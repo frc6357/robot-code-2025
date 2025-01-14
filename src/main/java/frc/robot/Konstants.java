@@ -38,7 +38,7 @@ public final class Konstants
 
     public static final class ExampleConstants
     {
-        public static final double kExampleSpeed = 0.5;
+        public static final double kExampleSpeed = 0.5;  //percentage based where 1.0 is max power and 0.0 is minimum
     }
     
     

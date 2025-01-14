@@ -57,8 +57,8 @@ public class Ports
         public static final SKTrigger kExampleButton = new SKTrigger(kOperator, kY.value, BUTTON);
 
         // Party mode
-        public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kBack.value, BUTTON);
-        public static final SKTrigger kLightsOff = new SKTrigger(kOperator, 90, POV);
+        public static final SKTrigger kPartyModeButton = new SKTrigger(kOperator, kBack.value, BUTTON);
+        public static final SKTrigger kLightsToTealButton = new SKTrigger(kOperator, 90, POV);
     }
 
     /**
@@ -99,5 +99,13 @@ public class Ports
 
         //assign a motor ID of 49 to the example motor
         public static final CANPort kExampleMotor = new CANPort(49, busName); 
+    }
+
+    public static class LightsPorts
+    {
+        //bus name is null
+        private static final String busName = "";
+        //assign an ID of 89 to the CANdle
+        public static final CANPort kCANdle = new CANPort(49, busName);
     }
 }
