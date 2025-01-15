@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.pathplanner.lib.config.PIDConstants;
 
 public final class Konstants
 {
@@ -27,6 +28,32 @@ public final class Konstants
         public static final double kTurnP = 0.1;
         public static final double kTurnI = 0;
         public static final double kTurnD = 0;
+    }
+
+    public static final class ElevatorConstants
+    {
+        public static final PIDConstants rightElevator = new PIDConstants(0.01, 0.0, 0.0);
+        public static final PIDConstants leftElevator = new PIDConstants(0.01, 0.0, 0.0);
+        public static final PIDConstants balancePID = new PIDConstants(0.0, 0.0, 0.0);
+
+        public static final double kElevatorBalanceTolerance = 5.0;
+        public static final double spoolDiameter = 0.75; //Inches
+        public static final double gearRatio = 1.0; //Shaft rotations / 1 motor rotation
+        public static final double elevatorHeight = 11.0; //Inches
+
+        public static final double elevatorConversion = 1.0 / 87.0; //inches moved per motor rotation
+        public static final double kPositionTolerance = 2.0;
+        public static final double kElevatorMotorMinOutput = -1.0;
+        public static final double kElevatorMotorMaxOutput = 1.0;
+
+        public static final double kElevatorUpSpeed = 1.0;
+        public static final double kElevatorDownSpeed = -1.0;
+        
+        public static final double kMinAngle = 0.0;
+        public static final double kMaxAngle = 1.0;
+    
+        public static final double kJoystickChange   = 0.1; // Manual setpoint value for units from 0.0 - 1.0 moved per second - TODO - find good value degrees per second angle launcher
+        public static final double kJoystickDeadband = 0.3;  // Manual arm movement axis deadband
     }
 
     public static final class LightConstants
