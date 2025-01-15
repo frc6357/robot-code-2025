@@ -14,13 +14,13 @@ import frc.robot.utils.filters.DeadbandFilter;
 
 public class SK25ElevatorBinder implements CommandBinder{
     Optional<SK25Elevator> subsystem;
-    Trigger climbUpDriverButton;
-    Trigger climbDownDriverButton;
-    Trigger rightClimbButton;
-    Trigger leftClimbButton;
-    Trigger climbUpOperatorButton;
-    Trigger climbDownOperatorButton;
-    Trigger climbOverride;
+    Trigger elevatorUpDriverButton;
+    Trigger elevatorDownDriverButton;
+    Trigger rightElevatorButton;
+    Trigger leftElevatorButton;
+    Trigger elevatorUpOperatorButton;
+    Trigger elevatorDownOperatorButton;
+    Trigger elevatorOverride;
 
 
     public SK25ElevatorBinder(Optional<SK25Elevator> subsystem){
@@ -48,33 +48,33 @@ public class SK25ElevatorBinder implements CommandBinder{
             kElevatorAxis.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
 
             // Elevator Up Buttons 
-            climbUpDriverButton.or(climbUpOperatorButton).onTrue(new InstantCommand(() -> elevator.runRightMotor(kElevatorUpSpeed))); 
-            climbUpDriverButton.or(climbUpOperatorButton).onTrue(new InstantCommand(() -> elevator.runLeftMotor(kElevatorUpSpeed))); 
+            elevatorUpDriverButton.or(elevatorUpOperatorButton).onTrue(new InstantCommand(() -> elevator.runRightMotor(kElevatorUpSpeed))); 
+            elevatorUpDriverButton.or(elevatorUpOperatorButton).onTrue(new InstantCommand(() -> elevator.runLeftMotor(kElevatorUpSpeed))); 
             
-            climbUpDriverButton.or(climbUpOperatorButton).onFalse(new InstantCommand(() -> elevator.runRightMotor(0.0))); 
-            climbUpDriverButton.or(climbUpOperatorButton).onFalse(new InstantCommand(() -> elevator.runLeftMotor(0.0)));
+            elevatorUpDriverButton.or(elevatorUpOperatorButton).onFalse(new InstantCommand(() -> elevator.runRightMotor(0.0))); 
+            elevatorUpDriverButton.or(elevatorUpOperatorButton).onFalse(new InstantCommand(() -> elevator.runLeftMotor(0.0)));
 
             // Elevator Down Buttons
-            climbDownDriverButton.or(climbDownOperatorButton).onTrue(new InstantCommand(() -> elevator.runRightMotor(kElevatorDownSpeed))); 
-            climbDownDriverButton.or(climbDownOperatorButton).onTrue(new InstantCommand(() -> elevator.runLeftMotor(kElevatorDownSpeed))); 
+            elevatorDownDriverButton.or(elevatorDownOperatorButton).onTrue(new InstantCommand(() -> elevator.runRightMotor(kElevatorDownSpeed))); 
+            elevatorDownDriverButton.or(elevatorDownOperatorButton).onTrue(new InstantCommand(() -> elevator.runLeftMotor(kElevatorDownSpeed))); 
 
-            rightClimbButton.onTrue(new InstantCommand(() -> elevator.runRightMotor(kElevatorDownSpeed)));
-            leftClimbButton.onTrue(new InstantCommand(() -> elevator.runLeftMotor(kElevatorDownSpeed)));
+            rightElevatorButton.onTrue(new InstantCommand(() -> elevator.runRightMotor(kElevatorDownSpeed)));
+            leftElevatorButton.onTrue(new InstantCommand(() -> elevator.runLeftMotor(kElevatorDownSpeed)));
             
-            climbDownDriverButton.or(climbDownOperatorButton).onFalse(new InstantCommand(() -> elevator.runLeftMotor(0.0)));
-            climbDownDriverButton.or(climbDownOperatorButton).onFalse(new InstantCommand(() -> elevator.runRightMotor(0.0)));
+            elevatorDownDriverButton.or(elevatorDownOperatorButton).onFalse(new InstantCommand(() -> elevator.runLeftMotor(0.0)));
+            elevatorDownDriverButton.or(elevatorDownOperatorButton).onFalse(new InstantCommand(() -> elevator.runRightMotor(0.0)));
 
-            rightClimbButton.onFalse(new InstantCommand(() -> elevator.runRightMotor(0.0)));
-            leftClimbButton.onFalse(new InstantCommand(() -> elevator.runLeftMotor(0.0)));
+            rightElevatorButton.onFalse(new InstantCommand(() -> elevator.runRightMotor(0.0)));
+            leftElevatorButton.onFalse(new InstantCommand(() -> elevator.runLeftMotor(0.0)));
             
-            climbUpDriverButton.and(climbOverride).onTrue(new InstantCommand(() -> elevator.resetPosition(1.0)));
+            elevatorUpDriverButton.and(elevatorOverride).onTrue(new InstantCommand(() -> elevator.resetPosition(1.0)));
 
               elevator.setDefaultCommand(
                          // Vertical movement of the arm is controlled by the Y axis of the right stick.
                          // Up on joystick moving arm up and down on stick moving arm down.
                          new ElevatorCommand(
                              () -> {return kElevatorAxis.getFilteredAxis();},
-                             climbOverride::getAsBoolean,
+                             elevatorOverride::getAsBoolean,
                              elevator));
         }
     }
