@@ -36,13 +36,18 @@ public final class Konstants
         public static final double kLightsOnBrightness = 0.5;
     }
 
+    public static final class ClimbConstants
+    {
+        
+    }
+
     public static final class ExampleConstants
     {
         public static final double kExampleSpeed = 0.5;
     }
     
     
-
+ 
     /** The file that is used for system instantiation at runtime */
     public static final String SUBSYSTEMFILE = "Subsystems.json";
 }
