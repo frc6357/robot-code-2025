@@ -36,7 +36,7 @@ public class SK25Lights{
      */
     public void init()
     {
-        candle = Optional.of(new CANdle(kCANdle.ID)); // creates a new CANdle with ID 3
+        candle = Optional.of(new CANdle(kCANdle.ID)); // creates a new CANdle with ID kCANdle's ID from ports
         
         CANdleConfiguration config = new CANdleConfiguration();
         

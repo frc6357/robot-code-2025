@@ -5,7 +5,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import static frc.robot.Ports.OperatorPorts.kExampleButton;
 import frc.robot.commands.ExampleCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+//import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ExampleBinder implements CommandBinder
 {
@@ -30,10 +30,11 @@ public class ExampleBinder implements CommandBinder
         {
             ExampleSubsystem Subsystem = myExampleSubsystem.get();
 
-            //run motor when pressed
-            ExampleButton.onTrue(new InstantCommand(() -> Subsystem.runMotor()));
-            //stop motor when released
-            ExampleButton.onFalse(new ExampleCommand(Subsystem));
+            //commented out example of how to make an instant command. this one runs the motor endlessly when the button is pressed
+            //ExampleButton.onTrue(new InstantCommand(() -> Subsystem.runMotor()));
+
+            //run the example command, which runs the motor while the button is pressed and stops when released
+            ExampleButton.onTrue(new ExampleCommand(Subsystem));
         }
     }
 

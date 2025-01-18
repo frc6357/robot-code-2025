@@ -1,32 +1,37 @@
 package frc.robot;
 
-
 public final class Konstants
 {
 
-    public static final class PracticeSwerveConstants
+    public static final class SwerveConstants
     {
         //8 swerve motor IDs for Ports
-        public static final int kFrontLeftDriveMotorId = 1;
-        public static final int kFrontLeftTurnMotorId = 2;
-        public static final int kFrontRightDriveMotorId = 3;
-        public static final int kFrontRightTurnMotorId = 4;
-        public static final int kBackLeftDriveMotorId = 5;
-        public static final int kBackLeftTurnMotorId = 6;
-        public static final int kBackRightDriveMotorId = 7;
-        public static final int kBackRightTurnMotorId = 8;
+        public static final int kFrontLeftDriveMotorID = 1; 
+        public static final int kFrontRightDriveMotorID = 2;
+        public static final int kBackLeftDriveMotorID = 3;
+        public static final int kBackRightDriveMotorID = 4;
+
+        public static final int kFrontLeftTurnMotorID = 11;
+        public static final int kFrontRightTurnMotorID = 12;
+        public static final int kBackLeftTurnMotorID = 13;
+        public static final int kBackRightTurnMotorID = 14;
+
+        public static final int kFrontLeftEncoderID = 21;
+        public static final int kFrontRightEncoderID = 22;
+        public static final int kBackLeftEncoderID = 23;
+        public static final int kBackRightEncoderID = 24;
 
         //swerve chassis width and length in inches
         public static final int kChassisLength = 28;
         public static final int kChassisWidth = 28;
 
-        //PID Constants
+        //PID Constants for wheels
         public static final double kDriveP = 0.1;
-        public static final double kDriveI = 0;
-        public static final double kDriveD = 0;
-        public static final double kTurnP = 0.1;
-        public static final double kTurnI = 0;
-        public static final double kTurnD = 0;
+        public static final double kDriveI = 0.0;
+        public static final double kDriveD = 0.0;
+        
+        //pigeon ID
+        public static final int kPigeonID = 30;
     }
 
     public static final class LightConstants

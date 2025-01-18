@@ -12,7 +12,7 @@ public class ExampleCommand extends Command
     {
         this.Subsystem = Subsystem;
 
-        //require a present subsystem in the json subsystems file
+        //prevents two commands involving the same subsystem(s) from running twice
         addRequirements(Subsystem);
     }
 
