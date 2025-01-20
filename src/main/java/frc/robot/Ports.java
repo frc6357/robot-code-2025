@@ -56,6 +56,9 @@ public class Ports
         //ExampleButton
         public static final SKTrigger kExampleButton = new SKTrigger(kOperator, kY.value, BUTTON);
 
+        //Elevator
+        public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
+
         // Party mode
         public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kBack.value, BUTTON);
         public static final SKTrigger kLightsOff = new SKTrigger(kOperator, 90, POV);
@@ -91,6 +94,14 @@ public class Ports
         public static final CANPort kPigeonPort = new CANPort(25, busName);
     }
 
+    public static class ElevatorPorts
+    {
+        private static final String busName = "";
+        public static final CANPort kRightClimbMotor = new CANPort(40, busName);
+        public static final CANPort kLeftClimbMotor = new CANPort(41, busName);
+        
+    }
+
 
     public static class ExamplePorts
     {
@@ -98,6 +109,6 @@ public class Ports
         private static final String busName = "";
 
         //assign a motor ID of 49 to the example motor
-        public static final CANPort kExampleMotor = new CANPort(49, busName); 
+        public static final CANPort kExampleMotor = new CANPort(59, busName); 
     }
 }

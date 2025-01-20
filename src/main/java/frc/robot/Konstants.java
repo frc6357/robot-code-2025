@@ -48,12 +48,19 @@ public final class Konstants
 
         public static final double kElevatorUpSpeed = 1.0;
         public static final double kElevatorDownSpeed = -1.0;
+
+        //public static final double kElevatorUpSpeedLeft = -1.0;
+        //public static final double kElevatorDownSpeedLeft = 1.0;
+
+
         
         public static final double kMinAngle = 0.0;
         public static final double kMaxAngle = 1.0;
     
-        public static final double kJoystickChange   = 0.1; // Manual setpoint value for units from 0.0 - 1.0 moved per second - TODO - find good value degrees per second angle launcher
+        public static final double kJoystickChange   = 0.1; // Manual setpoint value for units from 0.0 - 1.0 moved per second
         public static final double kJoystickDeadband = 0.3;  // Manual arm movement axis deadband
+
+        public static final boolean kJoystickReversed = true;  // Determines if the joystick movement is reversed
     }
 
     public static final class LightConstants

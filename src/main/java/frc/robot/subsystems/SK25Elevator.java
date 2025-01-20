@@ -1,11 +1,15 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import static frc.robot.Konstants.ElevatorConstants.*;
-
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.sim.SparkFlexExternalEncoderSim;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -15,8 +19,14 @@ public class SK25Elevator extends SubsystemBase
 {
     //Create memory motor objects
     SparkFlex motorR;
-    SparkFlex motorL;
-    
+    SparkMax motorL;
+
+    SparkFlexExternalEncoderSim encoderTestRight;
+
+    //SparkBase motortest;
+
+    SparkBaseConfig motortestconfig;
+
     //Create memory PID object
     PIDController rPID;
     PIDController lPID;
@@ -30,6 +40,9 @@ public class SK25Elevator extends SubsystemBase
     RelativeEncoder encoderL;
     RelativeEncoder encoderR;
 
+    DigitalInput touchSensorTop;
+    DigitalInput touchSensorBottom;
+
     //Constructor for public command access
     public SK25Elevator()
     {
@@ -40,28 +53,72 @@ public class SK25Elevator extends SubsystemBase
         lPID = new PIDController(leftElevator.kP, leftElevator.kI, leftElevator.kD);
         lPID.setSetpoint(0.0);
 
-        motorR = new SparkFlex(kRightClimbMotor.ID, MotorType.kBrushless);
-        motorL = new SparkFlex(kLeftClimbMotor.ID, MotorType.kBrushless);
+        motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
+        motorL = new SparkMax(kLeftElevatorMotor.ID, MotorType.kBrushless);
 
-        motorL.setInverted(false);
-        motorR.setInverted(true);
+        encoderTestRight = new SparkFlexExternalEncoderSim(motorR);
+
+        // Motor configurations for inverted
+
+        motortestconfig.inverted(true);
+        motorR.configure(motortestconfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+
+        // Encoder objects
 
         encoderL = motorL.getEncoder();
         encoderR = motorR.getEncoder();
-        
+
         RelativeEncoder encoderR = motorR.getEncoder();
-        //encoderR.setPositionConversionFactor(elevatorConversion);
+        encoderTestRight.setPositionConversionFactor(elevatorConversion);
 
         RelativeEncoder encoderL = motorL.getEncoder();
         //encoderL.setPositionConversionFactor(elevatorConversion);
+
         resetPosition(0.0);
+
+        // Positions
 
         RtargetPosition = 0.0;
         RcurrentPosition = 0.0;
 
         LtargetPosition = 0.0;
         LcurrentPosition = 0.0;
+
+        // Touch Sensor
+
+        touchSensorTop = new DigitalInput(1);
+        touchSensorBottom = new DigitalInput(2);
     }
+
+    // Button Sensor Methods
+
+    public Boolean isTopSensorPressed()
+    {
+        return !touchSensorTop.get();
+    }
+
+    public Boolean isBottomSensorPressed()
+    {
+        return !touchSensorBottom.get();
+    }
+
+    public boolean atTop()
+    {
+        if(isTopSensorPressed())
+            return true;
+        else
+            return false;
+    }
+
+    public boolean atBottom()
+    {
+        if(isBottomSensorPressed())
+            return true;
+        else
+            return false;
+    }
+
+    // Motor Methods
 
     public void setRightMotor(double location)
     {
@@ -84,6 +141,9 @@ public class SK25Elevator extends SubsystemBase
     {
         motorR.set(speed);
     }
+
+    // Position Methods
+    
     public double getLeftPosition()
     {
         return encoderL.getPosition();
@@ -117,6 +177,8 @@ public class SK25Elevator extends SubsystemBase
         encoderR.setPosition(position);
     }
 
+    // Stop Motors Method
+
     public void stopMotors()
     {
         motorL.stopMotor();
@@ -147,5 +209,10 @@ public class SK25Elevator extends SubsystemBase
         SmartDashboard.putNumber("Left Current Position", l_current_position);
         // SmartDashboard.putNumber("Left Target Position", l_target_position);
         // SmartDashboard.putBoolean("Left Arm at Setpoint", isLeftAtTargetPosition());
+
+        //TODO Uncomment below and add this to elastic dashboard once it's implemented.
+
+        //SmartDashboard.putBoolean("Elevator At Top", atTop());
+        //SmartDashboard.putBoolean("Elevator At Bottom", atBottom());
     }
 }
