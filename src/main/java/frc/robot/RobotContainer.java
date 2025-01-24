@@ -10,26 +10,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.ctre.phoenix6.Utils;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.bindings.ClimbBinder;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.ExampleBinder;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PracticeSwerve;
-import frc.robot.subsystems.Climb;
 import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
@@ -90,6 +87,9 @@ public class RobotContainer {
             {
                 mySubsystem = Optional.of(new ExampleSubsystem());
             }
+            if(subsystems.isClimbPresent()) {
+                m_Climb = Optional.of(new Climb());
+            }
         }
         catch (IOException e)
         {
@@ -108,6 +108,7 @@ public class RobotContainer {
 
         // Adding all the binding classes to the list
         buttonBinders.add(new ExampleBinder(mySubsystem));
+        buttonBinders.add(new ClimbBinder(m_Climb));
 
 
         // Traversing through all the binding classes to actually bind the buttons

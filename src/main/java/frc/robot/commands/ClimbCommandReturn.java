@@ -1,14 +1,12 @@
 package frc.robot.commands;
 
-import static frc.robot.Konstants.ClimbConstants.kClimbSetpoint;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climb;
 
-public class ClimbCommand1 extends Command{
+public class ClimbCommandReturn extends Command{
    public final Climb climb; 
     
-    public ClimbCommand1(Climb climb) {
+    public ClimbCommandReturn(Climb climb) {
         this.climb = climb;
         addRequirements(climb);
     }
@@ -18,8 +16,8 @@ public class ClimbCommand1 extends Command{
 
     @Override
     public void execute() {
-        climb.setPointL(kClimbSetpoint);
-        climb.setPointR(kClimbSetpoint);
+        climb.setPointL(0.0);
+        climb.setPointR(0.0);
     }
 
     @Override

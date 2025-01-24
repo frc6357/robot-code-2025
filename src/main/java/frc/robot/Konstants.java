@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.pathplanner.lib.config.PIDConstants;
 
 public final class Konstants
 {
@@ -38,7 +39,9 @@ public final class Konstants
 
     public static final class ClimbConstants
     {
-        
+        //to be changed
+        public static final PIDConstants pid = new PIDConstants(0.0, 0.0, 0.0);
+        public static final double kClimbSetpoint = 0.0;
     }
 
     public static final class ExampleConstants

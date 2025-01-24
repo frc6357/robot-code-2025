@@ -59,6 +59,10 @@ public class Ports
         // Party mode
         public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kBack.value, BUTTON);
         public static final SKTrigger kLightsOff = new SKTrigger(kOperator, 90, POV);
+
+        //Climb
+        public static final SKTrigger climbRaiseButton = new SKTrigger(kOperator, 0, POV);
+        public static final SKTrigger climbLowerButton = new SKTrigger(kOperator, 180, POV);
     }
 
     /**
