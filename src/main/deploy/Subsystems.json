@@ -1,4 +1,5 @@
 {
-    "lights": true,
+    "swerve": true,
+    "lights": false,
     "example": false
 }

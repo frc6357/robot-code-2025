@@ -1,23 +1,37 @@
 package frc.robot.commands;
 
-import static edu.wpi.first.wpilibj.XboxController.Axis.kLeftX;
-import static edu.wpi.first.wpilibj.XboxController.Axis.kLeftY;
-import static edu.wpi.first.wpilibj.XboxController.Axis.kRightX;
-import static frc.robot.Ports.DriverPorts.swerveController;
-
 import edu.wpi.first.wpilibj2.command.Command;
 //import com.ctre.phoenix6.hardware.core.CorePigeon2;
-import frc.robot.subsystems.NewSwerve;
+import frc.robot.subsystems.SK25Swerve;
 
 
 public class SwerveCommand extends Command
 {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    private final NewSwerve swerve;
 
-    public SwerveCommand(NewSwerve _swerve)
+    //declare swerve object
+    private final SK25Swerve swerve;
+
+    //declare the double version of joystick input values 
+    private final double leftY;
+    private final double leftX;
+    private final double rightX;
+
+    /**
+     * Creates a new SwerveCommand to handle all of the movement of the swerve drivebase.
+     * @param _swerve The SK25Swerve object to house the movement methods for the drivebase.
+     * @param _leftY The Y input of the left joystick on the controller used for translation.
+     * @param _leftX The X input of the left joystick on the controller used for translation.
+     * @param _rightX The X input of the right joystick on the controller used for rotation.
+     */
+    public SwerveCommand(SK25Swerve _swerve, double _leftY, double _leftX, double _rightX)
     {
+        //initialize objects and variables
         swerve = _swerve;
+        leftY = _leftY;
+        leftX = _leftX;
+        rightX = _rightX;
+        //ensure that this command only runs if no other command which uses the swerve subsystem is currently running.
         addRequirements(swerve);
     }
 
@@ -32,17 +46,20 @@ public class SwerveCommand extends Command
     @Override
     public void execute() 
     {
-        //driverController conversion
-        double angle = Math.atan2(swerveController.getRawAxis(kLeftY.value), swerveController.getRawAxis(kLeftX.value));
-        //make the deadzones
-        double translationMagnitude = deadZone(Math.hypot(swerveController.getRawAxis(kLeftX.value), swerveController.getRawAxis(kLeftY.value)), 0.1);
-        double rotationMagnitude = deadZone(swerveController.getRawAxis(kRightX.value), 0.1);
+        
+        //driverController conversion for left joystick.
+        //converts Cartesian coordinate system to Polar system by getting the angle between left joystick X and Y components.
+        double angle = Math.atan2(leftY, leftX);
+        //make the controller deadzones.
+        double translationMagnitude = deadZone(Math.hypot(leftX, leftY), 0.1);
+        double rotationMagnitude = deadZone(rightX, 0.1);
 
         //feild centric controls
         //TODO: getAngle() is deprecated for removal in 2026, use getYaw() from CorePigeon2 class instead and convert to degrees.
-        angle -= NewSwerve.pigeon.getAngle();
+        angle -= SK25Swerve.pigeon.getAngle();
 
-        NewSwerve.manager.setSwerve(angle, translationMagnitude, rotationMagnitude);
+        //run the setSwerve method which handles all swerve movement possibilites.
+        SK25Swerve.manager.setSwerve(angle, translationMagnitude, rotationMagnitude);
     }
     
 
@@ -50,8 +67,8 @@ public class SwerveCommand extends Command
     @Override
     public void end(boolean interrupted) 
     {
-       //sets all wheels to zero
-       NewSwerve.manager.setSwerve(0.0, 0.0, 0.0);
+       //sets all wheels to stop moving. //TODO: change to account for direction currently
+       SK25Swerve.manager.setSwerve(0.0, 0.0, 0.0);
     }
 
     // Returns true when the command should end.
@@ -61,17 +78,16 @@ public class SwerveCommand extends Command
         return false;
     }
 
+    //create a controller deadzone method which gives an output of zero if the controller is in the specified deadzone.
     private double deadZone (double value, double deadZone)
     {
+        //if the joystick value is less than the deadzone  value
         if( Math.abs(value) < deadZone)
         {
+            //override the value output as zero
             return 0;
         }
+        //return the normal joystick output
         return value;
-    }
-    
-    public void initDeafultCommand()
-    {
-        swerve.setDefaultCommand(new SwerveCommand(swerve));
     }
 }

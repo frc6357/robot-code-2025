@@ -13,7 +13,6 @@ import java.util.Optional;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -23,10 +22,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.ExampleBinder;
 import frc.robot.bindings.SK25LightsBinder;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.bindings.SK25SwerveBinder;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.NewSwerve;
 import frc.robot.subsystems.SK25Lights;
+import frc.robot.subsystems.SK25Swerve;
 import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
@@ -42,7 +41,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
   private Optional<SK25Lights> m_lights = Optional.empty();
-  private Optional<NewSwerve> m_swerve = Optional.empty();
+  private Optional<SK25Swerve> m_swerve = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -59,7 +58,7 @@ public class RobotContainer {
     configureSubsystems();
 
     // sets up autos needed for pathplanner
-    configurePathPlanner();
+    //configurePathPlanner();
 
     // Configure the trigger bindings
     configureButtonBindings();
@@ -94,7 +93,7 @@ public class RobotContainer {
             }
             if(subsystems.isSwervePresent())
             {
-                m_swerve = Optional.of(new NewSwerve());
+                m_swerve = Optional.of(new SK25Swerve());
             }
 
         }
@@ -116,6 +115,7 @@ public class RobotContainer {
         // Adding all the binding classes to the list
         buttonBinders.add(new ExampleBinder(mySubsystem));
         buttonBinders.add(new SK25LightsBinder(m_lights));
+        buttonBinders.add(new SK25SwerveBinder(m_swerve));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
@@ -125,10 +125,11 @@ public class RobotContainer {
 
     }
 
+
     private void configurePathPlanner()
     {   
-        ExampleSubsystem subsystem = mySubsystem.get();
-        NamedCommands.registerCommand("ExampleCommand", new ExampleCommand(subsystem));
+        //ExampleSubsystem subsystem = mySubsystem.get();
+        //NamedCommands.registerCommand("ExampleCommand", new ExampleCommand(subsystem));
 
 
         //Register commands for use in auto

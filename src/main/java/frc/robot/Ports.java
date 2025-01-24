@@ -4,13 +4,8 @@ import static edu.wpi.first.wpilibj.XboxController.Axis.kLeftX;
 import static edu.wpi.first.wpilibj.XboxController.Axis.kLeftY;
 import static edu.wpi.first.wpilibj.XboxController.Axis.kRightX;
 import static edu.wpi.first.wpilibj.XboxController.Button.kBack;
-import static edu.wpi.first.wpilibj.XboxController.Button.kLeftBumper;
-import static edu.wpi.first.wpilibj.XboxController.Button.kLeftStick;
-import static edu.wpi.first.wpilibj.XboxController.Button.kRightBumper;
 import static edu.wpi.first.wpilibj.XboxController.Button.kStart;
 import static edu.wpi.first.wpilibj.XboxController.Button.kY;
-import static frc.robot.utils.SKTrigger.INPUT_TYPE.BUTTON;
-import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
 import static frc.robot.Konstants.SwerveConstants.kBackLeftDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kBackLeftEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kBackLeftTurnMotorID;
@@ -24,12 +19,12 @@ import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kPigeonID;
-import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
+import static frc.robot.utils.SKTrigger.INPUT_TYPE.BUTTON;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.utils.CANPort;
 import frc.robot.utils.SKTrigger;
+import frc.robot.utils.filters.FilteredAxis;
 import frc.robot.utils.filters.FilteredXboxController;
 
 public class Ports
@@ -42,6 +37,10 @@ public class Ports
         //static GenericHID kUnderlyingDriverController = importedKDriver.getHID();
         public static final GenericHID swerveController = new FilteredXboxController(0).getHID();
         
+        // Filtered axis (translation & rotation)
+        public static final FilteredAxis kTranslationXPort = new FilteredAxis(() -> swerveController.getRawAxis(kLeftY.value));
+        public static final FilteredAxis kTranslationYPort = new FilteredAxis(() -> swerveController.getRawAxis(kLeftX.value));
+        public static final FilteredAxis kVelocityOmegaPort = new FilteredAxis(() -> swerveController.getRawAxis(kRightX.value)); 
         // Switch modes (robot centric vs feild centric, and slow mode)
        // public final SKTrigger kRobotCentricMode = new SKTrigger(swerveController, kRightBumper.value, BUTTON);
         //public final SKTrigger kSlowMode = new SKTrigger(swerveController, kLeftBumper.value, BUTTON);
