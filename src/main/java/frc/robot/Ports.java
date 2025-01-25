@@ -54,7 +54,10 @@ public class Ports
         //public static final FilteredAxis kExampleRawAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
         
         //ExampleButton
-        public static final SKTrigger kExampleButton = new SKTrigger(kOperator, kY.value, BUTTON);
+        public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
+        public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
+        public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
+        public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
 
         //Elevator
         public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
@@ -97,8 +100,8 @@ public class Ports
     public static class ElevatorPorts
     {
         private static final String busName = "";
-        public static final CANPort kRightClimbMotor = new CANPort(40, busName);
-        public static final CANPort kLeftClimbMotor = new CANPort(41, busName);
+        public static final CANPort kRightElevatorMotor = new CANPort(40, busName);
+        public static final CANPort kLeftElevatorMotor = new CANPort(41, busName);
         
     }
 

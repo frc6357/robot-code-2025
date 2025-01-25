@@ -26,6 +26,7 @@ public class SK25ElevatorBinder implements CommandBinder{
     public SK25ElevatorBinder(Optional<SK25Elevator> subsystem){
         
         this.subsystem = subsystem;
+        
         /*
         this.climbUpDriverButton = Ports.DriverPorts.kClimbUp.button;
         this.climbDownDriverButton = Ports.DriverPorts.kClimbDown.button;

@@ -21,9 +21,9 @@ public class SK25Elevator extends SubsystemBase
     SparkFlex motorR;
     SparkMax motorL;
 
-    SparkFlexExternalEncoderSim encoderTestRight;
+    // Creating testing objects
 
-    //SparkBase motortest;
+    SparkFlexExternalEncoderSim encoderTestRight;
 
     SparkBaseConfig motortestconfig;
 
@@ -58,7 +58,7 @@ public class SK25Elevator extends SubsystemBase
 
         encoderTestRight = new SparkFlexExternalEncoderSim(motorR);
 
-        // Motor configurations for inverted
+        // Motor configurations for inverting the motor
 
         motortestconfig.inverted(true);
         motorR.configure(motortestconfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
@@ -172,7 +172,8 @@ public class SK25Elevator extends SubsystemBase
         return Math.abs(getLeftPosition() - getLeftTargetPosition()) < kPositionTolerance;
     }
 
-    public void resetPosition(double position){
+    public void resetPosition(double position)
+    {
         encoderL.setPosition(position);
         encoderR.setPosition(position);
     }

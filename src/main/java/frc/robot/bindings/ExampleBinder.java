@@ -3,7 +3,7 @@ package frc.robot.bindings;
 import java.util.Optional;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import static frc.robot.Ports.OperatorPorts.kExampleButton;
+//import static frc.robot.Ports.OperatorPorts.kExampleButton;
 import frc.robot.commands.ExampleCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
@@ -20,7 +20,7 @@ public class ExampleBinder implements CommandBinder
         this.myExampleSubsystem = SubsystemName;
 
         //tie the ExampleButton trigger the actual kExample button from Ports
-        this.ExampleButton = kExampleButton.button;
+        //this.ExampleButton = kExampleButton.button;
     }
 
     public void bindButtons()
