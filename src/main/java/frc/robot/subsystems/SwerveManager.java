@@ -1,5 +1,10 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Radians;
+
+import edu.wpi.first.units.measure.Angle;
+
 public class SwerveManager {
 
     //declare swerve wheels
@@ -29,7 +34,7 @@ public class SwerveManager {
      * @param direction The direction to translate from the front as a degree value from 0.0 to 360.0.
      * @param speed The speed of the translation for the wheel as a percentage value from 0.0 to 1.0.
      */
-    public void translate(double direction, double speed)
+    public void translate(Angle direction, double speed)
     {
         //sets the directoin of each turn motor
         frontRightWheel.setDirection(direction);
@@ -51,10 +56,10 @@ public class SwerveManager {
     public void rotate(double speed)
     {
         //set the direction for each wheel using angle values
-        frontRightWheel.setDirection(135.0);
-        frontLeftWheel.setDirection(45.0);
-        backRightWheel.setDirection(-45.0);
-        backLeftWheel.setDirection(-135.0);
+        frontRightWheel.setDirection(Degrees.of(135.0));
+        frontLeftWheel.setDirection(Degrees.of(45.0));
+        backRightWheel.setDirection(Degrees.of(-45.0));
+        backLeftWheel.setDirection(Degrees.of(-135.0));
 
         //sets the speed of each drive wheel
         frontRightWheel.setSpeed(speed);
@@ -91,49 +96,60 @@ public class SwerveManager {
      */
     public void translateAndRotate(double direction, double translateSpeed, double rotateSpeed)
     {
+
+        //rotation direction plus rotation speed
+        Angle rotationTarget = Radians.of(direction).plus(Degrees.of(rotateSpeed * 45.0));
+        frontRightWheel.setDirection(rotationTarget);
+        frontLeftWheel.setDirection(rotationTarget);
+        backRightWheel.setDirection(rotationTarget);
+        backLeftWheel.setDirection(rotationTarget);
+
+
+
+
         //scale the double speed value to an angle value
-        double rotateAngle = rotateSpeed * 45.0;
+        //double rotateAngle = rotateSpeed * 45.0;
 
          // if the left front wheel is in the front
-        if (closestAngle(direction, 135.0) >= 90.0)
-        {
-            frontLeftWheel.setDirection(direction + rotateAngle);
-        }
+        //if (closestAngle(direction, 135.0) >= 90.0)
+        //{
+            //frontLeftWheel.setDirection(direction + rotateAngle);
+        //}
         // if it's in the back
-        else
-        {
-            frontLeftWheel.setDirection(direction - rotateAngle);
-        }
+        //else
+        //{
+            //frontLeftWheel.setDirection(direction - rotateAngle);
+        //}
         // if the left back wheel is in the front
-        if (closestAngle(direction, 225.0) > 90.0)
-        {
-            backLeftWheel.setDirection(direction + rotateAngle);
-        }
+        //if (closestAngle(direction, 225.0) > 90.0)
+        //{
+            //backLeftWheel.setDirection(direction + rotateAngle);
+        //}
         // if it's in the back
-        else
-        {
-            backLeftWheel.setDirection(direction - rotateAngle);
-        }
+        //else
+        //{
+            //backLeftWheel.setDirection(direction - rotateAngle);
+        //}
         // if the right front wheel is in the front
-        if (closestAngle(direction, 45.0) > 90.0)
-        {
-            frontRightWheel.setDirection(direction + rotateAngle);
-        }
+        //if (closestAngle(direction, 45.0) > 90.0)
+        //{
+            //frontRightWheel.setDirection(direction + rotateAngle);
+        //}
         // if it's in the back
-        else
-        {
-            frontRightWheel.setDirection(direction - rotateAngle);
-        }
+        //else
+        //{
+            //frontRightWheel.setDirection(direction - rotateAngle);
+        //}
         // if the right back wheel is in the front
-        if (closestAngle(direction, 315.0) >= 90.0)
-        {
-            backRightWheel.setDirection(direction + rotateAngle);
-        }
+        //if (closestAngle(direction, 315.0) >= 90.0)
+        //{
+            //backRightWheel.setDirection(direction + rotateAngle);
+        //}
         // if it's in the back
-        else
-        {
-            backRightWheel.setDirection(direction - rotateAngle);
-        }
+        //else
+        //{
+            //backRightWheel.setDirection(direction - rotateAngle);
+        //}
 
         //set the drive motors' speeds
         frontRightWheel.setSpeed(translateSpeed);

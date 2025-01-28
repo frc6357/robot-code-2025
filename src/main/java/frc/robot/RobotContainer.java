@@ -165,6 +165,10 @@ public class RobotContainer {
         {
             m_swerve.get().testPeriodic();
         }
+        if(m_lights.isPresent())
+        {
+            m_lights.get().testPeriodic();
+        }
     }
     public void testInit(){
         if(mySubsystem.isPresent())
@@ -174,6 +178,10 @@ public class RobotContainer {
         if(m_swerve.isPresent())
         {
             m_swerve.get().testInit();
+        }
+        if(m_lights.isPresent())
+        {
+            m_lights.get().testInit();
         }
     }
 

@@ -157,6 +157,19 @@ public class SK25Lights{
         TwinkleAnimation animation = new TwinkleAnimation(r, g, b, 0, 1.0, numLed, percent, 8);
         if(candle.isPresent()){ candle.get().animate(animation, 1);}
     }
+
+    //occurs every 20 miliseconds, usually not tied to a command, binder, etc...
+    public void periodic()
+    {
+    } 
+
+    public void testInit()
+    {
+    }
+    
+    public void testPeriodic()
+    {
+    }
     
 }
 

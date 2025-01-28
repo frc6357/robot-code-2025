@@ -26,10 +26,10 @@ public class SK25Swerve extends SubsystemBase
     public SK25Swerve()
     {
         //make new SwerveWheel objects
-        fRWheel = new SwerveWheel(kDriveP, kDriveI, kDriveD, kFrontRightDriveMotorID, kFrontRightTurnMotorID, kFrontRightEncoderID, kFrontRightEncoderOffset);
-        fLWheel = new SwerveWheel(kDriveP, kDriveI, kDriveD, kFrontLeftDriveMotorID, kFrontLeftTurnMotorID, kFrontLeftEncoderID, kFrontLeftEncoderOffset);
-        bRWheel = new SwerveWheel(kDriveP, kDriveI, kDriveD, kBackRightDriveMotorID, kBackRightTurnMotorID, kBackRightEncoderID, kBackRightEncoderOffset);
-        bLWheel = new SwerveWheel(kDriveP, kDriveI, kDriveD, kBackLeftDriveMotorID, kBackLeftTurnMotorID, kBackLeftEncoderID, kBackLeftEncoderOffset);
+        fRWheel = new SwerveWheel(kDriveP, kDriveI, kDriveD, kFrontRightDriveMotorID, kFrontRightTurnMotorID, kFrontRightEncoderID, kFrontRightEncoderOffset, kFrontRightInverted);
+        fLWheel = new SwerveWheel(kDriveP, kDriveI, kDriveD, kFrontLeftDriveMotorID, kFrontLeftTurnMotorID, kFrontLeftEncoderID, kFrontLeftEncoderOffset, kFrontLeftInverted);
+        bRWheel = new SwerveWheel(kDriveP, kDriveI, kDriveD, kBackRightDriveMotorID, kBackRightTurnMotorID, kBackRightEncoderID, kBackRightEncoderOffset, kBackRightInverted);
+        bLWheel = new SwerveWheel(kDriveP, kDriveI, kDriveD, kBackLeftDriveMotorID, kBackLeftTurnMotorID, kBackLeftEncoderID, kBackLeftEncoderOffset, kBackLeftInverted);
 
         //initialize pigeon
         pigeon = new Pigeon2(kPigeonID);

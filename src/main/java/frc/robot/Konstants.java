@@ -1,5 +1,11 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
+
+import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
+
+import edu.wpi.first.units.measure.Angle;
+
 public final class Konstants
 {
 
@@ -27,18 +33,30 @@ public final class Konstants
         public static final int kChassisWidth = 27;
 
         //encoder offsets (obtained from Phoenix Tuner X)
-        public static final double kFrontLeftEncoderOffset = 0.40283203125;
-        public static final double kFrontRightEncoderOffset = -0.044677734375;
-        public static final double kBackLeftEncoderOffset = -0.21875;
-        public static final double kBackRightEncoderOffset = -0.08642578125;
+        public static final Angle kFrontLeftEncoderOffset = Degrees.of(0.40283203125);
+        public static final Angle kFrontRightEncoderOffset = Degrees.of(-0.044677734375);
+        public static final Angle kBackLeftEncoderOffset = Degrees.of(-0.21875);
+        public static final Angle kBackRightEncoderOffset = Degrees.of(-0.08642578125);
 
         //PID Constants for wheels from manual tunning
         public static final double kDriveP = 0.00001;
         public static final double kDriveI = 0.0;
         public static final double kDriveD = 0.0;
+
+        //The error tolerance for the PID controllers of the wheels
+        public static final double kPIDControllerTolerance = 0.1;
         
         //pigeon ID
         public static final int kPigeonID = 30; //30
+
+        //constants which determine if the motors are inverted, negative if they are inverted, positive if not.
+        public static final double kFrontRightInverted = -1.0;
+        public static final double kFrontLeftInverted = -1.0;
+        public static final double kBackRightInverted = -1.0;
+        public static final double kBackLeftInverted = -1.0;
+
+        //the deadzone on the controller's joysticks
+        public static final double kJoystickDeadzone = 0.2;
     }
 
     public static final class LightConstants

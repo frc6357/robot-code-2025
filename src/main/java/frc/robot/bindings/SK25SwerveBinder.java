@@ -14,9 +14,9 @@ public class SK25SwerveBinder implements CommandBinder{
     //create the ExampleButton trigger object 
 
 
-    double leftX = kTranslationXPort.getFilteredAxis();
-    double leftY = kTranslationYPort.getFilteredAxis();
-    double rightX = kVelocityOmegaPort.getFilteredAxis();
+    //double leftX = kTranslationXPort.getFilteredAxis();
+    //double leftY = kTranslationYPort.getFilteredAxis();
+    //double rightX = kVelocityOmegaPort.getFilteredAxis();
 
     public SK25SwerveBinder(Optional<SK25Swerve> swerve)
     {
@@ -31,7 +31,14 @@ public class SK25SwerveBinder implements CommandBinder{
         {
             SK25Swerve Swerve = m_swerve.get();
 
-            SwerveCommand swerveCommand = new SwerveCommand(Swerve, leftX, leftY, rightX);
+            SwerveCommand swerveCommand = new SwerveCommand(
+            Swerve, 
+            () -> kTranslationXPort.getFilteredAxis(), 
+            () -> kTranslationYPort.getFilteredAxis(), 
+            () -> kVelocityOmegaPort.getFilteredAxis()
+            );
+
+            //make the swerveCommand run when no other command which utilizes the SK25Swerve subsytem runs.
             Swerve.setDefaultCommand(swerveCommand);
 
 
