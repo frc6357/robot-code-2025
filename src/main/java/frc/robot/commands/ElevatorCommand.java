@@ -4,8 +4,8 @@
 
 package frc.robot.commands;
 
-import static frc.robot.Konstants.ElevatorConstants.kMaxAngle;
-import static frc.robot.Konstants.ElevatorConstants.kMinAngle;
+import static frc.robot.Konstants.ElevatorConstants.kMax;
+import static frc.robot.Konstants.ElevatorConstants.kMin;
 
 import java.util.function.Supplier;
 
@@ -58,8 +58,8 @@ public class ElevatorCommand extends Command {
 
         if(!override.get())
         {
-            rightSetpoint = MathUtil.clamp(rightSetpoint, kMinAngle, kMaxAngle);
-            leftSetpoint = MathUtil.clamp(leftSetpoint, kMinAngle, kMaxAngle);
+            rightSetpoint = MathUtil.clamp(rightSetpoint, kMin, kMax);
+            leftSetpoint = MathUtil.clamp(leftSetpoint, kMin, kMax);
         }
 
         elevator.setRightMotor(rightSetpoint);

@@ -1,11 +1,14 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkMax;
+//import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.RelativeEncoder;
 import static frc.robot.Konstants.ElevatorConstants.*;
 import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.sim.SparkFlexExternalEncoderSim;
 import edu.wpi.first.math.controller.PIDController;
@@ -19,15 +22,18 @@ public class SK25Elevator extends SubsystemBase
 {
     //Create memory motor objects
     SparkFlex motorR;
-    SparkMax motorL;
+    SparkFlex motorL;
 
     // Creating testing objects
 
     SparkFlexExternalEncoderSim encoderTestRight;
 
-    SparkBaseConfig motortestconfig;
+    //SparkBaseConfig motortestconfig;
+
+    SparkFlexConfig config;
 
     //Create memory PID object
+
     PIDController rPID;
     PIDController lPID;
 
@@ -43,10 +49,16 @@ public class SK25Elevator extends SubsystemBase
     DigitalInput touchSensorTop;
     DigitalInput touchSensorBottom;
 
+    DigitalInput magEncoder1;
+    DigitalInput magEncoder2;
+    DigitalInput magEncoder3;
+    DigitalInput magEncoder4;
+
     //Constructor for public command access
     public SK25Elevator()
     {
         //Initialize motor objects
+
         rPID = new PIDController(rightElevator.kP, rightElevator.kI, rightElevator.kD);
         rPID.setSetpoint(0.0);
 
@@ -54,25 +66,31 @@ public class SK25Elevator extends SubsystemBase
         lPID.setSetpoint(0.0);
 
         motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
-        motorL = new SparkMax(kLeftElevatorMotor.ID, MotorType.kBrushless);
+        motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
+        config = new SparkFlexConfig();
 
         encoderTestRight = new SparkFlexExternalEncoderSim(motorR);
 
-        // Motor configurations for inverting the motor
+        // Configurations for the motor & encoder
 
-        motortestconfig.inverted(true);
-        motorR.configure(motortestconfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        config.
+            inverted(true);
+        config.encoder
+            .positionConversionFactor(elevatorConversion);
+        
+        motorR.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
         // Encoder objects
 
         encoderL = motorL.getEncoder();
         encoderR = motorR.getEncoder();
 
+        /*
         RelativeEncoder encoderR = motorR.getEncoder();
-        encoderTestRight.setPositionConversionFactor(elevatorConversion);
-
         RelativeEncoder encoderL = motorL.getEncoder();
-        //encoderL.setPositionConversionFactor(elevatorConversion);
+        encoderR.setPositionConversionFactor(elevatorConversion);
+        encoderL.setPositionConversionFactor(elevatorConversion);
+        */
 
         resetPosition(0.0);
 

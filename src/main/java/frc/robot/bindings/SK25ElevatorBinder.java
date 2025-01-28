@@ -28,13 +28,13 @@ public class SK25ElevatorBinder implements CommandBinder{
         this.subsystem = subsystem;
         
         /*
-        this.climbUpDriverButton = Ports.DriverPorts.kClimbUp.button;
-        this.climbDownDriverButton = Ports.DriverPorts.kClimbDown.button;
-        this.climbUpOperatorButton = Ports.OperatorPorts.kClimbUp.button;
-        this.climbDownOperatorButton = Ports.OperatorPorts.kClimbDown.button;
-        this.climbOverride = Ports.DriverPorts.kClimbOverride.button;
-        this.rightClimbButton = Ports.DriverPorts.kClimbRight.button;
-        this.leftClimbButton = Ports.DriverPorts.kClimbLeft.button;
+        this.elevatorUpDriverButton = Ports.DriverPorts.kClimbUp.button;
+        this.elevatorDownDriverButton = Ports.DriverPorts.kClimbDown.button;
+        this.elevatorUpOperatorButton = Ports.OperatorPorts.kClimbUp.button;
+        this.elevatorDownOperatorButton = Ports.OperatorPorts.kClimbDown.button;
+        this.elevatorOverride = Ports.DriverPorts.kClimbOverride.button;
+        this.rightelevatorButton = Ports.DriverPorts.kClimbRight.button;
+        this.leftelevatorButton = Ports.DriverPorts.kClimbLeft.button;
         */
     }
 

@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SK25Elevator;
+import static frc.robot.Konstants.ElevatorConstants.kElevatorUpSpeed;
 
 public class TroughCommand extends Command
 {
@@ -20,7 +21,15 @@ public class TroughCommand extends Command
     @Override
     public void initialize() 
     {
-        //elevator.runMotor();
+        if (elevator.atTop())
+        {
+            
+        }
+        else
+        {
+            elevator.runLeftMotor(kElevatorUpSpeed);
+            elevator.runRightMotor(kElevatorUpSpeed);
+        }
     }
 
     // Called every time the scheduler runs while the command is scheduled.

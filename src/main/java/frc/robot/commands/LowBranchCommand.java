@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SK25Elevator;
+import static frc.robot.Konstants.ElevatorConstants.kElevatorUpSpeed;
 
 public class LowBranchCommand extends Command
 {
@@ -20,14 +21,22 @@ public class LowBranchCommand extends Command
     @Override
     public void initialize() 
     {
-        //elevator.runMotor();
+        
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() 
     {
-        
+        if (elevator.atTop())
+        {
+            
+        }
+        else
+        {
+            elevator.runLeftMotor(kElevatorUpSpeed);
+            elevator.runRightMotor(kElevatorUpSpeed);
+        }
     }
 
     // Called once the command ends or is interrupted.
