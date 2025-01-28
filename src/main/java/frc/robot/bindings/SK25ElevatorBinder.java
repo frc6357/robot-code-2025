@@ -7,6 +7,10 @@ import java.util.Optional;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.TroughCommand;
+import frc.robot.commands.LowBranchCommand;
+import frc.robot.commands.MiddleBranchCommand;
+import frc.robot.commands.TopBranchCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.Ports;
@@ -14,12 +18,16 @@ import frc.robot.utils.filters.DeadbandFilter;
 
 public class SK25ElevatorBinder implements CommandBinder{
     Optional<SK25Elevator> subsystem;
-    Trigger elevatorUpDriverButton;
-    Trigger elevatorDownDriverButton;
+    Trigger elevatorTrough;
+    Trigger elevatorLowBranch;
+    Trigger elevatorMiddleBranch;
+    Trigger elevatorTopBranch;
+    /* 
     Trigger rightElevatorButton;
     Trigger leftElevatorButton;
     Trigger elevatorUpOperatorButton;
     Trigger elevatorDownOperatorButton;
+    */
     Trigger elevatorOverride;
 
 
@@ -27,15 +35,11 @@ public class SK25ElevatorBinder implements CommandBinder{
         
         this.subsystem = subsystem;
         
-        /*
-        this.elevatorUpDriverButton = Ports.DriverPorts.kClimbUp.button;
-        this.elevatorDownDriverButton = Ports.DriverPorts.kClimbDown.button;
-        this.elevatorUpOperatorButton = Ports.OperatorPorts.kClimbUp.button;
-        this.elevatorDownOperatorButton = Ports.OperatorPorts.kClimbDown.button;
-        this.elevatorOverride = Ports.DriverPorts.kClimbOverride.button;
-        this.rightelevatorButton = Ports.DriverPorts.kClimbRight.button;
-        this.leftelevatorButton = Ports.DriverPorts.kClimbLeft.button;
-        */
+        this.elevatorTrough = Ports.OperatorPorts.kTrough.button;
+        this.elevatorLowBranch = Ports.OperatorPorts.kLowBranch.button;
+        this.elevatorMiddleBranch = Ports.OperatorPorts.kMiddleBranch.button;
+        this.elevatorTopBranch = Ports.OperatorPorts.kTopBranch.button;
+        this.elevatorOverride = Ports.DriverPorts.kElevatorOverride.button;
     }
 
     public void bindButtons()
@@ -48,27 +52,12 @@ public class SK25ElevatorBinder implements CommandBinder{
             double joystickGain = kJoystickReversed ? -kJoystickChange : kJoystickChange;
             kElevatorAxis.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
 
-            // Elevator Up Buttons 
-            elevatorUpDriverButton.or(elevatorUpOperatorButton).onTrue(new InstantCommand(() -> elevator.runRightMotor(kElevatorUpSpeed))); 
-            elevatorUpDriverButton.or(elevatorUpOperatorButton).onTrue(new InstantCommand(() -> elevator.runLeftMotor(kElevatorUpSpeed))); 
-            
-            elevatorUpDriverButton.or(elevatorUpOperatorButton).onFalse(new InstantCommand(() -> elevator.runRightMotor(0.0))); 
-            elevatorUpDriverButton.or(elevatorUpOperatorButton).onFalse(new InstantCommand(() -> elevator.runLeftMotor(0.0)));
+            // Elevator Up/Down Buttons 
 
-            // Elevator Down Buttons
-            elevatorDownDriverButton.or(elevatorDownOperatorButton).onTrue(new InstantCommand(() -> elevator.runRightMotor(kElevatorDownSpeed))); 
-            elevatorDownDriverButton.or(elevatorDownOperatorButton).onTrue(new InstantCommand(() -> elevator.runLeftMotor(kElevatorDownSpeed))); 
-
-            rightElevatorButton.onTrue(new InstantCommand(() -> elevator.runRightMotor(kElevatorDownSpeed)));
-            leftElevatorButton.onTrue(new InstantCommand(() -> elevator.runLeftMotor(kElevatorDownSpeed)));
-            
-            elevatorDownDriverButton.or(elevatorDownOperatorButton).onFalse(new InstantCommand(() -> elevator.runLeftMotor(0.0)));
-            elevatorDownDriverButton.or(elevatorDownOperatorButton).onFalse(new InstantCommand(() -> elevator.runRightMotor(0.0)));
-
-            rightElevatorButton.onFalse(new InstantCommand(() -> elevator.runRightMotor(0.0)));
-            leftElevatorButton.onFalse(new InstantCommand(() -> elevator.runLeftMotor(0.0)));
-            
-            elevatorUpDriverButton.and(elevatorOverride).onTrue(new InstantCommand(() -> elevator.resetPosition(1.0)));
+            elevatorTrough.onTrue(new TroughCommand(elevator));
+            elevatorLowBranch.onTrue(new LowBranchCommand(elevator));
+            elevatorMiddleBranch.onTrue(new MiddleBranchCommand(elevator));
+            elevatorTopBranch.onTrue(new TopBranchCommand(elevator));
 
               elevator.setDefaultCommand(
                          // Vertical movement of the arm is controlled by the Y axis of the right stick.

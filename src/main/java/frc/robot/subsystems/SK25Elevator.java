@@ -1,78 +1,89 @@
+// Essentials
 package frc.robot.subsystems;
-
-import com.revrobotics.spark.SparkFlex;
-//import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkRelativeEncoder;
-import com.revrobotics.RelativeEncoder;
-import static frc.robot.Konstants.ElevatorConstants.*;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkFlexConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.sim.SparkFlexExternalEncoderSim;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+// Motors - Sparkflex
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+// Encoders - Sensors
+import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.wpilibj.DigitalInput;
+
+// Constants (Muy Importante)
+import static frc.robot.Konstants.ElevatorConstants.*;
 import static frc.robot.Ports.ElevatorPorts.*;
+
+// Configurations For Stuff (Thanks REV)
+import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.sim.SparkFlexExternalEncoderSim;
+
+// SparkBase
+import com.revrobotics.spark.SparkBase;
+
+// PID Controller
+import edu.wpi.first.math.controller.PIDController;
+
+// SmartDashboard
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+// Unused Imports (Maybe In The Future)
+//import com.revrobotics.spark.config.SparkMaxConfig;
+//import com.revrobotics.spark.config.SparkBaseConfig;
+//import com.revrobotics.spark.SparkRelativeEncoder;
+//import com.revrobotics.spark.SparkMax;
 
 public class SK25Elevator extends SubsystemBase
 {
-    //Create memory motor objects
+    // Create Memory Motor Objects
     SparkFlex motorR;
     SparkFlex motorL;
 
-    // Creating testing objects
-
+    // Creating Testing Objects
     SparkFlexExternalEncoderSim encoderTestRight;
-
-    //SparkBaseConfig motortestconfig;
 
     SparkFlexConfig config;
 
-    //Create memory PID object
-
+    //Create Memory PID Objects
     PIDController rPID;
     PIDController lPID;
 
+    // Target & Current Position Objects
     double LtargetPosition;
     double LcurrentPosition;
-
     double RtargetPosition;
     double RcurrentPosition;
 
+    // Encoder Objects
     RelativeEncoder encoderL;
     RelativeEncoder encoderR;
 
+    // Touch Sensor Objects
     DigitalInput touchSensorTop;
     DigitalInput touchSensorBottom;
 
+    // Magnetic Encoder Objects
     DigitalInput magEncoder1;
     DigitalInput magEncoder2;
     DigitalInput magEncoder3;
     DigitalInput magEncoder4;
 
-    //Constructor for public command access
+    // Constructor For Public Command Access
     public SK25Elevator()
     {
-        //Initialize motor objects
-
+        // PID Controllers - Setpoints
         rPID = new PIDController(rightElevator.kP, rightElevator.kI, rightElevator.kD);
         rPID.setSetpoint(0.0);
 
         lPID = new PIDController(leftElevator.kP, leftElevator.kI, leftElevator.kD);
         lPID.setSetpoint(0.0);
 
+        // Motor Initialization With REV - Configurations
         motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
         motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
         config = new SparkFlexConfig();
 
-        encoderTestRight = new SparkFlexExternalEncoderSim(motorR);
-
-        // Configurations for the motor & encoder
-
+        // Configurations For The Motor & Encoder
         config.
             inverted(true);
         config.encoder
@@ -80,11 +91,11 @@ public class SK25Elevator extends SubsystemBase
         
         motorR.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
-        // Encoder objects
-
+        // Encoder Objects
         encoderL = motorL.getEncoder();
         encoderR = motorR.getEncoder();
 
+        // Keeping This Here Just In Case
         /*
         RelativeEncoder encoderR = motorR.getEncoder();
         RelativeEncoder encoderL = motorL.getEncoder();
@@ -94,8 +105,7 @@ public class SK25Elevator extends SubsystemBase
 
         resetPosition(0.0);
 
-        // Positions
-
+        // Current And Target Positions
         RtargetPosition = 0.0;
         RcurrentPosition = 0.0;
 
@@ -103,13 +113,11 @@ public class SK25Elevator extends SubsystemBase
         LcurrentPosition = 0.0;
 
         // Touch Sensor
-
         touchSensorTop = new DigitalInput(1);
         touchSensorBottom = new DigitalInput(2);
     }
 
     // Button Sensor Methods
-
     public Boolean isTopSensorPressed()
     {
         return !touchSensorTop.get();
@@ -120,6 +128,7 @@ public class SK25Elevator extends SubsystemBase
         return !touchSensorBottom.get();
     }
 
+    // Button Sensor Methods For Use By Commands
     public boolean atTop()
     {
         if(isTopSensorPressed())
@@ -136,8 +145,14 @@ public class SK25Elevator extends SubsystemBase
             return false;
     }
 
-    // Motor Methods
+    // Encoder Value Method
+    public Double getEncoderValue()
+    {
+        return encoderL.getPosition();
 
+    }
+
+    // Motor Methods
     public void setRightMotor(double location)
     {
         RtargetPosition = location;
@@ -161,7 +176,6 @@ public class SK25Elevator extends SubsystemBase
     }
 
     // Position Methods
-    
     public double getLeftPosition()
     {
         return encoderL.getPosition();
@@ -197,7 +211,6 @@ public class SK25Elevator extends SubsystemBase
     }
 
     // Stop Motors Method
-
     public void stopMotors()
     {
         motorL.stopMotor();
@@ -211,10 +224,10 @@ public class SK25Elevator extends SubsystemBase
         // double r_target_position = getRightTargetPosition();
 
         double l_current_position = getLeftPosition();
-        // double l_target_position = getLeftTargetPosition();
+        //double l_target_position = getLeftTargetPosition();
 
         // // Calculates motor speed and puts it within operating range
-        // double rSpeed = MathUtil.clamp(rPID.calculate(r_current_position), kClimbMotorMinOutput, kClimbMotorMaxOutput);
+        //double rSpeed = MathUtil.clamp(rPID.calculate(r_current_position), kClimbMotorMinOutput, kClimbMotorMaxOutput);
         // motorR.set(rSpeed); 
 
         // // Calculates motor speed and puts it within operating range
