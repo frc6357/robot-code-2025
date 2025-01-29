@@ -1,7 +1,7 @@
 package frc.robot.bindings;
 
 import static frc.robot.Konstants.ElevatorConstants.*;
-import static frc.robot.Ports.OperatorPorts.kElevatorAxis;
+import static frc.robot.Ports.OperatorPorts.*;
 
 import java.util.Optional;
 
@@ -11,7 +11,7 @@ import frc.robot.commands.TroughCommand;
 import frc.robot.commands.LowBranchCommand;
 import frc.robot.commands.MiddleBranchCommand;
 import frc.robot.commands.TopBranchCommand;
-import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.ElevatorJoystickCommand;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.Ports;
 import frc.robot.utils.filters.DeadbandFilter;
@@ -29,6 +29,7 @@ public class SK25ElevatorBinder implements CommandBinder{
     Trigger elevatorDownOperatorButton;
     */
     Trigger elevatorOverride;
+    Trigger elevatorAxis;
 
 
     public SK25ElevatorBinder(Optional<SK25Elevator> subsystem){
@@ -39,7 +40,9 @@ public class SK25ElevatorBinder implements CommandBinder{
         this.elevatorLowBranch = Ports.OperatorPorts.kLowBranch.button;
         this.elevatorMiddleBranch = Ports.OperatorPorts.kMiddleBranch.button;
         this.elevatorTopBranch = Ports.OperatorPorts.kTopBranch.button;
+
         this.elevatorOverride = Ports.DriverPorts.kElevatorOverride.button;
+        //this.elevatorAxis = Ports.DriverPorts.kElevatorAxis.button;
     }
 
     public void bindButtons()
@@ -62,7 +65,7 @@ public class SK25ElevatorBinder implements CommandBinder{
               elevator.setDefaultCommand(
                          // Vertical movement of the arm is controlled by the Y axis of the right stick.
                          // Up on joystick moving arm up and down on stick moving arm down.
-                         new ElevatorCommand(
+                         new ElevatorJoystickCommand(
                              () -> {return kElevatorAxis.getFilteredAxis();},
                              elevatorOverride::getAsBoolean,
                              elevator));
