@@ -13,7 +13,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SK25Elevator;
 /** An example command that uses an example subsystem. */
-public class ElevatorCommand extends Command {
+public class ElevatorJoystickCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
     private final SK25Elevator elevator;
@@ -34,7 +34,7 @@ public class ElevatorCommand extends Command {
      * @param climb
      *            Subsystem used for this command
      */
-    public ElevatorCommand(Supplier<Double> setpointChange, Supplier<Boolean> clampOverride, SK25Elevator elevator)
+    public ElevatorJoystickCommand(Supplier<Double> setpointChange, Supplier<Boolean> clampOverride, SK25Elevator elevator)
     {
         this.controller = setpointChange;
         this.override = clampOverride;
