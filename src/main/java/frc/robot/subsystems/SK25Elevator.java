@@ -95,22 +95,14 @@ public class SK25Elevator extends SubsystemBase
         encoderL = motorL.getEncoder();
         encoderR = motorR.getEncoder();
 
-        // Keeping This Here Just In Case
-        /*
-        RelativeEncoder encoderR = motorR.getEncoder();
-        RelativeEncoder encoderL = motorL.getEncoder();
-        encoderR.setPositionConversionFactor(elevatorConversion);
-        encoderL.setPositionConversionFactor(elevatorConversion);
-        */
-
-        resetPosition(0.0);
-
         // Current And Target Positions
         RtargetPosition = 0.0;
         RcurrentPosition = 0.0;
 
         LtargetPosition = 0.0;
         LcurrentPosition = 0.0;
+
+        resetPosition(0.0);
 
         // Touch Sensor
         touchSensorTop = new DigitalInput(1);

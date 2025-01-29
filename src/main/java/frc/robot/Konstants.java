@@ -47,13 +47,11 @@ public final class Konstants
         public static final double kElevatorMotorMaxOutput = 1.0;
 
         public static final double kElevatorUpSpeed = 1.0;
-        public static final double kElevatorDownSpeed = -1.0;
+        public static final double kElevatorDownSpeed = 1.0;
 
         //public static final double kElevatorUpSpeedLeft = -1.0;
         //public static final double kElevatorDownSpeedLeft = 1.0;
 
-
-        
         public static final double kMin = 0.0;
         public static final double kMax = 1.0;
     

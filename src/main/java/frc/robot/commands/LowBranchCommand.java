@@ -28,28 +28,33 @@ public class LowBranchCommand extends Command
     @Override
     public void execute() 
     {
-        if (elevator.atTop())
-        {
-            
-        }
-        else
+        if (elevator.getEncoderValue() < .6)
         {
             elevator.runLeftMotor(kElevatorUpSpeed);
             elevator.runRightMotor(kElevatorUpSpeed);
+        }
+        else if (elevator.getEncoderValue() > .6)
+        {
+            elevator.runLeftMotor(-kElevatorUpSpeed);
+            elevator.runRightMotor(-kElevatorUpSpeed);
         }
     }
 
     // Called once the command ends or is interrupted.
     @Override
-    public void end(boolean interrupted) 
-    {
-        //stop the motor
-    }
+    public void end(boolean interrupted) {}
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished()
     {
-        return false;
+        if (elevator.getEncoderValue() == .2)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

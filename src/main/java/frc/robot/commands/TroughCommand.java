@@ -21,34 +21,40 @@ public class TroughCommand extends Command
     @Override
     public void initialize() 
     {
-        if (elevator.atTop())
-        {
-            
-        }
-        else
-        {
-            elevator.runLeftMotor(kElevatorUpSpeed);
-            elevator.runRightMotor(kElevatorUpSpeed);
-        }
+        
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() 
     {
+        if (elevator.getEncoderValue() < .4)
+        {
+            elevator.runLeftMotor(kElevatorUpSpeed);
+            elevator.runRightMotor(kElevatorUpSpeed);
+        }
+        else if (elevator.getEncoderValue() > .4)
+        {
+            elevator.runLeftMotor(-kElevatorUpSpeed);
+            elevator.runRightMotor(-kElevatorUpSpeed);
+        }
     }
 
     // Called once the command ends or is interrupted.
     @Override
-    public void end(boolean interrupted) 
-    {
-        //stop the motor
-    }
+    public void end(boolean interrupted) {}
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished()
     {
-        return false;
+        if (elevator.getEncoderValue() == .4)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
