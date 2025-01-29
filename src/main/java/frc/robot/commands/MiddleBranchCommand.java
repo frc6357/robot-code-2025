@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SK25Elevator;
-import static frc.robot.Konstants.ElevatorConstants.kElevatorUpSpeed;
+import static frc.robot.Konstants.ElevatorConstants.*;
 
 public class MiddleBranchCommand extends Command
 {
@@ -35,8 +35,8 @@ public class MiddleBranchCommand extends Command
         }
         else if (elevator.getEncoderValue() > .8)
         {
-            elevator.runLeftMotor(-kElevatorUpSpeed);
-            elevator.runRightMotor(-kElevatorUpSpeed);
+            elevator.runLeftMotor(kElevatorDownSpeed);
+            elevator.runRightMotor(kElevatorDownSpeed);
         }
     }
 
