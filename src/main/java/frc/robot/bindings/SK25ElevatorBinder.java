@@ -6,6 +6,7 @@ import static frc.robot.Ports.OperatorPorts.*;
 import java.util.Optional;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.ElevatorButtonCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.TroughCommand;
 import frc.robot.commands.LowBranchCommand;
@@ -28,6 +29,17 @@ public class SK25ElevatorBinder implements CommandBinder{
     Trigger elevatorUpOperatorButton;
     Trigger elevatorDownOperatorButton;
     */
+
+    Trigger LowButton;
+    Trigger MidButton;
+    Trigger HighButton;
+    Trigger TroughButton;
+
+    Trigger zeroPositionButton;
+    Trigger zeroPositionButtonDriver;
+
+    Trigger resetPos;
+
     Trigger elevatorOverride;
     Trigger elevatorAxis;
 
@@ -43,6 +55,13 @@ public class SK25ElevatorBinder implements CommandBinder{
 
         this.elevatorOverride = Ports.DriverPorts.kElevatorOverride.button;
         //this.elevatorAxis = Ports.DriverPorts.kElevatorAxis.button;
+
+        this.zeroPositionButton = kZeroPositionOperator.button;
+        this.LowButton          = kLowBranch.button;
+        this.MidButton          = kMiddleBranch.button;
+        this.HighButton         = kTopBranch.button;
+        this.TroughButton       = kTrough.button;
+        this.resetPos           = kResetArmPos.button;
     }
 
     public void bindButtons()

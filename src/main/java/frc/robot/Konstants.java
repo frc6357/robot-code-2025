@@ -32,14 +32,38 @@ public final class Konstants
 
     public static final class ElevatorConstants
     {
+        /** Angles for the different elevator positions */
+        public static enum ElevatorPosition
+        {
+            /** Set the angle to reach the top branch (L4) */
+            TopPosition(87.0),
+            /** Set the angle to reach the middle branch (L3) */
+            MidPosition(60.0),
+            /** Set the angle to reach the low branch (L2) */
+            LowPosition(12.5),
+            /** Set the angle to reach the trough (L1) */
+            TroughPosition(0.0),
+            /** Set the angle to a dipped position */
+            DipPosition(10.5),
+            /** Set the angle to reach the substation */
+            SSS(0.0);
+
+            public final double height;
+
+            ElevatorPosition(double height)
+            {
+                this.height = height;
+            }
+        }
+
         public static final PIDConstants rightElevator = new PIDConstants(0.01, 0.0, 0.0);
         public static final PIDConstants leftElevator = new PIDConstants(0.01, 0.0, 0.0);
         public static final PIDConstants balancePID = new PIDConstants(0.0, 0.0, 0.0);
 
         public static final double kElevatorBalanceTolerance = 5.0;
-        public static final double spoolDiameter = 0.75; //Inches
-        public static final double gearRatio = 1.0; //Shaft rotations / 1 motor rotation
-        public static final double elevatorHeight = 11.0; //Inches
+        public static final double spoolDiameter = 1.273; //Inches
+        public static final double gearRatio = .0625; //Shaft rotations / 1 motor rotation
+        public static final double elevatorHeight = 28; //Inches
 
         public static final double elevatorConversion = 1.0 / 87.0; //inches moved per motor rotation
         public static final double kPositionTolerance = 2.0;

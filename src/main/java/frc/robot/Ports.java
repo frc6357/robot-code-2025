@@ -54,14 +54,12 @@ public class Ports
         //Example of rawAxis values (Joysticks on the controller)
         //public static final FilteredAxis kExampleRawAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
         
-        //ExampleButton
+        // Elevator
         public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
         public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
         public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
         public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
-
-        //Elevator
-        public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
+        public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
 
         // Party mode
         public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kBack.value, BUTTON);

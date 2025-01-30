@@ -4,8 +4,7 @@
 
 package frc.robot.commands;
 
-import static frc.robot.Konstants.ElevatorConstants.kMax;
-import static frc.robot.Konstants.ElevatorConstants.kMin;
+import static frc.robot.Konstants.ElevatorConstants.*;
 
 import java.util.function.Supplier;
 
@@ -58,12 +57,12 @@ public class ElevatorJoystickCommand extends Command {
 
         if(!override.get())
         {
-            rightSetpoint = MathUtil.clamp(rightSetpoint, kMin, kMax);
-            leftSetpoint = MathUtil.clamp(leftSetpoint, kMin, kMax);
+            rightSetpoint = MathUtil.clamp(rightSetpoint, kMinHeight, kMaxHeight);
+            leftSetpoint = MathUtil.clamp(leftSetpoint, kMinHeight, kMaxHeight);
         }
 
-        elevator.setRightMotor(rightSetpoint);
-        elevator.setLeftMotor(leftSetpoint);
+        elevator.setRightTargetHeight(rightSetpoint);
+        elevator.setLeftTargetHeight(leftSetpoint);
     }
 
     @Override
