@@ -11,14 +11,13 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SK25Elevator;
-/** An example command that uses an example subsystem. */
+
 public class ElevatorJoystickCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
     private final SK25Elevator elevator;
     private final Supplier<Double>  controller;
     private final Supplier<Boolean> override;
-    
 
     /**
      * Sets the angle of the arm based upon input from a joystick, adding or subtracting
@@ -30,9 +29,10 @@ public class ElevatorJoystickCommand extends Command {
      *            The method to get the setpoint change in degrees per second
      * @param clampOverride
      *            The method to determine if the angle limits should be overridden
-     * @param climb
+     * @param elevator
      *            Subsystem used for this command
      */
+
     public ElevatorJoystickCommand(Supplier<Double> setpointChange, Supplier<Boolean> clampOverride, SK25Elevator elevator)
     {
         this.controller = setpointChange;
@@ -43,8 +43,7 @@ public class ElevatorJoystickCommand extends Command {
     }
 
     @Override
-    public void initialize()
-    {}
+    public void initialize(){}
 
     @Override
     public void execute()
@@ -66,10 +65,7 @@ public class ElevatorJoystickCommand extends Command {
     }
 
     @Override
-    public void end(boolean interrupted)
-    {
-        
-    }
+    public void end(boolean interrupted){}
 
     // Returns true when the command should end.
     @Override

@@ -165,7 +165,12 @@ public class RobotContainer {
 
     public void matchInit()
     {
-    
+        if (armSubsystem.isPresent())
+        {
+            SK25Elevator elevator = armSubsystem.get();
+            arm.resetAngle();
+            arm.setTargetAngle(0.0);
+        }
     }
 
     public void teleopInit()

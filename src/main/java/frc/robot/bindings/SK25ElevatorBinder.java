@@ -17,7 +17,7 @@ import static frc.robot.Ports.OperatorPorts.kTrough;
 import static frc.robot.Ports.OperatorPorts.kZeroPositionOperator;
 
 import java.util.Optional;
-
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Ports;
 import frc.robot.commands.ElevatorButtonCommand;
@@ -102,7 +102,7 @@ public class SK25ElevatorBinder implements CommandBinder{
             MidButton.onTrue(new ElevatorButtonCommand(MidPosition, elevator));
             TopButton.onTrue(new ElevatorButtonCommand(TopPosition, elevator));
 
-            //resetPos.onTrue(new InstantCommand(() -> elevator.resetPosition()));
+            resetPos.onTrue(new InstantCommand(() -> elevator.resetPosition()));
 
               elevator.setDefaultCommand(
                          // Vertical movement of the arm is controlled by the Y axis of the right stick.
