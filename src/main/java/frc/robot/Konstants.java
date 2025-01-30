@@ -43,10 +43,8 @@ public final class Konstants
             LowPosition(12.5),
             /** Set the angle to reach the trough (L1) */
             TroughPosition(0.0),
-            /** Set the angle to a dipped position */
-            DipPosition(10.5),
-            /** Set the angle to reach the substation */
-            SSS(0.0);
+            /** Set the angle to reach the bottom */
+            ZeroPosition(0.0);
 
             public final double height;
 
@@ -76,8 +74,8 @@ public final class Konstants
         //public static final double kElevatorUpSpeedLeft = -1.0;
         //public static final double kElevatorDownSpeedLeft = 1.0;
 
-        public static final double kMin = 0.0;
-        public static final double kMax = 1.0;
+        public static final double kMinHeight = 0;
+        public static final double kMaxHeight = 100;
     
         public static final double kJoystickChange   = 0.1; // Manual setpoint value for units from 0.0 - 1.0 moved per second
         public static final double kJoystickDeadband = 0.3;  // Manual arm movement axis deadband

@@ -1,20 +1,32 @@
 package frc.robot.bindings;
 
-import static frc.robot.Konstants.ElevatorConstants.*;
-import static frc.robot.Ports.OperatorPorts.*;
+import static frc.robot.Konstants.ElevatorConstants.kJoystickChange;
+import static frc.robot.Konstants.ElevatorConstants.kJoystickDeadband;
+import static frc.robot.Konstants.ElevatorConstants.kJoystickReversed;
+import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.LowPosition;
+import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.MidPosition;
+import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.TopPosition;
+import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.TroughPosition;
+import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.ZeroPosition;
+import static frc.robot.Ports.OperatorPorts.kElevatorAxis;
+import static frc.robot.Ports.OperatorPorts.kLowBranch;
+import static frc.robot.Ports.OperatorPorts.kMiddleBranch;
+import static frc.robot.Ports.OperatorPorts.kResetArmPos;
+import static frc.robot.Ports.OperatorPorts.kTopBranch;
+import static frc.robot.Ports.OperatorPorts.kTrough;
+import static frc.robot.Ports.OperatorPorts.kZeroPositionOperator;
 
 import java.util.Optional;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.ElevatorButtonCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.TroughCommand;
+import frc.robot.Ports;
+import frc.robot.commands.ElevatorButtonCommand;
+import frc.robot.commands.ElevatorJoystickCommand;
 import frc.robot.commands.LowBranchCommand;
 import frc.robot.commands.MiddleBranchCommand;
 import frc.robot.commands.TopBranchCommand;
-import frc.robot.commands.ElevatorJoystickCommand;
+import frc.robot.commands.TroughCommand;
 import frc.robot.subsystems.SK25Elevator;
-import frc.robot.Ports;
 import frc.robot.utils.filters.DeadbandFilter;
 
 public class SK25ElevatorBinder implements CommandBinder{
@@ -23,6 +35,7 @@ public class SK25ElevatorBinder implements CommandBinder{
     Trigger elevatorLowBranch;
     Trigger elevatorMiddleBranch;
     Trigger elevatorTopBranch;
+
     /* 
     Trigger rightElevatorButton;
     Trigger leftElevatorButton;
@@ -32,7 +45,7 @@ public class SK25ElevatorBinder implements CommandBinder{
 
     Trigger LowButton;
     Trigger MidButton;
-    Trigger HighButton;
+    Trigger TopButton;
     Trigger TroughButton;
 
     Trigger zeroPositionButton;
@@ -59,7 +72,7 @@ public class SK25ElevatorBinder implements CommandBinder{
         this.zeroPositionButton = kZeroPositionOperator.button;
         this.LowButton          = kLowBranch.button;
         this.MidButton          = kMiddleBranch.button;
-        this.HighButton         = kTopBranch.button;
+        this.TopButton          = kTopBranch.button;
         this.TroughButton       = kTrough.button;
         this.resetPos           = kResetArmPos.button;
     }
@@ -80,6 +93,16 @@ public class SK25ElevatorBinder implements CommandBinder{
             elevatorLowBranch.onTrue(new LowBranchCommand(elevator));
             elevatorMiddleBranch.onTrue(new MiddleBranchCommand(elevator));
             elevatorTopBranch.onTrue(new TopBranchCommand(elevator));
+
+            // Elevator Position Buttons (Kurian)
+
+            zeroPositionButton.onTrue(new ElevatorButtonCommand(ZeroPosition, elevator));
+            TroughButton.onTrue(new ElevatorButtonCommand(TroughPosition, elevator));
+            LowButton.onTrue(new ElevatorButtonCommand(LowPosition, elevator));
+            MidButton.onTrue(new ElevatorButtonCommand(MidPosition, elevator));
+            TopButton.onTrue(new ElevatorButtonCommand(TopPosition, elevator));
+
+            //resetPos.onTrue(new InstantCommand(() -> elevator.resetPosition()));
 
               elevator.setDefaultCommand(
                          // Vertical movement of the arm is controlled by the Y axis of the right stick.

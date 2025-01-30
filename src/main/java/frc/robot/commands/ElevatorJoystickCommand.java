@@ -53,7 +53,7 @@ public class ElevatorJoystickCommand extends Command {
 
          // Sets the new angle to the current angle plus or minus the constant change
         double rightSetpoint = elevator.getRightTargetPosition() + angleChange;
-        double leftSetpoint= elevator.getLeftTargetPosition() + angleChange;
+        double leftSetpoint = elevator.getLeftTargetPosition() + angleChange;
 
         if(!override.get())
         {

@@ -1,31 +1,31 @@
 // Essentials
 package frc.robot.subsystems;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-// Motors - Sparkflex
-import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
+// Constants (Muy Importante)
+import static frc.robot.Konstants.ElevatorConstants.elevatorConversion;
+import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
+import static frc.robot.Konstants.ElevatorConstants.leftElevator;
+import static frc.robot.Konstants.ElevatorConstants.rightElevator;
+import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
+import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
 
 // Encoders - Sensors
 import com.revrobotics.RelativeEncoder;
-import edu.wpi.first.wpilibj.DigitalInput;
-
-// Constants (Muy Importante)
-import static frc.robot.Konstants.ElevatorConstants.*;
-import static frc.robot.Ports.ElevatorPorts.*;
-
-// Configurations For Stuff (Thanks REV)
-import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.sim.SparkFlexExternalEncoderSim;
-
 // SparkBase
 import com.revrobotics.spark.SparkBase;
+// Motors - Sparkflex
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+// Configurations For Stuff (Thanks REV)
+import com.revrobotics.spark.config.SparkFlexConfig;
 
 // PID Controller
 import edu.wpi.first.math.controller.PIDController;
-
+import edu.wpi.first.wpilibj.DigitalInput;
 // SmartDashboard
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
 
 // Unused Imports (Maybe In The Future)
 //import com.revrobotics.spark.config.SparkMaxConfig;
@@ -109,6 +109,8 @@ public class SK25Elevator extends SubsystemBase
         touchSensorBottom = new DigitalInput(2);
     }
 
+    
+
     // Button Sensor Methods
     public Boolean isTopSensorPressed()
     {
@@ -144,30 +146,25 @@ public class SK25Elevator extends SubsystemBase
 
     }
 
-    // Motor Methods
-    public void setRightMotor(double location)
+    // Motor Methods (Kurian)
+    public void setTargetHeight(ElevatorPosition height)
     {
-        RtargetPosition = location;
-        rPID.setSetpoint(location);
+        setRightTargetHeight(height.height);
+        setLeftTargetHeight(height.height);
+    }
+
+    public void setRightTargetHeight(double height)
+    {
+        RtargetPosition = height;
+        rPID.setSetpoint(height);
     }
     
-    public void setLeftMotor(double location)
+    public void setLeftTargetHeight(double height)
     {
-        LtargetPosition = location;
-        lPID.setSetpoint(location);
+        LtargetPosition = height;
+        lPID.setSetpoint(height);
     }
 
-    public void runLeftMotor(double speed)
-    {
-        motorL.set(speed);
-    }
-
-    public void runRightMotor(double speed)
-    {
-        motorR.set(speed);
-    }
-
-    // Position Methods
     public double getLeftPosition()
     {
         return encoderL.getPosition();
@@ -200,6 +197,17 @@ public class SK25Elevator extends SubsystemBase
     {
         encoderL.setPosition(position);
         encoderR.setPosition(position);
+    }
+
+    // Run Motors Methods
+    public void runLeftMotor(double speed)
+    {
+        motorL.set(speed);
+    }
+
+    public void runRightMotor(double speed)
+    {
+        motorR.set(speed);
     }
 
     // Stop Motors Method

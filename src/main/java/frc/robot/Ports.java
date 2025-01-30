@@ -60,6 +60,8 @@ public class Ports
         public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
         public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
         public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
+        public static final SKTrigger kZeroPositionOperator  = new SKTrigger(kOperator, kStart.value, BUTTON);
+        public static final SKTrigger    kResetArmPos   = new SKTrigger(kOperator, kBack.value, BUTTON);
 
         // Party mode
         public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kBack.value, BUTTON);
