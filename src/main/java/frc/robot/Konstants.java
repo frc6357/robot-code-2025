@@ -40,8 +40,12 @@ public final class Konstants
     public static final class ClimbConstants
     {
         //to be changed
+        public static final int kRightClimbMotorId = 0;
+        public static final int kLeftClimbMotorId = 9;
         public static final PIDConstants pid = new PIDConstants(0.0, 0.0, 0.0);
         public static final double kClimbSetpoint = 0.0;
+        public static final double kSpeed = .3;
+
     }
 
     public static final class ExampleConstants

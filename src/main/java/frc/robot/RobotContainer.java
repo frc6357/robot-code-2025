@@ -24,7 +24,7 @@ import frc.robot.bindings.ClimbBinder;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.ExampleBinder;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.SK25Climb;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PracticeSwerve;
 import frc.robot.utils.SK25AutoBuilder;
@@ -41,7 +41,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
   private Optional<PracticeSwerve> m_PracticeSwerve = Optional.empty();
-  private Optional<Climb> m_Climb = Optional.empty();
+  private Optional<SK25Climb> m_Climb = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -88,7 +88,7 @@ public class RobotContainer {
                 mySubsystem = Optional.of(new ExampleSubsystem());
             }
             if(subsystems.isClimbPresent()) {
-                m_Climb = Optional.of(new Climb());
+                m_Climb = Optional.of(new SK25Climb());
             }
         }
         catch (IOException e)
