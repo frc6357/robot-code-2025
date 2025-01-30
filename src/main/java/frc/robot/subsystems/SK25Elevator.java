@@ -1,5 +1,6 @@
 // Essentials
 package frc.robot.subsystems;
+
 // Constants (Muy Importante)
 import static frc.robot.Konstants.ElevatorConstants.elevatorConversion;
 import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
@@ -10,18 +11,21 @@ import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
 
 // Encoders - Sensors
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.sim.SparkFlexExternalEncoderSim;
+
 // SparkBase
 import com.revrobotics.spark.SparkBase;
+
 // Motors - Sparkflex
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 // Configurations For Stuff (Thanks REV)
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 // PID Controller
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+
 // SmartDashboard
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -39,9 +43,7 @@ public class SK25Elevator extends SubsystemBase
     SparkFlex motorR;
     SparkFlex motorL;
 
-    // Creating Testing Objects
-    SparkFlexExternalEncoderSim encoderTestRight;
-
+    // Creating Config Object
     SparkFlexConfig config;
 
     //Create Memory PID Objects
@@ -90,6 +92,7 @@ public class SK25Elevator extends SubsystemBase
             .positionConversionFactor(elevatorConversion);
         
         motorR.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        motorL.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
         // Encoder Objects
         encoderL = motorL.getEncoder();
@@ -108,8 +111,6 @@ public class SK25Elevator extends SubsystemBase
         touchSensorTop = new DigitalInput(1);
         touchSensorBottom = new DigitalInput(2);
     }
-
-    
 
     // Button Sensor Methods
     public Boolean isTopSensorPressed()
@@ -139,14 +140,8 @@ public class SK25Elevator extends SubsystemBase
             return false;
     }
 
-    // Encoder Value Method
-    public Double getEncoderValue()
-    {
-        return encoderL.getPosition();
-
-    }
-
     // Motor Methods (Kurian)
+    
     public void setTargetHeight(ElevatorPosition height)
     {
         setRightTargetHeight(height.height);

@@ -4,9 +4,9 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
-//import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.subsystems.SK25Elevator;
 
 public class ElevatorButtonCommand extends Command
@@ -22,8 +22,8 @@ public class ElevatorButtonCommand extends Command
      * 
      * @param position
      *            The position to set the arm to
-     * @param Arm
-     *            The Arm subsystem the command operates on.
+     * @param Elevator
+     *            The Elevator subsystem the command operates on.
      */
     public ElevatorButtonCommand(ElevatorPosition position, SK25Elevator Elevator)
     {
@@ -43,18 +43,16 @@ public class ElevatorButtonCommand extends Command
     @Override
     public boolean isFinished()
     {
-        return false;
-        /*
+
         if(DriverStation.isAutonomousEnabled())
         {
-            return true;
-            //return Elevator.isAtTargetAngle();
+            return Elevator.isRightAtTargetPosition();
         }
         else
         {
             return true;
         }
-        */
+    
         
     }
 }

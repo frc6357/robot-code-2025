@@ -28,12 +28,12 @@ public class TopBranchCommand extends Command
     @Override
     public void execute() 
     {
-        if (elevator.getEncoderValue() < 1)
+        if (elevator.getRightPosition() < 1 && elevator.getLeftPosition() < 1)
         {
             elevator.runLeftMotor(kElevatorUpSpeed);
             elevator.runRightMotor(kElevatorUpSpeed);
         }
-        else if (elevator.getEncoderValue() > 1)
+        else if (elevator.getRightPosition() > 1 && elevator.getLeftPosition() > 1)
         {
             elevator.runLeftMotor(kElevatorDownSpeed);
             elevator.runRightMotor(kElevatorDownSpeed);
@@ -48,7 +48,7 @@ public class TopBranchCommand extends Command
     @Override
     public boolean isFinished()
     {
-        if (elevator.getEncoderValue() == 1)
+        if (elevator.getRightPosition() == 1 && elevator.getLeftPosition() == 1)
         {
             return true;
         }

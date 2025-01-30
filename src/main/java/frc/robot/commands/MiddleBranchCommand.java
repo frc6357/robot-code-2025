@@ -28,12 +28,12 @@ public class MiddleBranchCommand extends Command
     @Override
     public void execute() 
     {
-        if (elevator.getEncoderValue() < .8)
+        if (elevator.getRightPosition() < .8 && elevator.getLeftPosition() < .8)
         {
             elevator.runLeftMotor(kElevatorUpSpeed);
             elevator.runRightMotor(kElevatorUpSpeed);
         }
-        else if (elevator.getEncoderValue() > .8)
+        else if (elevator.getRightPosition() > .8 && elevator.getLeftPosition() > .8)
         {
             elevator.runLeftMotor(kElevatorDownSpeed);
             elevator.runRightMotor(kElevatorDownSpeed);
@@ -48,7 +48,7 @@ public class MiddleBranchCommand extends Command
     @Override
     public boolean isFinished()
     {
-        if (elevator.getEncoderValue() == .8)
+        if (elevator.getRightPosition() == .8 && elevator.getLeftPosition() == .8)
         {
             return true;
         }

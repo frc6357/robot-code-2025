@@ -28,12 +28,12 @@ public class TroughCommand extends Command
     @Override
     public void execute() 
     {
-        if (elevator.getEncoderValue() < .4)
+        if (elevator.getRightPosition() < .4 && elevator.getLeftPosition() < .4)
         {
             elevator.runLeftMotor(kElevatorUpSpeed);
             elevator.runRightMotor(kElevatorUpSpeed);
         }
-        else if (elevator.getEncoderValue() > .4)
+        else if (elevator.getRightPosition() > .4 && elevator.getLeftPosition() > .4)
         {
             elevator.runLeftMotor(kElevatorDownSpeed);
             elevator.runRightMotor(kElevatorDownSpeed);
@@ -48,7 +48,7 @@ public class TroughCommand extends Command
     @Override
     public boolean isFinished()
     {
-        if (elevator.getEncoderValue() == .4)
+        if (elevator.getRightPosition() == .4 && elevator.getLeftPosition() == .4)
         {
             return true;
         }

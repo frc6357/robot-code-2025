@@ -28,12 +28,12 @@ public class LowBranchCommand extends Command
     @Override
     public void execute() 
     {
-        if (elevator.getEncoderValue() < .6)
+        if (elevator.getRightPosition() < .6 && elevator.getLeftPosition() < .6)
         {
             elevator.runLeftMotor(kElevatorUpSpeed);
             elevator.runRightMotor(kElevatorUpSpeed);
         }
-        else if (elevator.getEncoderValue() > .6)
+        else if (elevator.getRightPosition() > .6 && elevator.getLeftPosition() > .6)
         {
             elevator.runLeftMotor(kElevatorDownSpeed);
             elevator.runRightMotor(kElevatorDownSpeed);
@@ -48,7 +48,7 @@ public class LowBranchCommand extends Command
     @Override
     public boolean isFinished()
     {
-        if (elevator.getEncoderValue() == .2)
+        if (elevator.getRightPosition() == .6 && elevator.getLeftPosition() == .6)
         {
             return true;
         }

@@ -36,13 +36,13 @@ public final class Konstants
         public static enum ElevatorPosition
         {
             /** Set the angle to reach the top branch (L4) */
-            TopPosition(87.0),
+            TopPosition(100),
             /** Set the angle to reach the middle branch (L3) */
-            MidPosition(60.0),
+            MidPosition(75),
             /** Set the angle to reach the low branch (L2) */
-            LowPosition(12.5),
+            LowPosition(50),
             /** Set the angle to reach the trough (L1) */
-            TroughPosition(0.0),
+            TroughPosition(25),
             /** Set the angle to reach the bottom */
             ZeroPosition(0.0);
 
@@ -74,9 +74,9 @@ public final class Konstants
         //public static final double kElevatorUpSpeedLeft = -1.0;
         //public static final double kElevatorDownSpeedLeft = 1.0;
 
-        public static final double kMinHeight = 0;
         public static final double kMaxHeight = 100;
-    
+        public static final double kMinHeight = 0;
+
         public static final double kJoystickChange   = 0.1; // Manual setpoint value for units from 0.0 - 1.0 moved per second
         public static final double kJoystickDeadband = 0.3;  // Manual arm movement axis deadband
 
@@ -95,8 +95,6 @@ public final class Konstants
         public static final double kExampleSpeed = 0.5;
     }
     
-    
-
     /** The file that is used for system instantiation at runtime */
     public static final String SUBSYSTEMFILE = "Subsystems.json";
 }
