@@ -44,7 +44,8 @@ public class SK25Elevator extends SubsystemBase
     SparkFlex motorL;
 
     // Creating Config Object
-    SparkFlexConfig config;
+    SparkFlexConfig config1;
+    SparkFlexConfig config2;
 
     //Create Memory PID Objects
     PIDController rPID;
@@ -73,32 +74,35 @@ public class SK25Elevator extends SubsystemBase
     // Constructor For Public Command Access
     public SK25Elevator()
     {
+        // Touch Sensors
+        touchSensorTop = new DigitalInput(1);
+        touchSensorBottom = new DigitalInput(2);
+
         // PID Controllers - Setpoints
         rPID = new PIDController(rightElevator.kP, rightElevator.kI, rightElevator.kD);
-        rPID.setSetpoint(0.0);
-
         lPID = new PIDController(leftElevator.kP, leftElevator.kI, leftElevator.kD);
+
+        rPID.setSetpoint(0.0);
         lPID.setSetpoint(0.0);
 
-        // Motor Initialization With REV - Configurations
+        // Motor Initialization With REV Sparkflex - Configurations
         motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
         motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
-        config = new SparkFlexConfig();
+        config1 = new SparkFlexConfig();
 
-        // Configurations For The Motor & Encoder
-        config.
-            inverted(true);
-        config.encoder
-            .positionConversionFactor(elevatorConversion);
+        // Configurations For The Motors & Encoders
+        config1.inverted(true);
+        config1.encoder.positionConversionFactor(elevatorConversion);
+        config2.encoder.positionConversionFactor(elevatorConversion);
         
-        motorR.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-        motorL.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        motorR.configure(config1, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        motorL.configure(config2, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
         // Encoder Objects
         encoderL = motorL.getEncoder();
         encoderR = motorR.getEncoder();
 
-        // Current And Target Positions
+        // Current, Target, and Reset Positions
         RtargetPosition = 0.0;
         RcurrentPosition = 0.0;
 
@@ -106,42 +110,13 @@ public class SK25Elevator extends SubsystemBase
         LcurrentPosition = 0.0;
 
         resetPosition(0.0);
-
-        // Touch Sensor
-        touchSensorTop = new DigitalInput(1);
-        touchSensorBottom = new DigitalInput(2);
     }
 
-    // Button Sensor Methods
-    public Boolean isTopSensorPressed()
-    {
-        return !touchSensorTop.get();
-    }
+    /* 
+     *  KURIAN-RELATED METHODS 
+    */
 
-    public Boolean isBottomSensorPressed()
-    {
-        return !touchSensorBottom.get();
-    }
-
-    // Button Sensor Methods For Use By Commands
-    public boolean atTop()
-    {
-        if(isTopSensorPressed())
-            return true;
-        else
-            return false;
-    }
-
-    public boolean atBottom()
-    {
-        if(isBottomSensorPressed())
-            return true;
-        else
-            return false;
-    }
-
-    // Motor Methods (Kurian)
-    
+    // Target Height
     public void setTargetHeight(ElevatorPosition height)
     {
         setRightTargetHeight(height.height);
@@ -160,6 +135,7 @@ public class SK25Elevator extends SubsystemBase
         lPID.setSetpoint(height);
     }
 
+    // Positions, Target Positions, & At Target Positions
     public double getLeftPosition()
     {
         return encoderL.getPosition();
@@ -187,11 +163,44 @@ public class SK25Elevator extends SubsystemBase
     {
         return Math.abs(getLeftPosition() - getLeftTargetPosition()) < kPositionTolerance;
     }
-
+    
+    // Reset Position
     public void resetPosition(double position)
     {
         encoderL.setPosition(position);
         encoderR.setPosition(position);
+    }
+
+    /* 
+     *  NON-KURIAN METHODS 
+    */
+
+    // Button Sensor Methods
+    public Boolean isTopSensorPressed()
+    {
+        return !touchSensorTop.get();
+    }
+
+    public Boolean isBottomSensorPressed()
+    {
+        return !touchSensorBottom.get();
+    }
+
+    // Button Sensor Methods For Use By Commands
+    public boolean atTop()
+    {
+        if(isTopSensorPressed())
+            return true;
+        else
+            return false;
+    }
+
+    public boolean atBottom()
+    {
+        if(isBottomSensorPressed())
+            return true;
+        else
+            return false;
     }
 
     // Run Motors Methods
