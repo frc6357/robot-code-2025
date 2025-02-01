@@ -100,4 +100,13 @@ public class Ports
         //assign a motor ID of 49 to the example motor
         public static final CANPort kExampleMotor = new CANPort(49, busName); 
     }
+
+    public static class EndEffectorPorts
+    {
+        private static final String busName = "";
+
+        public static final CANPort kRollerMotor = new CANPort(55, busName );
+        public static final CANPort kArmMotor = new CANPort(56, busName );
+    }
+
 }

@@ -40,6 +40,14 @@ public final class Konstants
     {
         public static final double kExampleSpeed = 0.5;
     }
+
+    public static final class EndEffectorConstants
+    {
+
+        public static double kRollerSpeed = 0.5;
+        public static double kArmSpeed = 0.5;
+        
+    }
     
     
 
