@@ -63,6 +63,7 @@ public class Ports
         //algae ports
         public static final SKTrigger kAlgaeGrab = new SKTrigger(kOperator, kA.value, BUTTON);
         public static final SKTrigger kAlgaeRelease = new SKTrigger(kOperator, kB.value, BUTTON);
+        public static final SKTrigger kAlgaeRaise = new SKTrigger(kOperator, kY.value, BUTTON);
     }
 
     /**

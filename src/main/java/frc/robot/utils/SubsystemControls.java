@@ -11,20 +11,24 @@ public class SubsystemControls
 
     private final boolean swerve;
     private final boolean example;
+    private final boolean algae;
 
      /**  
      * @param swerve
      *            indicates if the swerve subsystem is present and should be enabled
      * @param example
      *            indicates if the example subsystem is present and should be enabled
+     * @param algae
      */
     public SubsystemControls(
         @JsonProperty(required = true, value = "swerve")      boolean swerve,
-        @JsonProperty(required = true, value = "swerve")      boolean example
+        @JsonProperty(required = true, value = "example")      boolean example,
+        @JsonProperty(required = true, value = "algae") boolean algae
     )
     {
         this.swerve = swerve;
         this.example = example;
+        this.algae = algae;
     }
 
 
@@ -41,5 +45,8 @@ public class SubsystemControls
     public boolean isExamplePresent()
     {
         return example;
+    }
+    public boolean isAlgaePresent(){
+        return algae;
     }
 }

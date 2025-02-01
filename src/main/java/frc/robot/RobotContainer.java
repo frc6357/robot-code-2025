@@ -14,7 +14,7 @@ import com.ctre.phoenix6.Utils;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pathplanner.lib.auto.NamedCommands;
+//import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,10 +26,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.ExampleBinder;
+import frc.robot.bindings.AlgaeBinder;
+import frc.robot.subsystems.AlgaePickup;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PracticeSwerve;
-import frc.robot.utils.SK25AutoBuilder;
+//import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
 
@@ -43,6 +45,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
   private Optional<PracticeSwerve> m_PracticeSwerve = Optional.empty();
+  private Optional<AlgaePickup>    algaeSubsystem    = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -81,12 +84,15 @@ public class RobotContainer {
             JsonParser parser =
                     factory.createParser(new File(deployDirectory, Konstants.SUBSYSTEMFILE));
             SubsystemControls subsystems = mapper.readValue(parser, SubsystemControls.class);
-
             // Instantiating subsystems if they are present
             // This is decided by looking at Subsystems.json
             if(subsystems.isExamplePresent())
             {
                 mySubsystem = Optional.of(new ExampleSubsystem());
+            }
+            if(subsystems.isAlgaePresent()){
+                algaeSubsystem = Optional.of(new AlgaePickup());
+
             }
         }
         catch (IOException e)
@@ -106,7 +112,7 @@ public class RobotContainer {
 
         // Adding all the binding classes to the list
         buttonBinders.add(new ExampleBinder(mySubsystem));
-
+        buttonBinders.add(new AlgaeBinder(algaeSubsystem));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
@@ -122,7 +128,7 @@ public class RobotContainer {
         {
                 ExampleSubsystem subsystem = mySubsystem.get();
                 
-                NamedCommands.registerCommand("ExampleCommand", new ExampleCommand(subsystem));
+                //NamedCommands.registerCommand("ExampleCommand", new ExampleCommand(subsystem));
 
 
             //Register commands for use in auto
@@ -135,8 +141,11 @@ public class RobotContainer {
             // Configures the autonomous paths and smartdashboard chooser
             
             //SK25AutoBuilder.setAutoNames(autoList);
-            autoCommandSelector = SK25AutoBuilder.buildAutoChooser("P4_Taxi");
+            //autoCommandSelector = SK25AutoBuilder.buildAutoChooser("P4_Taxi");
             //SmartDashboard.putData("Auto Chooser", autoCommandSelector);
+        }
+        if (algaeSubsystem.isPresent())
+        {
         }
     }
 
@@ -165,12 +174,19 @@ public class RobotContainer {
 
     public void matchInit()
     {
-    
+
+        if (algaeSubsystem.isPresent())
+        {
+            AlgaePickup algae = algaeSubsystem.get();
+        }
     }
 
     public void teleopInit()
-    {
-       
+    {   
+        if (algaeSubsystem.isPresent())
+        {
+            AlgaePickup algae = algaeSubsystem.get();
+        }
     }
     public void autonomousInit()
     {

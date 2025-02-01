@@ -2,14 +2,17 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.ClosedLoopSlot;
-
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -40,14 +43,20 @@ public class AlgaePickup extends SubsystemBase {
     SparkMax m_roller; 
 
     //encoder for m_lifter
-    private AbsoluteEncoder m_encoder;
+    private RelativeEncoder m_encoder;
 
     
     private SparkMaxConfig motorConfig;
     public AlgaePickup(){
-        m_lifter = new SparkMax(40, MotorType.kBrushless);
-        m_roller = new SparkMax(41, MotorType.kBrushless);
-        m_encoder = m_lifter.getAbsoluteEncoder();
+
+        m_roller = new SparkMax(40, MotorType.kBrushless);
+        m_lifter = new SparkMax(41, MotorType.kBrushless);
+        SparkMaxConfig config = new SparkMaxConfig();
+        config
+            .smartCurrentLimit(50)
+            .idleMode(IdleMode.kBrake);
+
+        m_encoder = m_lifter.getEncoder();
         
 
         m_PID=m_lifter.getClosedLoopController();
@@ -64,12 +73,16 @@ public class AlgaePickup extends SubsystemBase {
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             // Set PID values for position control. We don't need to pass a closed loop
             // slot, as it will default to slot 0.
-            .p(0.1)
+            .p(0.05)
             .i(0)
             .d(0)
-            .outputRange(-1, 1);
+            .outputRange(-.1, .1);
+        m_roller.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_lifter.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
-
+    public void initialize(){
+        m_encoder.setPosition(0);
+    }
     public void lower(){
         //Triggered when button 1 is pressed.
 
@@ -114,7 +127,7 @@ public class AlgaePickup extends SubsystemBase {
         m_roller.set(-rollingSpeed);
     }
     public void grab(){
-        m_roller.set(-rollingSpeed);
+        m_roller.set(rollingSpeed);
     }
 
     public boolean returns(){
