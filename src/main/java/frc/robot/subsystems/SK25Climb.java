@@ -5,8 +5,8 @@ package frc.robot.subsystems;
 import static frc.robot.Konstants.ClimbConstants.kClimbMaxPosition;
 import static frc.robot.Konstants.ClimbConstants.kClimbMinPosition;
 import static frc.robot.Konstants.ClimbConstants.kPositionTolerance;
-import static frc.robot.Konstants.ClimbConstants.kRightClimbMotorId;
 import static frc.robot.Konstants.ClimbConstants.pid;
+import static frc.robot.Ports.ClimbPorts.*;
 
 //Encoder Import
 import com.revrobotics.RelativeEncoder;
@@ -43,7 +43,7 @@ public class SK25Climb extends SubsystemBase
    public SK25Climb() 
    {
        //Initializations
-       motor = new SparkMax(kRightClimbMotorId, MotorType.kBrushless);
+       motor = new SparkMax(kClimbMotor.ID, MotorType.kBrushless);
        climbPID = new PIDController(pid.kP, pid.kI, pid.kD);
        encoder = motor.getEncoder();
        motorCurrentPosition = 0.0;

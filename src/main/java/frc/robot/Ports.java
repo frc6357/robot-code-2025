@@ -95,6 +95,12 @@ public class Ports
         public static final CANPort kPigeonPort = new CANPort(25, busName);
     }
 
+    public static class ClimbPorts
+    {
+        private static final String busName = "";
+        public static final CANPort kClimbMotor = new CANPort(50, busName);
+        
+    }
 
     public static class ExamplePorts
     {
