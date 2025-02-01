@@ -21,11 +21,12 @@ public class ClimbCommand1 extends Command{
     @Override
     public void execute() {
         climb.setPoint(kClimbSetpoint);
+        climb.runMotor(kSpeed);
     }
 
     @Override
     public void end(boolean interrupted) {
-        climb.runMotor(kSpeed);
+        climb.runMotor(0.0);
     }
 
     @Override

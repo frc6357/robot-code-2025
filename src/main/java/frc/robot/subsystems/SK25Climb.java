@@ -1,59 +1,82 @@
+//Subsystem Essentials
 package frc.robot.subsystems;
 
-import static frc.robot.Konstants.ClimbConstants.*;
+//Konstants (muy importante)
+import static frc.robot.Konstants.ClimbConstants.kClimbMaxPosition;
+import static frc.robot.Konstants.ClimbConstants.kClimbMinPosition;
+import static frc.robot.Konstants.ClimbConstants.kRightClimbMotorId;
+import static frc.robot.Konstants.ClimbConstants.pid;
 
+//Encoder Import
 import com.revrobotics.RelativeEncoder;
+//SparkMax Motor Imports
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
-
+import edu.wpi.first.math.MathUtil;
+//PIDController Import
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+//SmartDashboard Import
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class SK25Climb extends SubsystemBase {
   
-   //Test Motors - Subject to Change
+   //Declarations
    SparkMax motor;
-  
-   PIDController testPID;
-   //Motor Positions, Current and Target
-   double motorCurrentPosition;
-   double motorTargetPosition;
 
+   PIDController climbPID;
 
-
-   //Encoders - Subject to Change
    RelativeEncoder encoder;
 
+   SparkMaxConfig config;
+
+   double motorCurrentPosition;
+   double motorTargetPosition;
 
    //Constructor
    public SK25Climb() {
        //Initializations
-       //Motor IDs are temporary placeholders
        motor = new SparkMax(kRightClimbMotorId, MotorType.kBrushless);
-       testPID = new PIDController(pid.kP, pid.kI, pid.kD);
+       climbPID = new PIDController(pid.kP, pid.kI, pid.kD);
        encoder = motor.getEncoder();
+       motorCurrentPosition = 0.0;
+       motorTargetPosition = 0.0;
+
+       setPoint(0.0);
    }
 
+   //Retrieve motor's speed
+   public double getMotorSpeed() {
+        return encoder.getVelocity();
+   }
 
+   //Retrieve motor's position
    public double getMotorPosition() {
-        return encoder.getPosition();
+     return encoder.getPosition();
    }
 
+   //Setting setpoints
    public void setPoint (double setPoint) {
-        testPID.reset();
-        testPID.setTolerance(0);
-        testPID.setSetpoint(testPID.calculate(getMotorPosition(), setPoint));
-     //    if (!testPID.atSetpoint()) {
-     //      runMotor(kSpeed);
-     //    } 
+        climbPID.reset();
+        climbPID.setTolerance(0);
+        // encoder.setPositionConversionFactor(0.0);
+        encoder.setPosition(MathUtil.clamp(setPoint, kClimbMaxPosition, kClimbMinPosition));
+      //  climbPID.setSetpoint(setPoint);
+      //  motor.set(climbPID.calculate(getMotorSpeed(), setPoint));
+      //  motor.set(MathUtil.clamp(setPoint(), kClimbMaxPosition, kClimbMinPosition));
+        
    }
 
+   //Running motor
    public void runMotor(double speed)
    {
-        motor.set(speed);
+       motor.set(speed);
    }
+
 
    @Override
    public void periodic() {}
