@@ -4,6 +4,8 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.pathplanner.lib.config.PIDConstants;
 
+import edu.wpi.first.units.measure.Distance;
+
 
 
 public final class Konstants
@@ -12,24 +14,42 @@ public final class Konstants
     public static final class PracticeSwerveConstants
     {
         //8 swerve motor IDs for Ports
+        // Front left
         public static final int kFrontLeftDriveMotorId = 1;
-        public static final int kFrontLeftTurnMotorId = 2;
+        public static final int kFrontLeftSteerMotorId = 2;
+        // Front right
         public static final int kFrontRightDriveMotorId = 3;
-        public static final int kFrontRightTurnMotorId = 4;
+        public static final int kFrontRightSteerMotorId = 4;
+        // Back left
         public static final int kBackLeftDriveMotorId = 5;
-        public static final int kBackLeftTurnMotorId = 6;
+        public static final int kBackLeftSteerMotorId = 6;
+        // Back right
         public static final int kBackRightDriveMotorId = 7;
-        public static final int kBackRightTurnMotorId = 8;
+        public static final int kBackRightSteerMotorId = 8;
 
-        //TODO: Update IDs for 2025
+        //TODO: Update IDs and offsets for 2025
+        // Encoder IDs and offsets:
+        // Front left
         public static final int kFrontLeftEncoderId = 33;
+        public static final double kFrontLeftEncoderOffset = 0.19482421875;
+
+        // Front right
         public static final int kFrontRightEncoderId = 31;
+        public static final double kFrontRightEncoderOffset = 0.141845703125;
+
+        // Back left
         public static final int kBackLeftEncoderId = 32;
+        public static final double kBackLeftEncoderOffset = -0.277099609375;
+        
+        // Back right
         public static final int kBackRightEncoderId = 30;
+        public static final double kBackRightEncoderOffset = -0.087646484375;
+
 
         //swerve chassis width and length in inches
-        public static final int kChassisLength = 28;
-        public static final int kChassisWidth = 28;
+        //TODO: Update for final robot
+        public static final int kChassisLength = 27;
+        public static final int kChassisWidth = 27;
 
         //PID Constants
         public static final double kDriveP = 0.1;
@@ -90,6 +110,28 @@ public final class Konstants
         public static final ClosedLoopOutputType driveClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
         public static final double kWheelRadius = (3.815 / 2); //TODO: WHEEL RADIUS FROM SPECTRUM, UPDATE WITH OUR OWN
+
+        // These are only used for simulation
+        public static final double kSteerInertia = 0.00001;
+        public static final double kDriveInertia = 0.001;
+        // Simulated voltage necessary to overcome friction
+        public static final double kSteerFrictionVoltage = 0.25;
+        public static final double kDriveFrictionVoltage = 0.25;
+
+        // Module positions for kinematics
+        // Front left
+        public static final double kFrontLeftXPos = wheelBaseInches / 2;
+        public static final double kFrontLeftYPos = trackWidthInches / 2;
+        // Front right
+        public static final double kFrontRightXPos = wheelBaseInches / 2;
+        public static final double kFrontRightYPos = -trackWidthInches / 2;
+        // Back left
+        public static final double kBackLeftXPos = wheelBaseInches / 2;
+        public static final double kBackLeftYPos = trackWidthInches / 2;
+        // Back right
+        public static final double kBackRightXPos = wheelBaseInches / 2;
+        public static final double kBackRightYPos = -trackWidthInches / 2;
+
     }
 
     public static final class ElevatorConstants
