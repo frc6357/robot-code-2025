@@ -59,6 +59,10 @@ public class Ports
         // Party mode
         public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kBack.value, BUTTON);
         public static final SKTrigger kLightsOff = new SKTrigger(kOperator, 90, POV);
+
+        //algae ports
+        public static final SKTrigger kAlgaeGrab = new SKTrigger(kOperator, kA.value, BUTTON);
+        public static final SKTrigger kAlgaeRelease = new SKTrigger(kOperator, kB.value, BUTTON);
     }
 
     /**
