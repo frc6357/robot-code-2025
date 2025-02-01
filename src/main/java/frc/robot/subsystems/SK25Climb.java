@@ -72,7 +72,7 @@ public class SK25Climb extends SubsystemBase
         motorTargetPosition = setpoint;
         climbPID.setSetpoint(setpoint);
         // encoder.setPositionConversionFactor(0.0);
-        encoder.setPosition(MathUtil.clamp(setpoint, kClimbMaxPosition, kClimbMinPosition));
+      //  encoder.setPosition(MathUtil.clamp(setpoint, kClimbMaxPosition, kClimbMinPosition));
       //  climbPID.setSetpoint(setPoint);
       //  motor.set(climbPID.calculate(getMotorSpeed(), setPoint));
       //  motor.set(MathUtil.clamp(setPoint(), kClimbMaxPosition, kClimbMinPosition));
