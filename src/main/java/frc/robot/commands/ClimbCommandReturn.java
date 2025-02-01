@@ -29,7 +29,12 @@ public class ClimbCommandReturn extends Command{
 
     @Override
     public boolean isFinished() {
-        return true;
+        if (climb.isAtTargetPosition()) {
+            return true;
+        } else {
+            return false;
+        }
+       // return true;
     }
 
 
