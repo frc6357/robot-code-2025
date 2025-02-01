@@ -26,7 +26,7 @@ public class ClimbCommand1 extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        climb.runMotor(0.0);
+        climb.stop();
     }
 
     @Override

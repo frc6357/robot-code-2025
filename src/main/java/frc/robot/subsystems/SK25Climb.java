@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 //Konstants (muy importante)
 import static frc.robot.Konstants.ClimbConstants.kClimbMaxPosition;
 import static frc.robot.Konstants.ClimbConstants.kClimbMinPosition;
+import static frc.robot.Konstants.ClimbConstants.kPositionTolerance;
 import static frc.robot.Konstants.ClimbConstants.kRightClimbMotorId;
 import static frc.robot.Konstants.ClimbConstants.pid;
 
@@ -23,7 +24,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-public class SK25Climb extends SubsystemBase {
+public class SK25Climb extends SubsystemBase 
+{
   
    //Declarations
    SparkMax motor;
@@ -38,7 +40,8 @@ public class SK25Climb extends SubsystemBase {
    double motorTargetPosition;
 
    //Constructor
-   public SK25Climb() {
+   public SK25Climb() 
+   {
        //Initializations
        motor = new SparkMax(kRightClimbMotorId, MotorType.kBrushless);
        climbPID = new PIDController(pid.kP, pid.kI, pid.kD);
@@ -46,25 +49,30 @@ public class SK25Climb extends SubsystemBase {
        motorCurrentPosition = 0.0;
        motorTargetPosition = 0.0;
 
-       setPoint(0.0);
+       climbPID.setSetpoint(0.0);
    }
 
    //Retrieve motor's speed
-   public double getMotorSpeed() {
+   public double getMotorSpeed()
+   {
         return encoder.getVelocity();
    }
 
    //Retrieve motor's position
-   public double getMotorPosition() {
+   public double getMotorPosition() 
+   {
      return encoder.getPosition();
    }
 
    //Setting setpoints
-   public void setPoint (double setPoint) {
+   public void setPoint (double setpoint) 
+   {
         climbPID.reset();
         climbPID.setTolerance(0);
+        motorTargetPosition = setpoint;
+        climbPID.setSetpoint(setpoint);
         // encoder.setPositionConversionFactor(0.0);
-        encoder.setPosition(MathUtil.clamp(setPoint, kClimbMaxPosition, kClimbMinPosition));
+        encoder.setPosition(MathUtil.clamp(setpoint, kClimbMaxPosition, kClimbMinPosition));
       //  climbPID.setSetpoint(setPoint);
       //  motor.set(climbPID.calculate(getMotorSpeed(), setPoint));
       //  motor.set(MathUtil.clamp(setPoint(), kClimbMaxPosition, kClimbMinPosition));
@@ -77,8 +85,22 @@ public class SK25Climb extends SubsystemBase {
        motor.set(speed);
    }
 
+   public double getTargetPosition() {
+      return motorTargetPosition;
+   }
+
+   //Check Motor is at Target Position
+   public boolean isAtTargetPosition()
+   {
+      return Math.abs(getMotorPosition() - getTargetPosition()) < kPositionTolerance;
+   }
+
+   public void stop() {
+      motor.stopMotor();
+   }
 
    @Override
-   public void periodic() {}
+   public void periodic() {
+      motorCurrentPosition = getMotorPosition();
+   }
 }
-

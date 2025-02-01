@@ -10,7 +10,7 @@ import frc.robot.commands.ClimbCommandReturn;
 import frc.robot.subsystems.SK25Climb;
 
 
-public class ClimbBinder implements CommandBinder{
+public class ClimbBinder implements CommandBinder {
     Optional<SK25Climb> subsystem;
     Trigger raise;
     Trigger lower;
