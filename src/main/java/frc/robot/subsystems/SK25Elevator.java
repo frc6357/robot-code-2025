@@ -1,16 +1,25 @@
 // Essentials
 package frc.robot.subsystems;
 import edu.wpi.first.math.MathUtil;
+import frc.robot.subsystems.superclasses.Elevator;
 
 // Constants (Muy Importante)
+import static frc.robot.Konstants.ElevatorConstants.kElevatorCurrentLimit;
 import static frc.robot.Konstants.ElevatorConstants.elevatorConversion;
 import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
 import static frc.robot.Konstants.ElevatorConstants.leftElevator;
 import static frc.robot.Konstants.ElevatorConstants.rightElevator;
 import static frc.robot.Konstants.ElevatorConstants.kElevatorMotorMaxOutput;
 import static frc.robot.Konstants.ElevatorConstants.kElevatorMotorMinOutput;
+import static frc.robot.Konstants.ElevatorConstants.kCANCoderGearRatio;
 import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
 import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
+import static frc.robot.Ports.ElevatorPorts.kEncoder;
+
+// Phoenix Sensors (Help)
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 // Encoders - Sensors
 import com.revrobotics.RelativeEncoder;
@@ -21,7 +30,7 @@ import com.revrobotics.spark.SparkBase;
 // Motors - Sparkflex
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 // Configurations For Stuff (Thanks REV)
 import com.revrobotics.spark.config.SparkFlexConfig;
 
@@ -31,7 +40,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 // SmartDashboard
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
 
 // Unused Imports (Maybe In The Future)
@@ -40,7 +48,7 @@ import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
 //import com.revrobotics.spark.SparkRelativeEncoder;
 //import com.revrobotics.spark.SparkMax;
 
-public class SK25Elevator extends SubsystemBase
+public class SK25Elevator extends Elevator
 {
     // Create Memory Motor Objects
     SparkFlex motorR;
@@ -59,6 +67,9 @@ public class SK25Elevator extends SubsystemBase
     double LcurrentPosition;
     double RtargetPosition;
     double RcurrentPosition;
+
+    // Phoenix Encoder Objects
+    CANCoder CANCoder;
 
     // Encoder Objects
     RelativeEncoder encoderL;
@@ -88,22 +99,33 @@ public class SK25Elevator extends SubsystemBase
         rPID.setSetpoint(0.0);
         lPID.setSetpoint(0.0);
 
+        // Encoder Objects
+        encoderL = motorL.getEncoder();
+        encoderR = motorR.getEncoder();
+
         // Motor Initialization With REV Sparkflex - Configurations
         motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
         motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
         config1 = new SparkFlexConfig();
 
         // Configurations For The Motors & Encoders
-        config1.inverted(true);
-        config1.encoder.positionConversionFactor(elevatorConversion);
-        config2.encoder.positionConversionFactor(elevatorConversion);
+        config1
+            .inverted(true)
+            .idleMode(IdleMode.kBrake)
+            .smartCurrentLimit(kElevatorCurrentLimit);
+
+        config2
+            .idleMode(IdleMode.kBrake)
+            .smartCurrentLimit(kElevatorCurrentLimit);
+
+        config1.encoder
+            .positionConversionFactor(elevatorConversion);
+
+        config2.encoder
+            .positionConversionFactor(elevatorConversion);
         
         motorR.configure(config1, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         motorL.configure(config2, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-
-        // Encoder Objects
-        encoderL = motorL.getEncoder();
-        encoderR = motorR.getEncoder();
 
         // Current, Target, and Reset Positions
         RtargetPosition = 0.0;
@@ -113,41 +135,73 @@ public class SK25Elevator extends SubsystemBase
         LcurrentPosition = 0.0;
 
         resetPosition();
+
+        CANCoder = new CANCoder(kEncoder.ID, kEncoder.bus);
+        CANCoderConfiguration config = new CANCoderConfiguration();
+
+        config.initializationStrategy = SensorInitializationStrategy.BootToZero;
+        config.unitString = "deg";
+        config.sensorDirection = false; // CCW+
+        config.sensorCoefficient = 360.0 / 4096 / kCANCoderGearRatio;
+
+        CANCoder.configAllSettings(config);
+
+        CANCoder.setPosition(0.0);
     }
+
 
     /* 
      *  KURIAN-RELATED METHODS 
     */
 
-    // Target Height
+    
+    /**
+     * {@inheritDoc}
+     */
     public void setTargetHeight(ElevatorPosition height)
     {
         setRightTargetHeight(height.height);
         setLeftTargetHeight(height.height);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setRightTargetHeight(double height)
     {
         RtargetPosition = height;
         rPID.setSetpoint(RtargetPosition);
     }
     
+    /**
+     * {@inheritDoc}
+     */
     public void setLeftTargetHeight(double height)
     {
         LtargetPosition = height;
         lPID.setSetpoint(LtargetPosition);
     }
 
-    // Positions, Target Positions, & At Target Positions
+    /**
+     * {@inheritDoc}
+     */
     public double getLeftPosition()
     {
         return encoderL.getPosition();
     }
     
+    /**
+     * {@inheritDoc}
+     */
     public double getRightPosition()
     {
         return encoderR.getPosition();
     }
+
+
+
+
+
 
     public double getRightTargetPosition(){
         return RtargetPosition;
@@ -156,6 +210,11 @@ public class SK25Elevator extends SubsystemBase
     public double getLeftTargetPosition(){
         return LtargetPosition;
     }
+
+
+
+
+
 
     public boolean isRightAtTargetPosition()
     {
@@ -167,6 +226,10 @@ public class SK25Elevator extends SubsystemBase
         return Math.abs(getLeftPosition() - getLeftTargetPosition()) < kPositionTolerance;
     }
     
+
+
+
+
     // Reset Position
     public void resetPosition()
     {
@@ -174,9 +237,11 @@ public class SK25Elevator extends SubsystemBase
         encoderR.setPosition(0.0);
     }
 
+
     /* 
      *  NON-KURIAN METHODS 
     */
+
 
     // Button Sensor Methods
     public Boolean isTopSensorPressed()

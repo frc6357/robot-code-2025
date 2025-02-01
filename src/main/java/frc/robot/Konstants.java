@@ -36,13 +36,13 @@ public final class Konstants
         public static enum ElevatorPosition
         {
             /** Set the angle to reach the top branch (L4) */
-            TopPosition(100),
+            TopPosition(27),
             /** Set the angle to reach the middle branch (L3) */
-            MidPosition(75),
+            MidPosition(22),
             /** Set the angle to reach the low branch (L2) */
-            LowPosition(50),
+            LowPosition(17),
             /** Set the angle to reach the trough (L1) */
-            TroughPosition(25),
+            TroughPosition(12),
             /** Set the angle to reach the bottom */
             ZeroPosition(0.0);
 
@@ -60,7 +60,7 @@ public final class Konstants
 
         public static final double kElevatorBalanceTolerance = 5.0;
         public static final double spoolDiameter = 1.273; //Inches
-        public static final double gearRatio = .0625; //Shaft rotations / 1 motor rotation
+        public static final double gearRatio = .1264; //Shaft rotations / 1 motor rotation
         public static final double elevatorHeight = 28; //Inches
 
         public static final double elevatorConversion = 1.0 / 87.0; //inches moved per motor rotation
@@ -71,10 +71,15 @@ public final class Konstants
         public static final double kElevatorUpSpeed = 1.0;
         public static final double kElevatorDownSpeed = -1.0;
 
+        public static final double kCANCoderGearRatio = 160.0 / 48.0; //Convert encoder degree units to arm degrees
+
+
+        public static final int kElevatorCurrentLimit = 30;
+
         //public static final double kElevatorUpSpeedLeft = -1.0;
         //public static final double kElevatorDownSpeedLeft = 1.0;
 
-        public static final double kMaxHeight = 100;
+        public static final double kMaxHeight = 28;
         public static final double kMinHeight = 0;
 
         public static final double kJoystickChange   = 0.1; // Manual setpoint value for units from 0.0 - 1.0 moved per second
