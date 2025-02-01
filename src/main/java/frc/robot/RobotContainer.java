@@ -10,15 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.ctre.phoenix6.Utils;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -26,8 +22,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.ExampleBinder;
+import frc.robot.bindings.SK25ElevatorBinder;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.PracticeSwerve;
 import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
@@ -43,6 +41,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
   private Optional<PracticeSwerve> m_PracticeSwerve = Optional.empty();
+  private Optional<SK25Elevator>    elevatorSubsystem    = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -106,7 +105,7 @@ public class RobotContainer {
 
         // Adding all the binding classes to the list
         buttonBinders.add(new ExampleBinder(mySubsystem));
-
+        buttonBinders.add(new SK25ElevatorBinder(elevatorSubsystem));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
@@ -128,6 +127,10 @@ public class RobotContainer {
             //Register commands for use in auto
             //NamedCommands.registerCommand("StartLauncherCommand", new LaunchCommandAuto(kLauncherLeftSpeed, kLauncherRightSpeed, launcher));
             
+        }
+        if (elevatorSubsystem.isPresent())
+        {
+            elevatorSubsystem = Optional.of(new SK25Elevator());
         }
 
         if(m_PracticeSwerve.isPresent()){
@@ -165,11 +168,12 @@ public class RobotContainer {
 
     public void matchInit()
     {
-        if (armSubsystem.isPresent())
+        if (elevatorSubsystem.isPresent())
         {
-            SK25Elevator elevator = armSubsystem.get();
-            arm.resetAngle();
-            arm.setTargetAngle(0.0);
+            SK25Elevator elevator = elevatorSubsystem.get();
+            elevator.resetPosition();
+            elevator.setRightTargetHeight(0.0);
+            elevator.setLeftTargetHeight(0.0);
         }
     }
 

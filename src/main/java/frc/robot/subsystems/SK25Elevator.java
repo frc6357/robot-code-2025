@@ -1,11 +1,14 @@
 // Essentials
 package frc.robot.subsystems;
+import edu.wpi.first.math.MathUtil;
 
 // Constants (Muy Importante)
 import static frc.robot.Konstants.ElevatorConstants.elevatorConversion;
 import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
 import static frc.robot.Konstants.ElevatorConstants.leftElevator;
 import static frc.robot.Konstants.ElevatorConstants.rightElevator;
+import static frc.robot.Konstants.ElevatorConstants.kElevatorMotorMaxOutput;
+import static frc.robot.Konstants.ElevatorConstants.kElevatorMotorMinOutput;
 import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
 import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
 
@@ -51,7 +54,7 @@ public class SK25Elevator extends SubsystemBase
     PIDController rPID;
     PIDController lPID;
 
-    // Target & Current Position Objects
+    // Target & Current Position
     double LtargetPosition;
     double LcurrentPosition;
     double RtargetPosition;
@@ -109,7 +112,7 @@ public class SK25Elevator extends SubsystemBase
         LtargetPosition = 0.0;
         LcurrentPosition = 0.0;
 
-        resetPosition(0.0);
+        resetPosition();
     }
 
     /* 
@@ -126,13 +129,13 @@ public class SK25Elevator extends SubsystemBase
     public void setRightTargetHeight(double height)
     {
         RtargetPosition = height;
-        rPID.setSetpoint(height);
+        rPID.setSetpoint(RtargetPosition);
     }
     
     public void setLeftTargetHeight(double height)
     {
         LtargetPosition = height;
-        lPID.setSetpoint(height);
+        lPID.setSetpoint(LtargetPosition);
     }
 
     // Positions, Target Positions, & At Target Positions
@@ -165,10 +168,10 @@ public class SK25Elevator extends SubsystemBase
     }
     
     // Reset Position
-    public void resetPosition(double position)
+    public void resetPosition()
     {
-        encoderL.setPosition(position);
-        encoderR.setPosition(position);
+        encoderL.setPosition(0.0);
+        encoderR.setPosition(0.0);
     }
 
     /* 
@@ -225,26 +228,26 @@ public class SK25Elevator extends SubsystemBase
     public void periodic(){
         
         double r_current_position = getRightPosition();
-        // double r_target_position = getRightTargetPosition();
+        double r_target_position = getRightTargetPosition();
 
         double l_current_position = getLeftPosition();
-        //double l_target_position = getLeftTargetPosition();
+        double l_target_position = getLeftTargetPosition();
 
-        // // Calculates motor speed and puts it within operating range
-        //double rSpeed = MathUtil.clamp(rPID.calculate(r_current_position), kClimbMotorMinOutput, kClimbMotorMaxOutput);
-        // motorR.set(rSpeed); 
+        // Calculates motor speed and puts it within operating range
+        double rSpeed = MathUtil.clamp(rPID.calculate(r_current_position), kElevatorMotorMinOutput, kElevatorMotorMaxOutput);
+        motorR.set(rSpeed); 
 
-        // // Calculates motor speed and puts it within operating range
-        // double lSpeed = MathUtil.clamp(lPID.calculate(l_current_position), kClimbMotorMinOutput, kClimbMotorMaxOutput);
-        // motorL.set(lSpeed); 
+        // Calculates motor speed and puts it within operating range
+        double lSpeed = MathUtil.clamp(lPID.calculate(l_current_position), kElevatorMotorMinOutput, kElevatorMotorMaxOutput);
+        motorL.set(lSpeed); 
 
         SmartDashboard.putNumber("Right Current Position", r_current_position);
-        // SmartDashboard.putNumber("Right Target Position", r_target_position);
-        // SmartDashboard.putBoolean("Right Arm at Setpoint", isRightAtTargetPosition());
+        SmartDashboard.putNumber("Right Target Position", r_target_position);
+        SmartDashboard.putBoolean("Right Elevator at Setpoint", isRightAtTargetPosition());
 
         SmartDashboard.putNumber("Left Current Position", l_current_position);
-        // SmartDashboard.putNumber("Left Target Position", l_target_position);
-        // SmartDashboard.putBoolean("Left Arm at Setpoint", isLeftAtTargetPosition());
+        SmartDashboard.putNumber("Left Target Position", l_target_position);
+        SmartDashboard.putBoolean("Left Elevator at Setpoint", isLeftAtTargetPosition());
 
         //TODO Uncomment below and add this to elastic dashboard once it's implemented.
 

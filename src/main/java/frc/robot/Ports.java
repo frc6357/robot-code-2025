@@ -59,16 +59,19 @@ public class Ports
         public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
         public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
         public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
-        public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
         public static final SKTrigger kZeroPositionOperator  = new SKTrigger(kOperator, kStart.value, BUTTON);
-        public static final SKTrigger    kResetArmPos   = new SKTrigger(kOperator, kBack.value, BUTTON);
+
+        // Elevator Overrides
+        public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
+        public static final SKTrigger kResetElevatorPos = new SKTrigger(kOperator, kBack.value, BUTTON);
+        public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
 
         // Party mode
-        public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kBack.value, BUTTON);
+        public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
         public static final SKTrigger kLightsOff = new SKTrigger(kOperator, 90, POV);
     }
 
-    /**
+    /*
      * Defines all the ports needed to create sensors and actuators for the drivetrain.
      */
 

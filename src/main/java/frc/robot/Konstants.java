@@ -32,7 +32,7 @@ public final class Konstants
 
     public static final class ElevatorConstants
     {
-        /** Angles for the different elevator positions */
+        /** Heights for the different elevator positions */
         public static enum ElevatorPosition
         {
             /** Set the angle to reach the top branch (L4) */
@@ -65,8 +65,8 @@ public final class Konstants
 
         public static final double elevatorConversion = 1.0 / 87.0; //inches moved per motor rotation
         public static final double kPositionTolerance = 2.0;
-        public static final double kElevatorMotorMinOutput = -1.0;
-        public static final double kElevatorMotorMaxOutput = 1.0;
+        public static final double kElevatorMotorMinOutput = -0.5;
+        public static final double kElevatorMotorMaxOutput = 0.8;
 
         public static final double kElevatorUpSpeed = 1.0;
         public static final double kElevatorDownSpeed = -1.0;

@@ -13,7 +13,7 @@ public class ElevatorButtonCommand extends Command
 {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-    private final SK25Elevator      Elevator;
+    private final SK25Elevator      elevator;
     private final ElevatorPosition  position;
 
     /**
@@ -25,28 +25,34 @@ public class ElevatorButtonCommand extends Command
      * @param Elevator
      *            The Elevator subsystem the command operates on.
      */
-    public ElevatorButtonCommand(ElevatorPosition position, SK25Elevator Elevator)
+    public ElevatorButtonCommand(ElevatorPosition position, SK25Elevator elevator)
     {
         this.position = position;
-        this.Elevator = Elevator;
+        this.elevator = elevator;
         // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(Elevator);
+        addRequirements(elevator);
     }
 
     @Override
     public void initialize()
     {
-        Elevator.setTargetHeight(position);
+        elevator.setTargetHeight(position);
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished()
     {
-
         if(DriverStation.isAutonomousEnabled())
         {
-            return Elevator.isRightAtTargetPosition();
+            if (elevator.isRightAtTargetPosition() && elevator.isRightAtTargetPosition())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {

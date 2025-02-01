@@ -11,7 +11,7 @@ import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.ZeroPositio
 import static frc.robot.Ports.OperatorPorts.kElevatorAxis;
 import static frc.robot.Ports.OperatorPorts.kLowBranch;
 import static frc.robot.Ports.OperatorPorts.kMiddleBranch;
-import static frc.robot.Ports.OperatorPorts.kResetArmPos;
+import static frc.robot.Ports.OperatorPorts.kResetElevatorPos;
 import static frc.robot.Ports.OperatorPorts.kTopBranch;
 import static frc.robot.Ports.OperatorPorts.kTrough;
 import static frc.robot.Ports.OperatorPorts.kZeroPositionOperator;
@@ -74,7 +74,7 @@ public class SK25ElevatorBinder implements CommandBinder{
         this.MidButton          = kMiddleBranch.button;
         this.TopButton          = kTopBranch.button;
         this.TroughButton       = kTrough.button;
-        this.resetPos           = kResetArmPos.button;
+        this.resetPos           = kResetElevatorPos.button;
     }
 
     public void bindButtons()
