@@ -30,6 +30,7 @@ public class ClimbBinder implements CommandBinder {
            // raise.onTrue(new ClimbCommand1(subsys));
            // lower.onTrue(new ClimbCommandReturn(subsys));
            raise.onTrue(new InstantCommand(() -> subsys.runMotor(kSpeed)));
+           lower.onTrue(new InstantCommand(() -> subsys.runMotor(-kSpeed)));
         }
     }
 }
