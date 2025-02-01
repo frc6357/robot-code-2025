@@ -4,17 +4,19 @@ import edu.wpi.first.math.MathUtil;
 import frc.robot.subsystems.superclasses.Elevator;
 
 // Constants (Muy Importante)
-import static frc.robot.Konstants.ElevatorConstants.kElevatorCurrentLimit;
-import static frc.robot.Konstants.ElevatorConstants.elevatorConversion;
-import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
-import static frc.robot.Konstants.ElevatorConstants.leftElevator;
-import static frc.robot.Konstants.ElevatorConstants.rightElevator;
-import static frc.robot.Konstants.ElevatorConstants.kElevatorMotorMaxOutput;
-import static frc.robot.Konstants.ElevatorConstants.kElevatorMotorMinOutput;
-import static frc.robot.Konstants.ElevatorConstants.kCANCoderGearRatio;
+import static frc.robot.Konstants.ElevatorConstants.*;
+//import static frc.robot.Konstants.ElevatorConstants.kElevatorCurrentLimit;
+//import static frc.robot.Konstants.ElevatorConstants.elevatorConversion;
+//import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
+//import static frc.robot.Konstants.ElevatorConstants.leftElevator;
+//import static frc.robot.Konstants.ElevatorConstants.rightElevator;
+//import static frc.robot.Konstants.ElevatorConstants.kElevatorMotorMaxOutput;
+//import static frc.robot.Konstants.ElevatorConstants.kElevatorMotorMinOutput;
+//import static frc.robot.Konstants.ElevatorConstants.kCANCoderGearRatio;
 import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
 import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
-import static frc.robot.Ports.ElevatorPorts.kEncoder;
+import static frc.robot.Ports.ElevatorPorts.kEncoderL;
+import static frc.robot.Ports.ElevatorPorts.kEncoderR;
 
 // Phoenix Sensors (Help)
 import com.ctre.phoenix.sensors.CANCoder;
@@ -69,7 +71,8 @@ public class SK25Elevator extends Elevator
     double RcurrentPosition;
 
     // Phoenix Encoder Objects
-    CANCoder CANCoder;
+    CANCoder CANCoderL;
+    CANCoder CANCoderR;
 
     // Encoder Objects
     RelativeEncoder encoderL;
@@ -136,17 +139,31 @@ public class SK25Elevator extends Elevator
 
         resetPosition();
 
-        CANCoder = new CANCoder(kEncoder.ID, kEncoder.bus);
-        CANCoderConfiguration config = new CANCoderConfiguration();
+        // CANCoder Stuff
 
-        config.initializationStrategy = SensorInitializationStrategy.BootToZero;
-        config.unitString = "deg";
-        config.sensorDirection = false; // CCW+
-        config.sensorCoefficient = 360.0 / 4096 / kCANCoderGearRatio;
+        CANCoderL = new CANCoder(kEncoderL.ID, kEncoderL.bus);
+        CANCoderConfiguration encoderConfigL = new CANCoderConfiguration();
 
-        CANCoder.configAllSettings(config);
+        encoderConfigL.initializationStrategy = SensorInitializationStrategy.BootToZero;
+        encoderConfigL.unitString = "deg";
+        encoderConfigL.sensorDirection = false; // CCW+
+        encoderConfigL.sensorCoefficient = 360.0 / 4096 / kCANCoderGearRatio;
 
-        CANCoder.setPosition(0.0);
+        CANCoderL.configAllSettings(encoderConfigL);
+        CANCoderL.setPosition(0.0);
+
+
+
+        CANCoderR = new CANCoder(kEncoderR.ID, kEncoderR.bus);
+        CANCoderConfiguration encoderConfigR = new CANCoderConfiguration();
+
+        encoderConfigR.initializationStrategy = SensorInitializationStrategy.BootToZero;
+        encoderConfigR.unitString = "deg";
+        encoderConfigR.sensorDirection = false; // CCW+
+        encoderConfigR.sensorCoefficient = 360.0 / 4096 / kCANCoderGearRatio;
+
+        CANCoderR.configAllSettings(encoderConfigR);
+        CANCoderR.setPosition(0.0);
     }
 
 
@@ -187,7 +204,7 @@ public class SK25Elevator extends Elevator
      */
     public double getLeftPosition()
     {
-        return encoderL.getPosition();
+        return CANCoderL.getPosition();
     }
     
     /**
@@ -195,9 +212,8 @@ public class SK25Elevator extends Elevator
      */
     public double getRightPosition()
     {
-        return encoderR.getPosition();
+        return CANCoderR.getPosition();
     }
-
 
 
 
@@ -210,7 +226,6 @@ public class SK25Elevator extends Elevator
     public double getLeftTargetPosition(){
         return LtargetPosition;
     }
-
 
 
 
