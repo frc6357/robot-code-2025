@@ -12,7 +12,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
-import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
+//import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 
@@ -28,6 +28,9 @@ public class SwerveConfig {
     private double robotWidth = Units.inchesToMeters(kChassisWidth);
     private double robotLength = Units.inchesToMeters(kChassisLength);
 
+    private double deadband = kDeadband;
+
+    // Rotation Controller Constants
     private double maxAngularVelocity = 2 * Math.PI; // rad/s
     private double maxAngularAcceleration = Math.pow(maxAngularVelocity, 2); // rad/s^2
     private double kPRotationController = 8.0;

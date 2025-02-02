@@ -15,7 +15,14 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+//Remove suppresswarnings annotations for when using in context
+//Remove suppresswarnings annotations for when using in context 
+//Remove suppresswarnings annotations for when using in context
+//Remove suppresswarnings annotations for when using in context
+//Remove suppresswarnings annotations for when using in context
+
 //defines the SwerveModule class which provides methods to manipulate the drive and turn motors within a module via current states of modules
+@SuppressWarnings("unused")
 class SwerveModule
 {
 
@@ -88,10 +95,10 @@ public class PracticeSwerve extends SubsystemBase{
     SwerveModule swerveModules [] = new SwerveModule[4];
 
     //create swerve modules
-    SwerveModule frontRightModule = new SwerveModule(kFrontRightDriveMotorId, kFrontRightTurnMotorId);
-    SwerveModule frontLeftModule = new SwerveModule(kFrontLeftDriveMotorId, kFrontLeftTurnMotorId);
-    SwerveModule backRightModule = new SwerveModule(kBackRightDriveMotorId, kBackRightTurnMotorId);
-    SwerveModule backLeftModule = new SwerveModule(kBackLeftDriveMotorId, kBackLeftTurnMotorId);
+    SwerveModule frontRightModule = new SwerveModule(kFrontRightDriveMotorId, kFrontRightSteerMotorId);
+    SwerveModule frontLeftModule = new SwerveModule(kFrontLeftDriveMotorId, kFrontLeftSteerMotorId);
+    SwerveModule backRightModule = new SwerveModule(kBackRightDriveMotorId, kBackRightSteerMotorId);
+    SwerveModule backLeftModule = new SwerveModule(kBackLeftDriveMotorId, kBackLeftSteerMotorId);
 
     //width and length of swerve drive chassis in inches to be used for rotational targets of swerve modules
     double chassisWidth = Units.inchesToMeters(kChassisWidth);
@@ -137,6 +144,7 @@ public class PracticeSwerve extends SubsystemBase{
        
         //Logging data for elastic dashboard
         //Ordered: FL, FR, BL, BR
+        @SuppressWarnings("unused")
         double ModuleStates[] = {
             frontLeftModule.getState().angle.getDegrees(),     //gets angle in degrees of FL module
             frontLeftModule.getState().speedMetersPerSecond,   //gets speed in m/s of FL module
