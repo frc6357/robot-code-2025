@@ -67,6 +67,7 @@ public class SwerveConfig {
     @Getter private TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration();
 
 
+    // TODO: Compare with current limiter from SK24Drive
     @Getter
     private TalonFXConfiguration steerInitialConfigs =
             new TalonFXConfiguration()
