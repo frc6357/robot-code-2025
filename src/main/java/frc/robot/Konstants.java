@@ -11,7 +11,7 @@ import com.pathplanner.lib.config.PIDConstants;
 public final class Konstants
 {
 
-    public static final class PracticeSwerveConstants
+    public static final class SwerveConstants
     {
         public static final double kDeadband = 0.1; //TODO: Update based on driver preference
 
@@ -61,21 +61,21 @@ public final class Konstants
         public static final double kDriveP = 0.1;
         public static final double kDriveI = 0;
         public static final double kDriveD = 0;
-        public static final double kTurnP = 0.1;
-        public static final double kTurnI = 0;
-        public static final double kTurnD = 0;
+        public static final double kSteerP = 0.1;
+        public static final double kSteerI = 0;
+        public static final double kSteerD = 0;
 
         // The steer motor uses any SwerveModule.SteerRequestType control request with the
         // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
         //TODO: THIS IS 2024 TUNING!!!! PLEASE UPDATE ME!!!!
-        public static final Slot0Configs steerGains = new Slot0Configs() //TODO - tune steering gains drive
+        public static final Slot0Configs kSteerGains = new Slot0Configs() //TODO - tune steering gains drive
         .withKP(100).withKI(0).withKD(0.3)
         .withKS(0).withKV(1.5).withKA(0);
 
         // When using closed-loop control, the drive motor uses the control
         // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
         //TODO: THIS IS 2024 TUNING!!!! PLEASE UPDATE ME!!!!
-        public static final Slot0Configs driveGains = new Slot0Configs() //TODO - tune driving gains drive
+        public static final Slot0Configs kDriveGains = new Slot0Configs() //TODO - tune driving gains drive
         .withKP(2.3).withKI(0).withKD(0)
         .withKS(0).withKV(0).withKA(0);
         
@@ -102,7 +102,6 @@ public final class Konstants
         public static final boolean kSteerMotorReversed = true;
         public static final boolean kInvertRightSide = true;
 
-        //TODO: Check these values
         public static final String kCANbusName = "DriveCAN";
         public static final int kPigeonId = 30;
 

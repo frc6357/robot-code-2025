@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Konstants.PracticeSwerveConstants.*;
+import static frc.robot.Konstants.SwerveConstants.*;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.PIDController;
@@ -56,7 +56,7 @@ class SwerveModule
 
         //initialize PIDControllers
         drivePIDController = new PIDController(kDriveP, kDriveI, kDriveD);
-        turnPIDController = new PIDController(kTurnP, kTurnI, kTurnD);
+        turnPIDController = new PIDController(kSteerP, kSteerI, kSteerD);
     }
 
     //gets the current state of the swerve module
