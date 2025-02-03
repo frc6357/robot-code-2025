@@ -1,5 +1,6 @@
 // Essentials
 package frc.robot.subsystems;
+
 import edu.wpi.first.math.MathUtil;
 import frc.robot.subsystems.superclasses.Elevator;
 
@@ -19,9 +20,12 @@ import static frc.robot.Ports.ElevatorPorts.kEncoderL;
 import static frc.robot.Ports.ElevatorPorts.kEncoderR;
 
 // Phoenix Sensors (Help)
-import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+import com.ctre.phoenix6.hardware.CANcoder;
+//import com.ctre.phoenix.sensors.CANCoder;
+//import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.StatusSignal;
 
 // Encoders - Sensors
 import com.revrobotics.RelativeEncoder;
@@ -38,6 +42,8 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 // PID Controller
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 // SmartDashboard
@@ -57,26 +63,32 @@ public class SK25Elevator extends Elevator
     SparkFlex motorL;
 
     // Creating Config Object
-    SparkFlexConfig config1;
-    SparkFlexConfig config2;
+    SparkFlexConfig motorConfigL;
+    SparkFlexConfig motorConfigR;
 
     //Create Memory PID Objects
     PIDController rPID;
     PIDController lPID;
 
     // Target & Current Position
-    double LtargetPosition;
-    double LcurrentPosition;
-    double RtargetPosition;
-    double RcurrentPosition;
+    double LtargetHeight;
+    double LcurrentHeight;
+    double RtargetHeight;
+    double RcurrentHeight;
 
-    // Phoenix Encoder Objects
-    CANCoder CANCoderL;
-    CANCoder CANCoderR;
+    // CANcoder Objects
+    CANcoder CANCoderL;
+    CANcoder CANCoderR;
+    CANcoderConfiguration CANCoderConfigL;
+    CANcoderConfiguration CANCoderConfigR;
+    StatusSignal<Angle> CANcoderDegreesL;
+    StatusSignal<Angle> CANcoderDegreesR;
+    double CANcoderHeightL;
+    double CANcoderHeightR;
 
     // Encoder Objects
-    RelativeEncoder encoderL;
-    RelativeEncoder encoderR;
+    //RelativeEncoder encoderL;
+    //RelativeEncoder encoderR;
 
     // Touch Sensor Objects
     DigitalInput touchSensorTop;
@@ -88,82 +100,90 @@ public class SK25Elevator extends Elevator
     DigitalInput magEncoder3;
     DigitalInput magEncoder4;
 
+    SlewRateLimiter accelLimit;
+
     // Constructor For Public Command Access
     public SK25Elevator()
     {
         // Touch Sensors
-        touchSensorTop = new DigitalInput(1);
-        touchSensorBottom = new DigitalInput(2);
+        //touchSensorTop = new DigitalInput(1);
+        //touchSensorBottom = new DigitalInput(2);
 
         // PID Controllers - Setpoints
         rPID = new PIDController(rightElevator.kP, rightElevator.kI, rightElevator.kD);
         lPID = new PIDController(leftElevator.kP, leftElevator.kI, leftElevator.kD);
 
+        rPID.setIntegratorRange(kMinInteg, kMaxInteg);
+        lPID.setIntegratorRange(kMinInteg, kMaxInteg);
+
         rPID.setSetpoint(0.0);
         lPID.setSetpoint(0.0);
 
         // Encoder Objects
-        encoderL = motorL.getEncoder();
-        encoderR = motorR.getEncoder();
+        //encoderL = motorL.getEncoder();
+        //encoderR = motorR.getEncoder();
 
         // Motor Initialization With REV Sparkflex - Configurations
         motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
         motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
-        config1 = new SparkFlexConfig();
+        motorConfigL = new SparkFlexConfig();
+        motorConfigR = new SparkFlexConfig();
+        
+        // Rate Limiter
+        accelLimit = new SlewRateLimiter(kPositiveAccelLimit, kNegativeAccelLimit, 0.0);
 
         // Configurations For The Motors & Encoders
-        config1
+        motorConfigL
             .inverted(true)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(kElevatorCurrentLimit);
 
-        config2
+        motorConfigR
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(kElevatorCurrentLimit);
 
-        config1.encoder
-            .positionConversionFactor(elevatorConversion);
+        //motorConfigL.encoder
+            //.positionConversionFactor(elevatorConversion);
 
-        config2.encoder
-            .positionConversionFactor(elevatorConversion);
+        //motorConfigR.encoder
+            //.positionConversionFactor(elevatorConversion);
         
-        motorR.configure(config1, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-        motorL.configure(config2, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        motorR.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        motorL.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
         // Current, Target, and Reset Positions
-        RtargetPosition = 0.0;
-        RcurrentPosition = 0.0;
+        RtargetHeight = 0.0;
+        RcurrentHeight = 0.0;
 
-        LtargetPosition = 0.0;
-        LcurrentPosition = 0.0;
+        LtargetHeight = 0.0;
+        LcurrentHeight = 0.0;
 
-        resetPosition();
-
-        // CANCoder Stuff
-
-        CANCoderL = new CANCoder(kEncoderL.ID, kEncoderL.bus);
-        CANCoderConfiguration encoderConfigL = new CANCoderConfiguration();
-
-        encoderConfigL.initializationStrategy = SensorInitializationStrategy.BootToZero;
-        encoderConfigL.unitString = "deg";
-        encoderConfigL.sensorDirection = false; // CCW+
-        encoderConfigL.sensorCoefficient = 360.0 / 4096 / kCANCoderGearRatio;
-
-        CANCoderL.configAllSettings(encoderConfigL);
+        //resetPosition();
+        
+        //TODO FIX_BEFORE_TESTING - Verify motor inverted (clockwise/ccw)
+        // CANCoders
+        CANcoder CANCoderL = new CANcoder(kEncoderL.ID, kEncoderL.bus);
+        CANcoderConfiguration CANCoderConfigL = new CANcoderConfiguration();
+        CANCoderConfigL.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        CANCoderL.getConfigurator().apply(CANCoderConfigL);
         CANCoderL.setPosition(0.0);
 
+        CANcoder CANCoderR = new CANcoder(kEncoderR.ID, kEncoderR.bus);
+        CANcoderConfiguration CANCoderConfigR = new CANcoderConfiguration();
+        CANCoderConfigR.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        CANCoderR.getConfigurator().apply(CANCoderConfigR);
+        // Set the position to 0 rotations for initial use
+        CANCoderR.setPosition(0.0); 
 
 
-        CANCoderR = new CANCoder(kEncoderR.ID, kEncoderR.bus);
-        CANCoderConfiguration encoderConfigR = new CANCoderConfiguration();
-
-        encoderConfigR.initializationStrategy = SensorInitializationStrategy.BootToZero;
-        encoderConfigR.unitString = "deg";
-        encoderConfigR.sensorDirection = false; // CCW+
-        encoderConfigR.sensorCoefficient = 360.0 / 4096 / kCANCoderGearRatio;
-
-        CANCoderR.configAllSettings(encoderConfigR);
-        CANCoderR.setPosition(0.0);
+        // Old Phoenix 5 Code
+        // In Phoenix 6, CANcoder does not support setting a custom sensor coefficient, unit string, 
+        // and sensor time base. Instead, the CANcoder uses canonical units of rotations and rotations per second using the C++ units library.
+        //encoderConfigL.initializationStrategy = SensorInitializationStrategy.BootToZero; - Always boots to 0 in Phoenix 6
+        //CANCoderConfigL.unitString = "deg";
+        //CANCoderConfigL.sensorDirection = false; // CCW+ 
+        //CANCoderConfigL.sensorCoefficient = 360.0 / 4096 / kCANCoderGearRatio;
+        //CANCoderL.configAllSettings(CANCoderConfigL);
     }
 
 
@@ -186,8 +206,8 @@ public class SK25Elevator extends Elevator
      */
     public void setRightTargetHeight(double height)
     {
-        RtargetPosition = height;
-        rPID.setSetpoint(RtargetPosition);
+        RtargetHeight = height;
+        rPID.setSetpoint(RtargetHeight);
     }
     
     /**
@@ -195,8 +215,8 @@ public class SK25Elevator extends Elevator
      */
     public void setLeftTargetHeight(double height)
     {
-        LtargetPosition = height;
-        lPID.setSetpoint(LtargetPosition);
+        LtargetHeight = height;
+        lPID.setSetpoint(LtargetHeight);
     }
 
     /**
@@ -204,7 +224,13 @@ public class SK25Elevator extends Elevator
      */
     public double getLeftPosition()
     {
-        return CANCoderL.getPosition();
+        // Get angle from CANcoder
+        CANcoderDegreesL = CANCoderL.getPosition();
+
+        // Convert degrees to inches
+        CANcoderHeightL = 1;
+        
+        return CANcoderHeightL;
     }
     
     /**
@@ -212,7 +238,13 @@ public class SK25Elevator extends Elevator
      */
     public double getRightPosition()
     {
-        return CANCoderR.getPosition();
+        // Get angle from CANcoder
+        CANcoderDegreesR = CANCoderR.getPosition();
+
+        // Convert degrees to inches
+        CANcoderHeightR = 1;
+        
+        return CANcoderHeightR;
     }
 
 
@@ -220,11 +252,11 @@ public class SK25Elevator extends Elevator
 
 
     public double getRightTargetPosition(){
-        return RtargetPosition;
+        return RtargetHeight;
     }
 
     public double getLeftTargetPosition(){
-        return LtargetPosition;
+        return LtargetHeight;
     }
 
 
@@ -248,8 +280,8 @@ public class SK25Elevator extends Elevator
     // Reset Position
     public void resetPosition()
     {
-        encoderL.setPosition(0.0);
-        encoderR.setPosition(0.0);
+        CANCoderL.setPosition(0.0);
+        CANCoderR.setPosition(0.0);
     }
 
 
@@ -286,15 +318,14 @@ public class SK25Elevator extends Elevator
             return false;
     }
 
-    // Run Motors Methods
-    public void runLeftMotor(double speed)
+    public void runLeftMotor(double motorSpeed)
     {
-        motorL.set(speed);
+        motorL.set(motorSpeed);
     }
 
-    public void runRightMotor(double speed)
+    public void runRightMotor(double motorSpeed)
     {
-        motorR.set(speed);
+        motorR.set(motorSpeed);
     }
 
     // Stop Motors Method

@@ -103,14 +103,12 @@ public class Ports
 
     public static class ElevatorPorts
     {
-        private static final String busName = "";
+        private static final String busName = "ElevatorCAN";
+        //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
         public static final CANPort kRightElevatorMotor = new CANPort(40, busName);
         public static final CANPort kLeftElevatorMotor = new CANPort(41, busName);
-
-        public static final CANPort kMainMotor   = new CANPort(50, busName);
-        public static final CANPort kEncoderL = new CANPort(51, busName); 
-        public static final CANPort kEncoderR = new CANPort(52, busName); 
-        
+        public static final CANPort kEncoderL = new CANPort(43, busName); 
+        public static final CANPort kEncoderR = new CANPort(44, busName); 
     }
 
 

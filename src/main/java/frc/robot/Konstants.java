@@ -35,6 +35,7 @@ public final class Konstants
         /** Heights for the different elevator positions */
         public static enum ElevatorPosition
         {
+            //TODO FIX_DURING_TESTING - Measure Elevator Heights
             /** Set the angle to reach the top branch (L4) */
             TopPosition(27),
             /** Set the angle to reach the middle branch (L3) */
@@ -54,9 +55,15 @@ public final class Konstants
             }
         }
 
-        public static final PIDConstants rightElevator = new PIDConstants(0.01, 0.0, 0.0);
-        public static final PIDConstants leftElevator = new PIDConstants(0.01, 0.0, 0.0);
+        public static final PIDConstants rightElevator = new PIDConstants(0.0375, 0.00075, 0.001);
+        public static final PIDConstants leftElevator = new PIDConstants(0.0375, 0.00075, 0.001);
         public static final PIDConstants balancePID = new PIDConstants(0.0, 0.0, 0.0);
+
+        public static final double kMinInteg = 0.0;
+        public static final double kMaxInteg = 0.15;
+
+        public static final double kPositiveAccelLimit = 1.0; // in %/sec
+        public static final double kNegativeAccelLimit = -5.0; // in %/sec
 
         public static final double kElevatorBalanceTolerance = 5.0;
         public static final double spoolDiameter = 1.273; //Inches
@@ -72,7 +79,6 @@ public final class Konstants
         public static final double kElevatorDownSpeed = -1.0;
 
         public static final double kCANCoderGearRatio = 160.0 / 48.0; //Convert encoder degree units to arm degrees
-
 
         public static final int kElevatorCurrentLimit = 30;
 
