@@ -5,18 +5,21 @@ import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Ports.EndEffectorPorts.kArmMotor;
+import static frc.robot.Konstants.EndEffectorConstants.armAngleTolerance;
 //import static frc.robot.Ports.EndEffectorPorts.kRollerMotor;
 import static frc.robot.Konstants.EndEffectorConstants.kArmSpeed;
 //import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 
 
@@ -37,6 +40,8 @@ public class EndEffectorV1  extends SubsystemBase{
 
     ArmFeedforward  armFeedforward;
 
+    double armTargetAngle;
+
     //constructor
     public EndEffectorV1()
     {
@@ -50,7 +55,7 @@ public class EndEffectorV1  extends SubsystemBase{
         armConfig = new SparkFlexConfig();
         
         armConfig.absoluteEncoder 
-            .positionConversionFactor(1)
+            .positionConversionFactor(360)
             .velocityConversionFactor(1);
 
         armConfig.closedLoop
@@ -65,6 +70,8 @@ public class EndEffectorV1  extends SubsystemBase{
             .velocityFF(1.0/5767, ClosedLoopSlot.kSlot1)
             .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
+        armConfig.idleMode(IdleMode.kBrake);
+
         mPID = armMotor.getClosedLoopController();
 
         mEncoder = armMotor.getAbsoluteEncoder();
@@ -73,7 +80,37 @@ public class EndEffectorV1  extends SubsystemBase{
 
        armMotor.configure(armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
+       armTargetAngle = 0.0;
+
     }
+
+    public void setTargetAngle(double angle)
+    {
+        armTargetAngle = angle;
+        //Come back and change this, need fraction for Encoder Rotations in place of angle
+        mPID.setReference(angle, ControlType.kPosition);
+
+    }
+
+    public double getArmPosition()
+    {
+        //Set conversion factor
+        return mEncoder.getPosition();
+    }
+
+    public double getTargetArmPosition()
+    {
+       return armTargetAngle;
+
+    }
+
+    public boolean isArmAtTargetPosition()
+    {
+        return Math.abs(getArmPosition() - getTargetArmPosition()) < armAngleTolerance;
+    }
+
+    
+
 
     //runs the motor
     //public void runRoller()

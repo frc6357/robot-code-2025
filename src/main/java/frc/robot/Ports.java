@@ -44,6 +44,15 @@ public class Ports
         // Operator Controller set to Xbox Controller
         public static final GenericHID kOperator = new FilteredXboxController(1).getHID();
 
+        // EndEffector
+        public static final SKTrigger armTrough = new SKTrigger(kOperator, kX.value, BUTTON);
+        public static final SKTrigger armMiddleLow = new SKTrigger(kOperator, kY.value, BUTTON);
+        public static final SKTrigger armHigh = new SKTrigger(kOperator, kA.value, BUTTON);
+        public static final SKTrigger intake = new SKTrigger(kOperator, kB.value, BUTTON);
+        public static final SKTrigger zeropos = new SKTrigger(kOperator, kStart.value, BUTTON);
+
+        public static final FilteredAxis endArm = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
+
         // Example of how to use POV buttons (D-pad)
         //public static final SKTrigger kExamplePOV = new SKTrigger(kOperator, 270, POV);
 
