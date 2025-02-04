@@ -1,10 +1,10 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Degrees;
-
-import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
+import static edu.wpi.first.units.Units.Inches;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 
 public final class Konstants
 {
@@ -32,12 +32,18 @@ public final class Konstants
         public static final int kChassisLength = 27;
         public static final int kChassisWidth = 27;
 
-        //encoder offsets (obtained from Phoenix Tuner X)
+        //encoder offsets (obtained from Phoenix Tuner X) as angles
         public static final Angle kFrontLeftEncoderOffset = Degrees.of(0.40283203125);
         public static final Angle kFrontRightEncoderOffset = Degrees.of(-0.044677734375);
         public static final Angle kBackLeftEncoderOffset = Degrees.of(-0.21875);
         public static final Angle kBackRightEncoderOffset = Degrees.of(-0.08642578125);
-
+        //double versions
+        public static final Double kFrontLeftEncoderOffsetDouble = 0.40283203125;
+        public static final Double kFrontRightEncoderOffsetDouble = -0.044677734375;
+        public static final Double kBackLeftEncoderOffsetDouble = -0.21875;
+        public static final Double kBackRightEncoderOffsetDouble = -0.08642578125;
+        //TODO: go to constants and convert angle values to doubles
+        
         //PID Constants for wheels from manual tunning
         public static final double kDriveP = 0.00001;
         public static final double kDriveI = 0.0;
@@ -57,6 +63,19 @@ public final class Konstants
 
         //the deadzone on the controller's joysticks
         public static final double kJoystickDeadzone = 0.2;
+
+        //the velocity limit for the swerve drive modules
+        public static final double kMaxVelocity = 0.0;
+
+        //radius of the wheels in inches
+        private static final Double kWheelRadiusInches = 2.0;   //inches
+        //radius of the wheels in meters
+        private static final Double kWheelRadiusMeters = kWheelRadiusInches  / 39.37;   //meters
+        //circumference of the swerve wheels for the drive conversion (circumfrance of the wheel times rotations yeilds distance travelled)
+        public static final Double kWheelCircumference = 2 * Math.PI * kWheelRadiusMeters;   //meters
+
+        //CANivore name in Phoneix Tuner X for assigning CANbus names
+        public static final String kCANivoreName = "SwerveCANivore";
     }
 
     public static final class LightConstants

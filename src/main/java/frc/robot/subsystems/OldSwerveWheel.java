@@ -1,21 +1,18 @@
 package frc.robot.subsystems;
 
+import static frc.robot.Konstants.SwerveConstants.kCANivoreName;
 import static frc.robot.Konstants.SwerveConstants.kPIDControllerTolerance;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreCANcoder;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class SwerveWheel {
+public class OldSwerveWheel {
 
     //declare variables for constructor
     PhoenixPIDController directionController;
@@ -25,7 +22,6 @@ public class SwerveWheel {
     Angle offset;
     BaseStatusSignal status;
     double inverted;
-    PIDController pcon;
 
     //declare and intitialize the encoder distance variables to zero before further manipulation.
     double currentDistance = 0.0;
@@ -42,16 +38,15 @@ public class SwerveWheel {
      * @param offset The offset constant of the encoder.
      * @param inverted If the motor is inverted. -1.0 if true, 1.0 if false.
      */
-    public SwerveWheel(double P, double I, double D, int driveID, int turnID, int encoderID, Angle offset, double inverted)
+    public OldSwerveWheel(double P, double I, double D, int driveID, int turnID, int encoderID, Angle offset, double inverted)
     {
         //initialize constructor variables
         directionController = new PhoenixPIDController(P, I, D);
-        driveMotor = new TalonFX(driveID,"SwerveCANivore"); //TODO: put inconstants
-        turnMotor = new TalonFX(turnID, "SwerveCANivore");
-        encoder = new CoreCANcoder(encoderID, "SwerveCANivore");
+        driveMotor = new TalonFX(driveID, kCANivoreName); 
+        turnMotor = new TalonFX(turnID, kCANivoreName);
+        encoder = new CoreCANcoder(encoderID, kCANivoreName);
         this.offset = offset;
         this.inverted = inverted;
-        pcon = new PIDController(0.0, 0.0, 0.0);
         
         //reset the PID controller once when the code is deployed.
         directionController.reset();
@@ -67,18 +62,6 @@ public class SwerveWheel {
         directionController.enableContinuousInput(-180, 180);
         //sets the acceptable error bound to which the controller will stop if reached
         directionController.setTolerance(kPIDControllerTolerance);
-
-        //get the absolute pos of the encoder as type StatusSingal<Angle>.
-        StatusSignal<Angle> encoderAngle = encoder.getAbsolutePosition();
-        //Subtract the encoder offset with the StatusSingal<Angle> type using the getValue() method to convert to the Angle type.
-        Angle encoderPos = encoderAngle.getValue().minus(offset);
-        //converts the Angle type to a primative double of the respective angle. 
-        Double encoderDoublePos = encoderPos.in(Units.Degrees);
-        //rotations from angle
-        //Rotation encoderRotations = encoderPos.in(Units.Rotation);
-
-        //TODO: remove later
-        //SmartDashboard.putNumber("setpoint", setpoint.inDegrees);
         
         //set the motor to the target PID condition. Account for inversion using the inversion parameter.
         //Phoenix6 PID gains

@@ -14,6 +14,8 @@ public class SubsystemControls
     private final boolean lights;
 
      /**  
+     *@param theswerve
+     *            indicates if the swerve subsystem is present and should be enabled
      * @param swerve
      *            indicates if the swerve subsystem is present and should be enabled
      * @param example

@@ -3,46 +3,38 @@ package frc.robot.bindings;
 import java.util.Optional;
 
 import frc.robot.commands.SwerveCommand;
-import frc.robot.subsystems.SK25Swerve;
+import frc.robot.subsystems.SK25SwerveFactory;
 import static frc.robot.Ports.DriverPorts.*;
 
 public class SK25SwerveBinder implements CommandBinder{
     
     //create a subsystem toggleable by the json subsystems file
-    Optional <SK25Swerve> m_swerve;
-
-    //create the ExampleButton trigger object 
+    Optional <SK25SwerveFactory> m_factory;
 
 
-    //double leftX = kTranslationXPort.getFilteredAxis();
-    //double leftY = kTranslationYPort.getFilteredAxis();
-    //double rightX = kVelocityOmegaPort.getFilteredAxis();
-
-    public SK25SwerveBinder(Optional<SK25Swerve> swerve)
+    public SK25SwerveBinder(Optional<SK25SwerveFactory> optionalFactory)
     {
-        this.m_swerve = swerve;
-
+        this.m_factory = optionalFactory;
     }
      
     public void bindButtons()
     {
         //if the subsytem is present in the json subsystems file
-        if (m_swerve.isPresent())
+        if (m_factory.isPresent())
         {
-            SK25Swerve Swerve = m_swerve.get();
+            SK25SwerveFactory SwerveFactory = m_factory.get();
 
             SwerveCommand swerveCommand = new SwerveCommand(
-            Swerve, 
+            SwerveFactory, 
             () -> kTranslationXPort.getFilteredAxis(), 
             () -> kTranslationYPort.getFilteredAxis(), 
             () -> kVelocityOmegaPort.getFilteredAxis()
             );
 
             //make the swerveCommand run when no other command which utilizes the SK25Swerve subsytem runs.
-            Swerve.setDefaultCommand(swerveCommand);
-
-
+            SwerveFactory.setDefaultCommand(swerveCommand);
         }
     }
 
 }
+

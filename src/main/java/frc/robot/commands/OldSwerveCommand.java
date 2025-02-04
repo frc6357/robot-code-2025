@@ -4,14 +4,19 @@ import static frc.robot.Konstants.SwerveConstants.kJoystickDeadzone;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.SK25SwerveFactory;
+//import com.ctre.phoenix6.hardware.core.CorePigeon2;
+import frc.robot.subsystems.OldSwerve;;
 
-public class SwerveCommand extends Command{
+
+public class OldSwerveCommand extends Command
+{
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
     //declare swerve object
-    private static SK25SwerveFactory Factory;
+    private final OldSwerve swerve;
 
     //declare the double version of joystick input values.
     //Suppliers are used to update the value periodicaly. 
@@ -26,34 +31,22 @@ public class SwerveCommand extends Command{
      * @param _leftX The X input of the left joystick on the controller used for translation.
      * @param _rightX The X input of the right joystick on the controller used for rotation.
      */
-    public SwerveCommand(SK25SwerveFactory _swerve, Supplier<Double> _leftY, Supplier<Double> _leftX, Supplier<Double> _rightX)
+    public OldSwerveCommand(OldSwerve _swerve, Supplier<Double> _leftY, Supplier<Double> _leftX, Supplier<Double> _rightX)
     {
         //initialize objects and variables
-        Factory = _swerve;
+        swerve = _swerve;
         leftY = _leftY;
         leftX = _leftX;
         rightX = _rightX;
         //ensure that this command only runs if no other command which uses the swerve subsystem is currently running.
-        addRequirements(Factory);
-    }
-
-    //create a controller deadzone method which gives an output of zero if the controller is in the specified deadzone.
-    private double deadZone (double value, double deadZone)
-    {
-        //if the joystick value is less than the deadzone  value
-        if( Math.abs(value) < deadZone)
-        {
-            //override the value output as zero
-            return 0;
-        }
-        //return the normal joystick output
-        return value;
+        addRequirements(swerve);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() 
     {
+      
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -67,17 +60,15 @@ public class SwerveCommand extends Command{
         //make the controller deadzones.
         double translationMagnitude = deadZone(Math.hypot(leftX.get(), leftY.get()), kJoystickDeadzone);
         double rotationMagnitude = deadZone(rightX.get(), kJoystickDeadzone);
-        double xVelocity = deadZone(leftX.get(), kJoystickDeadzone);
-        double yVelocity = deadZone(leftY.get(), kJoystickDeadzone);
 
         //feild centric controls
         //TODO: getAngle() is deprecated for removal in 2026, use getYaw() from CorePigeon2 class instead and convert to degrees.
-        angle -= Factory.m_gyro.getAngle();
+        //angle -= SK25Swerve.pigeon.getAngle();
 
-        //run the doSwerve method which handles all swerve movement possibilites.
-        Factory.doSwerve(angle, translationMagnitude, rotationMagnitude, xVelocity, yVelocity);
+        //run the setSwerve method which handles all swerve movement possibilites.
+        OldSwerve.manager.setSwerve(angle, translationMagnitude, rotationMagnitude);
 
-        //SmartDashboard.putNumber("setpoint", Units.Radians.of(angle).in(Units.Degrees));
+        SmartDashboard.putNumber("setpoint", Units.Radians.of(angle).in(Units.Degrees));
     }
     
 
@@ -86,7 +77,7 @@ public class SwerveCommand extends Command{
     public void end(boolean interrupted) 
     {
        //sets all wheels to stop moving. //TODO: change to account for direction currently
-       Factory.doSwerve(0.0, 0.0, 0.0, 0.0, 0.0);
+       OldSwerve.manager.setSwerve(0.0, 0.0, 0.0);
     }
 
     // Returns true when the command should end.
@@ -95,4 +86,17 @@ public class SwerveCommand extends Command{
     //{
         //return false;
     //}
+
+    //create a controller deadzone method which gives an output of zero if the controller is in the specified deadzone.
+    private double deadZone (double value, double deadZone)
+    {
+        //if the joystick value is less than the deadzone  value
+        if( Math.abs(value) < deadZone)
+        {
+            //override the value output as zero
+            return 0;
+        }
+        //return the normal joystick output
+        return value;
+    }
 }

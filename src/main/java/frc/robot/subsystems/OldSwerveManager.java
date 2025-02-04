@@ -5,13 +5,13 @@ import static edu.wpi.first.units.Units.Radians;
 
 import edu.wpi.first.units.measure.Angle;
 
-public class SwerveManager {
+public class OldSwerveManager {
 
     //declare swerve wheels
-    SwerveWheel frontRightWheel;
-    SwerveWheel frontLeftWheel;
-    SwerveWheel backRightWheel;
-    SwerveWheel backLeftWheel;
+    OldSwerveWheel frontRightWheel;
+    OldSwerveWheel frontLeftWheel;
+    OldSwerveWheel backRightWheel;
+    OldSwerveWheel backLeftWheel;
 
     /**
      * Creates a new SwerveManager which provides methods to translate and rotate the robot.
@@ -20,7 +20,7 @@ public class SwerveManager {
      * @param backRightWheel The back right wheel object to be used.
      * @param backLeftWheel The back leftwheel object to be used.
      */
-    public SwerveManager(SwerveWheel frontRightWheel, SwerveWheel frontLeftWheel, SwerveWheel backRightWheel, SwerveWheel backLeftWheel)
+    public OldSwerveManager(OldSwerveWheel frontRightWheel, OldSwerveWheel frontLeftWheel, OldSwerveWheel backRightWheel, OldSwerveWheel backLeftWheel)
     {
         //initialize wheels
         this.frontRightWheel = frontRightWheel;
@@ -56,10 +56,10 @@ public class SwerveManager {
     public void rotate(double speed)
     {
         //set the direction for each wheel using angle values
-        frontRightWheel.setDirection(Degrees.of(135.0));
-        frontLeftWheel.setDirection(Degrees.of(45.0));
+        frontRightWheel.setDirection(Degrees.of(45.0));
+        frontLeftWheel.setDirection(Degrees.of(-45.0));
         backRightWheel.setDirection(Degrees.of(-45.0));
-        backLeftWheel.setDirection(Degrees.of(-135.0));
+        backLeftWheel.setDirection(Degrees.of(45.0));
 
         //sets the speed of each drive wheel
         frontRightWheel.setSpeed(speed);
@@ -74,19 +74,7 @@ public class SwerveManager {
      * @param comparisonAngle The angle used as comparison to the target angle.
      * @return The closest angle to rotate toward between -180.0 and 180.0.
      */
-    private static double closestAngle(double targetAngle, double comparisonAngle)
-    {
-        // get the direction
-        //double dir = closestAngle(b, 360.0) - closestAngle(a, 360.0);
-        double dir = targetAngle - comparisonAngle;
-
-        // convert from -360 to 360 to -180 to 180
-        if (Math.abs(dir) > 180.0)
-        {
-                dir = -(Math.signum(dir) * 360.0) + dir;
-        }
-        return dir;
-    }
+    
 
     /**
      * Translates and rotates the robot at the same time by pointing the wheels in the hardcoded angle directions to do so.
@@ -98,7 +86,7 @@ public class SwerveManager {
     {
 
         //rotation direction plus rotation speed
-        Angle rotationTarget = Radians.of(direction).plus(Degrees.of(rotateSpeed * 45.0));
+        Angle rotationTarget = Radians.of(direction);//.plus(Degrees.of(rotateSpeed * 45.0));
         frontRightWheel.setDirection(rotationTarget);
         frontLeftWheel.setDirection(rotationTarget);
         backRightWheel.setDirection(rotationTarget);
