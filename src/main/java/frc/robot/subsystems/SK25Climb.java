@@ -12,8 +12,10 @@ import static frc.robot.Ports.ClimbPorts.*;
 import com.revrobotics.RelativeEncoder;
 //SparkMax Motor Imports
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 //PIDController Import
@@ -50,6 +52,9 @@ public class SK25Climb extends SubsystemBase
        motorTargetPosition = 0.0;
 
        climbPID.setSetpoint(0.0);
+
+       config.idleMode(IdleMode.kBrake);
+       motor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
    }
 
    //Retrieve motor's speed

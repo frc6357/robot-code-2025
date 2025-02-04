@@ -1,13 +1,14 @@
 package frc.robot.bindings;
 
-import static frc.robot.Ports.OperatorPorts.*;
+import static frc.robot.Ports.OperatorPorts.climbLowerButton;
+import static frc.robot.Ports.OperatorPorts.climbRaiseButton;
 
 import java.util.Optional;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ClimbCommand1;
+import frc.robot.commands.ClimbCommandReturn;
 import frc.robot.subsystems.SK25Climb;
-import static frc.robot.Konstants.ClimbConstants.*;
 
 
 
@@ -27,10 +28,10 @@ public class ClimbBinder implements CommandBinder {
         if (subsystem.isPresent()) 
         {
             SK25Climb subsys = subsystem.get();
-           // raise.onTrue(new ClimbCommand1(subsys));
-           // lower.onTrue(new ClimbCommandReturn(subsys));
-           raise.onTrue(new InstantCommand(() -> subsys.runMotor(kSpeed)));
-           lower.onTrue(new InstantCommand(() -> subsys.runMotor(-kSpeed)));
+           raise.onTrue(new ClimbCommand1(subsys));
+           lower.onTrue(new ClimbCommandReturn(subsys));
+           //raise.onTrue(new InstantCommand(() -> subsys.runMotor(kSpeed)));
+           //lower.onTrue(new InstantCommand(() -> subsys.runMotor(-kSpeed)));
         }
     }
 }

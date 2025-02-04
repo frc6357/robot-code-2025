@@ -45,7 +45,6 @@ public class RobotContainer {
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
-
   // The class used to create all PathPlanner Autos
   // private SK23AutoGenerator autoGenerator;
   // An option box on shuffleboard to choose the auto path
