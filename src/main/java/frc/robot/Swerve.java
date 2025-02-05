@@ -29,6 +29,7 @@ import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
@@ -38,11 +39,12 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 import frc.robot.utils.SK25AutoBuilder;
+import static frc.robot.Konstants.AutoConstants.*;
 
 public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements NTSendable, Subsystem {
     private SwerveConfig config;
-    //private Notifier simNotifier = null;
-    private double lastSimTime;
+    private Notifier m_simNotifier = null;
+    private double m_lastSimTime;
     private RotationController rotationController;
 
     private boolean hasAppliedDriverPerspective = false;
@@ -75,7 +77,7 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
         config.getModules());
 
         this.config = config;
-        configurePathPlanner();
+        setupPathPlanner();
 
         rotationController = new RotationController(config);
 
@@ -84,5 +86,60 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
         SmartDashboard.putData(this);
         Robot.add(this)
     }
+
+    private ChassisSpeeds getCurrentRobotChassisSpeeds() {
+        return getKinematics().toChassisSpeeds(getState().ModuleStates);
+    }
+
+    private void startSimThread() {
+        m_lastSimTime = Utils.getCurrentTimeSeconds();
+
+        /* Run simulation at a faster rate so PID gains behave more reasonably */
+        m_simNotifier = new Notifier(() -> {
+            final double currentTime = Utils.getCurrentTimeSeconds();
+            double deltaTime = currentTime - m_lastSimTime;
+            m_lastSimTime = currentTime;
+
+            /* use the measured time delta, get battery voltage from WPILib */
+            updateSimState(deltaTime, RobotController.getBatteryVoltage());
+        });
+        m_simNotifier.startPeriodic(config.getKSimLoopPeriod());
+    }
+
+    public void setupPathPlanner() {
+        resetPose(
+                new Pose2d(
+                        Units.feetToMeters(27.0),
+                        Units.feetToMeters(27.0 / 2.0),
+                        config.getBlueAlliancePerspectiveRotation()));
+        double driveBaseRadius = .5; //or something
+        for(var moduleLocation : getModuleLocations()) {
+            driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
+        }
+
+        RobotConfig robotConfig = null;
+        try {
+            RobotConfig.fromGUISettings();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    
+    SK25AutoBuilder.configure(
+        () -> this.getState().Pose, // Robot pose supplier
+        this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getCurrentRobotChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        (speeds, driveFeedForwards) -> 
+                this.setControl(
+                    AutoRequest.withSpeeds(speeds)), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        kAutoPathConfig,
+        robotConfig,
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+        this // Reference to this subsystem to set requirements
+        );
+  }
     
 }

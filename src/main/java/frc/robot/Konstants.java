@@ -3,6 +3,9 @@ package frc.robot;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
+// TODO: Add ReplanningConfig
 
 //import edu.wpi.first.units.measure.Distance;
 
@@ -10,6 +13,31 @@ import com.pathplanner.lib.config.PIDConstants;
 
 public final class Konstants
 {
+    public static final class AutoConstants
+    {
+       
+        // Autonomous translation constraints
+        public static final double          kMaxSpeedMetersPerSecond               = 3;
+        public static final double          kMaxAccelerationMetersPerSecondSquared = 2;
+        // public static final PathConstraints kPathConstraints                       =
+        //         new PathConstraints(kMaxSpeedMetersPerSecond,
+        //             kMaxAccelerationMetersPerSecondSquared);
+
+        // public static final PathConstraints kFastConstraints =
+        //     new PathConstraints(4.5, 3.5);
+
+        // PID Constants
+        public static final PIDConstants kTranslationPIDConstants = new PIDConstants(6, 0, 0);
+        public static final PIDConstants kRotationPIDConstants    = new PIDConstants(6, 0.4, 0);
+        public static final PPHolonomicDriveController kAutoPathConfig = new PPHolonomicDriveController(
+            kTranslationPIDConstants,
+            kRotationPIDConstants,
+            kMaxSpeedMetersPerSecond,
+            Math.hypot(SwerveConstants.kFTBEncoderDistInches / 2, SwerveConstants.kLTREncoderDistInches / 2), 
+            new ReplanningConfig()
+        );
+
+    }
 
     public static final class SwerveConstants
     {
