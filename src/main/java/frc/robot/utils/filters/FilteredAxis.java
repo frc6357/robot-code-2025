@@ -2,11 +2,14 @@ package frc.robot.utils.filters;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 public class FilteredAxis
 {
 
     private Supplier<Double> axis;
     private Filter filter;
+    public Trigger button;
 
     public FilteredAxis(Supplier<Double> supplier, Filter filter)
     {

@@ -48,7 +48,7 @@ public class Ports
         public static final SKTrigger armTrough = new SKTrigger(kOperator, kX.value, BUTTON);
         public static final SKTrigger armMiddleLow = new SKTrigger(kOperator, kY.value, BUTTON);
         public static final SKTrigger armHigh = new SKTrigger(kOperator, kA.value, BUTTON);
-        public static final SKTrigger intake = new SKTrigger(kOperator, kB.value, BUTTON);
+        public static final SKTrigger intakebut = new SKTrigger(kOperator, kB.value, BUTTON);
         public static final SKTrigger zeropos = new SKTrigger(kOperator, kStart.value, BUTTON);
 
         public static final FilteredAxis endArm = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
