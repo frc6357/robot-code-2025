@@ -87,6 +87,10 @@ public class RobotContainer {
             {
                 mySubsystem = Optional.of(new ExampleSubsystem());
             }
+            if(subsystems.isElevatorPresent())
+            {
+                elevatorSubsystem = Optional.of(new SK25Elevator());
+            }
         }
         catch (IOException e)
         {
@@ -158,11 +162,19 @@ public class RobotContainer {
         {
             mySubsystem.get().testPeriodic();
         }
+        if(elevatorSubsystem.isPresent())
+        {
+            elevatorSubsystem.get().testPeriodic();
+        }
     }
     public void testInit(){
         if(mySubsystem.isPresent())
         {
             mySubsystem.get().testInit();
+        }
+        if(elevatorSubsystem.isPresent())
+        {
+            elevatorSubsystem.get().testInit();
         }
     }
 
@@ -172,8 +184,9 @@ public class RobotContainer {
         {
             SK25Elevator elevator = elevatorSubsystem.get();
             elevator.resetPosition();
-            elevator.setRightTargetHeight(0.0);
-            elevator.setLeftTargetHeight(0.0);
+            //TODO Add this back :)
+            //elevator.setRightTargetHeight(0.0);
+            //elevator.setLeftTargetHeight(0.0);
         }
     }
 

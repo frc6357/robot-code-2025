@@ -134,11 +134,11 @@ public class SK25Elevator extends Elevator
 
         // Configurations For The Motors & Encoders
         motorConfigL
-            .inverted(true)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(kElevatorCurrentLimit);
 
         motorConfigR
+            .inverted(true)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(kElevatorCurrentLimit);
 
@@ -337,7 +337,7 @@ public class SK25Elevator extends Elevator
 
     @Override
     public void periodic(){
-        
+        /*
         double r_current_position = getRightPosition();
         double r_target_position = getRightTargetPosition();
 
@@ -359,10 +359,16 @@ public class SK25Elevator extends Elevator
         SmartDashboard.putNumber("Left Current Position", l_current_position);
         SmartDashboard.putNumber("Left Target Position", l_target_position);
         SmartDashboard.putBoolean("Left Elevator at Setpoint", isLeftAtTargetPosition());
-
+        */
         //TODO Uncomment below and add this to elastic dashboard once it's implemented.
 
         //SmartDashboard.putBoolean("Elevator At Top", atTop());
         //SmartDashboard.putBoolean("Elevator At Bottom", atBottom());
+    }
+    public void testPeriodic(){
+
+    }
+    public void testInit(){
+        
     }
 }
