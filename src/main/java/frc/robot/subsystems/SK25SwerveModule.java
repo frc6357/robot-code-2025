@@ -52,21 +52,111 @@ public class SK25SwerveModule {
         turnPID = new PhoenixPIDController(kDriveP, kDriveI, kDriveD);
         //makes a new SlewrateLimiter to limit the velocity of the module
         velocityLimiter = new SlewRateLimiter(kMaxVelocity);
+        
         //reset PID controler
         turnPID.reset();
 
         this.encoderOffset = encoderOffset;
     }
 
+    //gets the velocity of the turn motor
     StatusSignal<AngularVelocity> fLTurnVelocity = m_FLEncoder.getVelocity();
+    //gets the absolute position of the turn motor
     StatusSignal<Angle> fLTurnDistance = m_FLEncoder.getAbsolutePosition();
+    //gets the velocity of the drive motor
     double fLDriveVelocity = driveMotor.get();
     //converts from StatusSignal<Angle> to Angle with the getValue() method.
     Angle fLDriveDistance = driveMotor.getPosition().getValue();
+
     //degrees of the drive motor
     Double driveRotations = fLDriveDistance.in(Units.Degrees);
-    //TODO: make get methods
+    //meters of distance travelled by the wheel
+    Double driveDistance = fLDriveDistance.in(Rotation) * kWheelCircumference;
 
+
+    //rotation2d is a rotation coordinate on the unit circle. This version of the method takes radian values as doubles (0.0 to 2 * Math.PI).
+    //this object holds an angle with turning encoder's current pos.
+    Rotation2d moduleRotation = new Rotation2d(getOffsetEncoderPos(m_FLEncoder, encoderOffset));
+
+    //translation2d objects define movement on an xy pane. these ones are for the module's distance from the center of the robot with x and y coordinates
+    Translation2d moduleTranslation = new Translation2d(kChassisWidth / 2.0, kChassisLength / 2.0);
+
+    //represents the distance travelled in an arc, dx is distance traveled in a vector (translation), dtheta is angle of travel, 
+    //and dy is the distance driven to the side (0.0 since swerve dosnt do this).
+    Twist2d acrDistanceTraveled = new Twist2d(5.0, 0.0, 45.0);
+
+
+    //gets the rotation of the swervemodule
+    /**
+     * Gets the rotation of the swerve module, aka the position of the turn motor.
+     * @return The module's rotation.
+     */
+    public Rotation2d getModuleRotation()
+    {
+        return moduleRotation;
+    }
+
+    /**
+     * Gets the translation of the module: the distance between the module and the center of the robot.
+     * @return the Translation of the module form the center of the robot.
+     */
+    //public Translation2d getModuleTranslation()
+    //{
+        //return moduleTranslation;
+    //}
+
+    /**
+     * Gets the change in position from a starting poisition to an ending position and the rotation value in one object as a matrix. 
+     * The Transform2d class uses ideas of matrix operations to apply rotation via the rotational matrix
+     * It also preforms vector operations to determine the change in translation.
+     * The rotatoinal matrix is as follows, where x is the degrees to rotate:
+     * 
+     * Row 1: [cosx  -sinx  0]
+     * Row 2: [sinx  cosx   0]
+     * Row 3: [0     0      1]
+     * 
+     * @param startPose The starting position of the robot before the transformation occurs.
+     * @param endPose The ending position of the robot after the transformation occurs.
+     * @return The transformation from the startPose to endPose.
+     */
+    public Transform2d getTransformation(Pose2d startPose, Pose2d endPose)
+    {
+        return new Transform2d(startPose, endPose);
+    }
+   
+    //gets the translation2d of the transform2d object
+    /**
+     * Gets the underlying translation of the occured transformation.
+     * @param transformation The transformation preformed.
+     * @return The translation preformed by the Transform2d object.
+     */
+    public Translation2d getTranslation2d(Transform2d transformation)
+    {
+        //returns the translation
+        return transformation.getTranslation();
+    }
+   
+    /**
+     * Gets the underlying rotation of the occured transformation.
+     * @param transformation The transformation occured.
+     * @return The rotation preformed by the Transform2d object.
+     */
+    public Rotation2d getRotation2d(Transform2d transformation)
+    {
+        //returns the rotation
+        return transformation.getRotation();
+    }
+
+    //gets the swerve module position
+    /**
+     * Gets the position of the swerve modules on the feild using the module rotation and distance driven by the drive motor.
+     * @return The object containing the module position.
+     */
+    public SwerveModulePosition getSwerveModulePosition()
+    {
+        //new swerve module position with the current distance driven and current module rotation
+        return new SwerveModulePosition(driveDistance, moduleRotation);
+    }
     
     /**
      * Gets the output of the encoder after accounting for its offsets.
@@ -80,27 +170,27 @@ public class SK25SwerveModule {
         return (encoder.getAbsolutePosition().getValue().in(Units.Radians) - offset);
     }
 
-    //rotation2d is a rotation coordinate on the unit circle. This version of the method takes radian values as doubles (0.0 to 2 * Math.PI).
-    //this object holds an angle with turning encoder's current pos.
-    Rotation2d moduleRotation = new Rotation2d(getOffsetEncoderPos(m_FLEncoder, encoderOffset));
+     /**
+      * Gets the velocity after a velocityLimiter object caps the maximum velocity.
+      * @param velocity The velocity to be limited.
+      * @return The limited velocity.
+      */
+     public double getLimitedVelocity(double velocity)
+     {
+         //returns the velocity after the velocity limit has been applied. Pass the velocity to be limited in the calculate method.
+         return velocityLimiter.calculate(velocity);
+     }
 
-    //gets the rotation of the swervemodule
-    public Rotation2d getModuleRotation()
-    {
-        return moduleRotation;
-    }
-
-    //translation2d objects define movement on an xy pane. these ones are for the module's distance from the center of the robot with x and y coordinates
-    Translation2d moduleTranslation = new Translation2d(kChassisWidth / 2.0, kChassisLength / 2.0);
-
-    //gets the translation of the module as the distance between the module and the center of the robot.
-    public Translation2d getModuleTranslation()
-    {
-        return moduleTranslation;
-    }
-
-
-    //more accureatley and efficiently turns the wheels to the porper state
+    /**
+     * Optimizes the module states through wheel pathing reduction and cosine scaling.
+     * The state is told to spin the wheels in the direction which travels a shorter distance.
+     * For example, if the wheel is at 0 degrees and has a target of 270 degrees, the wheel can rotate 
+     * -90 degrees instead of 270 to reach its destination more efficiently.
+     * The state also scales down any perpendicular movement to the traget direction to smoothen the driving.
+     * It takes the error of the angle finds the cosine of the angle to scale the speed with.
+     * @param state The swerve module state to be optimized.
+     * @param gyroAngle the current rotation of the robot, obtained from the gyro.
+     */
     public void decreaseError(SwerveModuleState state, Rotation2d gyroAngle)
     {
             //ensures the wheels turn in the direction of least distance travelled (smaller angle).
@@ -112,46 +202,10 @@ public class SK25SwerveModule {
             state.cosineScale(gyroAngle);
     }
 
-    //meters of distance travelled by the wheel
-    Double driveDistance = fLDriveDistance.in(Rotation) * kWheelCircumference;
-    //gets the swerve module position
-    public SwerveModulePosition getSwerveModulePosition()
-    {
-        //new swerve module position with the current distance driven and current module rotation
-        return new SwerveModulePosition(driveDistance, moduleRotation);
-    }
-    
-
-    //limits the velocity: returns the limited velocity.
-    public double getLimitedVelocity(double velocity)
-    {
-        //returns the velocity after the velocity limit has been applied. Pass the velocity to be limited in the calculate method.
-        return velocityLimiter.calculate(velocity);
-    }
-
-    //transform objects turns pose2d objects into the new position of the robot as a pose2d. Transform is the transformation matrix from the old position.
-    //get change in position
-    public Transform2d getTransformation(Pose2d startPose, Pose2d endPose)
-    {
-        return new Transform2d(startPose, endPose);
-    }
-    //gets the translation2d of the transform2d object
-    public Translation2d getTranslation2d(Transform2d transformation)
-    {
-        return transformation.getTranslation();
-    }
-    //gets the rotation of the transform2d object
-    public Rotation2d getRotation2d(Transform2d transformation)
-    {
-        return transformation.getRotation();
-    }
-
-    //represents the distance travelled in an arc, dx is distance traveled in a vector (translation), dtheta is angle of travel, 
-    //and dy is the distance driven to the side (0.0 since swerve dosnt do this).
-    Twist2d acrDistanceTraveled = new Twist2d(5.0, 0.0, 45.0);
-    
-
-
+    /**
+     * Applys a PID loop to the turn motor using PID constants and the target setpoint of the PID.
+     * @param setpoint The setpoint of the PID loop to reach.
+     */
     private void applyPID(Angle setpoint)
     {
         //allows the PID loop to take the smaller of the two errors, for example, traveling -90 degrees instead of 270.
@@ -165,17 +219,23 @@ public class SK25SwerveModule {
         turnPIDConfigs.kD = kDriveD; 
         //apply the PID Configs to the motor
         turnMotor.getConfigurator().apply(turnPIDConfigs);
-        // create a position closed-loop request, voltage output, slot 0 configs
+        //create a position closed-loop request, voltage output, slot 0 configs. This defines the setpoint. 
         final PositionVoltage m_request = new PositionVoltage(setpoint).withSlot(0);
-        // set position to rotation distance specified by the request
+        //set position to a rotation distance specified by the request
         turnMotor.setControl(m_request);
     }
 
-    //sets the target state of the swerve modules by applying the PID configs/setpoint to the turn motor and setting the drive motor to the inputted velocity
+    /**
+     * Sets the target state of the swerve modules by applying the PID loop 
+     * to the turn motor and setting the drive motor to the specified velocity.
+     * @param setpoint The setpoint of the applied PID loop to reach.
+     * @param velocity The velocity to spin the drive motor at, at a percentage from 0.0 to 1.0.
+     */
     public void setTargetState(Angle setpoint, double velocity)
     {
         //apply the PID constants to the turn motor
         applyPID(setpoint);
+        //set the drive motor to the velocity
         driveMotor.set(velocity);
     }
 }

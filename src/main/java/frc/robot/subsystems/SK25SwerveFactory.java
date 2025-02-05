@@ -43,7 +43,7 @@ public class SK25SwerveFactory extends SubsystemBase{
 
     public SK25SwerveFactory()
     {
-        //make new swerveModuel objects 
+        //make new swerve module objects 
         frontLeftModule = new SK25SwerveModule(kFrontLeftDriveMotorID, kFrontLeftTurnMotorID, kFrontLeftEncoderID, kFrontLeftEncoderOffsetDouble);
         frontRightModule = new SK25SwerveModule(kFrontRightDriveMotorID, kFrontRightTurnMotorID, kFrontRightEncoderID, kFrontRightEncoderOffsetDouble);
         backLeftModule = new SK25SwerveModule(kBackLeftDriveMotorID, kBackLeftTurnMotorID, kBackLeftEncoderID, kBackLeftEncoderOffsetDouble);
@@ -59,14 +59,14 @@ public class SK25SwerveFactory extends SubsystemBase{
     //position of the robot when code is deployed. starts at 0, 0.
     Pose2d startingPose = new Pose2d();
 
-    //kinematics object is a middle man who converts chassisspeeds to swervedrive states
+    //kinematics object is used to convert chassisspeeds to swervedrive states
     SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-        frontLeftModule.getModuleTranslation(), 
-        frontRightModule.getModuleTranslation(), 
-        backLeftModule.getModuleTranslation(), 
-        backRightModule.getModuleTranslation());
+        frontLeftModule.moduleTranslation, 
+        frontRightModule.moduleTranslation, 
+        backLeftModule.moduleTranslation, 
+        backRightModule.moduleTranslation);
 
-    //creates new swerve modulve positions which deifne the magnitude and direction of each module
+    //creates new swerve modulve positions which deifne the distance traveled and rotation of each module
     SwerveModulePosition[] m_Positions = {
         frontLeftModule.getSwerveModulePosition(), 
         frontRightModule.getSwerveModulePosition(), 
@@ -75,6 +75,10 @@ public class SK25SwerveFactory extends SubsystemBase{
 
     //creates a new swerve dirve odometry which uses the parameters to estimate the robots position on the feild (becomes less acurate over time)
     SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, currentAngle, m_Positions, startingPose);
+
+    //update the position using the current angle from the pigeon and the current positions of the swerve modules
+    Pose2d updatedRobotPose = m_odometry.update(currentAngle, m_Positions);
+
 
     //The primary method to control the swerve drive via configuring all of its modules.
     public void doSwerve(double theta, double translation, double rotation, double vX, double vY)
@@ -96,9 +100,6 @@ public class SK25SwerveFactory extends SubsystemBase{
 
         //position of the robot
         //Pose2d currentRobotPose = new Pose2d(robotTranslation, currentAngle);
-    
-        //update the position using the current angle from the pigeon and the current positions of the swerve modules
-        Pose2d updatedRobotPose = m_odometry.update(currentAngle, m_Positions);
 
         //transform objects turns pose2d objects into the new position of the robot as a pose2d. Transform is the transformation matrix from the old position.
         Transform2d frontLeftTransformation = frontLeftModule.getTransformation(startingPose, updatedRobotPose);
@@ -120,14 +121,21 @@ public class SK25SwerveFactory extends SubsystemBase{
         backLeftModule.decreaseError(bLState, currentAngle);
         backRightModule.decreaseError(bRState, currentAngle);
 
-       //set the target position of the swerve modules
-       frontLeftModule.setTargetState(Radians.of(theta), translation);
-       frontRightModule.setTargetState(Radians.of(theta), translation);
-       backLeftModule.setTargetState(Radians.of(theta), translation);
-       backRightModule.setTargetState(Radians.of(theta), translation);
+        //set the target position of the swerve modules
+        frontLeftModule.setTargetState(Radians.of(theta), translation);
+        frontRightModule.setTargetState(Radians.of(theta), translation);
+        backLeftModule.setTargetState(Radians.of(theta), translation);
+        backRightModule.setTargetState(Radians.of(theta), translation);
     }
 
-
+    /**
+     * Gets the current position of the robot from the odometry update.
+     * @return The new robot position.
+     */
+    public Pose2d getRobotPose()
+    {
+        return updatedRobotPose;
+    }
 
     //occurs every 20 miliseconds, usually not tied to a command, binder, etc...
     public void periodic()
