@@ -27,6 +27,8 @@ import edu.wpi.first.networktables.NTSendableBuilder;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -34,12 +36,16 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 import frc.robot.utils.SK25AutoBuilder;
 import static frc.robot.Konstants.AutoConstants.*;
+
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements NTSendable, Subsystem {
     private SwerveConfig config;
@@ -81,17 +87,260 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
 
         rotationController = new RotationController(config);
 
+        if(Utils.isSimulation()) {startSimThread();}
+
         // TODO: Review data communication methods (for apps like Shuffleboard, Elastic, etc.)
         SendableRegistry.add(this, "Swerve Drive");
         SmartDashboard.putData(this);
-        Robot.add(this)
+        Robot.add(this);
+        this.register();
+    }
+
+    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+
+    public void initSendable(NTSendableBuilder builder) {
+        SmartDashboard.putData(
+                "Swerve Drive",
+                new Sendable() {
+                    @Override
+                    public void initSendable(SendableBuilder builder) {
+                        builder.setSmartDashboardType("SwerveDrive");
+
+                        addModuleProperties(builder, "Front Left", 0);
+                        addModuleProperties(builder, "Front Right", 1);
+                        addModuleProperties(builder, "Back Left", 2);
+                        addModuleProperties(builder, "Back Right", 3);
+
+                        builder.addDoubleProperty("Robot Angle", () -> getRotationRadians(), null);
+                    }
+                });
+    }
+
+    private void addModuleProperties(SendableBuilder builder, String moduleName, int moduleNumber) {
+        builder.addDoubleProperty(
+                moduleName + " Angle",
+                () -> getModule(moduleNumber).getCurrentState().angle.getRadians(),
+                null);
+        builder.addDoubleProperty(
+                moduleName + " Velocity",
+                () -> getModule(moduleNumber).getCurrentState().speedMetersPerSecond,
+                null);
+    }
+
+    /**
+     * The function `getRobotPose` returns the robot's pose after checking and updating it.
+     *
+     * @return The `getRobotPose` method is returning the robot's current pose after calling the
+     *     `seedCheckedPose` method with the current pose as an argument.
+     */
+    public Pose2d getRobotPose() {
+        Pose2d pose = getState().Pose;
+        return keepPoseOnField(pose);
+    }
+
+    // Keep the robot on the field
+    private Pose2d keepPoseOnField(Pose2d pose) {
+        double halfRobot = config.getRobotLength() / 2;
+        double x = pose.getX();
+        double y = pose.getY();
+
+        double newX = Util.limit(x, halfRobot, Field.getFieldLength() - halfRobot);
+        double newY = Util.limit(y, halfRobot, Field.getFieldWidth() - halfRobot);
+
+        if (x != newX || y != newY) {
+            pose = new Pose2d(new Translation2d(newX, newY), pose.getRotation());
+            resetPose(pose);
+        }
+        return pose;
+    }
+
+    public Trigger inXzone(double minXmeter, double maxXmeter) {
+        return new Trigger(
+                () -> Util.inRange(() -> getRobotPose().getX(), () -> minXmeter, () -> maxXmeter));
+    }
+
+    public Trigger inYzone(double minYmeter, double maxYmeter) {
+        return new Trigger(
+                () -> Util.inRange(() -> getRobotPose().getY(), () -> minYmeter, () -> maxYmeter));
+    }
+
+     /**
+     * This method is used to check if the robot is in the X zone of the field flips the values if
+     * Red Alliance
+     *
+     * @param minXmeter
+     * @param maxXmeter
+     * @return
+     */
+    public Trigger inXzoneAlliance(double minXmeter, double maxXmeter) {
+        return new Trigger(
+                () -> Util.inRange(Field.flipXifRed(getRobotPose().getX()), minXmeter, maxXmeter));
+    }
+
+    /**
+     * This method is used to check if the robot is in the Y zone of the field flips the values if
+     * Red Alliance
+     *
+     * @param minYmeter
+     * @param maxYmeter
+     * @return
+     */
+    public Trigger inYzoneAlliance(double minYmeter, double maxYmeter) {
+        return new Trigger(
+                () -> Util.inRange(Field.flipYifRed(getRobotPose().getY()), minYmeter, maxYmeter));
+    }
+
+    // Used to set a control request to the swerve module, ignores disable so commands are
+    // continuous.
+    Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
+        return run(() -> this.setControl(requestSupplier.get())).ignoringDisable(true);
     }
 
     private ChassisSpeeds getCurrentRobotChassisSpeeds() {
         return getKinematics().toChassisSpeeds(getState().ModuleStates);
     }
+    
+    private void setPilotPerspective() {
+        /* Periodically try to apply the operator perspective */
+        /* If we haven't applied the operator perspective before, then we should apply it regardless of DS state */
+        /* This allows us to correct the perspective in case the robot code restarts mid-match */
+        /* Otherwise, only check and apply the operator perspective if the DS is disabled */
+        /* This ensures driving behavior doesn't change until an explicit disable event occurs during testing*/
+        if (!hasAppliedDriverPerspective || DriverStation.isDisabled()) {
+            DriverStation.getAlliance()
+                    .ifPresent(
+                            allianceColor -> {
+                                this.setOperatorPerspectiveForward(
+                                        allianceColor == Alliance.Red
+                                                ? config.getRedAlliancePerspectiveRotation()
+                                                : config.getBlueAlliancePerspectiveRotation());
+                                hasAppliedDriverPerspective = true;
+                            });
+        }
+    }
 
-    private void startSimThread() {
+    protected void reorient(double angleDegrees) {
+        resetPose(
+                new Pose2d(
+                        getRobotPose().getX(),
+                        getRobotPose().getY(),
+                        Rotation2d.fromDegrees(angleDegrees)));
+    }
+
+    protected Command reorientOperatorAngle(double angleDegrees) {
+        return runOnce(
+                () -> {
+                    double output;
+                    output = Field.flipTrueAngleIfRed(angleDegrees);
+                    reorient(output);
+                });
+    }
+
+    protected double getClosestCardinal() {
+        double heading = getRotation().getRadians();
+        if (heading > -Math.PI / 4 && heading <= Math.PI / 4) {
+            return 0;
+        } else if (heading > Math.PI / 4 && heading <= 3 * Math.PI / 4) {
+            return 90;
+        } else if (heading > 3 * Math.PI / 4 || heading <= -3 * Math.PI / 4) {
+            return 180;
+        } else {
+            return 270;
+        }
+    }
+
+    protected double getClosest45() {
+        double angleRadians = getRotation().getRadians();
+        double angleDegrees = Math.toDegrees(angleRadians);
+
+        // Normalize the angle to be within 0 to 360 degrees
+        angleDegrees = angleDegrees % 360;
+        if (angleDegrees < 0) {
+            angleDegrees += 360;
+        }
+
+        // Round to the nearest multiple of 45 degrees
+        double closest45Degrees = Math.round(angleDegrees / 45.0) * 45.0;
+
+        // Convert back to radians and return as a Rotation2d
+        return Rotation2d.fromDegrees(closest45Degrees).getRadians();
+    }
+
+    protected Command cardinalReorient() {
+        return runOnce(
+                () -> {
+                    double angleDegrees = getClosestCardinal();
+                    reorient(angleDegrees);
+                });
+    }
+
+    //                     //
+    // Rotation Controller //
+    //                     //
+    double getRotationControl(double goalRadians) {
+        return rotationController.calculate(goalRadians, getRotationRadians());
+    }
+
+    void resetRotationController() {
+        rotationController.reset(getRotationRadians());
+    }
+
+    Rotation2d getRotation() {
+        return getRobotPose().getRotation();
+    }
+
+    double getRotationRadians() {
+        return getRobotPose().getRotation().getRadians();
+    }
+
+    double calculateRotationController(DoubleSupplier targetRadians) {
+        return rotationController.calculate(targetRadians.getAsDouble(), getRotationRadians());
+    }
+
+    //              //
+    // Path Planner //
+    //              //
+    public void setupPathPlanner() {
+        resetPose(
+                new Pose2d(
+                        Units.feetToMeters(27.0),
+                        Units.feetToMeters(27.0 / 2.0),
+                        config.getBlueAlliancePerspectiveRotation()));
+        double driveBaseRadius = .4; //or something
+        for(var moduleLocation : getModuleLocations()) {
+            driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
+        }
+
+        RobotConfig robotConfig = null; // Just in case of exception, set to null first
+        try {
+            robotConfig = RobotConfig.fromGUISettings(); // Takes config from Robot Config on Pathplanner Settings
+        }
+        catch (Exception e){
+            e.printStackTrace(); // Fallback to default config
+        }
+    
+    SK25AutoBuilder.configure(
+        () -> this.getState().Pose, // Robot pose supplier
+        this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getCurrentRobotChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        (speeds, driveFeedForwards) -> 
+                this.setControl(
+                    AutoRequest.withSpeeds(speeds)), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        kAutoPathConfig,
+        robotConfig,
+                    // ||  Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // ||  This will flip the path being followed to the red side of the field.
+                    // \/  THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+        this // Reference to this subsystem to set requirements
+        );
+    }
+    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+
+    //            //
+    // Simulation //
+    //            //
+    private void startSimThread() { 
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
         /* Run simulation at a faster rate so PID gains behave more reasonably */
@@ -104,42 +353,6 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
         m_simNotifier.startPeriodic(config.getKSimLoopPeriod());
-    }
-
-    public void setupPathPlanner() {
-        resetPose(
-                new Pose2d(
-                        Units.feetToMeters(27.0),
-                        Units.feetToMeters(27.0 / 2.0),
-                        config.getBlueAlliancePerspectiveRotation()));
-        double driveBaseRadius = .5; //or something
-        for(var moduleLocation : getModuleLocations()) {
-            driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
-        }
-
-        RobotConfig robotConfig = null;
-        try {
-            RobotConfig.fromGUISettings();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    
-    SK25AutoBuilder.configure(
-        () -> this.getState().Pose, // Robot pose supplier
-        this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-        this::getCurrentRobotChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        (speeds, driveFeedForwards) -> 
-                this.setControl(
-                    AutoRequest.withSpeeds(speeds)), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        kAutoPathConfig,
-        robotConfig,
-        // Boolean supplier that controls when the path will be mirrored for the red alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-        () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
-        this // Reference to this subsystem to set requirements
-        );
-  }
+}
     
 }

@@ -32,9 +32,10 @@ public final class Konstants
         public static final PPHolonomicDriveController kAutoPathConfig = new PPHolonomicDriveController(
             kTranslationPIDConstants,
             kRotationPIDConstants,
-            kMaxSpeedMetersPerSecond,
-            Math.hypot(SwerveConstants.kFTBEncoderDistInches / 2, SwerveConstants.kLTREncoderDistInches / 2), 
-            new ReplanningConfig()
+            Robot.kDefaultPeriod
+            //kMaxSpeedMetersPerSecond,
+            //Math.hypot(SwerveConstants.kFTBEncoderDistInches / 2, SwerveConstants.kLTREncoderDistInches / 2), 
+            //new ReplanningConfig()
         );
 
     }
@@ -76,7 +77,6 @@ public final class Konstants
 
 
         //swerve chassis width and length in inches
-        //TODO: Update for final robot
         public static final double kChassisLength = 27;
         public static final double kChassisWidth = 27;
 
