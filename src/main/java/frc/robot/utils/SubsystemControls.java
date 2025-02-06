@@ -21,8 +21,8 @@ public class SubsystemControls
      */
     public SubsystemControls(
         @JsonProperty(required = true, value = "swerve")      boolean swerve,
-        @JsonProperty(required = true, value = "swerve")      boolean example,
-        @JsonProperty(required = true, value = "swerve")      boolean elevator
+        @JsonProperty(required = true, value = "example")      boolean example,
+        @JsonProperty(required = true, value = "elevator")      boolean elevator
     )
     {
         this.swerve = swerve;

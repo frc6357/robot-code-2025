@@ -88,7 +88,7 @@ public final class Konstants
         public static final double kMaxHeight = 28;
         public static final double kMinHeight = 0;
 
-        public static final double kJoystickChange   = 0.1; // Manual setpoint value for units from 0.0 - 1.0 moved per second
+        public static final double kJoystickChange   = 1.0; // Manual setpoint value for units from 0.0 - 1.0 moved per second
         public static final double kJoystickDeadband = 0.3;  // Manual arm movement axis deadband
 
         public static final boolean kJoystickReversed = true;  // Determines if the joystick movement is reversed
