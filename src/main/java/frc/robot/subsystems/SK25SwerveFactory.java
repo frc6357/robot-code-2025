@@ -1,23 +1,6 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Radians;
-import static frc.robot.Konstants.SwerveConstants.kBackLeftDriveMotorID;
-import static frc.robot.Konstants.SwerveConstants.kBackLeftEncoderID;
-import static frc.robot.Konstants.SwerveConstants.kBackLeftEncoderOffsetDouble;
-import static frc.robot.Konstants.SwerveConstants.kBackLeftTurnMotorID;
-import static frc.robot.Konstants.SwerveConstants.kBackRightDriveMotorID;
-import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderID;
-import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderOffsetDouble;
-import static frc.robot.Konstants.SwerveConstants.kBackRightTurnMotorID;
-import static frc.robot.Konstants.SwerveConstants.kFrontLeftDriveMotorID;
-import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderID;
-import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderOffsetDouble;
-import static frc.robot.Konstants.SwerveConstants.kFrontLeftTurnMotorID;
-import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveMotorID;
-import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
-import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderOffsetDouble;
-import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
-import static frc.robot.Konstants.SwerveConstants.kPigeonID;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -38,26 +21,24 @@ public class SK25SwerveFactory extends SubsystemBase{
     SK25SwerveModule backLeftModule;
     SK25SwerveModule backRightModule;
 
-    public Pigeon2 m_gyro;
-    Rotation2d currentAngle;
+    public Rotation2d currentAngle;
 
-    public SK25SwerveFactory()
+    public SK25SwerveFactory(SK25SwerveModule fL, SK25SwerveModule fR, SK25SwerveModule bL, SK25SwerveModule bR, Pigeon2 bird)
     {
         //make new swerve module objects 
-        frontLeftModule = new SK25SwerveModule(kFrontLeftDriveMotorID, kFrontLeftTurnMotorID, kFrontLeftEncoderID, kFrontLeftEncoderOffsetDouble);
-        frontRightModule = new SK25SwerveModule(kFrontRightDriveMotorID, kFrontRightTurnMotorID, kFrontRightEncoderID, kFrontRightEncoderOffsetDouble);
-        backLeftModule = new SK25SwerveModule(kBackLeftDriveMotorID, kBackLeftTurnMotorID, kBackLeftEncoderID, kBackLeftEncoderOffsetDouble);
-        backRightModule = new SK25SwerveModule(kBackRightDriveMotorID, kBackRightTurnMotorID, kBackRightEncoderID, kBackRightEncoderOffsetDouble);
-        //make a new Pigeon object which gives access to gyro positions
-        m_gyro = new Pigeon2(kPigeonID);
+        this.frontLeftModule = fL;
+        this.frontLeftModule = fR;
+        this.frontLeftModule = bL;
+        this.frontLeftModule = bR;
         //gets the current angle of the robot
-        currentAngle = m_gyro.getRotation2d();
+        currentAngle = bird.getRotation2d();
         //reset gyro
-        m_gyro.reset();
+        bird.reset();
     }
 
     //position of the robot when code is deployed. starts at 0, 0.
     Pose2d startingPose = new Pose2d();
+    
 
     //kinematics object is used to convert chassisspeeds to swervedrive states
     SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
@@ -75,9 +56,6 @@ public class SK25SwerveFactory extends SubsystemBase{
 
     //creates a new swerve dirve odometry which uses the parameters to estimate the robots position on the feild (becomes less acurate over time)
     SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, currentAngle, m_Positions, startingPose);
-
-    //update the position using the current angle from the pigeon and the current positions of the swerve modules
-    Pose2d updatedRobotPose = m_odometry.update(currentAngle, m_Positions);
 
 
     //The primary method to control the swerve drive via configuring all of its modules.
@@ -102,10 +80,10 @@ public class SK25SwerveFactory extends SubsystemBase{
         //Pose2d currentRobotPose = new Pose2d(robotTranslation, currentAngle);
 
         //transform objects turns pose2d objects into the new position of the robot as a pose2d. Transform is the transformation matrix from the old position.
-        Transform2d frontLeftTransformation = frontLeftModule.getTransformation(startingPose, updatedRobotPose);
-        Transform2d frontRightTransformation = frontRightModule.getTransformation(startingPose, updatedRobotPose);
-        Transform2d backLeftTransformation = backLeftModule.getTransformation(startingPose, updatedRobotPose);
-        Transform2d backRightTransformation = backRightModule.getTransformation(startingPose, updatedRobotPose);
+        Transform2d frontLeftTransformation = frontLeftModule.getTransformation(startingPose, updatedOdometryPose());
+        Transform2d frontRightTransformation = frontRightModule.getTransformation(startingPose, updatedOdometryPose());
+        Transform2d backLeftTransformation = backLeftModule.getTransformation(startingPose, updatedOdometryPose());
+        Transform2d backRightTransformation = backRightModule.getTransformation(startingPose, updatedOdometryPose());
 
         //make a swerve module state which takes the speed of the module and its rotation
         SwerveModuleState frontLeftTargetState = new SwerveModuleState(translation, frontLeftModule.getModuleRotation());  //TODO: translation should (MABYE) be converted to the meters per second values
@@ -128,18 +106,31 @@ public class SK25SwerveFactory extends SubsystemBase{
         backRightModule.setTargetState(Radians.of(theta), translation);
     }
 
+    //updates the odometry
+    public void updateOdometry() 
+    {
+        m_odometry.update(currentAngle, m_Positions);
+    }
+
+    //updates the odometry and returns the updated pose
+    private Pose2d updatedOdometryPose()
+    {
+        return m_odometry.update(currentAngle, m_Positions);
+    }
+
     /**
      * Gets the current position of the robot from the odometry update.
      * @return The new robot position.
      */
     public Pose2d getRobotPose()
     {
-        return updatedRobotPose;
+        return updatedOdometryPose();
     }
 
     //occurs every 20 miliseconds, usually not tied to a command, binder, etc...
     public void periodic()
     {
+        updateOdometry();
     } 
 
     public void testInit()
@@ -148,5 +139,6 @@ public class SK25SwerveFactory extends SubsystemBase{
     
     public void testPeriodic()
     {
+        updateOdometry();
     }
 }

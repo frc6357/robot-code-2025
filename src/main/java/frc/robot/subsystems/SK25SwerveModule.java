@@ -35,7 +35,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 public class SK25SwerveModule {
     TalonFX driveMotor;
     TalonFX turnMotor;
-    CoreCANcoder m_FLEncoder;
+    CoreCANcoder encoder;
     PhoenixPIDController turnPID;
     SlewRateLimiter velocityLimiter;
     Double encoderOffset;
@@ -47,7 +47,7 @@ public class SK25SwerveModule {
         //the turn motor to use for this module
         turnMotor = new TalonFX(turnMotorID, kCANivoreName);
         //the encoder to use for this module
-        m_FLEncoder = new CoreCANcoder(encoderID, kCANivoreName);
+        encoder = new CoreCANcoder(encoderID, kCANivoreName);
         //the Phoenix PID controller to use for this module
         turnPID = new PhoenixPIDController(kDriveP, kDriveI, kDriveD);
         //makes a new SlewrateLimiter to limit the velocity of the module
@@ -60,9 +60,9 @@ public class SK25SwerveModule {
     }
 
     //gets the velocity of the turn motor
-    StatusSignal<AngularVelocity> fLTurnVelocity = m_FLEncoder.getVelocity();
+    StatusSignal<AngularVelocity> fLTurnVelocity = encoder.getVelocity();
     //gets the absolute position of the turn motor
-    StatusSignal<Angle> fLTurnDistance = m_FLEncoder.getAbsolutePosition();
+    StatusSignal<Angle> fLTurnDistance = encoder.getAbsolutePosition();
     //gets the velocity of the drive motor
     double fLDriveVelocity = driveMotor.get();
     //converts from StatusSignal<Angle> to Angle with the getValue() method.
@@ -76,7 +76,7 @@ public class SK25SwerveModule {
 
     //rotation2d is a rotation coordinate on the unit circle. This version of the method takes radian values as doubles (0.0 to 2 * Math.PI).
     //this object holds an angle with turning encoder's current pos.
-    Rotation2d moduleRotation = new Rotation2d(getOffsetEncoderPos(m_FLEncoder, encoderOffset));
+    Rotation2d moduleRotation = new Rotation2d(getOffsetEncoderPos(encoder, encoderOffset));
 
     //translation2d objects define movement on an xy pane. these ones are for the module's distance from the center of the robot with x and y coordinates
     Translation2d moduleTranslation = new Translation2d(kChassisWidth / 2.0, kChassisLength / 2.0);
@@ -239,4 +239,3 @@ public class SK25SwerveModule {
         driveMotor.set(velocity);
     }
 }
-

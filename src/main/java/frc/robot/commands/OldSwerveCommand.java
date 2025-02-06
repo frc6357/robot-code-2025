@@ -1,102 +1,101 @@
-package frc.robot.commands;
+// package frc.robot.commands;
 
-import static frc.robot.Konstants.SwerveConstants.kJoystickDeadzone;
+// import static frc.robot.Konstants.SwerveConstants.kJoystickDeadzone;
 
-import java.util.function.Supplier;
+// import java.util.function.Supplier;
 
-import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-//import com.ctre.phoenix6.hardware.core.CorePigeon2;
-import frc.robot.subsystems.OldSwerve;;
+// import edu.wpi.first.units.Units;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj2.command.Command;
+// //import com.ctre.phoenix6.hardware.core.CorePigeon2;
+// import frc.robot.subsystems.OldSwerve;
 
 
-public class OldSwerveCommand extends Command
-{
-    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+// public class OldSwerveCommand extends Command
+// {
+//     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-    //declare swerve object
-    private final OldSwerve swerve;
+//     //declare swerve object
+//     private final OldSwerve swerve;
 
-    //declare the double version of joystick input values.
-    //Suppliers are used to update the value periodicaly. 
-    private  Supplier<Double> leftY;
-    private  Supplier<Double> leftX;
-    private  Supplier<Double> rightX;
+//     //declare the double version of joystick input values.
+//     //Suppliers are used to update the value periodicaly. 
+//     private  Supplier<Double> leftY;
+//     private  Supplier<Double> leftX;
+//     private  Supplier<Double> rightX;
 
-    /**
-     * Creates a new SwerveCommand to handle all of the movement of the swerve drivebase.
-     * @param _swerve The SK25Swerve object to house the movement methods for the drivebase.
-     * @param _leftY The Y input of the left joystick on the controller used for translation.
-     * @param _leftX The X input of the left joystick on the controller used for translation.
-     * @param _rightX The X input of the right joystick on the controller used for rotation.
-     */
-    public OldSwerveCommand(OldSwerve _swerve, Supplier<Double> _leftY, Supplier<Double> _leftX, Supplier<Double> _rightX)
-    {
-        //initialize objects and variables
-        swerve = _swerve;
-        leftY = _leftY;
-        leftX = _leftX;
-        rightX = _rightX;
-        //ensure that this command only runs if no other command which uses the swerve subsystem is currently running.
-        addRequirements(swerve);
-    }
+//     /**
+//      * Creates a new SwerveCommand to handle all of the movement of the swerve drivebase.
+//      * @param _swerve The SK25Swerve object to house the movement methods for the drivebase.
+//      * @param _leftY The Y input of the left joystick on the controller used for translation.
+//      * @param _leftX The X input of the left joystick on the controller used for translation.
+//      * @param _rightX The X input of the right joystick on the controller used for rotation.
+//      */
+//     public OldSwerveCommand(OldSwerve _swerve, Supplier<Double> _leftY, Supplier<Double> _leftX, Supplier<Double> _rightX)
+//     {
+//         //initialize objects and variables
+//         swerve = _swerve;
+//         leftY = _leftY;
+//         leftX = _leftX;
+//         rightX = _rightX;
+//         //ensure that this command only runs if no other command which uses the swerve subsystem is currently running.
+//         addRequirements(swerve);
+//     }
 
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() 
-    {
+//     // Called when the command is initially scheduled.
+//     @Override
+//     public void initialize() 
+//     {
       
-    }
+//     }
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() 
-    {
-        
-        //driverController conversion for left joystick.
-        //converts Cartesian coordinate system to Polar system by getting the angle between left joystick X and Y components.
-        double angle = Math.atan2(leftY.get(), leftX.get());
-        //make the controller deadzones.
-        double translationMagnitude = deadZone(Math.hypot(leftX.get(), leftY.get()), kJoystickDeadzone);
-        double rotationMagnitude = deadZone(rightX.get(), kJoystickDeadzone);
+//     // Called every time the scheduler runs while the command is scheduled.
+//     @Override
+//     public void execute() 
+//     {
+//         //driverController conversion for left joystick.
+//         //converts Cartesian coordinate system to Polar system by getting the angle between left joystick X and Y components.
+//         double angle = Math.atan2(leftY.get(), leftX.get());
+//         //make the controller deadzones.
+//         double translationMagnitude = deadZone(Math.hypot(leftX.get(), leftY.get()), kJoystickDeadzone);
+//         double rotationMagnitude = deadZone(rightX.get(), kJoystickDeadzone);
 
-        //feild centric controls
-        //TODO: getAngle() is deprecated for removal in 2026, use getYaw() from CorePigeon2 class instead and convert to degrees.
-        //angle -= SK25Swerve.pigeon.getAngle();
+//         //feild centric controls
+//         //TODO: getAngle() is deprecated for removal in 2026, use getYaw() from CorePigeon2 class instead and convert to degrees.
+//         //angle -= OldSwerve.pigeon.getAngle();
 
-        //run the setSwerve method which handles all swerve movement possibilites.
-        OldSwerve.manager.setSwerve(angle, translationMagnitude, rotationMagnitude);
+//         //run the setSwerve method which handles all swerve movement possibilites.
+//         OldSwerve.manager.setSwerve(angle, translationMagnitude, rotationMagnitude);
 
-        SmartDashboard.putNumber("setpoint", Units.Radians.of(angle).in(Units.Degrees));
-    }
+//         SmartDashboard.putNumber("setpoint", Units.Radians.of(angle).in(Units.Degrees));
+//     }
     
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) 
-    {
-       //sets all wheels to stop moving. //TODO: change to account for direction currently
-       OldSwerve.manager.setSwerve(0.0, 0.0, 0.0);
-    }
+//     // Called once the command ends or is interrupted.
+//     @Override
+//     public void end(boolean interrupted) 
+//     {
+//        //sets all wheels to stop moving. //TODO: change to account for direction currently
+//        OldSwerve.manager.setSwerve(0.0, 0.0, 0.0);
+//     }
 
-    // Returns true when the command should end.
-    //@Override
-    //public boolean isFinished()
-    //{
-        //return false;
-    //}
+//     // Returns true when the command should end.
+//     //@Override
+//     //public boolean isFinished()
+//     //{
+//         //return false;
+//     //}
 
-    //create a controller deadzone method which gives an output of zero if the controller is in the specified deadzone.
-    private double deadZone (double value, double deadZone)
-    {
-        //if the joystick value is less than the deadzone  value
-        if( Math.abs(value) < deadZone)
-        {
-            //override the value output as zero
-            return 0;
-        }
-        //return the normal joystick output
-        return value;
-    }
-}
+//     //create a controller deadzone method which gives an output of zero if the controller is in the specified deadzone.
+//     private double deadZone (double value, double deadZone)
+//     {
+//         //if the joystick value is less than the deadzone  value
+//         if( Math.abs(value) < deadZone)
+//         {
+//             //override the value output as zero
+//             return 0;
+//         }
+//         //return the normal joystick output
+//         return value;
+//     }
+// }

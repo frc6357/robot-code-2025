@@ -25,7 +25,7 @@ import frc.robot.bindings.SK25LightsBinder;
 import frc.robot.bindings.SK25SwerveBinder;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SK25Lights;
-import frc.robot.subsystems.SK25SwerveFactory;
+import frc.robot.subsystems.SK25Swerve;
 import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
@@ -41,7 +41,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
   private Optional<SK25Lights> m_lights = Optional.empty();
-  private Optional<SK25SwerveFactory> m_swerve = Optional.empty();
+  private Optional<SK25Swerve> m_swerve = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -93,7 +93,7 @@ public class RobotContainer {
             }
             if(subsystems.isSwervePresent())
             {
-                m_swerve = Optional.of(new SK25SwerveFactory());
+                m_swerve = Optional.of(new SK25Swerve());
             }
 
         }
