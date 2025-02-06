@@ -58,16 +58,14 @@ public class SK25SwerveModule {
         this.encoderOffset = encoderOffset;
     }
 
-    CoreCANcoder en = new CoreCANcoder(3, "rio");
-    TalonFX dr = new TalonFX(4, "rio");
     //gets the velocity of the turn motor
-    StatusSignal<AngularVelocity> fLTurnVelocity = en.getVelocity();
+    StatusSignal<AngularVelocity> fLTurnVelocity = encoder.getVelocity();
     //gets the absolute position of the turn motor
-    StatusSignal<Angle> fLTurnDistance = en.getAbsolutePosition();
+    StatusSignal<Angle> fLTurnDistance = encoder.getAbsolutePosition();
     //gets the velocity of the drive motor
-    double fLDriveVelocity = dr.get();
+    double fLDriveVelocity = driveMotor.get();
     //converts from StatusSignal<Angle> to Angle with the getValue() method.
-    Angle fLDriveDistance = dr.getPosition().getValue();
+    Angle fLDriveDistance = driveMotor.getPosition().getValue();
 
     //degrees of the drive motor
     Double driveRotations = fLDriveDistance.in(Units.Degrees);
