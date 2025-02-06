@@ -23,19 +23,20 @@ public class SK25SwerveFactory extends SubsystemBase{
 
     public Rotation2d currentAngle;
 
-    public SK25SwerveFactory(SK25SwerveModule fL, SK25SwerveModule fR, SK25SwerveModule bL, SK25SwerveModule bR, Pigeon2 bird)
+    public SK25SwerveFactory(SK25SwerveModule frontLeftModule, SK25SwerveModule frontRightModule, SK25SwerveModule backLeftModule, SK25SwerveModule backRightModule, Pigeon2 bird)
     {
         //make new swerve module objects 
-        this.frontLeftModule = fL;
-        this.frontLeftModule = fR;
-        this.frontLeftModule = bL;
-        this.frontLeftModule = bR;
+        this.frontLeftModule = frontLeftModule;
+        this.frontLeftModule = frontRightModule;
+        this.frontLeftModule = backLeftModule;
+        this.frontLeftModule = backRightModule;
         //gets the current angle of the robot
         currentAngle = bird.getRotation2d();
         //reset gyro
         bird.reset();
     }
 
+    
     //position of the robot when code is deployed. starts at 0, 0.
     Pose2d startingPose = new Pose2d();
     
@@ -70,20 +71,20 @@ public class SK25SwerveFactory extends SubsystemBase{
         //Translation2d robotTranslation = new Translation2d(translation, theta);
 
         //swerve module states
-        SwerveModuleState[] m_states = m_kinematics.toSwerveModuleStates(robotSpeeds);
-        SwerveModuleState fLState = m_states[0];
-        SwerveModuleState fRState = m_states[1]; 
-        SwerveModuleState bLState = m_states[2]; 
-        SwerveModuleState bRState = m_states[3]; 
+        SwerveModuleState[] currentModuleStates = m_kinematics.toSwerveModuleStates(robotSpeeds);
+        SwerveModuleState fLState = currentModuleStates[0];
+        SwerveModuleState fRState = currentModuleStates[1]; 
+        SwerveModuleState bLState = currentModuleStates[2]; 
+        SwerveModuleState bRState = currentModuleStates[3]; 
 
         //position of the robot
         //Pose2d currentRobotPose = new Pose2d(robotTranslation, currentAngle);
 
         //transform objects turns pose2d objects into the new position of the robot as a pose2d. Transform is the transformation matrix from the old position.
-        Transform2d frontLeftTransformation = frontLeftModule.getTransformation(startingPose, updatedOdometryPose());
-        Transform2d frontRightTransformation = frontRightModule.getTransformation(startingPose, updatedOdometryPose());
-        Transform2d backLeftTransformation = backLeftModule.getTransformation(startingPose, updatedOdometryPose());
-        Transform2d backRightTransformation = backRightModule.getTransformation(startingPose, updatedOdometryPose());
+        Transform2d frontLeftTransformation = frontLeftModule.getTransformation(startingPose, getUpdatedOdometryPose());
+        Transform2d frontRightTransformation = frontRightModule.getTransformation(startingPose, getUpdatedOdometryPose());
+        Transform2d backLeftTransformation = backLeftModule.getTransformation(startingPose, getUpdatedOdometryPose());
+        Transform2d backRightTransformation = backRightModule.getTransformation(startingPose, getUpdatedOdometryPose());
 
         //make a swerve module state which takes the speed of the module and its rotation
         SwerveModuleState frontLeftTargetState = new SwerveModuleState(translation, frontLeftModule.getModuleRotation());  //TODO: translation should (MABYE) be converted to the meters per second values
@@ -91,7 +92,7 @@ public class SK25SwerveFactory extends SubsystemBase{
         SwerveModuleState backLeftTargetState = new SwerveModuleState(translation, backLeftModule.getModuleRotation());
         SwerveModuleState backRightTargetState = new SwerveModuleState(translation, backRightModule.getModuleRotation());
         //array of module states for iteration
-        SwerveModuleState[] moduleStates = {frontLeftTargetState, frontRightTargetState, backLeftTargetState, backRightTargetState};
+        SwerveModuleState[] targetModuleStates = {frontLeftTargetState, frontRightTargetState, backLeftTargetState, backRightTargetState};
        
         //decrease the error in turning by preventing misdirection or oversteer/understeer
         frontLeftModule.decreaseError(fLState, currentAngle);
@@ -113,7 +114,7 @@ public class SK25SwerveFactory extends SubsystemBase{
     }
 
     //updates the odometry and returns the updated pose
-    private Pose2d updatedOdometryPose()
+    private Pose2d getUpdatedOdometryPose()
     {
         return m_odometry.update(currentAngle, m_Positions);
     }
@@ -124,7 +125,7 @@ public class SK25SwerveFactory extends SubsystemBase{
      */
     public Pose2d getRobotPose()
     {
-        return updatedOdometryPose();
+        return getUpdatedOdometryPose();
     }
 
     //occurs every 20 miliseconds, usually not tied to a command, binder, etc...

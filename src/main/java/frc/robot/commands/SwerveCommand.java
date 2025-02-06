@@ -11,7 +11,7 @@ public class SwerveCommand extends Command{
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
     //declare swerve object
-    private SK25Swerve Swerve;
+    private final SK25Swerve Swerve;
 
     //declare the double version of joystick input values.
     //Suppliers are used to update the value periodicaly. 

@@ -12,6 +12,7 @@ import static frc.robot.Konstants.SwerveConstants.kBackLeftTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightTurnMotorID;
+import static frc.robot.Konstants.SwerveConstants.kCANivoreName;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftTurnMotorID;
@@ -82,28 +83,28 @@ public class Ports
 
     public static class DrivePorts
     {
-        private static final String busName = "DriveCAN";
+        //private static final String busName = "DriveCAN";
 
         // CAN IDs for the drive motors on the swerve module
-        public static final CANPort kFrontLeftDriveMotorPort  = new CANPort(kFrontLeftDriveMotorID, busName);
-        public static final CANPort kFrontRightDriveMotorPort = new CANPort(kFrontRightDriveMotorID, busName);
-        public static final CANPort kRearLeftDriveMotorPort   = new CANPort(kBackLeftDriveMotorID, busName);
-        public static final CANPort kRearRightDriveMotorPort  = new CANPort(kBackRightDriveMotorID, busName);
+        public static final CANPort kFrontLeftDriveMotorPort  = new CANPort(kFrontLeftDriveMotorID, kCANivoreName);
+        public static final CANPort kFrontRightDriveMotorPort = new CANPort(kFrontRightDriveMotorID, kCANivoreName);
+        public static final CANPort kBackLeftDriveMotorPort   = new CANPort(kBackLeftDriveMotorID, kCANivoreName);
+        public static final CANPort kBackRightDriveMotorPort  = new CANPort(kBackRightDriveMotorID, kCANivoreName);
 
         // CAN IDs for the turning motors on the swerve module
-        public static final CANPort kFrontLeftTurningMotorPort  = new CANPort(kFrontLeftTurnMotorID, busName);
-        public static final CANPort kFrontRightTurningMotorPort = new CANPort(kFrontRightTurnMotorID, busName);
-        public static final CANPort kRearLeftTurningMotorPort   = new CANPort(kBackLeftTurnMotorID, busName);
-        public static final CANPort kRearRightTurningMotorPort  = new CANPort(kBackRightTurnMotorID, busName);
+        public static final CANPort kFrontLeftTurnMotorPort  = new CANPort(kFrontLeftTurnMotorID, kCANivoreName);
+        public static final CANPort kFrontRightTurnMotorPort = new CANPort(kFrontRightTurnMotorID, kCANivoreName);
+        public static final CANPort kBackLeftTurnMotorPort   = new CANPort(kBackLeftTurnMotorID, kCANivoreName);
+        public static final CANPort kBackRightTurnMotorPort  = new CANPort(kBackRightTurnMotorID, kCANivoreName);
 
         // CAN IDs for the CANCoders
-        public static final CANPort kFrontLeftTurningEncoderPort  = new CANPort(kFrontLeftEncoderID, busName);
-        public static final CANPort kFrontRightTurningEncoderPort = new CANPort(kFrontRightEncoderID, busName);
-        public static final CANPort kRearLeftTurningEncoderPort   = new CANPort(kBackLeftEncoderID, busName);
-        public static final CANPort kRearRightTurningEncoderPort  = new CANPort(kBackRightEncoderID, busName);
+        public static final CANPort kFrontLeftEncoderPort  = new CANPort(kFrontLeftEncoderID, kCANivoreName);
+        public static final CANPort kFrontRightEncoderPort = new CANPort(kFrontRightEncoderID, kCANivoreName);
+        public static final CANPort kBackLeftEncoderPort   = new CANPort(kBackLeftEncoderID, kCANivoreName);
+        public static final CANPort kBackRightEncoderPort  = new CANPort(kBackRightEncoderID, kCANivoreName);
         
         // CAN ID for IMU
-        public static final CANPort kPigeonPort = new CANPort(kPigeonID, busName);
+        public static final CANPort kPigeonPort = new CANPort(kPigeonID, kCANivoreName);
     }
 
 

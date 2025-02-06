@@ -12,9 +12,9 @@ public class SK25SwerveBinder implements CommandBinder{
     Optional <SK25Swerve> m_swerve;
 
 
-    public SK25SwerveBinder(Optional<SK25Swerve> optionalSwerve)
+    public SK25SwerveBinder(Optional<SK25Swerve> m_swerve)
     {
-        this.m_swerve = optionalSwerve;
+        this.m_swerve = m_swerve;
     }
      
     public void bindButtons()

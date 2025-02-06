@@ -33,10 +33,10 @@ public final class Konstants
         public static final int kChassisWidth = 27;
 
         //encoder offsets (obtained from Phoenix Tuner X) as angles
-        public static final Angle kFrontLeftEncoderOffset = Degrees.of(0.40283203125);
-        public static final Angle kFrontRightEncoderOffset = Degrees.of(-0.044677734375);
-        public static final Angle kBackLeftEncoderOffset = Degrees.of(-0.21875);
-        public static final Angle kBackRightEncoderOffset = Degrees.of(-0.08642578125);
+        //public static final Angle kFrontLeftEncoderOffset = Degrees.of(0.40283203125);
+        //public static final Angle kFrontRightEncoderOffset = Degrees.of(-0.044677734375);
+        //public static final Angle kBackLeftEncoderOffset = Degrees.of(-0.21875);
+        //public static final Angle kBackRightEncoderOffset = Degrees.of(-0.08642578125);
         //double versions
         public static final Double kFrontLeftEncoderOffsetDouble = 0.40283203125;
         public static final Double kFrontRightEncoderOffsetDouble = -0.044677734375;

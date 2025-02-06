@@ -23,7 +23,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Units;
@@ -59,14 +58,16 @@ public class SK25SwerveModule {
         this.encoderOffset = encoderOffset;
     }
 
+    CoreCANcoder en = new CoreCANcoder(3, "rio");
+    TalonFX dr = new TalonFX(4, "rio");
     //gets the velocity of the turn motor
-    StatusSignal<AngularVelocity> fLTurnVelocity = encoder.getVelocity();
+    StatusSignal<AngularVelocity> fLTurnVelocity = en.getVelocity();
     //gets the absolute position of the turn motor
-    StatusSignal<Angle> fLTurnDistance = encoder.getAbsolutePosition();
+    StatusSignal<Angle> fLTurnDistance = en.getAbsolutePosition();
     //gets the velocity of the drive motor
-    double fLDriveVelocity = driveMotor.get();
+    double fLDriveVelocity = dr.get();
     //converts from StatusSignal<Angle> to Angle with the getValue() method.
-    Angle fLDriveDistance = driveMotor.getPosition().getValue();
+    Angle fLDriveDistance = dr.getPosition().getValue();
 
     //degrees of the drive motor
     Double driveRotations = fLDriveDistance.in(Units.Degrees);
@@ -83,7 +84,7 @@ public class SK25SwerveModule {
 
     //represents the distance travelled in an arc, dx is distance traveled in a vector (translation), dtheta is angle of travel, 
     //and dy is the distance driven to the side (0.0 since swerve dosnt do this).
-    Twist2d acrDistanceTraveled = new Twist2d(5.0, 0.0, 45.0);
+    //Twist2d acrDistanceTraveled = new Twist2d(5.0, 0.0, 45.0);
 
 
     //gets the rotation of the swervemodule
@@ -175,7 +176,7 @@ public class SK25SwerveModule {
       * @param velocity The velocity to be limited.
       * @return The limited velocity.
       */
-     public double getLimitedVelocity(double velocity)
+     private double getLimitedVelocity(double velocity)
      {
          //returns the velocity after the velocity limit has been applied. Pass the velocity to be limited in the calculate method.
          return velocityLimiter.calculate(velocity);
@@ -236,6 +237,6 @@ public class SK25SwerveModule {
         //apply the PID constants to the turn motor
         applyPID(setpoint);
         //set the drive motor to the velocity
-        driveMotor.set(velocity);
+        driveMotor.set(getLimitedVelocity(velocity));
     }
 }

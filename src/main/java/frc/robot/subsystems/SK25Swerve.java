@@ -1,21 +1,22 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Konstants.SwerveConstants.kBackLeftDriveMotorID;
-import static frc.robot.Konstants.SwerveConstants.kBackLeftEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kBackLeftEncoderOffsetDouble;
-import static frc.robot.Konstants.SwerveConstants.kBackLeftTurnMotorID;
-import static frc.robot.Konstants.SwerveConstants.kBackRightDriveMotorID;
-import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderOffsetDouble;
-import static frc.robot.Konstants.SwerveConstants.kBackRightTurnMotorID;
-import static frc.robot.Konstants.SwerveConstants.kFrontLeftDriveMotorID;
-import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderOffsetDouble;
-import static frc.robot.Konstants.SwerveConstants.kFrontLeftTurnMotorID;
-import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveMotorID;
-import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderOffsetDouble;
-import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
+import static frc.robot.Ports.DrivePorts.kBackLeftDriveMotorPort;
+import static frc.robot.Ports.DrivePorts.kBackLeftEncoderPort;
+import static frc.robot.Ports.DrivePorts.kBackLeftTurnMotorPort;
+import static frc.robot.Ports.DrivePorts.kBackRightDriveMotorPort;
+import static frc.robot.Ports.DrivePorts.kBackRightEncoderPort;
+import static frc.robot.Ports.DrivePorts.kBackRightTurnMotorPort;
+import static frc.robot.Ports.DrivePorts.kFrontLeftDriveMotorPort;
+import static frc.robot.Ports.DrivePorts.kFrontLeftEncoderPort;
+import static frc.robot.Ports.DrivePorts.kFrontLeftTurnMotorPort;
+import static frc.robot.Ports.DrivePorts.kFrontRightDriveMotorPort;
+import static frc.robot.Ports.DrivePorts.kFrontRightEncoderPort;
+import static frc.robot.Ports.DrivePorts.kFrontRightTurnMotorPort;
+import static frc.robot.Ports.DrivePorts.kPigeonPort;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -34,10 +35,12 @@ public class SK25Swerve extends SubsystemBase{
 
     public SK25Swerve()
     {
-        fLModule = new SK25SwerveModule(kFrontLeftDriveMotorID, kFrontLeftTurnMotorID, kFrontLeftEncoderID, kFrontLeftEncoderOffsetDouble);
-        fRModule = new SK25SwerveModule(kFrontRightDriveMotorID, kFrontRightTurnMotorID, kFrontRightEncoderID, kFrontRightEncoderOffsetDouble);
-        bLModule = new SK25SwerveModule(kBackLeftDriveMotorID, kBackLeftTurnMotorID, kBackLeftEncoderID, kBackLeftEncoderOffsetDouble);
-        bRModule = new SK25SwerveModule(kBackRightDriveMotorID, kBackRightTurnMotorID, kBackRightEncoderID, kBackRightEncoderOffsetDouble);
+        fLModule = new SK25SwerveModule(kFrontLeftDriveMotorPort.ID, kFrontLeftTurnMotorPort.ID, kFrontLeftEncoderPort.ID, kFrontLeftEncoderOffsetDouble);
+        fRModule = new SK25SwerveModule(kFrontRightDriveMotorPort.ID, kFrontRightTurnMotorPort.ID, kFrontRightEncoderPort.ID, kFrontRightEncoderOffsetDouble);
+        bLModule = new SK25SwerveModule(kBackLeftDriveMotorPort.ID, kBackLeftTurnMotorPort.ID, kBackLeftEncoderPort.ID, kBackLeftEncoderOffsetDouble);
+        bRModule = new SK25SwerveModule(kBackRightDriveMotorPort.ID, kBackRightTurnMotorPort.ID, kBackRightEncoderPort.ID, kBackRightEncoderOffsetDouble);
+
+        pigeon = new Pigeon2(kPigeonPort.ID);
 
         factory = new SK25SwerveFactory(fLModule, fRModule, bLModule, bRModule, pigeon);
     }
