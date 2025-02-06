@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.bindings.CommandBinder;
+import frc.robot.bindings.EndEffectorBinder;
+import frc.robot.subsystems.EndEffectorV1;
 import frc.robot.bindings.ExampleBinder;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -43,6 +45,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
   private Optional<PracticeSwerve> m_PracticeSwerve = Optional.empty();
+  private Optional<EndEffectorV1> endEffector = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -88,6 +91,10 @@ public class RobotContainer {
             {
                 mySubsystem = Optional.of(new ExampleSubsystem());
             }
+            if(subsystems.isEndEffectorPresent())
+            {
+                endEffector = Optional.of(new EndEffectorV1());
+            }
         }
         catch (IOException e)
         {
@@ -106,7 +113,7 @@ public class RobotContainer {
 
         // Adding all the binding classes to the list
         buttonBinders.add(new ExampleBinder(mySubsystem));
-
+        buttonBinders.add(new EndEffectorBinder(endEffector));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
@@ -138,6 +145,10 @@ public class RobotContainer {
             autoCommandSelector = SK25AutoBuilder.buildAutoChooser("P4_Taxi");
             //SmartDashboard.putData("Auto Chooser", autoCommandSelector);
         }
+
+        if(endEffector.isPresent())
+        {
+        }
     }
 
   /**
@@ -165,11 +176,18 @@ public class RobotContainer {
 
     public void matchInit()
     {
-    
+        if(endEffector.isPresent())
+        {
+            EndEffectorV1 endeffector = endEffector.get();
+        }
     }
 
     public void teleopInit()
     {
+        if(endEffector.isPresent())
+        {
+            EndEffectorV1 endeffector = endEffector.get();
+        }
        
     }
     public void autonomousInit()
