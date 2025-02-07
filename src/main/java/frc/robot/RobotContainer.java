@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.bindings.CommandBinder;
-import frc.robot.bindings.ExampleBinder;
 import frc.robot.bindings.SK25ElevatorBinder;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -108,7 +107,6 @@ public class RobotContainer {
     {
 
         // Adding all the binding classes to the list
-        buttonBinders.add(new ExampleBinder(mySubsystem));
         buttonBinders.add(new SK25ElevatorBinder(elevatorSubsystem));
 
         // Traversing through all the binding classes to actually bind the buttons
@@ -131,10 +129,6 @@ public class RobotContainer {
             //Register commands for use in auto
             //NamedCommands.registerCommand("StartLauncherCommand", new LaunchCommandAuto(kLauncherLeftSpeed, kLauncherRightSpeed, launcher));
             
-        }
-        if (elevatorSubsystem.isPresent())
-        {
-            elevatorSubsystem = Optional.of(new SK25Elevator());
         }
 
         if(m_PracticeSwerve.isPresent()){
