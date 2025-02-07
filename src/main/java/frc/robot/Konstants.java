@@ -1,11 +1,14 @@
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
-// TODO: Add ReplanningConfig
 
 //import edu.wpi.first.units.measure.Distance;
 
@@ -15,7 +18,8 @@ public final class Konstants
 {
     public static final class AutoConstants
     {
-       
+        public static List<String> autoList = new ArrayList<String>(Arrays.asList("P4_Taxi"));
+
         // Autonomous translation constraints
         public static final double          kMaxSpeedMetersPerSecond               = 3;
         public static final double          kMaxAccelerationMetersPerSecondSquared = 2;

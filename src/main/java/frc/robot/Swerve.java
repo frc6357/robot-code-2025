@@ -3,9 +3,14 @@ package frc.robot;
 // Packages used for the mechanisms/motors for the swerve drivetrain itself
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveModule;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
+import com.ctre.phoenix6.swerve.SwerveModule.ModuleRequest;
 
 // Packages used for Pathplanner
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -43,6 +48,7 @@ import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 import frc.robot.utils.SK25AutoBuilder;
 import static frc.robot.Konstants.AutoConstants.*;
+import static frc.robot.Konstants.SwerveConstants.kDeadband;
 
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -52,8 +58,9 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     private RotationController rotationController;
+    private Pigeon2 m_pigeon2;
 
-    private boolean hasAppliedDriverPerspective = false;
+    private boolean hasAppliedOperatorPerspective = false;
 
     private final SwerveRequest.ApplyRobotSpeeds AutoRequest = new SwerveRequest.ApplyRobotSpeeds();
     
@@ -84,16 +91,23 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
 
         this.config = config;
         setupPathPlanner();
+        m_pigeon2 = this.getPigeon2();
 
         rotationController = new RotationController(config);
 
         if(Utils.isSimulation()) {startSimThread();}
 
-        // TODO: Review data communication methods (for apps like Shuffleboard, Elastic, etc.)
-        SendableRegistry.add(this, "Swerve Drive");
         SmartDashboard.putData(this);
-        Robot.add(this);
-        this.register();
+    }
+
+    @Override
+    public void periodic()
+    {
+      this.setOperatorPerspective();
+      SmartDashboard.putNumber("Pigeon", getPigeonHeading().getDegrees());
+      currentPublisher.set(this.getState().ModuleStates);
+      targetPublisher.set(this.getState().ModuleTargets);
+      odomPublisher.set(getOdomHeading());
     }
 
     //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
@@ -126,6 +140,36 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
                 () -> getModule(moduleNumber).getCurrentState().speedMetersPerSecond,
                 null);
     }
+
+    /**
+   * The primary method for controlling the drivebase.  Takes a xSpeed, ySpeed and a rotation rate, and
+   * calculates and commands module states accordingly. Also has field- and robot-relative modes, 
+   * which affect how the translation vector is used.
+   *
+   * @param xSpeed  Velocity of x in m/s
+   * @param ySpeed  Velocity of y in m/s
+   * @param rot     Robot angular rate, in radians per second. CCW positive.  Unaffected by field/robot relativity.
+   * @param fieldRelative Drive mode. True for field-relative, false for robot-relative.
+   */
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative)
+  {
+    // if((xSpeed == 0.0) && (ySpeed == 0.0) && (rot == 0.0)){
+    //   this.lock();
+    // }
+    // else
+     if(fieldRelative){
+      SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric()
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withDeadband(0).withRotationalDeadband(0);
+      
+      this.setControl(fieldCentric.withVelocityX(xSpeed).withVelocityY(ySpeed).withRotationalRate(rot));
+    }else{
+      SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric()
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withDeadband(0).withRotationalDeadband(0);
+      
+
+      this.setControl(robotCentric.withVelocityX(xSpeed).withVelocityY(ySpeed).withRotationalRate(rot));
+    }
+   }
 
     /**
      * The function `getRobotPose` returns the robot's pose after checking and updating it.
@@ -200,13 +244,13 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
         return getKinematics().toChassisSpeeds(getState().ModuleStates);
     }
     
-    private void setPilotPerspective() {
+    private void setOperatorPerspective() {
         /* Periodically try to apply the operator perspective */
         /* If we haven't applied the operator perspective before, then we should apply it regardless of DS state */
         /* This allows us to correct the perspective in case the robot code restarts mid-match */
         /* Otherwise, only check and apply the operator perspective if the DS is disabled */
         /* This ensures driving behavior doesn't change until an explicit disable event occurs during testing*/
-        if (!hasAppliedDriverPerspective || DriverStation.isDisabled()) {
+        if (!hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
             DriverStation.getAlliance()
                     .ifPresent(
                             allianceColor -> {
@@ -214,7 +258,7 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
                                         allianceColor == Alliance.Red
                                                 ? config.getRedAlliancePerspectiveRotation()
                                                 : config.getBlueAlliancePerspectiveRotation());
-                                hasAppliedDriverPerspective = true;
+                                hasAppliedOperatorPerspective = true;
                             });
         }
     }
@@ -296,6 +340,67 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
     double calculateRotationController(DoubleSupplier targetRadians) {
         return rotationController.calculate(targetRadians.getAsDouble(), getRotationRadians());
     }
+
+
+
+  /**
+   * Gets the current yaw angle of the robot, as reported by the imu.  CCW positive, not wrapped.
+   *
+   * @return The yaw angle
+   */
+  public Rotation2d getPigeonHeading()
+  {
+    return m_pigeon2.getRotation2d();
+  }
+
+  public Rotation2d getOdomHeading()
+  {
+    return getRobotPose().getRotation();
+  }
+
+  public boolean leftTilted()
+  {
+    double roll = this.getPigeon2().getRoll().getValueAsDouble();
+    if(roll > kDeadband){
+      return true;
+    }
+    return false;
+  }
+
+  public boolean rightTilted()
+  {
+    double roll = this.getPigeon2().getRoll().getValueAsDouble();
+    if(roll < -kDeadband){
+      return true;
+    }
+    return false;
+  }
+  /**
+   * Sets the heading of the robot using a {@link Rotation2d}. CCW positive, not wrapped.
+   * 
+   * @param angle {@link Rotation2d} to set the robot heading to
+   */
+  public void setHeading(Rotation2d angle){
+    resetPose(new Pose2d(this.getRobotPose().getTranslation(), angle));
+  }
+
+  /**
+   * Lock the swerve drive to prevent it from moving.
+   */
+  public void lock()
+  {
+    this.setControl(new SwerveRequest.SwerveDriveBrake());
+  }
+
+  /**
+   * Gets the current pitch angle of the robot, as reported by the imu.
+   *
+   * @return The heading as a {@link Rotation2d} angle
+   */
+  public Rotation2d getPitch()
+  {
+    return new Rotation2d(this.getPigeon2().getPitch().getValueAsDouble());
+  }
 
     //              //
     // Path Planner //
