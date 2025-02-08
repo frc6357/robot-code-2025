@@ -5,7 +5,7 @@ import frc.robot.utils.SKTrigger;
 import frc.robot.utils.filters.FilteredXboxController;
 import static edu.wpi.first.wpilibj.XboxController.Button.*;
 import static edu.wpi.first.wpilibj.XboxController.Axis.*;
-import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
+//import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.BUTTON;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
 
@@ -30,7 +30,6 @@ public class Ports
 
         // Reset gyro
         public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kLeftStick.value, BUTTON);
-        public static final SKTrigger kElevatorOverride = new SKTrigger(kDriver, kRightStick.value, BUTTON);
 
         // Party mode
         

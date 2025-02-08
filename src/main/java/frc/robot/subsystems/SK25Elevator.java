@@ -1,8 +1,6 @@
 // Essentials
 package frc.robot.subsystems;
 import edu.wpi.first.math.MathUtil;
-
-// Elevator Superclass
 import frc.robot.subsystems.superclasses.Elevator;
 
 // Constants (Muy Importante)
@@ -14,7 +12,7 @@ import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-// Configurations For Stuff (Thanks REV)
+// Configurations For Motors (REV)
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
@@ -30,17 +28,14 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 // SmartDashboard
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-// Unused Imports (Maybe In The Future)
-//import com.revrobotics.spark.config.SparkMaxConfig;
-//import com.revrobotics.spark.config.SparkBaseConfig;
-//import com.revrobotics.spark.SparkRelativeEncoder;
-//import com.revrobotics.spark.SparkMax;
-
 public class SK25Elevator extends Elevator
 {
     // Create Memory Motor Objects
     SparkFlex motorR;
     SparkFlex motorL;
+    
+    // Encoder Memory Object
+    DutyCycleEncoder absoluteEncoder;
 
     // Creating Config Object
     SparkFlexConfig motorConfigL;
@@ -85,8 +80,7 @@ public class SK25Elevator extends Elevator
         // Initializes a duty cycle encoder on DIO pins 0 to return a value of 4 for
         // a full rotation, with the encoder reporting 0 half way through rotation (2
         // out of 4)
-        DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(0, 4.0, 2.0);
-        absoluteEncoder.get();
+        absoluteEncoder = new DutyCycleEncoder(0, 4.0, 2.0);
 
         // Configurations For The Motors & Encoders
         motorConfigL
@@ -98,7 +92,7 @@ public class SK25Elevator extends Elevator
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(kElevatorCurrentLimit);
         
-            // Apply Motor Configurations
+        // Apply Motor Configurations
         motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
@@ -146,7 +140,9 @@ public class SK25Elevator extends Elevator
      */
     public double getEncoderPosition()
     {
-        absoluteEncoder.get();
+        double encoderPositionValue = absoluteEncoder.get();
+        return encoderPositionValue;
+
     }
 
     /**
@@ -219,7 +215,6 @@ public class SK25Elevator extends Elevator
         motorR.set(motorSpeed);
     }
 
-    // Stop Motors Method
     public void stopMotors()
     {
         motorL.stopMotor();
@@ -227,8 +222,8 @@ public class SK25Elevator extends Elevator
     }
 
     @Override
-    public void periodic(){
-        
+    public void periodic()
+    {
         // Initialize Current & Target Positions
         double currentPosition = getEncoderPosition();
 
@@ -239,7 +234,6 @@ public class SK25Elevator extends Elevator
         double rSpeed = MathUtil.clamp(rPID.calculate(currentPosition), kElevatorMotorMinOutput, kElevatorMotorMaxOutput);
         motorR.set(rSpeed); 
 
-        // Calculates Motor Speed & Puts It Within Operating Range
         double lSpeed = MathUtil.clamp(lPID.calculate(currentPosition), kElevatorMotorMinOutput, kElevatorMotorMaxOutput);
         motorL.set(lSpeed); 
 
@@ -253,11 +247,9 @@ public class SK25Elevator extends Elevator
         SmartDashboard.putBoolean("Left Elevator at Setpoint", isLeftAtTargetPosition());
         
         //TODO Uncomment below and add this to elastic dashboard once it's implemented.
-
         //SmartDashboard.putBoolean("Elevator At Top", atTop());
         //SmartDashboard.putBoolean("Elevator At Bottom", atBottom());
     }
-
     public void testPeriodic(){}
     public void testInit(){}
 }

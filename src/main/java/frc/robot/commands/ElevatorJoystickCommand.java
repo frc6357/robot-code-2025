@@ -52,16 +52,15 @@ public class ElevatorJoystickCommand extends Command {
     public void execute()
     {
 
-        double motorSpeed = controller.get();
-        elevator.runLeftMotor(motorSpeed);
-        elevator.runRightMotor(motorSpeed);
+        //double motorSpeed = controller.get();
+        //elevator.runLeftMotor(motorSpeed);
+        //elevator.runRightMotor(motorSpeed);
 
-        /* 
-        double angleChange = controller.get() / 50; // Units per 20ms from 0.0 to 1.0
+        double positionChange = controller.get() / 50; // Units per 20ms from 0.0 to 1.0
 
-         // Sets the new angle to the current angle plus or minus the constant change
-        double rightSetpoint = elevator.getRightTargetPosition() + angleChange;
-        double leftSetpoint = elevator.getLeftTargetPosition() + angleChange;
+         // Sets the new angle to the current position plus or minus the constant change
+        double rightSetpoint = elevator.getRightTargetPosition() + positionChange;
+        double leftSetpoint = elevator.getLeftTargetPosition() + positionChange;
 
         if(!override.get())
         {
@@ -71,8 +70,6 @@ public class ElevatorJoystickCommand extends Command {
 
         elevator.setRightTargetHeight(rightSetpoint);
         elevator.setLeftTargetHeight(leftSetpoint);
-        */
-        
     }
 
     @Override

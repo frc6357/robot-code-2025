@@ -58,7 +58,5 @@ public class ElevatorButtonCommand extends Command
         {
             return true;
         }
-    
-        
     }
 }
