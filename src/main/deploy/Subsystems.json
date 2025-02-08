@@ -1,3 +1,5 @@
 {
-    "elevator": true
+    "elevator": true,
+    "swerve": true,
+    "example": true
 }
