@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.utils;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
