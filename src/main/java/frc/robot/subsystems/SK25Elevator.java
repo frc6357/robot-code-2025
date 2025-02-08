@@ -227,8 +227,8 @@ public class SK25Elevator extends Elevator
         // Initialize Current & Target Positions
         double currentPosition = getEncoderPosition();
 
-        double r_target_position = getRightTargetPosition();
-        double l_target_position = getLeftTargetPosition();
+        double rTargetPosition = getRightTargetPosition();
+        double lTargetPosition = getLeftTargetPosition();
 
         // Calculates Motor Speed & Puts It Within Operating Range
         double rSpeed = MathUtil.clamp(rPID.calculate(currentPosition), kElevatorMotorMinOutput, kElevatorMotorMaxOutput);
@@ -240,10 +240,10 @@ public class SK25Elevator extends Elevator
         // SmartDashboard Current & Target Positions
         SmartDashboard.putNumber("Current Estimated Position", currentPosition);
 
-        SmartDashboard.putNumber("Right Target Position", r_target_position);
+        SmartDashboard.putNumber("Right Target Position", rTargetPosition);
         SmartDashboard.putBoolean("Right Elevator at Setpoint", isRightAtTargetPosition());
 
-        SmartDashboard.putNumber("Left Target Position", l_target_position);
+        SmartDashboard.putNumber("Left Target Position", lTargetPosition);
         SmartDashboard.putBoolean("Left Elevator at Setpoint", isLeftAtTargetPosition());
         
         //TODO Uncomment below and add this to elastic dashboard once it's implemented.
