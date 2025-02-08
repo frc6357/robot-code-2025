@@ -146,11 +146,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kA.value, BUTTON, XBOX_BUTTON);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kA.value, BUTTON, XBOX_BUTTON);
             case HID:
                 return new SKTrigger(hIDController, kA.value, BUTTON);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kA.value, BUTTON);
+                return new SKTrigger(hIDController, kA.value, BUTTON); //lower 1 button
             case KEYBOARD:
                 return new SKTrigger(hIDController, kA.value, BUTTON);
             case GCN:
@@ -165,11 +165,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kB.value, BUTTON, XBOX_BUTTON);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kB.value, BUTTON, XBOX_BUTTON);
             case HID:
                 return new SKTrigger(hIDController, kB.value, BUTTON);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kB.value, BUTTON);
+                return new SKTrigger(hIDController, kB.value, BUTTON); //upper 1
             case KEYBOARD:
                 return new SKTrigger(hIDController, kB.value, BUTTON);
             case GCN:
@@ -184,11 +184,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kX.value, BUTTON, XBOX_BUTTON);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kX.value, BUTTON, XBOX_BUTTON);
             case HID:
                 return new SKTrigger(hIDController, kX.value, BUTTON);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kX.value, BUTTON);
+                return new SKTrigger(hIDController, kX.value, BUTTON); //upper 2
             case KEYBOARD:
                 return new SKTrigger(hIDController, kX.value, BUTTON);
             case GCN:
@@ -203,11 +203,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kY.value, BUTTON, XBOX_BUTTON);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kY.value, BUTTON, XBOX_BUTTON);
             case HID:
                 return new SKTrigger(hIDController, kY.value, BUTTON);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kY.value, BUTTON);
+                return new SKTrigger(hIDController, kY.value, BUTTON); //upper 3
             case KEYBOARD:
                 return new SKTrigger(hIDController, kY.value, BUTTON);
             case GCN:
@@ -222,11 +222,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kLeftBumper.value, BUTTON, XBOX_BUTTON);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kLeftBumper.value, BUTTON, XBOX_BUTTON);
             case HID:
                 return new SKTrigger(hIDController, kLeftBumper.value, BUTTON);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kLeftBumper.value, BUTTON);
+                return new SKTrigger(hIDController, kLeftBumper.value, BUTTON); //lower 2
             case KEYBOARD:
                 return new SKTrigger(hIDController, kLeftBumper.value, BUTTON);
             case GCN:
@@ -241,11 +241,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kRightBumper.value, BUTTON, XBOX_BUTTON);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kRightBumper.value, BUTTON, XBOX_BUTTON);
             case HID:
                 return new SKTrigger(hIDController, kRightBumper.value, BUTTON);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kRightBumper.value, BUTTON);
+                return new SKTrigger(hIDController, kRightBumper.value, BUTTON); //lower 3
             case KEYBOARD:
                 return new SKTrigger(hIDController, kRightBumper.value, BUTTON);
             case GCN:
@@ -260,11 +260,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kStart.value, BUTTON, XBOX_BUTTON);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kStart.value, BUTTON, XBOX_BUTTON);
             case HID:
                 return new SKTrigger(hIDController, kStart.value, BUTTON);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kStart.value, BUTTON);
+                return null;
             case KEYBOARD:
                 return new SKTrigger(hIDController, kStart.value, BUTTON);
             case GCN:
@@ -279,11 +279,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kBack.value, BUTTON, XBOX_BUTTON);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kBack.value, BUTTON, XBOX_BUTTON);
             case HID:
                 return new SKTrigger(hIDController, kBack.value, BUTTON);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kBack.value, BUTTON);
+                return null;
             case KEYBOARD:
                 return new SKTrigger(hIDController, kBack.value, BUTTON);
             case GCN:
@@ -298,11 +298,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, 0, POV, XBOX_POV);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), 0, POV, XBOX_POV);
             case HID:
                 return new SKTrigger(hIDController, 0, POV);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, 0, POV);
+                return new SKTrigger(hIDController, 0, POV); //up joystick
             case KEYBOARD:
                 return new SKTrigger(hIDController, 0, POV);
             case GCN:
@@ -317,11 +317,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, 180, POV, XBOX_POV);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), 180, POV, XBOX_POV);
             case HID:
                 return new SKTrigger(hIDController, 180, POV);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, 180, POV);
+                return new SKTrigger(hIDController, 180, POV); //down joystick
             case KEYBOARD:
                 return new SKTrigger(hIDController, 180, POV);
             case GCN:
@@ -336,11 +336,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, 270, POV, XBOX_POV);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), 270, POV, XBOX_POV);
             case HID:
                 return new SKTrigger(hIDController, 270, POV);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, 270, POV);
+                return new SKTrigger(hIDController, 270, POV); //left joystick
             case KEYBOARD:
                 return new SKTrigger(hIDController, 270, POV);
             case GCN:
@@ -355,11 +355,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, 90, POV, XBOX_POV);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), 90, POV, XBOX_POV);
             case HID:
                 return new SKTrigger(hIDController, 90, POV);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, 90, POV);
+                return new SKTrigger(hIDController, 90, POV); //right joystick
             case KEYBOARD:
                 return new SKTrigger(hIDController, 90, POV);
             case GCN:
@@ -374,11 +374,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kRightTrigger.value, AXIS, XBOX_AXIS);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kRightTrigger.value, AXIS, XBOX_AXIS);
             case HID:
                 return new SKTrigger(hIDController, kRightTrigger.value, AXIS);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kRightTrigger.value, AXIS);
+                return null;
             case KEYBOARD:
                 return new SKTrigger(hIDController, kRightTrigger.value, AXIS);
             case GCN:
@@ -393,11 +393,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kLeftTrigger.value, AXIS, XBOX_AXIS);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kLeftTrigger.value, AXIS, XBOX_AXIS);
             case HID:
                 return new SKTrigger(hIDController, kLeftTrigger.value, AXIS);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kLeftTrigger.value, AXIS);
+                return null;
             case KEYBOARD:
                 return new SKTrigger(hIDController, kLeftTrigger.value, AXIS);
             case GCN:
@@ -412,11 +412,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kLeftX.value, AXIS, XBOX_AXIS);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kLeftX.value, AXIS, XBOX_AXIS);
             case HID:
                 return new SKTrigger(hIDController, kLeftX.value, AXIS);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kLeftX.value, AXIS);
+                return null;
             case KEYBOARD:
                 return new SKTrigger(hIDController, kLeftX.value, AXIS);
             case GCN:
@@ -431,11 +431,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kLeftY.value, AXIS, XBOX_AXIS);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kLeftY.value, AXIS, XBOX_AXIS);
             case HID:
                 return new SKTrigger(hIDController, kLeftY.value, AXIS);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kLeftY.value, AXIS);
+                return new SKTrigger(hIDController, kLeftY.value, AXIS);  //strum bar, -1.0 if up, 1.0 if down, no inbetween
             case KEYBOARD:
                 return new SKTrigger(hIDController, kLeftY.value, AXIS);
             case GCN:
@@ -450,11 +450,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kRightX.value, AXIS, XBOX_AXIS);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kRightX.value, AXIS, XBOX_AXIS);
             case HID:
                 return new SKTrigger(hIDController, kRightX.value, AXIS);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kRightX.value, AXIS);
+                return null;
             case KEYBOARD:
                 return new SKTrigger(hIDController, kRightX.value, AXIS);
             case GCN:
@@ -469,11 +469,11 @@ public class SKController
         switch(type)
         {
             case XBOX: 
-                return new SKCommandXboxTrigger(xboxController, hIDController, kRightY.value, AXIS, XBOX_AXIS);
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kRightY.value, AXIS, XBOX_AXIS);
             case HID:
                 return new SKTrigger(hIDController, kRightY.value, AXIS);
             case GUITAR_HERO:
-                return new SKTrigger(hIDController, kRightY.value, AXIS);
+                return null;
             case KEYBOARD:
                 return new SKTrigger(hIDController, kRightY.value, AXIS);
             case GCN:
@@ -482,6 +482,45 @@ public class SKController
                 return new SKTrigger(hIDController, kRightY.value, AXIS);
         }
     }
+
+    public SKTrigger mapLeftJoystickPress()
+    {
+        switch(type)
+        {
+            case XBOX: 
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kLeftStick.value, AXIS, XBOX_AXIS);
+            case HID:
+                return new SKTrigger(hIDController, kLeftStick.value, AXIS);
+            case GUITAR_HERO:
+                return new SKTrigger(hIDController, kLeftStick.value, AXIS);   //hero power
+            case KEYBOARD:
+                return new SKTrigger(hIDController, kLeftStick.value, AXIS);
+            case GCN:
+                return new SKTrigger(hIDController, kLeftStick.value, AXIS);
+            default:
+                return new SKTrigger(hIDController, kLeftStick.value, AXIS);
+        }
+    }
+
+    public SKTrigger mapRightJoystickPress()
+    {
+        switch(type)
+        {
+            case XBOX: 
+                return new SKCommandXboxTrigger(xboxController, xboxController.getHID(), kRightStick.value, AXIS, XBOX_AXIS);
+            case HID:
+                return new SKTrigger(hIDController, kRightStick.value, AXIS);
+            case GUITAR_HERO:
+                return new SKTrigger(hIDController, kRightStick.value, AXIS);  //pause
+            case KEYBOARD:
+                return new SKTrigger(hIDController, kRightStick.value, AXIS);
+            case GCN:
+                return new SKTrigger(hIDController, kRightStick.value, AXIS);
+            default:
+                return new SKTrigger(hIDController, kRightStick.value, AXIS);
+        }
+    }
+
 
     
 
@@ -495,12 +534,12 @@ public class SKController
     //right bumper is lower 3
     //right trigger is
     //left trigger is 
-    //left stick X is null
+    //left stick X is 
     //left stick Y is strum bar, -1.0 if up, 1.0 if down, no inbetween
     //right stick X is
     //right stick Y is
-    //start is null
-    //back is null
+    //start is 
+    //back is 
     //up is joystick up
     //left is koystick left
     //right is joystick right
@@ -508,7 +547,7 @@ public class SKController
     //left stick press is hero power
     //right stick press is pause
 
-    //motion input, wammy bar, capture and reset dont have known mappable values (more testing required)
+    //motion input, whammy bar, capture and reset dont have known mappable values (more testing required)
     
     //try kXInputGuitar, kXInputGuitar2, and kXInputGuitar3.
 }

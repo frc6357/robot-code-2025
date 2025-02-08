@@ -1,13 +1,17 @@
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.Konstants.SwerveConstants.kJoystickDeadzone;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SK25Swerve;
 
-public class SwerveCommand extends Command{
+public class SwerveDefaultCommand extends Command{
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
     //declare swerve object
@@ -26,7 +30,7 @@ public class SwerveCommand extends Command{
      * @param _leftX The X input of the left joystick on the controller used for translation.
      * @param _rightX The X input of the right joystick on the controller used for rotation.
      */
-    public SwerveCommand(SK25Swerve _swerve, Supplier<Double> _leftY, Supplier<Double> _leftX, Supplier<Double> _rightX)
+    public SwerveDefaultCommand(SK25Swerve _swerve, Supplier<Double> _leftY, Supplier<Double> _leftX, Supplier<Double> _rightX)
     {
         //initialize objects and variables
         Swerve = _swerve;
@@ -63,19 +67,21 @@ public class SwerveCommand extends Command{
         
         //driverController conversion for left joystick.
         //converts Cartesian coordinate system to Polar system by getting the angle between left joystick X and Y components.
-        double angle = Math.atan2(leftY.get(), leftX.get());
         //make the controller deadzones.
         double translationMagnitude = deadZone(Math.hypot(leftX.get(), leftY.get()), kJoystickDeadzone);
-        double rotationMagnitude = deadZone(rightX.get(), kJoystickDeadzone);
         double xVelocity = deadZone(leftX.get(), kJoystickDeadzone);
         double yVelocity = deadZone(leftY.get(), kJoystickDeadzone);
+        Translation2d velocity = new Translation2d(xVelocity, yVelocity).times(translationMagnitude);
+        
+        double rotationMagnitude = deadZone(rightX.get(), kJoystickDeadzone);
+        double desiredRadiansPerSecond = rotationMagnitude * 2 * Math.PI;
 
         //feild centric controls
         //TODO: getAngle() is deprecated for removal in 2026, use getYaw() from CorePigeon2 class instead and convert to degrees.
-        angle -= SK25Swerve.pigeon.getAngle();
+        // angle = angle.minus(Degrees.of(SK25Swerve.pigeon.getAngle()));
 
         //run the doSwerve method which handles all swerve movement possibilites.
-        SK25Swerve.factory.doSwerve(angle, translationMagnitude, rotationMagnitude, xVelocity, yVelocity);
+        SK25Swerve.factory.doSwerve(desiredRadiansPerSecond, velocity);
 
         //SmartDashboard.putNumber("setpoint", Units.Radians.of(angle).in(Units.Degrees));
     }
@@ -86,7 +92,7 @@ public class SwerveCommand extends Command{
     public void end(boolean interrupted) 
     {
        //sets all wheels to stop moving. //TODO: change to account for direction currently
-       SK25Swerve.factory.doSwerve(0.0, 0.0, 0.0, 0.0, 0.0);
+       SK25Swerve.factory.doSwerve(0.0, new Translation2d());
     }
 
     // Returns true when the command should end.

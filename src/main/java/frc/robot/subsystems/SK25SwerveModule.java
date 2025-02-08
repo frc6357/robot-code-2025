@@ -7,15 +7,21 @@ import static frc.robot.Konstants.SwerveConstants.kChassisWidth;
 import static frc.robot.Konstants.SwerveConstants.kDriveD;
 import static frc.robot.Konstants.SwerveConstants.kDriveI;
 import static frc.robot.Konstants.SwerveConstants.kDriveP;
-import static frc.robot.Konstants.SwerveConstants.kMaxVelocity;
-import static frc.robot.Konstants.SwerveConstants.kPIDControllerTolerance;
+import static frc.robot.Konstants.SwerveConstants.kMaxVelocityMetersPerSecond;
+import static frc.robot.Konstants.SwerveConstants.kPIDControllerToleranceDegrees;
 import static frc.robot.Konstants.SwerveConstants.kWheelCircumference;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreCANcoder;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -25,10 +31,10 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
-
 
 
 public class SK25SwerveModule {
@@ -38,8 +44,9 @@ public class SK25SwerveModule {
     PhoenixPIDController turnPID;
     SlewRateLimiter velocityLimiter;
     Double encoderOffset;
+    Double inverted;
 
-    public SK25SwerveModule(int driveMotorID, int turnMotorID, int encoderID, double encoderOffset)
+    public SK25SwerveModule(int driveMotorID, int turnMotorID, int encoderID, double encoderOffset, double inverted)
     {
         //the drive motor to use for this module
         driveMotor = new TalonFX(driveMotorID, kCANivoreName);
@@ -50,32 +57,66 @@ public class SK25SwerveModule {
         //the Phoenix PID controller to use for this module
         turnPID = new PhoenixPIDController(kDriveP, kDriveI, kDriveD);
         //makes a new SlewrateLimiter to limit the velocity of the module
-        velocityLimiter = new SlewRateLimiter(kMaxVelocity);
+        velocityLimiter = new SlewRateLimiter(kMaxVelocityMetersPerSecond);
         
         //reset PID controler
         turnPID.reset();
 
         this.encoderOffset = encoderOffset;
+        this.inverted = inverted;
+
+        //allows the PID loop to take the smaller of the two errors, for example, traveling -90 degrees instead of 270.
+        turnPID.enableContinuousInput(-180, 180);
+        //sets the acceptable error bound to which the controller will stop if reached
+        turnPID.setTolerance(kPIDControllerToleranceDegrees);
+
+        TalonFXConfiguration configuration = new TalonFXConfiguration();
+
+        configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        configuration.ClosedLoopGeneral.ContinuousWrap = true;
+
+        //create P, I, and D configs for the PID Configs object
+        Slot0Configs turnPIDConfigs = configuration.Slot0;
+        turnPIDConfigs.kS = 0.25; // Add 0.25 V output to overcome static friction
+        turnPIDConfigs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
+        turnPIDConfigs.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
+        turnPIDConfigs.kP = 4.8; // A position error of 2.5 rotations results in 12 V output
+        turnPIDConfigs.kI = 0; // no output for integrated error
+        turnPIDConfigs.kD = 0.1; // A velocity error of 1 rps results in 0.1 V output
+        
+        var motionMagicConfigs = configuration.MotionMagic;
+        motionMagicConfigs.MotionMagicCruiseVelocity = 80; // Target cruise velocity of 80 rps
+        motionMagicConfigs.MotionMagicAcceleration = 160; // Target acceleration of 160 rps/s (0.5 seconds)
+        motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
+
+        //apply the PID Configs to the motor
+        turnMotor.getConfigurator().apply(turnPIDConfigs);
     }
 
-    //gets the velocity of the turn motor
-    StatusSignal<AngularVelocity> fLTurnVelocity = encoder.getVelocity();
-    //gets the absolute position of the turn motor
-    StatusSignal<Angle> fLTurnDistance = encoder.getAbsolutePosition();
-    //gets the velocity of the drive motor
-    double fLDriveVelocity = driveMotor.get();
-    //converts from StatusSignal<Angle> to Angle with the getValue() method.
-    Angle fLDriveDistance = driveMotor.getPosition().getValue();
+    public void driveOpenLoop(SwerveModuleState desiredState) {
+        desiredState.optimize(getModuleRotation());
+        double percentOutput = desiredState.speedMetersPerSecond / kMaxVelocityMetersPerSecond;
+        driveMotor.setVoltage(percentOutput * 12);
+        applyPID(desiredState.angle.getMeasure()); // Always closed-loop control for turn motor.
+    }
 
-    //degrees of the drive motor
-    Double driveRotations = fLDriveDistance.in(Units.Degrees);
-    //meters of distance travelled by the wheel
-    Double driveDistance = fLDriveDistance.in(Rotation) * kWheelCircumference;
+    /** gets the absolute position of the turn motor in rotations */
+    private StatusSignal<Angle> getEncoderAbsRotations()
+    {
+        return encoder.getAbsolutePosition();
+    }
 
+    private Angle getDriveDistanceAngle()
+    {
+        //converts from StatusSignal<Angle> to Angle with the getValue() method.
+        return driveMotor.getPosition().getValue();
+    }
 
-    //rotation2d is a rotation coordinate on the unit circle. This version of the method takes radian values as doubles (0.0 to 2 * Math.PI).
-    //this object holds an angle with turning encoder's current pos.
-    Rotation2d moduleRotation = new Rotation2d(getOffsetEncoderPos(encoder, encoderOffset));
+    private Double getDriveDistanceMeters()
+    {
+        return getDriveDistanceAngle().in(Rotation) * kWheelCircumference;
+    }
+
 
     //translation2d objects define movement on an xy pane. these ones are for the module's distance from the center of the robot with x and y coordinates
     Translation2d moduleTranslation = new Translation2d(kChassisWidth / 2.0, kChassisLength / 2.0);
@@ -92,7 +133,9 @@ public class SK25SwerveModule {
      */
     public Rotation2d getModuleRotation()
     {
-        return moduleRotation;
+        //rotation2d is a rotation coordinate on the unit circle. This version of the method takes radian values as doubles (0.0 to 2 * Math.PI).
+        //this object holds an angle with turning encoder's current pos.
+        return new Rotation2d(getOffsetEncoderPos(encoder, encoderOffset));
     }
 
     /**
@@ -151,10 +194,10 @@ public class SK25SwerveModule {
      * Gets the position of the swerve modules on the feild using the module rotation and distance driven by the drive motor.
      * @return The object containing the module position.
      */
-    public SwerveModulePosition getSwerveModulePosition()
+    public SwerveModulePosition getLatestSwerveModulePosition()
     {
         //new swerve module position with the current distance driven and current module rotation
-        return new SwerveModulePosition(driveDistance, moduleRotation);
+        return new SwerveModulePosition(getDriveDistanceMeters(), getModuleRotation());
     }
     
     /**
@@ -166,7 +209,7 @@ public class SK25SwerveModule {
     private double getOffsetEncoderPos(CoreCANcoder encoder, Double offset)
     {
         //convert the StatusSignal<Angle> return type of the encoder to an angle, then to radians, then substract the offset.
-        return (encoder.getAbsolutePosition().getValue().in(Units.Radians) - offset);
+        return (getEncoderAbsRotations().getValue().in(Units.Radians) - offset);
     }
 
      /**
@@ -207,21 +250,11 @@ public class SK25SwerveModule {
      */
     private void applyPID(Angle setpoint)
     {
-        //allows the PID loop to take the smaller of the two errors, for example, traveling -90 degrees instead of 270.
-        turnPID.enableContinuousInput(-180, 180);
-        //sets the acceptable error bound to which the controller will stop if reached
-        turnPID.setTolerance(kPIDControllerTolerance);
-        //create P, I, and D configs for the PID Configs object
-        Slot0Configs turnPIDConfigs = new Slot0Configs();
-        turnPIDConfigs.kP = kDriveP;
-        turnPIDConfigs.kI = kDriveI;
-        turnPIDConfigs.kD = kDriveD; 
-        //apply the PID Configs to the motor
-        turnMotor.getConfigurator().apply(turnPIDConfigs);
-        //create a position closed-loop request, voltage output, slot 0 configs. This defines the setpoint. 
-        final PositionVoltage m_request = new PositionVoltage(setpoint).withSlot(0);
+        final MotionMagicVoltage angleVoltageControl = new MotionMagicVoltage(0);
+        angleVoltageControl.UpdateFreqHz = 0;
+
         //set position to a rotation distance specified by the request
-        turnMotor.setControl(m_request);
+        turnMotor.setControl(angleVoltageControl.withPosition(setpoint));
     }
 
     /**
@@ -235,6 +268,6 @@ public class SK25SwerveModule {
         //apply the PID constants to the turn motor
         applyPID(setpoint);
         //set the drive motor to the velocity
-        driveMotor.set(getLimitedVelocity(velocity));
+        driveMotor.set(inverted * getLimitedVelocity(velocity));
     }
 }

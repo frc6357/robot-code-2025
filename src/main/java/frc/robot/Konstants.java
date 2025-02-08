@@ -38,19 +38,21 @@ public final class Konstants
         //public static final Angle kBackLeftEncoderOffset = Degrees.of(-0.21875);
         //public static final Angle kBackRightEncoderOffset = Degrees.of(-0.08642578125);
         //double versions
-        public static final Double kFrontLeftEncoderOffsetDouble = 0.40283203125;
-        public static final Double kFrontRightEncoderOffsetDouble = -0.044677734375;
-        public static final Double kBackLeftEncoderOffsetDouble = -0.21875;
-        public static final Double kBackRightEncoderOffsetDouble = -0.08642578125;
+        public static final Double kFrontLeftEncoderOffsetRadians = 0.40283203125;
+        public static final Double kFrontRightEncoderOffsetRadians = -0.044677734375;
+        public static final Double kBackLeftEncoderOffsetRadians = -0.21875;
+        public static final Double kBackRightEncoderOffsetRadians = -0.08642578125;
         //TODO: go to constants and convert angle values to doubles
         
         //PID Constants for wheels from manual tunning
-        public static final double kDriveP = 0.00001;
+        public static final double kDriveP = 0.5;
         public static final double kDriveI = 0.0;
         public static final double kDriveD = 0.0;
 
-        //The error tolerance for the PID controllers of the wheels
-        public static final double kPIDControllerTolerance = 0.1;
+        /**
+         * The error tolerance for the PID controllers of the wheels in radians
+         */
+        public static final double kPIDControllerToleranceDegrees = 6.0;
         
         //pigeon ID
         public static final int kPigeonID = 30; //30
@@ -65,7 +67,7 @@ public final class Konstants
         public static final double kJoystickDeadzone = 0.2;
 
         //the velocity limit for the swerve drive modules
-        public static final double kMaxVelocity = 0.0;
+        public static final double kMaxVelocityMetersPerSecond = 1.0;
 
         //radius of the wheels in inches
         private static final Double kWheelRadiusInches = 2.0;   //inches

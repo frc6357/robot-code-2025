@@ -2,7 +2,7 @@ package frc.robot.bindings;
 
 import java.util.Optional;
 
-import frc.robot.commands.SwerveCommand;
+import frc.robot.commands.SwerveDefaultCommand;
 import frc.robot.subsystems.SK25Swerve;
 import static frc.robot.Ports.DriverPorts.*;
 
@@ -24,7 +24,7 @@ public class SK25SwerveBinder implements CommandBinder{
         {
             SK25Swerve Swerve = m_swerve.get();
 
-            SwerveCommand swerveCommand = new SwerveCommand(
+            SwerveDefaultCommand swerveCommand = new SwerveDefaultCommand(
             Swerve, 
             () -> kTranslationXPort.getFilteredAxis(), 
             () -> kTranslationYPort.getFilteredAxis(), 

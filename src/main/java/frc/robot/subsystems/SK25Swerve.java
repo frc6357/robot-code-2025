@@ -1,9 +1,14 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Konstants.SwerveConstants.kBackLeftEncoderOffsetDouble;
-import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderOffsetDouble;
-import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderOffsetDouble;
-import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderOffsetDouble;
+import static frc.robot.Konstants.SwerveConstants.kBackLeftEncoderOffsetRadians;
+import static frc.robot.Konstants.SwerveConstants.kBackLeftInverted;
+import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderOffsetRadians;
+import static frc.robot.Konstants.SwerveConstants.kBackRightInverted;
+import static frc.robot.Konstants.SwerveConstants.kCANivoreName;
+import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderOffsetRadians;
+import static frc.robot.Konstants.SwerveConstants.kFrontLeftInverted;
+import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderOffsetRadians;
+import static frc.robot.Konstants.SwerveConstants.kFrontRightInverted;
 import static frc.robot.Ports.DrivePorts.kBackLeftDriveMotorPort;
 import static frc.robot.Ports.DrivePorts.kBackLeftEncoderPort;
 import static frc.robot.Ports.DrivePorts.kBackLeftTurnMotorPort;
@@ -35,12 +40,12 @@ public class SK25Swerve extends SubsystemBase{
 
     public SK25Swerve()
     {
-        fLModule = new SK25SwerveModule(kFrontLeftDriveMotorPort.ID, kFrontLeftTurnMotorPort.ID, kFrontLeftEncoderPort.ID, kFrontLeftEncoderOffsetDouble);
-        fRModule = new SK25SwerveModule(kFrontRightDriveMotorPort.ID, kFrontRightTurnMotorPort.ID, kFrontRightEncoderPort.ID, kFrontRightEncoderOffsetDouble);
-        bLModule = new SK25SwerveModule(kBackLeftDriveMotorPort.ID, kBackLeftTurnMotorPort.ID, kBackLeftEncoderPort.ID, kBackLeftEncoderOffsetDouble);
-        bRModule = new SK25SwerveModule(kBackRightDriveMotorPort.ID, kBackRightTurnMotorPort.ID, kBackRightEncoderPort.ID, kBackRightEncoderOffsetDouble);
+        fLModule = new SK25SwerveModule(kFrontLeftDriveMotorPort.ID, kFrontLeftTurnMotorPort.ID, kFrontLeftEncoderPort.ID, kFrontLeftEncoderOffsetRadians, kFrontLeftInverted);
+        fRModule = new SK25SwerveModule(kFrontRightDriveMotorPort.ID, kFrontRightTurnMotorPort.ID, kFrontRightEncoderPort.ID, kFrontRightEncoderOffsetRadians, kFrontRightInverted);
+        bLModule = new SK25SwerveModule(kBackLeftDriveMotorPort.ID, kBackLeftTurnMotorPort.ID, kBackLeftEncoderPort.ID, kBackLeftEncoderOffsetRadians, kBackLeftInverted);
+        bRModule = new SK25SwerveModule(kBackRightDriveMotorPort.ID, kBackRightTurnMotorPort.ID, kBackRightEncoderPort.ID, kBackRightEncoderOffsetRadians, kBackRightInverted);
 
-        pigeon = new Pigeon2(kPigeonPort.ID);
+        pigeon = new Pigeon2(kPigeonPort.ID, kCANivoreName);
 
         factory = new SK25SwerveFactory(fLModule, fRModule, bLModule, bRModule, pigeon);
     }
@@ -48,13 +53,16 @@ public class SK25Swerve extends SubsystemBase{
     //occurs every 20 miliseconds, usually not tied to a command, binder, etc...
     public void periodic()
     {
+        factory.periodic();
     } 
 
     public void testInit()
     {
+        factory.testInit();
     }
     
     public void testPeriodic()
     {
+        factory.testPeriodic();
     }
 }
