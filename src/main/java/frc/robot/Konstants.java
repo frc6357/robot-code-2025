@@ -172,6 +172,11 @@ public final class Konstants
         public static final double kBackRightXPos = -kLTREncoderDistInches / 2;
         public static final double kBackRightYPos = -kFTBEncoderDistInches / 2;
 
+        public static final double kMaxModuleAngularSpeedDegreesPerSecond = 360;
+
+        /** The max speed the drive wheels should be allowed to go */
+        public static final double kMaxSpeedMetersPerSecond = 3.0; //TODO: Update max speed depending on robot performance
+        public static final double kMaxRotationDegreesPerSecond = 360.0;
     }
 
     public static final class ElevatorConstants
@@ -204,6 +209,18 @@ public final class Konstants
 
         public static final boolean kJoystickReversed = true;  // Determines if the joystick movement is reversed
     }
+
+        /** Constants that are used when defining filters for controllers */
+        public static final class OIConstants
+        {
+            // Controller constraints
+            public static final double kDriveCoeff       = 0.95;
+            public static final double kRotationCoeff    = 0.95;
+            public static final double kJoystickDeadband = 0.15;
+            public static final double kSlowModePercent  = 0.2;
+            
+            public static final double kAccelLimit = 2;
+        }
 
     public static final class LightConstants
     {

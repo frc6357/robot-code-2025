@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems.swerve;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -152,8 +152,8 @@ public class SwerveConfig {
     @Getter private SwerveModuleConstants backLeft;
     @Getter private SwerveModuleConstants backRight;
 
-    // Not too sure what this does yet
-    @Getter private double targetHeading = 0;
+    // Angular heading used for robot rotation control
+    @Getter @Setter private double targetHeading = 0;
 
     public SwerveModuleConstants[] getModules() {
         return new SwerveModuleConstants[] {frontLeft, frontRight, backLeft, backRight};

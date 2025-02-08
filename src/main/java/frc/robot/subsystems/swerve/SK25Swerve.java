@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems.swerve;
 
 // Packages used for the mechanisms/motors for the swerve drivetrain itself
 import com.ctre.phoenix6.Utils;
@@ -7,16 +7,16 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.ctre.phoenix6.swerve.SwerveModule;
+// import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
-import com.ctre.phoenix6.swerve.SwerveModule.ModuleRequest;
+// import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
+// import com.ctre.phoenix6.swerve.SwerveModule.ModuleRequest;
 
 // Packages used for Pathplanner
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.PIDConstants;
+// import com.pathplanner.lib.auto.AutoBuilder;
+// import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+// import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 // Packages used for positioning, kinematics, odometry
 import edu.wpi.first.math.geometry.Pose2d;
@@ -34,7 +34,6 @@ import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -50,13 +49,15 @@ import frc.robot.utils.Field;
 import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.Util;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static frc.robot.Konstants.AutoConstants.*;
 import static frc.robot.Konstants.SwerveConstants.kDeadband;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements NTSendable, Subsystem {
+public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements NTSendable, Subsystem {
     private SwerveConfig config;
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -85,7 +86,7 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
      * @param config The configuration object containing constants for 
      * the drivetrain and the module configurations.
      */
-    public Swerve(SwerveConfig config) {
+    public SK25Swerve(SwerveConfig config) {
         // Creates a Swerve Drivetrain using Phoenix6's SwerveDrivetrain class, passing the
         // properties of the swerve drive itself from SwerveConfig into the constructor.
         super(TalonFX::new, TalonFX::new, CANcoder::new,
@@ -144,6 +145,24 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
                 null);
     }
 
+    protected Command resetTurnController() {
+        return runOnce(() -> resetRotationController());
+    }
+
+    protected Command setTargetHeading(double targetHeading) {
+        return runOnce(() -> config.setTargetHeading(targetHeading));
+    }
+
+    private final SwerveRequest.FieldCentric fieldCentricDrive =
+            new SwerveRequest.FieldCentric()
+                .withDeadband(
+                        config.getSpeedAt12Volts().in(MetersPerSecond) * config.getDeadband())
+                .withRotationalDeadband(config.getMaxAngularRate() * config.getDeadband())
+                .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    
+    private final SwerveRequest.RobotCentric robotCentricDrive =
+            new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage).withDeadband(0).withRotationalDeadband(0);
+
     /**
    * The primary method for controlling the drivebase.  Takes a xSpeed, ySpeed and a rotation rate, and
    * calculates and commands module states accordingly. Also has field- and robot-relative modes, 
@@ -154,25 +173,96 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
    * @param rot     Robot angular rate, in radians per second. CCW positive.  Unaffected by field/robot relativity.
    * @param fieldRelative Drive mode. True for field-relative, false for robot-relative.
    */
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative)
+  public Command drive(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot, Boolean fieldRelative)
   {
-    // if((xSpeed == 0.0) && (ySpeed == 0.0) && (rot == 0.0)){
-    //   this.lock();
-    // }
-    // else
-     if(fieldRelative){
-      SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric()
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withDeadband(0).withRotationalDeadband(0);
-      
-      this.setControl(fieldCentric.withVelocityX(xSpeed).withVelocityY(ySpeed).withRotationalRate(rot));
-    }else{
-      SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric()
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withDeadband(0).withRotationalDeadband(0);
-      
-
-      this.setControl(robotCentric.withVelocityX(xSpeed).withVelocityY(ySpeed).withRotationalRate(rot));
+    if(fieldRelative){
+        return applyRequest(() -> 
+        fieldCentricDrive
+            .withVelocityX(xSpeed.getAsDouble())
+            .withVelocityY(ySpeed.getAsDouble())
+            .withRotationalRate(rot.getAsDouble())
+            );
+    }
+    else{
+        return applyRequest(() ->
+        robotCentricDrive
+            .withVelocityX(xSpeed.getAsDouble())
+            .withVelocityY(ySpeed.getAsDouble())
+            .withRotationalRate(rot.getAsDouble())
+        );
     }
    }
+
+   /**
+     * Reset the turn controller and then run the drive command with a angle supplier. This can be
+     * used for aiming at a goal or heading locking, etc.
+     */
+    public Command aimDrive(
+            DoubleSupplier velocityX, DoubleSupplier velocityY, DoubleSupplier targetRadians) {
+        return resetTurnController()
+                .andThen(
+                        drive(
+                                velocityX,
+                                velocityY,
+                                () -> calculateRotationController(targetRadians),
+                                true)
+                        );
+    }
+
+    /**
+     * Reset the turn controller, set the target heading to the current heading(end that command
+     * immediately), and then run the drive command with the Rotation controller. The rotation
+     * controller will only engage if you are driving x or y.
+     */
+    public Command headingLock(DoubleSupplier velocityX, DoubleSupplier velocityY) {
+        return resetTurnController()
+                .andThen(
+                        setTargetHeading(getRotation().getRadians()),
+                        drive(
+                                velocityX,
+                                velocityY,
+                                rotateToHeadingWhenMoving(
+                                        velocityX, velocityY, () -> config.getTargetHeading()),
+                                true));
+    }
+
+    private DoubleSupplier rotateToHeadingWhenMoving(
+            DoubleSupplier velocityX, DoubleSupplier velocityY, DoubleSupplier heading) {
+        return () -> {
+            if (Math.abs(velocityX.getAsDouble()) < 0.5
+                    && Math.abs(velocityY.getAsDouble()) < 0.5) {
+                return 0;
+            } else {
+                return calculateRotationController(heading::getAsDouble);
+            }
+        };
+    }
+
+    // Reorient Commands
+    public Command reorientForward() {
+        return reorientOperatorAngle(0);
+    }
+
+    public Command reorientLeft() {
+        return reorientOperatorAngle(90);
+    }
+
+    public Command reorientBack() {
+        return reorientOperatorAngle(180);
+    }
+
+    public Command reorientRight() {
+        return reorientOperatorAngle(270);
+    }
+
+    public Command cardinalReorient() {
+        return runOnce(
+                () -> {
+                    double angleDegrees = getClosestCardinal();
+                    reorient(angleDegrees);
+                });
+    }
+
 
     /**
      * The function `getRobotPose` returns the robot's pose after checking and updating it.
@@ -238,7 +328,7 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
     }
 
     // Used to set a control request to the swerve module, ignores disable so commands are
-    // continuous.
+    //continuous.
     Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
         return run(() -> this.setControl(requestSupplier.get())).ignoringDisable(true);
     }
@@ -313,13 +403,10 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
         return Rotation2d.fromDegrees(closest45Degrees).getRadians();
     }
 
-    protected Command cardinalReorient() {
-        return runOnce(
-                () -> {
-                    double angleDegrees = getClosestCardinal();
-                    reorient(angleDegrees);
-                });
-    }
+
+    public void setFront() {
+        reorientOperatorAngle(0);
+      }
 
     //                     //
     // Rotation Controller //
@@ -360,6 +447,8 @@ public class Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> impleme
   {
     return getRobotPose().getRotation();
   }
+
+  
 
   public boolean leftTilted()
   {

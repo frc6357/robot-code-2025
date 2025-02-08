@@ -26,9 +26,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.ExampleBinder;
+import frc.robot.bindings.SK25DriveBinder;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.PracticeSwerve;
+import frc.robot.subsystems.swerve.SK25Swerve;
+import frc.robot.subsystems.swerve.SwerveConfig;
 import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
@@ -41,8 +43,7 @@ import frc.robot.utils.filters.FilteredJoystick;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
-  private Optional<PracticeSwerve> m_PracticeSwerve = Optional.empty();
+  private Optional<SK25Swerve> m_Swerve = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -84,9 +85,9 @@ public class RobotContainer {
 
             // Instantiating subsystems if they are present
             // This is decided by looking at Subsystems.json
-            if(subsystems.isExamplePresent())
+            if(subsystems.isSwervePresent())
             {
-                mySubsystem = Optional.of(new ExampleSubsystem());
+                m_Swerve = Optional.of(new SK25Swerve(new SwerveConfig()));
             }
         }
         catch (IOException e)
@@ -105,7 +106,7 @@ public class RobotContainer {
     {
 
         // Adding all the binding classes to the list
-        buttonBinders.add(new ExampleBinder(mySubsystem));
+        buttonBinders.add(new SK25DriveBinder(m_Swerve));
 
 
         // Traversing through all the binding classes to actually bind the buttons
@@ -118,19 +119,16 @@ public class RobotContainer {
 
     private void configurePathPlanner()
     {
-        if(m_PracticeSwerve.isPresent())
+        if(m_Swerve.isPresent())
         {
-                ExampleSubsystem subsystem = mySubsystem.get();
-                
-                NamedCommands.registerCommand("ExampleCommand", new ExampleCommand(subsystem));
-
+            NamedCommands.registerCommand("DefaultSwerveCommand", getAutonomousCommand());
 
             //Register commands for use in auto
             //NamedCommands.registerCommand("StartLauncherCommand", new LaunchCommandAuto(kLauncherLeftSpeed, kLauncherRightSpeed, launcher));
             
         }
 
-        if(m_PracticeSwerve.isPresent()){
+        if(m_Swerve.isPresent()){
             
             // Configures the autonomous paths and smartdashboard chooser
             
@@ -151,16 +149,8 @@ public class RobotContainer {
     }
 
     public void testPeriodic(){
-        if(mySubsystem.isPresent())
-        {
-            mySubsystem.get().testPeriodic();
-        }
     }
     public void testInit(){
-        if(mySubsystem.isPresent())
-        {
-            mySubsystem.get().testInit();
-        }
     }
 
     public void matchInit()

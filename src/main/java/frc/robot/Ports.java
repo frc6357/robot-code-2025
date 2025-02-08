@@ -24,13 +24,16 @@ public class Ports
         public static final FilteredAxis kTranslationYPort     = new FilteredAxis(() -> kDriver.getRawAxis(kLeftX.value));
         public static final FilteredAxis kVelocityOmegaPort    = new FilteredAxis(() -> kDriver.getRawAxis(kRightX.value)); 
         
+        // Driver Function Button (Activates secondary control scheme when held)
+        public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kLeftBumper.value, BUTTON);
+
         // Switch modes
-        public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, kRightBumper.value, BUTTON);
-        public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kLeftBumper.value, BUTTON);
+        public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, 180, POV); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
+        public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kRightTrigger.value, BUTTON); // Function Controlscheme
 
         // Reset gyro
-        public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kLeftStick.value, BUTTON);
-        public static final SKTrigger kElevatorOverride = new SKTrigger(kDriver, kRightStick.value, BUTTON);
+        public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kRightStick.value, BUTTON);
+        
 
         // Party mode
         
@@ -54,14 +57,6 @@ public class Ports
         //Example of rawAxis values (Joysticks on the controller)
         //public static final FilteredAxis kExampleRawAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
         
-        //ExampleButton
-        public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
-        public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
-        public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
-        public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
-
-        //Elevator
-        public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
 
         // Party mode
         public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kBack.value, BUTTON);

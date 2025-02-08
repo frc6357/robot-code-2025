@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -13,7 +13,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
  * angle.
  */
 public class RotationController {
-    Swerve swerve;
+    SK25Swerve swerve;
     SwerveConfig config;
     ProfiledPIDController controller;
     PIDController holdController;
