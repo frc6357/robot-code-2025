@@ -176,8 +176,7 @@ public class RobotContainer {
     {
         if (elevatorSubsystem.isPresent())
         {
-            SK25Elevator elevator = elevatorSubsystem.get();
-            elevator.resetPosition();
+            //SK25Elevator elevator = elevatorSubsystem.get();
             //TODO Add this back :)
             //elevator.setRightTargetHeight(0.0);
             //elevator.setLeftTargetHeight(0.0);

@@ -1,54 +1,34 @@
 // Essentials
 package frc.robot.subsystems;
-
 import edu.wpi.first.math.MathUtil;
+
+// Elevator Superclass
 import frc.robot.subsystems.superclasses.Elevator;
 
 // Constants (Muy Importante)
 import static frc.robot.Konstants.ElevatorConstants.*;
-//import static frc.robot.Konstants.ElevatorConstants.kElevatorCurrentLimit;
-//import static frc.robot.Konstants.ElevatorConstants.elevatorConversion;
-//import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
-//import static frc.robot.Konstants.ElevatorConstants.leftElevator;
-//import static frc.robot.Konstants.ElevatorConstants.rightElevator;
-//import static frc.robot.Konstants.ElevatorConstants.kElevatorMotorMaxOutput;
-//import static frc.robot.Konstants.ElevatorConstants.kElevatorMotorMinOutput;
-//import static frc.robot.Konstants.ElevatorConstants.kCANCoderGearRatio;
-import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
-import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
-import static frc.robot.Ports.ElevatorPorts.kEncoderL;
-import static frc.robot.Ports.ElevatorPorts.kEncoderR;
-
-// Phoenix Sensors (Help)
-import com.ctre.phoenix6.hardware.CANcoder;
-//import com.ctre.phoenix.sensors.CANCoder;
-//import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.ctre.phoenix6.StatusSignal;
-
-// Encoders - Sensors
-import com.revrobotics.RelativeEncoder;
-
-// SparkBase
-import com.revrobotics.spark.SparkBase;
+import static frc.robot.Ports.ElevatorPorts.*;
 
 // Motors - Sparkflex
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 // Configurations For Stuff (Thanks REV)
 import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 // PID Controller
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.units.measure.Angle;
+
+// Limit Switches
 import edu.wpi.first.wpilibj.DigitalInput;
+
+// Absolute Encoder (REV)
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 // SmartDashboard
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
 
 // Unused Imports (Maybe In The Future)
 //import com.revrobotics.spark.config.SparkMaxConfig;
@@ -73,42 +53,17 @@ public class SK25Elevator extends Elevator
     // Target & Current Position
     double LtargetHeight;
     double LcurrentHeight;
+
     double RtargetHeight;
     double RcurrentHeight;
-
-    // CANcoder Objects
-    CANcoder CANCoderL;
-    CANcoder CANCoderR;
-    CANcoderConfiguration CANCoderConfigL;
-    CANcoderConfiguration CANCoderConfigR;
-    StatusSignal<Angle> CANcoderDegreesL;
-    StatusSignal<Angle> CANcoderDegreesR;
-    double CANcoderHeightL;
-    double CANcoderHeightR;
-
-    // Encoder Objects
-    //RelativeEncoder encoderL;
-    //RelativeEncoder encoderR;
 
     // Touch Sensor Objects
     DigitalInput touchSensorTop;
     DigitalInput touchSensorBottom;
 
-    // Magnetic Encoder Objects
-    DigitalInput magEncoder1;
-    DigitalInput magEncoder2;
-    DigitalInput magEncoder3;
-    DigitalInput magEncoder4;
-
-    SlewRateLimiter accelLimit;
-
     // Constructor For Public Command Access
     public SK25Elevator()
     {
-        // Touch Sensors
-        //touchSensorTop = new DigitalInput(1);
-        //touchSensorBottom = new DigitalInput(2);
-
         // PID Controllers - Setpoints
         rPID = new PIDController(rightElevator.kP, rightElevator.kI, rightElevator.kD);
         lPID = new PIDController(leftElevator.kP, leftElevator.kI, leftElevator.kD);
@@ -119,18 +74,19 @@ public class SK25Elevator extends Elevator
         rPID.setSetpoint(0.0);
         lPID.setSetpoint(0.0);
 
-        // Encoder Objects
-        //encoderL = motorL.getEncoder();
-        //encoderR = motorR.getEncoder();
-
         // Motor Initialization With REV Sparkflex - Configurations
         motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
         motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
+
         motorConfigL = new SparkFlexConfig();
         motorConfigR = new SparkFlexConfig();
         
-        // Rate Limiter
-        accelLimit = new SlewRateLimiter(kPositiveAccelLimit, kNegativeAccelLimit, 0.0);
+        // TODO Change the channel, full range, and expected zero.
+        // Initializes a duty cycle encoder on DIO pins 0 to return a value of 4 for
+        // a full rotation, with the encoder reporting 0 half way through rotation (2
+        // out of 4)
+        DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(0, 4.0, 2.0);
+        absoluteEncoder.get();
 
         // Configurations For The Motors & Encoders
         motorConfigL
@@ -141,13 +97,8 @@ public class SK25Elevator extends Elevator
             .inverted(true)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(kElevatorCurrentLimit);
-
-        //motorConfigL.encoder
-            //.positionConversionFactor(elevatorConversion);
-
-        //motorConfigR.encoder
-            //.positionConversionFactor(elevatorConversion);
         
+            // Apply Motor Configurations
         motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
@@ -158,40 +109,11 @@ public class SK25Elevator extends Elevator
         LtargetHeight = 0.0;
         LcurrentHeight = 0.0;
 
-        //resetPosition();
-        
-        //TODO FIX_BEFORE_TESTING - Verify motor inverted (clockwise/ccw)
-        // CANCoders
-        CANcoder CANCoderL = new CANcoder(kEncoderL.ID, kEncoderL.bus);
-        CANcoderConfiguration CANCoderConfigL = new CANcoderConfiguration();
-        CANCoderConfigL.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        CANCoderL.getConfigurator().apply(CANCoderConfigL);
-        CANCoderL.setPosition(0.0);
-
-        CANcoder CANCoderR = new CANcoder(kEncoderR.ID, kEncoderR.bus);
-        CANcoderConfiguration CANCoderConfigR = new CANcoderConfiguration();
-        CANCoderConfigR.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        CANCoderR.getConfigurator().apply(CANCoderConfigR);
-        // Set the position to 0 rotations for initial use
-        CANCoderR.setPosition(0.0); 
-
-
-        // Old Phoenix 5 Code
-        // In Phoenix 6, CANcoder does not support setting a custom sensor coefficient, unit string, 
-        // and sensor time base. Instead, the CANcoder uses canonical units of rotations and rotations per second using the C++ units library.
-        //encoderConfigL.initializationStrategy = SensorInitializationStrategy.BootToZero; - Always boots to 0 in Phoenix 6
-        //CANCoderConfigL.unitString = "deg";
-        //CANCoderConfigL.sensorDirection = false; // CCW+ 
-        //CANCoderConfigL.sensorCoefficient = 360.0 / 4096 / kCANCoderGearRatio;
-        //CANCoderL.configAllSettings(CANCoderConfigL);
+        // Touch Sensors
+        // touchSensorTop = new DigitalInput(1);
+        // touchSensorBottom = new DigitalInput(2);
     }
 
-
-    /* 
-     *  KURIAN-RELATED METHODS 
-    */
-
-    
     /**
      * {@inheritDoc}
      */
@@ -222,73 +144,42 @@ public class SK25Elevator extends Elevator
     /**
      * {@inheritDoc}
      */
-    public double getLeftPosition()
+    public double getEncoderPosition()
     {
-        // Get angle from CANcoder
-        CANcoderDegreesL = CANCoderL.getPosition();
-
-        // Convert degrees to inches
-        CANcoderHeightL = 1;
-        
-        return CANcoderHeightL;
+        absoluteEncoder.get();
     }
-    
+
     /**
      * {@inheritDoc}
      */
-    public double getRightPosition()
+    public double getRightTargetPosition()
     {
-        // Get angle from CANcoder
-        CANcoderDegreesR = CANCoderR.getPosition();
-
-        // Convert degrees to inches
-        CANcoderHeightR = 1;
-        
-        return CANcoderHeightR;
-    }
-
-
-
-
-
-    public double getRightTargetPosition(){
         return RtargetHeight;
     }
 
-    public double getLeftTargetPosition(){
+    /**
+     * {@inheritDoc}
+     */
+    public double getLeftTargetPosition()
+    {
         return LtargetHeight;
     }
 
-
-
-
-
+    /**
+     * {@inheritDoc}
+     */
     public boolean isRightAtTargetPosition()
     {
-        return Math.abs(getRightPosition() - getRightTargetPosition()) < kPositionTolerance;
+        return Math.abs(getEncoderPosition() - getRightTargetPosition()) < kPositionTolerance;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isLeftAtTargetPosition()
     {
-        return Math.abs(getLeftPosition() - getLeftTargetPosition()) < kPositionTolerance;
+        return Math.abs(getEncoderPosition() - getLeftTargetPosition()) < kPositionTolerance;
     }
-    
-
-
-
-
-    // Reset Position
-    public void resetPosition()
-    {
-        CANCoderL.setPosition(0.0);
-        CANCoderR.setPosition(0.0);
-    }
-
-
-    /* 
-     *  NON-KURIAN METHODS 
-    */
-
 
     // Button Sensor Methods
     public Boolean isTopSensorPressed()
@@ -337,38 +228,36 @@ public class SK25Elevator extends Elevator
 
     @Override
     public void periodic(){
-        /*
-        double r_current_position = getRightPosition();
-        double r_target_position = getRightTargetPosition();
+        
+        // Initialize Current & Target Positions
+        double currentPosition = getEncoderPosition();
 
-        double l_current_position = getLeftPosition();
+        double r_target_position = getRightTargetPosition();
         double l_target_position = getLeftTargetPosition();
 
-        // Calculates motor speed and puts it within operating range
-        double rSpeed = MathUtil.clamp(rPID.calculate(r_current_position), kElevatorMotorMinOutput, kElevatorMotorMaxOutput);
+        // Calculates Motor Speed & Puts It Within Operating Range
+        double rSpeed = MathUtil.clamp(rPID.calculate(currentPosition), kElevatorMotorMinOutput, kElevatorMotorMaxOutput);
         motorR.set(rSpeed); 
 
-        // Calculates motor speed and puts it within operating range
-        double lSpeed = MathUtil.clamp(lPID.calculate(l_current_position), kElevatorMotorMinOutput, kElevatorMotorMaxOutput);
+        // Calculates Motor Speed & Puts It Within Operating Range
+        double lSpeed = MathUtil.clamp(lPID.calculate(currentPosition), kElevatorMotorMinOutput, kElevatorMotorMaxOutput);
         motorL.set(lSpeed); 
 
-        SmartDashboard.putNumber("Right Current Position", r_current_position);
+        // SmartDashboard Current & Target Positions
+        SmartDashboard.putNumber("Current Estimated Position", currentPosition);
+
         SmartDashboard.putNumber("Right Target Position", r_target_position);
         SmartDashboard.putBoolean("Right Elevator at Setpoint", isRightAtTargetPosition());
 
-        SmartDashboard.putNumber("Left Current Position", l_current_position);
         SmartDashboard.putNumber("Left Target Position", l_target_position);
         SmartDashboard.putBoolean("Left Elevator at Setpoint", isLeftAtTargetPosition());
-        */
+        
         //TODO Uncomment below and add this to elastic dashboard once it's implemented.
 
         //SmartDashboard.putBoolean("Elevator At Top", atTop());
         //SmartDashboard.putBoolean("Elevator At Bottom", atBottom());
     }
-    public void testPeriodic(){
 
-    }
-    public void testInit(){
-        
-    }
+    public void testPeriodic(){}
+    public void testInit(){}
 }

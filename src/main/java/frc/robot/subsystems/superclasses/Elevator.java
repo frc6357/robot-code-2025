@@ -49,12 +49,7 @@ public abstract class Elevator extends SubsystemBase
     /**
      * @return Returns the height that the elevator is currently at
      */
-    public abstract double getLeftPosition();
-
-    /**
-     * @return Returns the height that the elevator is currently at
-     */
-    public abstract double getRightPosition();
+    public abstract double getEncoderPosition();
 
 
     /*
