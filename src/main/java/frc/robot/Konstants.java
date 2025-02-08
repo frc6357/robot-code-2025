@@ -53,10 +53,10 @@ public final class Konstants
         public static final double level4 = 0.3;
         public static final double intake = 0.2;
 
-        public static final double armAngleTolerance = 1.0;
+        public static final double armAngleTolerance = 0.01;
 
-        public static final double kJoystickChange = 0.1;
-        public static final double kJoystickDeadband = 0.3;
+        public static final double kJoystickChange = 0.05;
+        public static final double kJoystickDeadband = 0.8;
 
         public static final boolean kJoystickReversed = true;
 
