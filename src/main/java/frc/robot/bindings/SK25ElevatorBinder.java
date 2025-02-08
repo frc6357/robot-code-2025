@@ -1,21 +1,8 @@
 package frc.robot.bindings;
 
-import static frc.robot.Konstants.ElevatorConstants.kJoystickChange;
-import static frc.robot.Konstants.ElevatorConstants.kJoystickDeadband;
-import static frc.robot.Konstants.ElevatorConstants.kJoystickReversed;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.LowPosition;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.MidPosition;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.TopPosition;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.TroughPosition;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.ZeroPosition;
-import static frc.robot.Ports.OperatorPorts.kElevatorAxis;
-import static frc.robot.Ports.OperatorPorts.kLowBranch;
-import static frc.robot.Ports.OperatorPorts.kMiddleBranch;
-import static frc.robot.Ports.OperatorPorts.kResetElevatorPos;
-import static frc.robot.Ports.OperatorPorts.kTopBranch;
-import static frc.robot.Ports.OperatorPorts.kTrough;
-import static frc.robot.Ports.OperatorPorts.kZeroPositionOperator;
-import static frc.robot.Ports.OperatorPorts.kElevatorOverride;
+import static frc.robot.Konstants.ElevatorConstants.*;
+import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.*;
+import static frc.robot.Ports.OperatorPorts.*;
 
 import java.util.Optional;
 import edu.wpi.first.wpilibj2.command.button.Trigger;

@@ -13,7 +13,6 @@ import java.util.Optional;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -22,11 +21,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.SK25ElevatorBinder;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SK25Elevator;
-import frc.robot.subsystems.PracticeSwerve;
-import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
 
@@ -39,7 +35,6 @@ import frc.robot.utils.filters.FilteredJoystick;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
-  private Optional<PracticeSwerve> m_PracticeSwerve = Optional.empty();
   private Optional<SK25Elevator>    elevatorSubsystem    = Optional.empty();
 
   // The list containing all the command binding classes
@@ -117,29 +112,7 @@ public class RobotContainer {
 
     }
 
-    private void configurePathPlanner()
-    {
-        if(m_PracticeSwerve.isPresent())
-        {
-                ExampleSubsystem subsystem = mySubsystem.get();
-                
-                NamedCommands.registerCommand("ExampleCommand", new ExampleCommand(subsystem));
-
-
-            //Register commands for use in auto
-            //NamedCommands.registerCommand("StartLauncherCommand", new LaunchCommandAuto(kLauncherLeftSpeed, kLauncherRightSpeed, launcher));
-            
-        }
-
-        if(m_PracticeSwerve.isPresent()){
-            
-            // Configures the autonomous paths and smartdashboard chooser
-            
-            //SK25AutoBuilder.setAutoNames(autoList);
-            autoCommandSelector = SK25AutoBuilder.buildAutoChooser("P4_Taxi");
-            //SmartDashboard.putData("Auto Chooser", autoCommandSelector);
-        }
-    }
+    private void configurePathPlanner(){}
 
   /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

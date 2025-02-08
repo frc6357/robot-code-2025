@@ -78,8 +78,7 @@ public class SK25Elevator extends Elevator
         
         // TODO Change the channel, full range, and expected zero.
         // Initializes a duty cycle encoder on DIO pins 0 to return a value of 4 for
-        // a full rotation, with the encoder reporting 0 half way through rotation (2
-        // out of 4)
+        // a full rotation, with the encoder reporting 0 half way through rotation (2 out of 4)
         absoluteEncoder = new DutyCycleEncoder(0, 4.0, 2.0);
 
         // Configurations For The Motors & Encoders
