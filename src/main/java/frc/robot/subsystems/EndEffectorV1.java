@@ -4,7 +4,7 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -17,7 +17,7 @@ import static frc.robot.Konstants.EndEffectorConstants.armAngleTolerance;
 import static frc.robot.Konstants.EndEffectorConstants.kArmSpeed;
 //import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
@@ -27,10 +27,10 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class EndEffectorV1  extends SubsystemBase{
 
-    //declare a motor object of type CANSParkFlex
-    //SparkFlex rollerMotor;
-    SparkFlex armMotor;
-    SparkFlexConfig armConfig;
+    //declare a motor object of type CANSparkMax
+    //SparkMax rollerMotor;
+    SparkMax armMotor;
+    SparkMaxConfig armConfig;
 
     SparkClosedLoopController mPID;
     double mtargetPosition;
@@ -49,18 +49,18 @@ public class EndEffectorV1  extends SubsystemBase{
 
         
         //initialize the new motor object with its motor ID and type
-        //rollerMotor = new SparkFlex(kRollerMotor.ID, MotorType.kBrushless);
-        armMotor = new SparkFlex(kArmMotor.ID, MotorType.kBrushless);
+        //rollerMotor = new SparkMax(kRollerMotor.ID, MotorType.kBrushless);
+        armMotor = new SparkMax(kArmMotor.ID, MotorType.kBrushless);
 
-        armConfig = new SparkFlexConfig();
+        armConfig = new SparkMaxConfig();
         
         armConfig.absoluteEncoder 
-            .positionConversionFactor(360)
+            .positionConversionFactor(1)
             .velocityConversionFactor(1);
 
         armConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .p(0.1)
+            .p(0.05)
             .i(0)
             .d(0)
             .outputRange(-1, 1)

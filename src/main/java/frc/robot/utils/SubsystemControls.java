@@ -21,7 +21,7 @@ public class SubsystemControls
      */
     public SubsystemControls(
         @JsonProperty(required = true, value = "swerve")      boolean swerve,
-        @JsonProperty(required = true, value = "swerve")      boolean example,
+        @JsonProperty(required = true, value = "example")      boolean example,
         @JsonProperty(required = true, value = "endeffector") boolean endeffector
     )
     {

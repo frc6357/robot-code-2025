@@ -1,3 +1,5 @@
 {
-   "endeffector" : true
+   "swerve": false,
+   "example": false,
+   "endeffector": true
 }

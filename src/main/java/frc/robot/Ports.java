@@ -115,7 +115,7 @@ public class Ports
         private static final String busName = "";
 
         public static final CANPort kRollerMotor = new CANPort(55, busName );
-        public static final CANPort kArmMotor = new CANPort(41, busName );
+        public static final CANPort kArmMotor = new CANPort(40, busName );
     }
 
 }

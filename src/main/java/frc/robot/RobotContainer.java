@@ -87,10 +87,6 @@ public class RobotContainer {
 
             // Instantiating subsystems if they are present
             // This is decided by looking at Subsystems.json
-            if(subsystems.isExamplePresent())
-            {
-                mySubsystem = Optional.of(new ExampleSubsystem());
-            }
             if(subsystems.isEndEffectorPresent())
             {
                 endEffector = Optional.of(new EndEffectorV1());
@@ -125,26 +121,26 @@ public class RobotContainer {
 
     private void configurePathPlanner()
     {
-        if(m_PracticeSwerve.isPresent())
-        {
-                ExampleSubsystem subsystem = mySubsystem.get();
+       // if(m_PracticeSwerve.isPresent())
+        //{
+                //ExampleSubsystem subsystem = mySubsystem.get();
                 
-                NamedCommands.registerCommand("ExampleCommand", new ExampleCommand(subsystem));
+                //NamedCommands.registerCommand("ExampleCommand", new ExampleCommand(subsystem));
 
 
             //Register commands for use in auto
             //NamedCommands.registerCommand("StartLauncherCommand", new LaunchCommandAuto(kLauncherLeftSpeed, kLauncherRightSpeed, launcher));
             
-        }
+       // }
 
-        if(m_PracticeSwerve.isPresent()){
+       // if(m_PracticeSwerve.isPresent()){
             
             // Configures the autonomous paths and smartdashboard chooser
             
             //SK25AutoBuilder.setAutoNames(autoList);
-            autoCommandSelector = SK25AutoBuilder.buildAutoChooser("P4_Taxi");
+            //autoCommandSelector = SK25AutoBuilder.buildAutoChooser("P4_Taxi");
             //SmartDashboard.putData("Auto Chooser", autoCommandSelector);
-        }
+       // }
 
         if(endEffector.isPresent())
         {

@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Konstants.ExampleConstants.kExampleSpeed;
@@ -9,14 +9,14 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class ExampleSubsystem extends SubsystemBase
 {
-    //declare a motor object of type CANSParkFlex
-    SparkFlex motor;
+    //declare a motor object of type CANSparkMax
+    SparkMax motor;
 
     //constructor
     public ExampleSubsystem()
     {
         //initialize the new motor object with its motor ID and type
-        motor = new SparkFlex(kExampleMotor.ID, MotorType.kBrushless);
+        motor = new SparkMax(kExampleMotor.ID, MotorType.kBrushless);
     }
 
     //runs the motor

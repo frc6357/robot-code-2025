@@ -45,13 +45,13 @@ public final class Konstants
     {
 
         public static double kRollerSpeed = 0.5;
-        public static double kArmSpeed = 0.5;
+        public static double kArmSpeed = 0.1;
 
         public static final double horizontal = 0.0;
-        public static final double level1 = 210.0;
-        public static final double level23 = 215.0;
-        public static final double level4 = 220.0;
-        public static final double intake = 145.0;
+        public static final double level1 = 0.5;
+        public static final double level23 = 0.4;
+        public static final double level4 = 0.3;
+        public static final double intake = 0.2;
 
         public static final double armAngleTolerance = 1.0;
 

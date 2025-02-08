@@ -17,12 +17,15 @@ public class EndEffectorButtonCommand extends Command {
         this.endEffector = endEffector;
 
         addRequirements(endEffector);
+
+        System.out.println("Hello");
     }
 
     @Override
     public void initialize()
     {
         endEffector.setTargetAngle(position);
+        System.out.println("Urmom");
     }
 
     @Override

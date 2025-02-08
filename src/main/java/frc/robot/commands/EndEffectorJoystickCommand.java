@@ -17,6 +17,8 @@ public class EndEffectorJoystickCommand extends Command{
         this.endEffector = endEffector;
 
         addRequirements(endEffector);
+
+        System.out.println("Hii");
     }
 
     @Override 
@@ -30,6 +32,8 @@ public class EndEffectorJoystickCommand extends Command{
         double armSetpoint = endEffector.getTargetArmPosition() + angleChange;
 
         endEffector.setTargetAngle(armSetpoint);
+
+        System.out.println("exec");
     }
 
     @Override

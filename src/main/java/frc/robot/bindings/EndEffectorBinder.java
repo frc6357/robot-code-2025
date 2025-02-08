@@ -70,8 +70,9 @@ public class EndEffectorBinder implements CommandBinder{
         {
             EndEffectorV1 endEffector = subsystem.get();
 
-            double joystickGain = kJoystickReversed ? -kJoystickChange : kJoystickChange;
-            endArm.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
+           // double joystickGain = kJoystickReversed ? -kJoystickChange : kJoystickChange;
+           // endArm.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
+            System.out.println("Hi");
 
             // endEffector Up/Down Buttons 
 
@@ -87,12 +88,12 @@ public class EndEffectorBinder implements CommandBinder{
 
 
 
-            endEffector.setDefaultCommand(
+           // endEffector.setDefaultCommand(
                     // Vertical movement of the arm is controlled by the Y axis of the right stick.
                     // Up on joystick moving arm up and down on stick moving arm down.
-                    new EndEffectorJoystickCommand(
-                        () -> {return endArm.getFilteredAxis();},
-                        endEffector));
+                   // new EndEffectorJoystickCommand(
+                        //() -> {return endArm.getFilteredAxis();},
+                       // endEffector));
                             
                              
         }
