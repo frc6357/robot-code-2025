@@ -63,14 +63,16 @@ public class EndEffectorV1  extends SubsystemBase{
             .p(0.05)
             .i(0)
             .d(0)
-            .outputRange(-1, 1)
+            .outputRange(-.1, .1)
             .p(0, ClosedLoopSlot.kSlot1)
             .i(0, ClosedLoopSlot.kSlot1)
             .d(0, ClosedLoopSlot.kSlot1)
             .velocityFF(1.0/5767, ClosedLoopSlot.kSlot1)
             .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
-        armConfig.idleMode(IdleMode.kBrake);
+        armConfig
+            .idleMode(IdleMode.kBrake)
+            .smartCurrentLimit(30);
 
         mPID = armMotor.getClosedLoopController();
 

@@ -2,6 +2,7 @@ package frc.robot.bindings;
 
 import frc.robot.commands.EndEffectorButtonCommand;
 import frc.robot.commands.EndEffectorJoystickCommand;
+import frc.robot.commands.EndEffectorStopCommand;
 
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickChange;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
@@ -80,13 +81,17 @@ public class EndEffectorBinder implements CommandBinder{
 
             // endEffector Position Buttons (Kurian)
 
+            
             zeroPositionButton.onTrue(new EndEffectorButtonCommand(horizontal, endEffector));
             TroughButton.onTrue(new EndEffectorButtonCommand(level1, endEffector));
             LowMidButton.onTrue(new EndEffectorButtonCommand(level23, endEffector));
             IntakeButton.onTrue(new EndEffectorButtonCommand(intake, endEffector));
             TopButton.onTrue(new EndEffectorButtonCommand(level4, endEffector));
-
-
+            zeroPositionButton.onFalse(new EndEffectorStopCommand(endEffector));
+            TroughButton.onFalse(new EndEffectorStopCommand(endEffector));
+            LowMidButton.onFalse(new EndEffectorStopCommand(endEffector));
+            IntakeButton.onFalse(new EndEffectorStopCommand(endEffector));
+            TopButton.onFalse(new EndEffectorStopCommand(endEffector));
 
            // endEffector.setDefaultCommand(
                     // Vertical movement of the arm is controlled by the Y axis of the right stick.
