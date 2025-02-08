@@ -148,8 +148,8 @@ public class SK25Elevator extends Elevator
         //motorConfigR.encoder
             //.positionConversionFactor(elevatorConversion);
         
-        motorR.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-        motorL.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
         // Current, Target, and Reset Positions
         RtargetHeight = 0.0;

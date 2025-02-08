@@ -77,36 +77,36 @@ public class Ports
 
     public static class DrivePorts
     {
-        private static final String busName = "DriveCAN";
+    //     private static final String busName = "DriveCAN";
 
-        // CAN IDs for the drive motors on the swerve module
-        public static final CANPort kFrontLeftDriveMotorPort  = new CANPort(13, busName);
-        public static final CANPort kRearLeftDriveMotorPort   = new CANPort(12, busName);
-        public static final CANPort kFrontRightDriveMotorPort = new CANPort(11, busName);
-        public static final CANPort kRearRightDriveMotorPort  = new CANPort(10, busName);
+    //     // CAN IDs for the drive motors on the swerve module
+    //     public static final CANPort kFrontLeftDriveMotorPort  = new CANPort(13, busName);
+    //     public static final CANPort kRearLeftDriveMotorPort   = new CANPort(12, busName);
+    //     public static final CANPort kFrontRightDriveMotorPort = new CANPort(11, busName);
+    //     public static final CANPort kRearRightDriveMotorPort  = new CANPort(10, busName);
 
-        // CAN IDs for the turning motors on the swerve module
-        public static final CANPort kFrontLeftTurningMotorPort  = new CANPort(23, busName);
-        public static final CANPort kRearLeftTurningMotorPort   = new CANPort(22, busName);
-        public static final CANPort kFrontRightTurningMotorPort = new CANPort(21, busName);
-        public static final CANPort kRearRightTurningMotorPort  = new CANPort(20, busName);
+    //     // CAN IDs for the turning motors on the swerve module
+    //     public static final CANPort kFrontLeftTurningMotorPort  = new CANPort(23, busName);
+    //     public static final CANPort kRearLeftTurningMotorPort   = new CANPort(22, busName);
+    //     public static final CANPort kFrontRightTurningMotorPort = new CANPort(21, busName);
+    //     public static final CANPort kRearRightTurningMotorPort  = new CANPort(20, busName);
 
-        // CAN IDs for the CANCoders
-        public static final CANPort kFrontLeftTurningEncoderPort  = new CANPort(33, busName);
-        public static final CANPort kRearLeftTurningEncoderPort   = new CANPort(32, busName);
-        public static final CANPort kFrontRightTurningEncoderPort = new CANPort(31, busName);
-        public static final CANPort kRearRightTurningEncoderPort  = new CANPort(30, busName);
+    //     // CAN IDs for the CANCoders
+    //     public static final CANPort kFrontLeftTurningEncoderPort  = new CANPort(33, busName);
+    //     public static final CANPort kRearLeftTurningEncoderPort   = new CANPort(32, busName);
+    //     public static final CANPort kFrontRightTurningEncoderPort = new CANPort(31, busName);
+    //     public static final CANPort kRearRightTurningEncoderPort  = new CANPort(30, busName);
         
-        // CAN ID for IMU
-        public static final CANPort kPigeonPort = new CANPort(25, busName);
-    }
+    //     // CAN ID for IMU
+    //     public static final CANPort kPigeonPort = new CANPort(25, busName);
+     }
 
     public static class ElevatorPorts
     {
-        private static final String busName = "ElevatorCAN";
+        private static final String busName = "";
         //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
-        public static final CANPort kRightElevatorMotor = new CANPort(40, busName);
-        public static final CANPort kLeftElevatorMotor = new CANPort(41, busName);
+        public static final CANPort kRightElevatorMotor = new CANPort(61, busName);
+        public static final CANPort kLeftElevatorMotor = new CANPort(62, busName);
         public static final CANPort kEncoderL = new CANPort(43, busName);
         public static final CANPort kEncoderR = new CANPort(44, busName); 
     }
