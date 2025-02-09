@@ -42,12 +42,17 @@ public class Ports
         public static final FilteredAxis kTranslationXPort = new FilteredAxis(() -> swerveController.getRawAxis(kLeftY.value));
         public static final FilteredAxis kTranslationYPort = new FilteredAxis(() -> swerveController.getRawAxis(kLeftX.value));
         public static final FilteredAxis kVelocityOmegaPort = new FilteredAxis(() -> swerveController.getRawAxis(kRightX.value)); 
-        // Switch modes (robot centric vs feild centric, and slow mode)
-       // public final SKTrigger kRobotCentricMode = new SKTrigger(swerveController, kRightBumper.value, BUTTON);
-        //public final SKTrigger kSlowMode = new SKTrigger(swerveController, kLeftBumper.value, BUTTON);
+        
+        // Driver Function Button (Activates secondary control scheme when held)
+        public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kLeftBumper.value, BUTTON);
+
+        // Switch modes
+        public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, 180, POV); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
+        public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kRightTrigger.value, BUTTON); // Function Controlscheme
 
         // Reset gyro
-        //public final SKTrigger kResetGyroPos = new SKTrigger(swerveController, kLeftStick.value, BUTTON);
+        public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kRightStick.value, BUTTON);
+        
 
     }
     /**
@@ -69,8 +74,6 @@ public class Ports
         //Example of rawAxis values (Joysticks on the controller)
         //public static final FilteredAxis kExampleRawAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
         
-        //ExampleButton
-        public static final SKTrigger kExampleButton = new SKTrigger(kOperator, kY.value, BUTTON);
 
         // Party mode and Teal Lights
         public static final SKTrigger kPartyModeButton = new SKTrigger(kOperator, kStart.value, BUTTON);
@@ -107,6 +110,14 @@ public class Ports
         public static final CANPort kPigeonPort = new CANPort(kPigeonID, kCANivoreName);
     }
 
+    public static class ElevatorPorts
+    {
+        private static final String busName = "";
+        public static final CANPort kRightElevatorMotor = new CANPort(40, busName);
+        public static final CANPort kLeftElevatorMotor = new CANPort(41, busName);
+        
+    }
+
 
     public static class ExamplePorts
     {
@@ -114,7 +125,7 @@ public class Ports
         private static final String busName = "";
 
         //assign a motor ID of 49 to the example motor
-        public static final CANPort kExampleMotor = new CANPort(49, busName); 
+        public static final CANPort kExampleMotor = new CANPort(59, busName); 
     }
 
     public static class LightsPorts

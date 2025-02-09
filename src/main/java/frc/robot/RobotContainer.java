@@ -26,6 +26,9 @@ import frc.robot.bindings.SK25SwerveBinder;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SK25Lights;
 import frc.robot.subsystems.SK25Swerve;
+import frc.robot.bindings.SK25DriveBinder;
+import frc.robot.subsystems.swerve.SK25Swerve;
+import frc.robot.subsystems.swerve.SwerveConfig;
 import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
@@ -81,9 +84,10 @@ public class RobotContainer {
 
             // Instantiating subsystems if they are present
             // This is decided by looking at Subsystems.json
-            if(subsystems.isExamplePresent())
+            if(subsystems.isSwervePresent())
             {
-                mySubsystem = Optional.of(new ExampleSubsystem());
+                SwerveConfig config = new SwerveConfig();
+                m_Swerve = Optional.of(new SK25Swerve(config));
             }
             if(subsystems.isLightsPresent())
             {
@@ -125,20 +129,22 @@ public class RobotContainer {
 
 
     private void configurePathPlanner()
-    {   
-        //ExampleSubsystem subsystem = mySubsystem.get();
-        //NamedCommands.registerCommand("ExampleCommand", new ExampleCommand(subsystem));
-
-
-        //Register commands for use in auto
-        //NamedCommands.registerCommand("StartLauncherCommand", new LaunchCommandAuto(kLauncherLeftSpeed, kLauncherRightSpeed, launcher));
-            
-        
-        // Configures the autonomous paths and smartdashboard chooser
-        if(m_swerve.isPresent())
+    {
+        if(m_Swerve.isPresent())
         {
+           // NamedCommands.registerCommand("DefaultSwerveCommand", getAutonomousCommand());
+
+            //Register commands for use in auto
+            //NamedCommands.registerCommand("StartLauncherCommand", new LaunchCommandAuto(kLauncherLeftSpeed, kLauncherRightSpeed, launcher));
+            
+        }
+
+        if(m_Swerve.isPresent()){
+            
+            // Configures the autonomous paths and smartdashboard chooser
+            
             //SK25AutoBuilder.setAutoNames(autoList);
-            autoCommandSelector = SK25AutoBuilder.buildAutoChooser("Taxi");
+            //autoCommandSelector = SK25AutoBuilder.buildAutoChooser("P4_Taxi");
             //SmartDashboard.putData("Auto Chooser", autoCommandSelector);
         }
     }
