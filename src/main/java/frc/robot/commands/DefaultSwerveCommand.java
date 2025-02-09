@@ -46,7 +46,7 @@ public class DefaultSwerveCommand extends Command {
     @Override
     public void execute()
     {
-        subsystem.drive(xSpeed, ySpeed, omegaSpeed, fieldCentric.getAsBoolean());
+        subsystem.drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), omegaSpeed.getAsDouble(), fieldCentric.getAsBoolean());
     }
 
     // Called once the command ends or is interrupted.
@@ -54,9 +54,7 @@ public class DefaultSwerveCommand extends Command {
     public void end(boolean interrupted)
     {
         subsystem.drive(
-            () -> {return 0;}, // xSpeed = 0
-            () -> {return 0;}, // ySpeed = 0
-            () -> {return 0;}, // rotSpeed = 0
+            0.0, 0.0, 0.0,
             true); // fieldRelative = true
     }
 }

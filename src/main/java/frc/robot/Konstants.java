@@ -46,37 +46,37 @@ public final class Konstants
 
     public static final class SwerveConstants
     {
-        public static final double kDeadband = 0.1; //TODO: Update based on driver preference
+        public static final double kDeadband = 0.3; //TODO: Update based on driver preference
 
         //8 swerve motor IDs for Ports
         // Front left
-        public static final int kFrontLeftDriveMotorId = 1;
-        public static final int kFrontLeftSteerMotorId = 11;
+        public static final int kFrontLeftDriveMotorId = 13;
+        public static final int kFrontLeftSteerMotorId = 23;
         // Front right
-        public static final int kFrontRightDriveMotorId = 2;
-        public static final int kFrontRightSteerMotorId = 12;
+        public static final int kFrontRightDriveMotorId = 11;
+        public static final int kFrontRightSteerMotorId = 21;
         // Back left
-        public static final int kBackLeftDriveMotorId = 3;
-        public static final int kBackLeftSteerMotorId = 13;
+        public static final int kBackLeftDriveMotorId = 12;
+        public static final int kBackLeftSteerMotorId = 22;
         // Back right
-        public static final int kBackRightDriveMotorId = 4;
-        public static final int kBackRightSteerMotorId = 14;
+        public static final int kBackRightDriveMotorId = 10;
+        public static final int kBackRightSteerMotorId = 20;
 
         // Encoder IDs and offsets:
         // Front left
-        public static final int kFrontLeftEncoderId = 21;
+        public static final int kFrontLeftEncoderId = 33;
         public static final double kFrontLeftEncoderOffset = 0.19482421875;
 
         // Front right
-        public static final int kFrontRightEncoderId = 22;
+        public static final int kFrontRightEncoderId = 31;
         public static final double kFrontRightEncoderOffset = 0.141845703125;
 
         // Back left
-        public static final int kBackLeftEncoderId = 23;
+        public static final int kBackLeftEncoderId = 32;
         public static final double kBackLeftEncoderOffset = -0.277099609375;
         
         // Back right
-        public static final int kBackRightEncoderId = 24;
+        public static final int kBackRightEncoderId = 30;
         public static final double kBackRightEncoderOffset = -0.087646484375;
 
 
@@ -135,7 +135,7 @@ public final class Konstants
         public static final boolean kInvertRightSide = true;
 
         public static final String kCANbusName = "DriveCAN";
-        public static final int kPigeonId = 30;
+        public static final int kPigeonId = 25;
 
         // The closed-loop output type to use for the steer motors;
         // This affects the PID/FF gains for the steer motors

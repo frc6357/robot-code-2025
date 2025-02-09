@@ -94,7 +94,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         config.getModules());
 
         this.config = config;
-        setupPathPlanner();
+        //setupPathPlanner();
         m_pigeon2 = this.getPigeon2();
 
         rotationController = new RotationController(config);
@@ -102,13 +102,20 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         if(Utils.isSimulation()) {startSimThread();}
 
         SmartDashboard.putData(this);
+
+        fieldCentricDrive = new SwerveRequest.FieldCentric()
+                .withDeadband(
+                        config.getSpeedAt12Volts().in(MetersPerSecond) * config.getDeadband())
+                .withRotationalDeadband(config.getMaxAngularRate() * config.getDeadband())
+                .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    
     }
 
     @Override
     public void periodic()
     {
       this.setOperatorPerspective();
-      SmartDashboard.putNumber("Pigeon", getPigeonHeading().getDegrees());
+      //SmartDashboard.putNumber("Pigeon", getPigeonHeading().getDegrees());
       currentPublisher.set(this.getState().ModuleStates);
       targetPublisher.set(this.getState().ModuleTargets);
       odomPublisher.set(getOdomHeading());
@@ -153,13 +160,8 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         return runOnce(() -> config.setTargetHeading(targetHeading));
     }
 
-    private final SwerveRequest.FieldCentric fieldCentricDrive =
-            new SwerveRequest.FieldCentric()
-                .withDeadband(
-                        config.getSpeedAt12Volts().in(MetersPerSecond) * config.getDeadband())
-                .withRotationalDeadband(config.getMaxAngularRate() * config.getDeadband())
-                .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-    
+    private final SwerveRequest.FieldCentric fieldCentricDrive;
+            
     private final SwerveRequest.RobotCentric robotCentricDrive =
             new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage).withDeadband(0).withRotationalDeadband(0);
 
@@ -173,22 +175,22 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
    * @param rot     Robot angular rate, in radians per second. CCW positive.  Unaffected by field/robot relativity.
    * @param fieldRelative Drive mode. True for field-relative, false for robot-relative.
    */
-  public Command drive(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot, Boolean fieldRelative)
+  public void drive(Double xSpeed, Double ySpeed, Double rot, Boolean fieldRelative)
   {
     if(fieldRelative){
-        return applyRequest(() -> 
+        this.setControl(
         fieldCentricDrive
-            .withVelocityX(xSpeed.getAsDouble())
-            .withVelocityY(ySpeed.getAsDouble())
-            .withRotationalRate(rot.getAsDouble())
-            );
+            .withVelocityX(xSpeed)
+            .withVelocityY(ySpeed)
+            .withRotationalRate(rot)
+        );
     }
     else{
-        return applyRequest(() ->
+        this.setControl(
         robotCentricDrive
-            .withVelocityX(xSpeed.getAsDouble())
-            .withVelocityY(ySpeed.getAsDouble())
-            .withRotationalRate(rot.getAsDouble())
+            .withVelocityX(xSpeed)
+            .withVelocityY(ySpeed)
+            .withRotationalRate(rot)
         );
     }
    }
@@ -197,16 +199,14 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
      * Reset the turn controller and then run the drive command with a angle supplier. This can be
      * used for aiming at a goal or heading locking, etc.
      */
-    public Command aimDrive(
+    public void aimDrive(
             DoubleSupplier velocityX, DoubleSupplier velocityY, DoubleSupplier targetRadians) {
-        return resetTurnController()
-                .andThen(
-                        drive(
-                                velocityX,
-                                velocityY,
-                                () -> calculateRotationController(targetRadians),
-                                true)
-                        );
+        resetTurnController();
+        drive(
+            velocityX.getAsDouble(),
+            velocityY.getAsDouble(),
+            calculateRotationController(targetRadians),
+            true);
     }
 
     /**
@@ -214,16 +214,15 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
      * immediately), and then run the drive command with the Rotation controller. The rotation
      * controller will only engage if you are driving x or y.
      */
-    public Command headingLock(DoubleSupplier velocityX, DoubleSupplier velocityY) {
-        return resetTurnController()
-                .andThen(
-                        setTargetHeading(getRotation().getRadians()),
-                        drive(
-                                velocityX,
-                                velocityY,
-                                rotateToHeadingWhenMoving(
-                                        velocityX, velocityY, () -> config.getTargetHeading()),
-                                true));
+    public void headingLock(DoubleSupplier velocityX, DoubleSupplier velocityY) {
+        resetTurnController();
+        setTargetHeading(getRotation().getRadians());
+        drive(
+                velocityX.getAsDouble(),
+                velocityY.getAsDouble(),
+                rotateToHeadingWhenMoving(
+                        velocityX, velocityY, () -> config.getTargetHeading()).getAsDouble(),
+                true);
     }
 
     private DoubleSupplier rotateToHeadingWhenMoving(
@@ -330,7 +329,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     // Used to set a control request to the swerve module, ignores disable so commands are
     //continuous.
     Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
-        return run(() -> this.setControl(requestSupplier.get())).ignoringDisable(true);
+        return run(() -> this.setControl(requestSupplier.get()));
     }
 
     private ChassisSpeeds getCurrentRobotChassisSpeeds() {
@@ -514,6 +513,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         }
         catch (Exception e){
             e.printStackTrace(); // Fallback to default config
+            throw new RuntimeException(e);
         }
     
     SK25AutoBuilder.configure(

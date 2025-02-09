@@ -25,10 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.bindings.CommandBinder;
-import frc.robot.bindings.ExampleBinder;
 import frc.robot.bindings.SK25DriveBinder;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.swerve.SK25Swerve;
 import frc.robot.subsystems.swerve.SwerveConfig;
 import frc.robot.utils.SK25AutoBuilder;
@@ -60,7 +57,7 @@ public class RobotContainer {
     configureSubsystems();
 
     // sets up autos needed for pathplanner
-    configurePathPlanner();
+    //configurePathPlanner();
 
     // Configure the trigger bindings
     configureButtonBindings();
@@ -87,7 +84,8 @@ public class RobotContainer {
             // This is decided by looking at Subsystems.json
             if(subsystems.isSwervePresent())
             {
-                m_Swerve = Optional.of(new SK25Swerve(new SwerveConfig()));
+                SwerveConfig config = new SwerveConfig();
+                m_Swerve = Optional.of(new SK25Swerve(config));
             }
         }
         catch (IOException e)
@@ -121,7 +119,7 @@ public class RobotContainer {
     {
         if(m_Swerve.isPresent())
         {
-            NamedCommands.registerCommand("DefaultSwerveCommand", getAutonomousCommand());
+           // NamedCommands.registerCommand("DefaultSwerveCommand", getAutonomousCommand());
 
             //Register commands for use in auto
             //NamedCommands.registerCommand("StartLauncherCommand", new LaunchCommandAuto(kLauncherLeftSpeed, kLauncherRightSpeed, launcher));
@@ -133,7 +131,7 @@ public class RobotContainer {
             // Configures the autonomous paths and smartdashboard chooser
             
             //SK25AutoBuilder.setAutoNames(autoList);
-            autoCommandSelector = SK25AutoBuilder.buildAutoChooser("P4_Taxi");
+            //autoCommandSelector = SK25AutoBuilder.buildAutoChooser("P4_Taxi");
             //SmartDashboard.putData("Auto Chooser", autoCommandSelector);
         }
     }
