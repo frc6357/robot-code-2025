@@ -51,7 +51,7 @@ import frc.robot.utils.Util;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static frc.robot.Konstants.AutoConstants.*;
-import static frc.robot.Konstants.SwerveConstants.kDeadband;
+import static frc.robot.Konstants.SwerveConstants.kJoystickDeadband;
 
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -451,7 +451,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
   public boolean leftTilted()
   {
     double roll = this.getPigeon2().getRoll().getValueAsDouble();
-    if(roll > kDeadband){
+    if(roll > kJoystickDeadband){
       return true;
     }
     return false;
@@ -460,7 +460,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
   public boolean rightTilted()
   {
     double roll = this.getPigeon2().getRoll().getValueAsDouble();
-    if(roll < -kDeadband){
+    if(roll < -kJoystickDeadband){
       return true;
     }
     return false;

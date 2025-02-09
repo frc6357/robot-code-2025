@@ -17,27 +17,35 @@ public class Limelight {
 
     /* Limelight Configuration */
 
+    //@Getter and @Setter annotations create and call both get and set methods on the object annotated.
+    //These annotations are rpovided by project lombok, documentation can be found on theri site.
+
     public static class LimelightConfig {
-        /** Must match to the name given in LL dashboard */
+        /** The name of the limelight, must match to the name given in LL dashboard */
         @Getter @Setter private String name;
-
+        /** If the limelight is attached to the robot or not*/
         @Getter @Setter private boolean attached = true;
-
+        /** isIntegrating */
         @Getter @Setter private boolean isIntegrating;
-        /** Physical Config */
+        /** Physical Config : The distances of the limelight from the center of the robot.
+         * Uses foward, right, up in meters where the specified directions are positive */
         @Getter private double forward, right, up; // meters
-
+        /** The angle of the limelight in terms of roll, pitch, and yaw respectivley in degrees*/
         @Getter private double roll, pitch, yaw; // degrees
 
+        /** Creates a new limelight config (configurable limelight)
+         * @param name The name of the limelight
+         */
         public LimelightConfig(String name) {
             this.name = name;
         }
 
         /**
+         * Applies the translation of the limelight from the center of the robot.
          * @param forward (meters) forward from center of robot
          * @param right (meters) right from center of robot
          * @param up (meters) up from center of robot
-         * @return
+         * @return The object this method is called on after withTranslation has been applied
          */
         public LimelightConfig withTranslation(double forward, double right, double up) {
             this.forward = forward;
@@ -47,10 +55,11 @@ public class Limelight {
         }
 
         /**
+         * Applies the rotation of the limelight from its default position.
          * @param roll (degrees) roll of limelight || positive is rotated right
          * @param pitch (degrees) pitch of limelight || positive is camera tilted up
          * @param yaw (yaw) yaw of limelight || positive is rotated left
-         * @return
+         * @return The object this method is called on after withRotation has been applied
          */
         public LimelightConfig withRotation(double roll, double pitch, double yaw) {
             this.roll = roll;
@@ -60,7 +69,9 @@ public class Limelight {
         }
 
         /**
+         * Applies the attached or unattatched state of the limelight.
          * @param attached whether or not the limelight is attached
+         * @return The object this method is called on after withAttached has been applied
          */
         public LimelightConfig withAttached(boolean attached) {
             this.attached = attached;
@@ -74,33 +85,54 @@ public class Limelight {
     @Getter @Setter private String logStatus = "";
     @Getter @Setter private String tagStatus = "";
 
+    /** Creates a new limelight object.
+     * @param config The limeight config object to use
+     */
     public Limelight(LimelightConfig config) {
         this.config = config;
     }
 
+    /** Creates a new limelight object.
+     * @param name The name of the limelight / limeight config to use
+     */                                         
     public Limelight(String name) {
         config = new LimelightConfig(name);
     }
 
+    /** Creates a new limelight object.
+     * @param name The name of the limelight / limeight config to use
+     * @param attached The state of the limelight (attached or not)
+     */
     public Limelight(String name, boolean attached) {
         config = new LimelightConfig(name).withAttached(attached);
     }
 
+    /** Creates a new limelight object.
+     * @param cameraName The name of the limelight / limeight config to use
+     * @param pipeline The default pipeline to assign the limelight to
+     */
     public Limelight(String cameraName, int pipeline) {
         this(cameraName);
         setLimelightPipeline(pipeline);
     }
 
+    /**Gets the name of the limelight
+     * @return the name of the limelight
+     */
     public String getName() {
         return config.getName();
     }
 
+    /**Gets the attached state of the limelight
+     * @return the attached state of the limelight
+     */
     public boolean isAttached() {
         return config.isAttached();
     }
 
     /* ::: Basic Information Retrieval ::: */
-    /**
+    /**Gets the horizontal offset of the crosshair from the target using getTX() from the limelight helpers class.
+     * If the limelight is not attached, a value of zero is returned.
      * @return Horizontal Offset From Crosshair To Target (LL1: -27 degrees to 27 degrees / LL2:
      *     -29.8 to 29.8 degrees)
      */
@@ -112,8 +144,10 @@ public class Limelight {
     }
 
     /**
+     * Gets the vertical offset of the crosshair from the target using getTY() from the limelight helpers class.
      * @return Vertical Offset From Crosshair To Target in degrees (LL1: -20.5 degrees to 20.5
-     *     degrees / LL2: -24.85 to 24.85 degrees)
+     *     degrees / LL2: -24.85 to 24.85 degrees). 
+     * If the limelight is not attached, a value of zero is returned.
      */
     public double getVerticalOffset() {
         if (!isAttached()) {
@@ -122,7 +156,10 @@ public class Limelight {
         return LimelightHelpers.getTY(config.getName());
     }
 
-    /** @return Whether the LL has any valid targets (April tags or other vision targets) */
+    /** 
+     * Determines if any valid targets are in veiw of the limelight (specified by pipelines) using getTV() from the limelight helpers class.
+     * @return Whether the LL has any valid targets (April tags or other vision targets) 
+     * If the limelight is not attached, return false.*/
     public boolean targetInView() {
         if (!isAttached()) {
             return false;
@@ -130,7 +167,10 @@ public class Limelight {
         return LimelightHelpers.getTV(config.getName());
     }
 
-    /** @return whether the LL sees multiple tags or not */
+    /** 
+     * Checks if multiple targets are veiwable by the limelight.
+     * @return whether the LL sees multiple tags or not.
+     * If the limelight is not attached, return false.*/
     public boolean multipleTagsInView() {
         if (!isAttached()) {
             return false;
@@ -138,6 +178,10 @@ public class Limelight {
         return getTagCountInView() > 1;
     }
 
+    /** 
+     * Gets the amount of targets veiwable by the limelight using a robot pose estimate with getBotPoseEstimate() from LimelightHelpers.
+     * @return whether the LL sees multiple tags or not.
+     * If the limelight is not attached, return false.*/
     public double getTagCountInView() {
         if (!isAttached()) {
             return 0;
@@ -150,8 +194,10 @@ public class Limelight {
     }
 
     /**
+     * Gets the limelight tag at the centermost point of its veiw using getFiducialID() from the limelighthelpers class.
      * @return the tag ID of the apriltag most centered in the LL's view (or based on different
      *     criteria set in LL dasbhoard)
+     * If the limelight is not attahced, return zero.
      */
     public double getClosestTagID() {
         if (!isAttached()) {
@@ -160,6 +206,14 @@ public class Limelight {
         return LimelightHelpers.getFiducialID(config.getName());
     }
 
+    /**
+     * Gets the target tag area using getTA() from the limelighthelpers class. The target tag area is the 
+     * percentage of the window visible by the camera taken up by the tag, where 100% is the full window
+     * and 0% means it cannot see a tag.
+     * @return the tag ID of the apriltag most centered in the LL's view (or based on different
+     *     criteria set in LL dasbhoard)
+     * If the limelight is not attahced, return zero.
+     */
     public double getTargetSize() {
         if (!isAttached()) {
             return 0;
@@ -169,7 +223,10 @@ public class Limelight {
 
     /* ::: Pose Retrieval ::: */
 
-    /** @return the corresponding LL Pose3d (MEGATAG1) for the alliance in DriverStation.java */
+    /** Gets the limelight pose by using the current robot pose and accounting for the limelight's
+     * offset from the center of the robot. This uses getBotPose3d_wpiBlue() from the limelight helpers class.
+     * @return the corresponding LL Pose3d (MEGATAG1) for the alliance in DriverStation.java 
+     * If no limelight is attached, return a Pose3d() object with no translatoin or rotation values.*/
     public Pose3d getRawPose3d() {
         if (!isAttached()) {
             return new Pose3d();
@@ -178,15 +235,26 @@ public class Limelight {
                 config.name); // 2024: all alliances use blue as 0,0
     }
 
-    /** @return the corresponding LL Pose3d (MEGATAG2) for the alliance in DriverStation.java */
+    /**
+     * Gets the april tag pose2d by using the current robot pose and accounting for the limelight's
+     * offset from the center of the robot. This uses getBotPose3d_wpiBlue() from the limelight helpers class,
+     * including logic with the MegaTag2 object which runs these calculations given the robot pose. 
+     * @return the corresponding LL Pose2d (MEGATAG2) for the alliance in DriverStation.java 
+     * If no limelight is attached, return a Pose2d() object with no translatoin or rotation values.*/
     public Pose2d getMegaPose2d() {
         if (!isAttached()) {
             return new Pose2d();
         }
-        return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name)
-                .pose; // 2024: all alliances use blue as 0,0
+        return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name).pose; // 2024: all alliances use blue as 0,0
+        
+        //TODO: see if starting blue alliance corrds have changed
     }
 
+    /** Leverages the limelight's veiw of multiple tags and their distance from the robot to check if the
+     * robot pose and/or limelight pose are more accurate than a basic pose update from the gyro/accelerometer.
+     * @retrun If the position is "accurate".
+     * If no limelight is attached, return false.
+     */
     public boolean hasAccuratePose() {
         if (!isAttached()) {
             return false;
@@ -194,7 +262,10 @@ public class Limelight {
         return multipleTagsInView() && getTargetSize() > 0.1;
     }
 
-    /** @return the distance of the 2d vector from the camera to closest apriltag */
+    /** Determines the distance from the tag and the limelight as a vector. We can use x and y distances
+     * and pythagorean therom to determines the distance in a straight line.
+     * @return the distance of the 2d vector from the camera to closest apriltag
+     *  If no limelight is attached, return a distance of zero. */
     public double getDistanceToTagFromCamera() {
         if (!isAttached()) {
             return 0;
@@ -204,14 +275,15 @@ public class Limelight {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
+    /** Gets an array of the raw network table ouput (the raw april tag data)*/           //TODO: need more understanding
     public RawFiducial[] getRawFiducial() {
         return LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name).rawFiducials;
     }
 
     /**
      * Returns the timestamp of the MEGATAG1 pose estimation from the Limelight camera.
-     *
      * @return The timestamp of the pose estimation in seconds.
+     *  If no limelight is attached, return a time value of zero.
      */
     public double getRawPoseTimestamp() {
         if (!isAttached()) {
@@ -222,8 +294,8 @@ public class Limelight {
 
     /**
      * Returns the timestamp of the MEGATAG2 pose estimation from the Limelight camera.
-     *
      * @return The timestamp of the pose estimation in seconds.
+     *  If no limelight is attached, return a distance of zero.
      */
     public double getMegaPoseTimestamp() {
         if (!isAttached()) {
@@ -235,10 +307,10 @@ public class Limelight {
 
     /**
      * Returns the latency of the pose estimation from the Limelight camera.
-     *
      * @return The latency of the pose estimation in seconds.
+     *  If no limelight is attached, return a distance of zero.
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated(forRemoval = true)  //declare this method as deprecated for removal
     public double getPoseLatency() {
         if (!isAttached()) {
             return 0;
@@ -252,10 +324,10 @@ public class Limelight {
      */
 
     /**
-     * get distance in meters to a target
-     *
-     * @param targetHeight meters
-     * @return
+     * Get distance in meters to a target
+     * @param targetHeight height of the target in meters
+     * @return the distance of the liemlight to the target in meters.
+     *  If no limelight is attached, return a distance of zero.
      */
     public double getDistanceToTarget(double targetHeight) {
         if (!isAttached()) {
@@ -265,11 +337,17 @@ public class Limelight {
                 / Math.tan(Units.degreesToRadians(config.roll + getVerticalOffset()));
     }
 
+    /** Log the validity of the limelight as valid. Used when any and all
+     *  required conditions for the limelight are met.
+     * @param message The message to display alongside the status signal.  */
     public void sendValidStatus(String message) {
         config.isIntegrating = true;
         logStatus = message;
     }
 
+    /** Log the validity of the limelight as invalid. Used when any
+     *  required conditions for the limelight are not met.
+     * @param message The message to display alongside the status signal.*/
     public void sendInvalidStatus(String message) {
         config.isIntegrating = false;
         logStatus = message;
@@ -285,7 +363,8 @@ public class Limelight {
         return LimelightHelpers.getLatestResults(config.name);
     }
 
-    /** @param pipelineIndex use pipeline indexes in {@link VisionConfig} */
+    /** Sets the limelight target pipeline. Nothing happens if the limelight is not attached.
+     * @param pipelineIndex use pipeline indexes in {@link VisionConfig} */
     public void setLimelightPipeline(int pipelineIndex) {
         if (!isAttached()) {
             return;
@@ -293,7 +372,8 @@ public class Limelight {
         LimelightHelpers.setPipelineIndex(config.name, pipelineIndex);
     }
 
-    /** */
+    //TODO: change Limelight calls for setting the swerve drivetrain
+
     public void setRobotOrientation(double degrees) {
         if (!isAttached()) {
             return;
@@ -310,7 +390,7 @@ public class Limelight {
 
     /**
      * Sets the LED mode of the LL.
-     *
+     *  If no limelight is attached, nothing will happen.
      * @param enabled true to enable the LED mode, false to disable it
      */
     public void setLEDMode(boolean enabled) {
@@ -326,8 +406,6 @@ public class Limelight {
 
     /**
      * Set LL LED's to blink
-     *
-     * @return
      */
     public void blinkLEDs() {
         if (!isAttached()) {
@@ -336,7 +414,9 @@ public class Limelight {
         LimelightHelpers.setLEDMode_ForceBlink(config.getName());
     }
 
-    /** Checks if the camera is connected by looking for an empty botpose array from camera. */
+    /** Checks if the camera is connected by looking for an empty botpose array from camera. 
+     * @return if the camera is connected
+    */
     public boolean isCameraConnected() {
         if (!isAttached()) {
             return false;

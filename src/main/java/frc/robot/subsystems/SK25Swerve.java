@@ -4,7 +4,7 @@ import static frc.robot.Konstants.SwerveConstants.kBackLeftEncoderOffsetRadians;
 import static frc.robot.Konstants.SwerveConstants.kBackLeftInverted;
 import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderOffsetRadians;
 import static frc.robot.Konstants.SwerveConstants.kBackRightInverted;
-import static frc.robot.Konstants.SwerveConstants.kCANivoreName;
+import static frc.robot.Konstants.SwerveConstants.kCANivoreNameString;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderOffsetRadians;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftInverted;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderOffsetRadians;
@@ -45,7 +45,7 @@ public class SK25Swerve extends SubsystemBase{
         bLModule = new SK25SwerveModule(kBackLeftDriveMotorPort.ID, kBackLeftTurnMotorPort.ID, kBackLeftEncoderPort.ID, kBackLeftEncoderOffsetRadians, kBackLeftInverted);
         bRModule = new SK25SwerveModule(kBackRightDriveMotorPort.ID, kBackRightTurnMotorPort.ID, kBackRightEncoderPort.ID, kBackRightEncoderOffsetRadians, kBackRightInverted);
 
-        pigeon = new Pigeon2(kPigeonPort.ID, kCANivoreName);
+        pigeon = new Pigeon2(kPigeonPort.ID, kCANivoreNameString);
 
         factory = new SK25SwerveFactory(fLModule, fRModule, bLModule, bRModule, pigeon);
     }

@@ -21,6 +21,7 @@ public class RotationController {
 
     double calculatedValue = 0;
 
+    /** Creates a new rotation controller  */
     public RotationController(SwerveConfig config) {
         this.config = config;
         constraints =

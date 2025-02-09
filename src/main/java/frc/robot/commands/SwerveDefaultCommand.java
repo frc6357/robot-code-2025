@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
-import static frc.robot.Konstants.SwerveConstants.kJoystickDeadzone;
+import static frc.robot.Konstants.SwerveConstants.kJoystickDeadband;
 
 import java.util.function.Supplier;
 
@@ -68,12 +68,12 @@ public class SwerveDefaultCommand extends Command{
         //driverController conversion for left joystick.
         //converts Cartesian coordinate system to Polar system by getting the angle between left joystick X and Y components.
         //make the controller deadzones.
-        double translationMagnitude = deadZone(Math.hypot(leftX.get(), leftY.get()), kJoystickDeadzone);
-        double xVelocity = deadZone(leftX.get(), kJoystickDeadzone);
-        double yVelocity = deadZone(leftY.get(), kJoystickDeadzone);
+        double translationMagnitude = deadZone(Math.hypot(leftX.get(), leftY.get()), kJoystickDeadband);
+        double xVelocity = deadZone(leftX.get(), kJoystickDeadband);
+        double yVelocity = deadZone(leftY.get(), kJoystickDeadband);
         Translation2d velocity = new Translation2d(xVelocity, yVelocity).times(translationMagnitude);
         
-        double rotationMagnitude = deadZone(rightX.get(), kJoystickDeadzone);
+        double rotationMagnitude = deadZone(rightX.get(), kJoystickDeadband);
         double desiredRadiansPerSecond = rotationMagnitude * 2 * Math.PI;
 
         //feild centric controls

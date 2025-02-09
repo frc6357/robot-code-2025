@@ -20,14 +20,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.bindings.CommandBinder;
-import frc.robot.bindings.ExampleBinder;
 import frc.robot.bindings.SK25LightsBinder;
 import frc.robot.bindings.SK25SwerveBinder;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SK25Lights;
 import frc.robot.subsystems.SK25Swerve;
 import frc.robot.bindings.SK25DriveBinder;
-import frc.robot.subsystems.swerve.SK25Swerve;
 import frc.robot.subsystems.swerve.SwerveConfig;
 import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
@@ -40,7 +37,6 @@ import frc.robot.utils.filters.FilteredJoystick;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
   private Optional<SK25Lights> m_lights = Optional.empty();
   private Optional<SK25Swerve> m_swerve = Optional.empty();
 
@@ -87,7 +83,7 @@ public class RobotContainer {
             if(subsystems.isSwervePresent())
             {
                 SwerveConfig config = new SwerveConfig();
-                m_Swerve = Optional.of(new SK25Swerve(config));
+                //m_Swerve = Optional.of(new SK25Swerve(config));            //TODO: resolve collision in robot container with swerve constructor differences
             }
             if(subsystems.isLightsPresent())
             {
@@ -115,7 +111,6 @@ public class RobotContainer {
     {
 
         // Adding all the binding classes to the list
-        buttonBinders.add(new ExampleBinder(mySubsystem));
         buttonBinders.add(new SK25LightsBinder(m_lights));
         buttonBinders.add(new SK25SwerveBinder(m_swerve));
 
@@ -130,7 +125,7 @@ public class RobotContainer {
 
     private void configurePathPlanner()
     {
-        if(m_Swerve.isPresent())
+        if(m_swerve.isPresent())
         {
            // NamedCommands.registerCommand("DefaultSwerveCommand", getAutonomousCommand());
 
@@ -139,7 +134,7 @@ public class RobotContainer {
             
         }
 
-        if(m_Swerve.isPresent()){
+        if(m_swerve.isPresent()){
             
             // Configures the autonomous paths and smartdashboard chooser
             
@@ -161,10 +156,6 @@ public class RobotContainer {
 
     public void testPeriodic()
     {
-        if(mySubsystem.isPresent())
-        {
-            mySubsystem.get().testPeriodic();
-        }
         if(m_swerve.isPresent())
         {
             m_swerve.get().testPeriodic();
@@ -175,10 +166,6 @@ public class RobotContainer {
         }
     }
     public void testInit(){
-        if(mySubsystem.isPresent())
-        {
-            mySubsystem.get().testInit();
-        }
         if(m_swerve.isPresent())
         {
             m_swerve.get().testInit();

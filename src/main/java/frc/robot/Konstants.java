@@ -1,19 +1,20 @@
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Inches;
-
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.Distance;
+import static edu.wpi.first.units.Units.Amps;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Current;
+import lombok.Getter;
 
 
 //import edu.wpi.first.units.measure.Distance;
@@ -44,12 +45,11 @@ public final class Konstants
         public static final int kChassisLength = 27;
         public static final int kChassisWidth = 27;
 
-        //double versions
+        //The offset of the encoders in radians
         public static final Double kFrontLeftEncoderOffsetRadians = 0.40283203125;
         public static final Double kFrontRightEncoderOffsetRadians = -0.044677734375;
         public static final Double kBackLeftEncoderOffsetRadians = -0.21875;
         public static final Double kBackRightEncoderOffsetRadians = -0.08642578125;
-        //TODO: go to constants and convert angle values to doubles
         
         //PID Constants for wheels from manual tunning
         public static final double kDriveP = 0.5;
@@ -71,61 +71,56 @@ public final class Konstants
         public static final double kBackLeftInverted = -1.0;
 
         //the deadzone on the controller's joysticks
-        public static final double kJoystickDeadzone = 0.2;
+        public static final double kJoystickDeadband = 0.2;   //TODO: find approperiate deaband
 
         //the velocity limit for the swerve drive modules
         public static final double kMaxVelocityMetersPerSecond = 1.0;
 
         //radius of the wheels in inches
-        private static final Double kWheelRadiusInches = 2.0;   //inches
+        public static final Double kWheelRadiusInches = 2.0;   //inches   //TODO: value in orignial spectrum code was 4 inches, was it mistaken for diameter?
         //radius of the wheels in meters
         private static final Double kWheelRadiusMeters = kWheelRadiusInches  / 39.37;   //meters
         //circumference of the swerve wheels for the drive conversion (circumfrance of the wheel times rotations yeilds distance travelled)
         public static final Double kWheelCircumference = 2 * Math.PI * kWheelRadiusMeters;   //meters
 
         //CANivore name in Phoneix Tuner X for assigning CANbus names
-        public static final String kCANivoreName = "SwerveCANivore";
+        public static final String kCANivoreNameString = "SwerveCANivore";
+        public static final CANBus kCANivoreNameCANBus = new CANBus(kCANivoreNameString);
 
 
 
         //experimental swerve constants
-        public static final double kDeadband = 0.3; //TODO: Update based on driver preference
+        public static final Rotation2d kBlueAlliancePerspective = Rotation2d.fromDegrees(0);
+        public static final Rotation2d kRedAlliancePerspective = Rotation2d.fromDegrees(180);
 
-        //8 swerve motor IDs for Ports
-        // Front left            //TODO: use actual IDs from above and change them
-        public static final int kFrontLeftDriveMotorId = 13;
-        public static final int kFrontLeftSteerMotorId = 23;
-        // Front right
-        public static final int kFrontRightDriveMotorId = 11;
-        public static final int kFrontRightSteerMotorId = 21;
-        // Back left
-        public static final int kBackLeftDriveMotorId = 12;
-        public static final int kBackLeftSteerMotorId = 22;
-        // Back right
-        public static final int kBackRightDriveMotorId = 10;
-        public static final int kBackRightSteerMotorId = 20;
+        public static final Current kTurningCurrentLimitAmps = Amps.of(60);
 
-        // Encoder IDs and offsets:
-        // Front left
-        public static final int kFrontLeftEncoderId = 33;
-        public static final double kFrontLeftEncoderOffset = 0.19482421875;
+        public static final boolean kTurningCurrentLimitsEnabled = true;
 
-        // Front right
-        public static final int kFrontRightEncoderId = 31;
-        public static final double kFrontRightEncoderOffset = 0.141845703125;
+        public static final double kSimulationLoopPeriod = 0.005;
 
-        // Back left
-        public static final int kBackLeftEncoderId = 32;
-        public static final double kBackLeftEncoderOffset = -0.277099609375;
-        
-        // Back right
-        public static final int kBackRightEncoderId = 30;
-        public static final double kBackRightEncoderOffset = -0.087646484375;
+        public static final double kRotationToleranceRadians = (Math.PI / 360); // rads
+        public static final double kMaxAngularRate = 1.5*Math.PI;
+        public static final double kMaxAngularVelocity = 2 * Math.PI; // rad/s
+        public static final double kMaxAngularAcceleration = Math.pow(kMaxAngularVelocity, 2); // rad/s^2
+
+        public static final double kPRotationController = 8.0;
+        public static final double kIRotationController = 0.0;
+        public static final double kDRotationController = 0.2;
+
+        public static final double kPHoldController = 12.0;
+        public static final double kIHoldController = 0.0;
+        public static final double kDHoldController = 0.0;
 
         // "Front-to-back Encoder Distance in inches"
         public static final double kFTBEncoderDistInches = 21.6875;
         //"Left-to-right Encoder Distance in inches"
         public static final double kLTREncoderDistInches = 21.59375;
+
+        public static final boolean kIsFrontLeftEncoderInverted = false;
+        public static final boolean kIsFrontRightEncoderInverted = false;
+        public static final boolean kIsBackLeftEncoderInverted = false;
+        public static final boolean kIsBackRightEncoderInverted = false;
 
         // The steer motor uses any SwerveModule.SteerRequestType control request with the
         // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
@@ -143,17 +138,17 @@ public final class Konstants
         // The stator current at which the wheels start to slip;
         // This needs to be tuned to your individual robot
         //TODO: Tune SlipCurrent
-        public static final double kSlipCurrentA = 300.0;
+        public static final double kSlipCurrentAmps = 300.0;
 
         // Theoretical free speed (m/s) at 12v applied output;
         // This needs to be tuned to your individual robot
         //TODO: Tune free speed
-        public static final double kSpeedAt12VoltsMps = 4.73;
+        public static final double kSpeedAt12VoltsMeterPerSecond = 4.73;   //TODO: find max speed in phoenix tuner x
 
         // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
         // This may need to be tuned to your individual robot
         //TODO: Tune CoupleRatio
-        public static final double kCoupleRatio = 3.5714285714285716;
+        public static final double kCoupleGearRatio = 3.5714285714285716;
 
         //TODO: Check these values
         public static final double kDriveGearRatio = 6.746031746031747;
@@ -163,16 +158,13 @@ public final class Konstants
         public static final boolean kSteerMotorReversed = true;
         public static final boolean kInvertRightSide = true;
 
-        public static final String kCANbusName = "SwerveCANivore";
-        public static final int kPigeonId = 30;
-
         // The closed-loop output type to use for the steer motors;
         // This affects the PID/FF gains for the steer motors
-        public static final ClosedLoopOutputType steerClosedLoopOutput = ClosedLoopOutputType.Voltage;
+        public static final ClosedLoopOutputType kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
         // The closed-loop output type to use for the drive motors;
         // This affects the PID/FF gains for the drive motors
-        public static final ClosedLoopOutputType driveClosedLoopOutput = ClosedLoopOutputType.Voltage;
+        public static final ClosedLoopOutputType kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
 
         // Combines a margin of error with the known wheel radius 
@@ -187,8 +179,8 @@ public final class Konstants
         public static final double kSteerFrictionVoltage = 0.25;
         public static final double kDriveFrictionVoltage = 0.25;
 
-        // Module positions for kinematics
-        // Front left
+        // Module positions for kinematics, distances between encoders divided by two
+        // Front left                                                                      //TODO: decide on module position in x and y or translation 2ds
         public static final double kFrontLeftXPos = kLTREncoderDistInches / 2;
         public static final double kFrontLeftYPos = kFTBEncoderDistInches / 2;
         // Front right
