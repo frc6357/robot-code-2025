@@ -76,7 +76,7 @@ public class SK25SwerveFactory {
         m_Positions[3] = backRightModule.getLatestSwerveModulePosition();
     }
 
-    //The primary method to control the swerve drive via configuring all of its modules.
+    //The primary method to control the swerve drive via configuring all of its modules. takes polar coordinates of velocity (speed and direction)
     public void doSwerve(
         double desiredOmegaRadiansPerSecond,
         Translation2d desiredVelocityMetersPerSecond
@@ -94,9 +94,6 @@ public class SK25SwerveFactory {
             ),
             currentAngle
         );
-
-        //translation2d object of the robot
-        //Translation2d robotTranslation = new Translation2d(translation, theta);
 
         //swerve module states
         SwerveModuleState[] desiredModuleStates = m_kinematics.toSwerveModuleStates(desiredSpeeds);
@@ -118,12 +115,6 @@ public class SK25SwerveFactory {
         // SwerveModuleState backRightTargetState = new SwerveModuleState(translation, backRightModule.getModuleRotation());
         // //array of module states for iteration
         // SwerveModuleState[] targetModuleStates = {frontLeftTargetState, frontRightTargetState, backLeftTargetState, backRightTargetState};
-       
-        //decrease the error in turning by preventing misdirection or oversteer/understeer
-        // frontLeftModule.decreaseError(fLState, currentAngle);
-        // frontRightModule.decreaseError(fRState, currentAngle);
-        // backLeftModule.decreaseError(bLState, currentAngle);
-        // backRightModule.decreaseError(bRState, currentAngle);
 
         // //set the target position of the swerve modules
         // frontLeftModule.setTargetState(desiredAngle, translation);
@@ -132,7 +123,8 @@ public class SK25SwerveFactory {
         // backRightModule.setTargetState(desiredAngle, translation);
     }
 
-    void driveOpenLoop(SwerveModuleState[] states) {
+    //drive all modules
+    private void driveOpenLoop(SwerveModuleState[] states) {
         for (int i = 0; i < 4; ++i) {
             SK25SwerveModule module = this.modules[i];
             SwerveModuleState desiredState = states[i];

@@ -93,10 +93,16 @@ public class SK25SwerveModule {
         turnMotor.getConfigurator().apply(turnPIDConfigs);
     }
 
-    public void driveOpenLoop(SwerveModuleState desiredState) {
-        desiredState.optimize(getModuleRotation());
-        double percentOutput = desiredState.speedMetersPerSecond / kMaxVelocityMetersPerSecond;
-        driveMotor.setVoltage(percentOutput * 12);
+    //the method which controls the drive and turn motors, using open loop for drive and closed for turn
+    public void driveOpenLoop(SwerveModuleState desiredState)
+    {
+        //decrease the error of the module states using their current rotation
+        decreaseError(desiredState);
+        //determine the voltage output of the drive motor based on its speed in m/s
+        double percentOutput = desiredState.speedMetersPerSecond; // / kMaxVelocityMetersPerSecond;
+        //set the drive motor output as a percentage times the number of volts supplied by the battery (12 volts)
+        driveMotor.setVoltage(inverted * getLimitedVelocity(percentOutput * 12));
+        //set the PID controller to reach the desired angle
         applyPID(desiredState.angle.getMeasure()); // Always closed-loop control for turn motor.
     }
 
@@ -121,31 +127,18 @@ public class SK25SwerveModule {
     //translation2d objects define movement on an xy pane. these ones are for the module's distance from the center of the robot with x and y coordinates
     Translation2d moduleTranslation = new Translation2d(kChassisWidth / 2.0, kChassisLength / 2.0);
 
-    //represents the distance travelled in an arc, dx is distance traveled in a vector (translation), dtheta is angle of travel, 
-    //and dy is the distance driven to the side (0.0 since swerve dosnt do this).
-    //Twist2d acrDistanceTraveled = new Twist2d(5.0, 0.0, 45.0);
-
 
     //gets the rotation of the swervemodule
     /**
      * Gets the rotation of the swerve module, aka the position of the turn motor.
      * @return The module's rotation.
      */
-    public Rotation2d getModuleRotation()
+    private Rotation2d getModuleRotation()
     {
         //rotation2d is a rotation coordinate on the unit circle. This version of the method takes radian values as doubles (0.0 to 2 * Math.PI).
         //this object holds an angle with turning encoder's current pos.
         return new Rotation2d(getOffsetEncoderPos(encoder, encoderOffset));
     }
-
-    /**
-     * Gets the translation of the module: the distance between the module and the center of the robot.
-     * @return the Translation of the module form the center of the robot.
-     */
-    //public Translation2d getModuleTranslation()
-    //{
-        //return moduleTranslation;
-    //}
 
     /**
      * Gets the change in position from a starting poisition to an ending position and the rotation value in one object as a matrix. 
@@ -233,15 +226,15 @@ public class SK25SwerveModule {
      * @param state The swerve module state to be optimized.
      * @param gyroAngle the current rotation of the robot, obtained from the gyro.
      */
-    public void decreaseError(SwerveModuleState state, Rotation2d gyroAngle)
+    private void decreaseError(SwerveModuleState state)
     {
             //ensures the wheels turn in the direction of least distance travelled (smaller angle).
-            state.optimize(gyroAngle);
+            state.optimize(getModuleRotation());
 
             // Scale speed by cosine of angle error. This scales down movement perpendicular to the desired
             // direction of travel that can occur when modules change directions. This results in smoother
             // driving.
-            state.cosineScale(gyroAngle);
+            state.cosineScale(getModuleRotation());
     }
 
     /**
@@ -255,19 +248,5 @@ public class SK25SwerveModule {
 
         //set position to a rotation distance specified by the request
         turnMotor.setControl(angleVoltageControl.withPosition(setpoint));
-    }
-
-    /**
-     * Sets the target state of the swerve modules by applying the PID loop 
-     * to the turn motor and setting the drive motor to the specified velocity.
-     * @param setpoint The setpoint of the applied PID loop to reach.
-     * @param velocity The velocity to spin the drive motor at, at a percentage from 0.0 to 1.0.
-     */
-    public void setTargetState(Angle setpoint, double velocity)
-    {
-        //apply the PID constants to the turn motor
-        applyPID(setpoint);
-        //set the drive motor to the velocity
-        driveMotor.set(inverted * getLimitedVelocity(velocity));
     }
 }
