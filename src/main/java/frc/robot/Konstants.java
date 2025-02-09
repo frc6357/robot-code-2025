@@ -90,19 +90,15 @@ public final class Konstants
         public static final double kLTREncoderDistInches = 21.59375;
 
         //PID Constants
-        public static final double kDriveP = 0.1;
+        public static final double kDriveP = 0.5;
         public static final double kDriveI = 0;
         public static final double kDriveD = 0;
-        public static final double kSteerP = 0.1;
-        public static final double kSteerI = 0;
-        public static final double kSteerD = 0;
 
         // The steer motor uses any SwerveModule.SteerRequestType control request with the
         // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
-        //TODO: THIS IS 2024 TUNING!!!! PLEASE UPDATE ME!!!!
         public static final Slot0Configs kSteerGains = new Slot0Configs() //TODO - tune steering gains drive
-        .withKP(100).withKI(0).withKD(0.3)
-        .withKS(0).withKV(1.5).withKA(0);
+        .withKP(4.8).withKI(0).withKD(0.1)
+        .withKS(0.25).withKV(0.12).withKA(0.01);
 
         // When using closed-loop control, the drive motor uses the control
         // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput

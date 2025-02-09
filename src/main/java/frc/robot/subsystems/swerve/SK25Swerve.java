@@ -53,7 +53,6 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static frc.robot.Konstants.AutoConstants.*;
 import static frc.robot.Konstants.SwerveConstants.kDeadband;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 

@@ -67,7 +67,6 @@ public class SwerveConfig {
     @Getter private TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration();
 
 
-    // TODO: Compare with current limiter from SK24Drive
     @Getter
     private TalonFXConfiguration steerInitialConfigs =
             new TalonFXConfiguration()
@@ -82,7 +81,8 @@ public class SwerveConfig {
 
     @Getter private CANcoderConfiguration cancoderInitialConfigs = new CANcoderConfiguration();
     // Configs for the Pigeon 2; leave this null to skip applying Pigeon 2 configs
-    @Getter private Pigeon2Configuration pigeonConfigs = new Pigeon2Configuration();
+    // TODO: Check Pigeon usage in Swerve
+    @Getter private Pigeon2Configuration pigeonConfigs = null;
 
     @Getter @Setter private LinearVelocity speedAt12Volts = MetersPerSecond.of(kSpeedAt12VoltsMps);
 
@@ -109,6 +109,7 @@ public class SwerveConfig {
 
     @Getter private SwerveDrivetrainConstants drivetrainConstants;
 
+    @SuppressWarnings("rawtypes")
     @Getter private SwerveModuleConstantsFactory constantCreator;
 
     // Front left
@@ -147,14 +148,15 @@ public class SwerveConfig {
     @Getter private Distance backRightXPos = Inches.of(kBackRightXPos);
     @Getter private Distance backRightYPos = Inches.of(kBackRightYPos);
 
-    @Getter private SwerveModuleConstants frontLeft;
-    @Getter private SwerveModuleConstants frontRight;
-    @Getter private SwerveModuleConstants backLeft;
-    @Getter private SwerveModuleConstants backRight;
+    @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants frontLeft;
+    @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants frontRight;
+    @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants backLeft;
+    @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants backRight;
 
     // Angular heading used for robot rotation control
     @Getter @Setter private double targetHeading = 0;
 
+    @SuppressWarnings("rawtypes")
     public SwerveModuleConstants[] getModules() {
         return new SwerveModuleConstants[] {frontLeft, frontRight, backLeft, backRight};
     }
@@ -163,7 +165,7 @@ public class SwerveConfig {
         updateConfig();
     }
 
-    public SwerveConfig updateConfig() {
+    @SuppressWarnings({ "rawtypes", "unchecked" }) public SwerveConfig updateConfig() {
         drivetrainConstants =
                 new SwerveDrivetrainConstants()
                         .withCANBusName(canBus.getName())
