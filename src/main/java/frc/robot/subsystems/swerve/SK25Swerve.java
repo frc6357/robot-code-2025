@@ -71,14 +71,16 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     private final SwerveRequest.ApplyRobotSpeeds AutoRequest = new SwerveRequest.ApplyRobotSpeeds();
     
     //Creates publishers for logging
+
+    //log the current swerve states
     StructArrayPublisher<SwerveModuleState> currentPublisher = 
     NetworkTableInstance.getDefault().
     getStructArrayTopic("CurrentSwerveStates", SwerveModuleState.struct).publish();
-
+    //log the target swerve states
     StructArrayPublisher<SwerveModuleState> targetPublisher = 
     NetworkTableInstance.getDefault().
     getStructArrayTopic("TargetSwerveStates", SwerveModuleState.struct).publish();
-
+    //log the rotation of the robot
     StructPublisher<Rotation2d> odomPublisher = NetworkTableInstance.getDefault().
     getStructTopic("Rotation", Rotation2d.struct).publish();
 
