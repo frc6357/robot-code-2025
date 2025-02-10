@@ -11,10 +11,7 @@ import static frc.robot.Konstants.SwerveConstants.kBackLeftYPos;
 import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderOffsetRadians;
 import static frc.robot.Konstants.SwerveConstants.kBackRightXPos;
 import static frc.robot.Konstants.SwerveConstants.kBackRightYPos;
-import static frc.robot.Konstants.SwerveConstants.kBlueAlliancePerspective;
 import static frc.robot.Konstants.SwerveConstants.kCANivoreNameString;
-import static frc.robot.Konstants.SwerveConstants.kChassisLength;
-import static frc.robot.Konstants.SwerveConstants.kChassisWidth;
 import static frc.robot.Konstants.SwerveConstants.kCoupleGearRatio;
 import static frc.robot.Konstants.SwerveConstants.kDriveClosedLoopOutput;
 import static frc.robot.Konstants.SwerveConstants.kDriveFrictionVoltage;
@@ -33,20 +30,14 @@ import static frc.robot.Konstants.SwerveConstants.kIsBackLeftEncoderInverted;
 import static frc.robot.Konstants.SwerveConstants.kIsBackRightEncoderInverted;
 import static frc.robot.Konstants.SwerveConstants.kIsFrontLeftEncoderInverted;
 import static frc.robot.Konstants.SwerveConstants.kIsFrontRightEncoderInverted;
-import static frc.robot.Konstants.SwerveConstants.kJoystickDeadband;
-import static frc.robot.Konstants.SwerveConstants.kMaxAngularAcceleration;
-import static frc.robot.Konstants.SwerveConstants.kMaxAngularRate;
-import static frc.robot.Konstants.SwerveConstants.kRedAlliancePerspective;
-import static frc.robot.Konstants.SwerveConstants.kRotationToleranceRadians;
-import static frc.robot.Konstants.SwerveConstants.kSimulationLoopPeriod;
 import static frc.robot.Konstants.SwerveConstants.kSlipCurrentAmps;
 import static frc.robot.Konstants.SwerveConstants.kSpeedAt12VoltsMeterPerSecond;
-import static frc.robot.Konstants.SwerveConstants.kSteerClosedLoopOutput;
-import static frc.robot.Konstants.SwerveConstants.kSteerFrictionVoltage;
+import static frc.robot.Konstants.SwerveConstants.kTurnClosedLoopOutput;
+import static frc.robot.Konstants.SwerveConstants.kTurnFrictionVoltage;
 import static frc.robot.Konstants.SwerveConstants.kSteerGains;
-import static frc.robot.Konstants.SwerveConstants.kSteerGearRatio;
+import static frc.robot.Konstants.SwerveConstants.kTurnGearRatio;
 import static frc.robot.Konstants.SwerveConstants.kSteerInertia;
-import static frc.robot.Konstants.SwerveConstants.kSteerMotorReversed;
+import static frc.robot.Konstants.SwerveConstants.kTurnMotorsReversed;
 import static frc.robot.Konstants.SwerveConstants.kTurningCurrentLimitAmps;
 import static frc.robot.Konstants.SwerveConstants.kTurningCurrentLimitsEnabled;
 import static frc.robot.Konstants.SwerveConstants.kWheelRadiusInches;
@@ -73,42 +64,21 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import lombok.Getter;
 import lombok.Setter;
 
 //"Straight outta Spectrum"
 
-public class SwerveConfig {
-    @Getter private final double kSimLoopPeriod = kSimulationLoopPeriod;
-    @Getter private double robotWidth = Units.inchesToMeters(kChassisWidth);
-    @Getter private double robotLength = Units.inchesToMeters(kChassisLength);
+public class SwerveConstantsConfigurator {
 
-    @Getter private double maxAngularRate = kMaxAngularRate;
-    @Getter private double deadband = kJoystickDeadband;
-
-    // Rotation Controller Constants
-    @Getter private double maxAngularAcceleration = kMaxAngularAcceleration; // rad/s^2
-    @Getter private double rotationTolerance = kRotationToleranceRadians; // rads
-
-    @Getter private double kPRotationController = 8.0;
-    @Getter private double kIRotationController = 0.0;
-    @Getter private double kDRotationController = 0.2;
-    @Getter private double kPHoldController = 12.0;
-    @Getter private double kIHoldController = 0.0;
-    @Getter private double kDHoldController = 0.0;
-
-    // Blue alliance sees forward as 0 degrees (toward red alliance wall)
-    @Getter private final Rotation2d BlueAlliancePerspectiveRotation = kBlueAlliancePerspective;
-    // Red alliance sees forward as 180 degrees (toward blue alliance wall)
-    @Getter private final Rotation2d RedAlliancePerspectiveRotation = kRedAlliancePerspective;
+    //Angular heading used for robot rotation control.
+    //Heading is the rotation of the robot from its default position.
+    @Getter @Setter private double targetHeading = 0;
 
     // Initial configs for the drive and steer motors and the CANcoder; these cannot be null.
     // Some configs will be overwritten; check the `with*InitialConfigs()` API documentation.
     @Getter private TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration();
-
 
     /** Create current limits for the turning motors, since they don't need significant current or voltage to
      * their respective modules.
@@ -126,6 +96,13 @@ public class SwerveConfig {
     // TODO: Check Pigeon usage in Swerve
     @Getter private Pigeon2Configuration pigeonConfigs = null;
 
+    
+    //TODO: see if these encoder offset variables are needed for the update method at the bottom of SwerveConfig
+    @Getter private Angle frontLeftEncoderOffset = Rotations.of(kFrontLeftEncoderOffsetRadians);
+    @Getter private Angle frontRightEncoderOffset = Rotations.of(kFrontRightEncoderOffsetRadians);
+    @Getter private Angle backLeftEncoderOffset = Rotations.of(kBackLeftEncoderOffsetRadians);
+    @Getter private Angle backRightEncoderOffset = Rotations.of(kBackRightEncoderOffsetRadians);
+
 
     /* Contains a set of constants for a swerve drivetrain */
     @Getter private SwerveDrivetrainConstants drivetrainConstants;
@@ -136,12 +113,6 @@ public class SwerveConfig {
     @SuppressWarnings("rawtypes")
     @Getter private SwerveModuleConstantsFactory constantCreator;
 
-    //TODO: see if these encoder offset variables are needed for the update method at the bottom of SwerveConfig
-    @Getter private Angle frontLeftEncoderOffset = Rotations.of(kFrontLeftEncoderOffsetRadians);
-    @Getter private Angle frontRightEncoderOffset = Rotations.of(kFrontRightEncoderOffsetRadians);
-    @Getter private Angle backLeftEncoderOffset = Rotations.of(kBackLeftEncoderOffsetRadians);
-    @Getter private Angle backRightEncoderOffset = Rotations.of(kBackRightEncoderOffsetRadians);
-
     //Create new SwerveModuleConstants objects for each module.
     //These will hold constants values for each module.
     @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants frontLeft;
@@ -149,18 +120,15 @@ public class SwerveConfig {
     @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants backLeft;
     @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants backRight;
 
-    //Angular heading used for robot rotation control.
-    //Heading is the rotation of the robot from its default position.
-    @Getter @Setter private double targetHeading = 0;
-
     //Makes an array of the swerve module constants objects
     @SuppressWarnings("rawtypes")
     public SwerveModuleConstants[] getModules() {
         return new SwerveModuleConstants[] {frontLeft, frontRight, backLeft, backRight};
     }
 
-    /** Creates a new SwerveConfig which applies all constants to the drivetrain and its modules.*/
-    public SwerveConfig() {
+
+    /** Creates a new SwerveConstantsConfigurator which applies all constants to the drivetrain and its modules.*/
+    public SwerveConstantsConfigurator() {
         updateConfig();
     }
 
@@ -170,7 +138,7 @@ public class SwerveConfig {
      * @return the SwerveConfig object used to call this method.
     */
     @SuppressWarnings({ "rawtypes", "unchecked" }) 
-    public SwerveConfig updateConfig() {
+    public SwerveConstantsConfigurator updateConfig() {
         //apply drivetrain constants
         drivetrainConstants =
                 new SwerveDrivetrainConstants()
@@ -182,17 +150,17 @@ public class SwerveConfig {
         constantCreator =
                 new SwerveModuleConstantsFactory()
                         .withDriveMotorGearRatio(kDriveGearRatio)
-                        .withSteerMotorGearRatio(kSteerGearRatio)
+                        .withSteerMotorGearRatio(kTurnGearRatio)
                         .withWheelRadius(Inches.of(kWheelRadiusInches))
                         .withSlipCurrent(Amps.of(kSlipCurrentAmps))
                         .withSteerMotorGains(kSteerGains)
                         .withDriveMotorGains(kDriveGains)
-                        .withSteerMotorClosedLoopOutput(kSteerClosedLoopOutput)
+                        .withSteerMotorClosedLoopOutput(kTurnClosedLoopOutput)
                         .withDriveMotorClosedLoopOutput(kDriveClosedLoopOutput)
                         .withSpeedAt12Volts(kSpeedAt12VoltsMeterPerSecond)
                         .withSteerInertia(kSteerInertia)
                         .withDriveInertia(kDriveInertia)
-                        .withSteerFrictionVoltage(Volts.of(kSteerFrictionVoltage))
+                        .withSteerFrictionVoltage(Volts.of(kTurnFrictionVoltage))
                         .withDriveFrictionVoltage(Volts.of(kDriveFrictionVoltage))
                         .withFeedbackSource(SteerFeedbackType.FusedCANcoder)  //TODO: change feeback to something without phoenix pro
                         .withCouplingGearRatio(kCoupleGearRatio)
@@ -209,7 +177,7 @@ public class SwerveConfig {
                         Inches.of(kFrontLeftXPos),
                         Inches.of(kFrontLeftYPos),
                         kInvertLeftSide,
-                        kSteerMotorReversed,
+                        kTurnMotorsReversed,
                         kIsFrontLeftEncoderInverted);
 
         //apply front right module constants
@@ -222,7 +190,7 @@ public class SwerveConfig {
                         Inches.of(kFrontRightXPos),
                         Inches.of(kFrontRightYPos),
                         kInvertRightSide,
-                        kSteerMotorReversed,
+                        kTurnMotorsReversed,
                         kIsFrontRightEncoderInverted);
 
         //apply back left module constants
@@ -235,7 +203,7 @@ public class SwerveConfig {
                         Inches.of(kBackLeftXPos),
                         Inches.of(kBackLeftYPos),
                         kInvertLeftSide,
-                        kSteerMotorReversed,
+                        kTurnMotorsReversed,
                         kIsBackLeftEncoderInverted);
 
         //apply back right module constants
@@ -248,7 +216,7 @@ public class SwerveConfig {
                         Inches.of(kBackRightXPos),
                         Inches.of(kBackRightYPos),
                         kInvertRightSide,
-                        kSteerMotorReversed,
+                        kTurnMotorsReversed,
                         kIsBackRightEncoderInverted);
 
         return this;
@@ -261,7 +229,7 @@ public class SwerveConfig {
      * @param backRight The offset of the back right encoder in radians.
      * @return The SwerveConfig object used to call this method.
     */
-    public SwerveConfig configEncoderOffsets(                     //TODO: find if this encoder offsets are updated from default values, then edit this method
+    public SwerveConstantsConfigurator configEncoderOffsets(                     //TODO: find if this encoder offsets are updated from default values, then edit this method
             double frontLeft, double frontRight, double backLeft, double backRight) {
         frontLeftEncoderOffset = Rotations.of(frontLeft);
         frontRightEncoderOffset = Rotations.of(frontRight);

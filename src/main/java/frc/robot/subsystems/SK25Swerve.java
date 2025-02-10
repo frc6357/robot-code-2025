@@ -1,14 +1,14 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Konstants.SwerveConstants.kBackLeftEncoderOffsetRadians;
-import static frc.robot.Konstants.SwerveConstants.kBackLeftInverted;
+import static frc.robot.Konstants.SwerveConstants.kBackLeftDriveInverted;
 import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderOffsetRadians;
-import static frc.robot.Konstants.SwerveConstants.kBackRightInverted;
+import static frc.robot.Konstants.SwerveConstants.kBackRightDriveInverted;
 import static frc.robot.Konstants.SwerveConstants.kCANivoreNameString;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderOffsetRadians;
-import static frc.robot.Konstants.SwerveConstants.kFrontLeftInverted;
+import static frc.robot.Konstants.SwerveConstants.kFrontLeftDriveInverted;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderOffsetRadians;
-import static frc.robot.Konstants.SwerveConstants.kFrontRightInverted;
+import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveInverted;
 import static frc.robot.Ports.DrivePorts.kBackLeftDriveMotorPort;
 import static frc.robot.Ports.DrivePorts.kBackLeftEncoderPort;
 import static frc.robot.Ports.DrivePorts.kBackLeftTurnMotorPort;
@@ -40,10 +40,10 @@ public class SK25Swerve extends SubsystemBase{
 
     public SK25Swerve()
     {
-        fLModule = new SK25SwerveModule(kFrontLeftDriveMotorPort.ID, kFrontLeftTurnMotorPort.ID, kFrontLeftEncoderPort.ID, kFrontLeftEncoderOffsetRadians, kFrontLeftInverted);
-        fRModule = new SK25SwerveModule(kFrontRightDriveMotorPort.ID, kFrontRightTurnMotorPort.ID, kFrontRightEncoderPort.ID, kFrontRightEncoderOffsetRadians, kFrontRightInverted);
-        bLModule = new SK25SwerveModule(kBackLeftDriveMotorPort.ID, kBackLeftTurnMotorPort.ID, kBackLeftEncoderPort.ID, kBackLeftEncoderOffsetRadians, kBackLeftInverted);
-        bRModule = new SK25SwerveModule(kBackRightDriveMotorPort.ID, kBackRightTurnMotorPort.ID, kBackRightEncoderPort.ID, kBackRightEncoderOffsetRadians, kBackRightInverted);
+        fLModule = new SK25SwerveModule(kFrontLeftDriveMotorPort.ID, kFrontLeftTurnMotorPort.ID, kFrontLeftEncoderPort.ID, kFrontLeftEncoderOffsetRadians, kFrontLeftDriveInverted);
+        fRModule = new SK25SwerveModule(kFrontRightDriveMotorPort.ID, kFrontRightTurnMotorPort.ID, kFrontRightEncoderPort.ID, kFrontRightEncoderOffsetRadians, kFrontRightDriveInverted);
+        bLModule = new SK25SwerveModule(kBackLeftDriveMotorPort.ID, kBackLeftTurnMotorPort.ID, kBackLeftEncoderPort.ID, kBackLeftEncoderOffsetRadians, kBackLeftDriveInverted);
+        bRModule = new SK25SwerveModule(kBackRightDriveMotorPort.ID, kBackRightTurnMotorPort.ID, kBackRightEncoderPort.ID, kBackRightEncoderOffsetRadians, kBackRightDriveInverted);
 
         pigeon = new Pigeon2(kPigeonPort.ID, kCANivoreNameString);
 

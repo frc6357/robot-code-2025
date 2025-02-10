@@ -1,17 +1,29 @@
 package frc.robot.subsystems.swerve;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static frc.robot.Konstants.AutoConstants.kAutoPathConfig;
+import static frc.robot.Konstants.SwerveConstants.kBlueAlliancePerspective;
+import static frc.robot.Konstants.SwerveConstants.kChassisLength;
+import static frc.robot.Konstants.SwerveConstants.kJoystickDeadband;
+import static frc.robot.Konstants.SwerveConstants.kMaxAngularRate;
+import static frc.robot.Konstants.SwerveConstants.kRedAlliancePerspective;
+import static frc.robot.Konstants.SwerveConstants.kSimulationLoopPeriod;
+import static frc.robot.Konstants.SwerveConstants.kSpeedAt12VoltsMeterPerSecond;
+
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
 // Packages used for the mechanisms/motors for the swerve drivetrain itself
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
-import com.ctre.phoenix6.swerve.SwerveRequest;
 // import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 // import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 // import com.ctre.phoenix6.swerve.SwerveModule.ModuleRequest;
-
+import com.ctre.phoenix6.swerve.SwerveRequest;
 // Packages used for Pathplanner
 // import com.pathplanner.lib.auto.AutoBuilder;
 // import com.pathplanner.lib.config.PIDConstants;
@@ -25,7 +37,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-
 // Packages used for logging, communications, overall functionality
 import edu.wpi.first.networktables.NTSendable;
 import edu.wpi.first.networktables.NTSendableBuilder;
@@ -38,26 +49,18 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.preferences.Pref;
-import frc.robot.preferences.SKPreferences;
 import frc.robot.utils.Field;
 import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.Util;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static frc.robot.Konstants.AutoConstants.*;
-import static frc.robot.Konstants.SwerveConstants.kJoystickDeadband;
 
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements NTSendable, Subsystem {
-    private SwerveConfig config;
+    private SwerveConstantsConfigurator config;
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     private RotationController rotationController;
@@ -85,7 +88,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
      * @param config The configuration object containing constants for 
      * the drivetrain and the module configurations.
      */
-    public SK25Swerve(SwerveConfig config) {
+    public SK25Swerve(SwerveConstantsConfigurator config) {
         // Creates a Swerve Drivetrain using Phoenix6's SwerveDrivetrain class, passing the
         // properties of the swerve drive itself from SwerveConfig into the constructor.
         super(TalonFX::new, TalonFX::new, CANcoder::new,
@@ -104,8 +107,8 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
 
         fieldCentricDrive = new SwerveRequest.FieldCentric()
                 .withDeadband(
-                        config.getSpeedAt12Volts().in(MetersPerSecond) * config.getDeadband())
-                .withRotationalDeadband(config.getMaxAngularRate() * config.getDeadband())
+                        kSpeedAt12VoltsMeterPerSecond.in(MetersPerSecond) * kJoystickDeadband)
+                .withRotationalDeadband(kMaxAngularRate * kJoystickDeadband)
                 .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
     
     }
@@ -275,7 +278,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
 
     // Keep the robot on the field
     private Pose2d keepPoseOnField(Pose2d pose) {
-        double halfRobot = config.getRobotLength() / 2;
+        double halfRobot = kChassisLength / 2;
         double x = pose.getX();
         double y = pose.getY();
 
@@ -347,8 +350,8 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
                             allianceColor -> {
                                 this.setOperatorPerspectiveForward(
                                         allianceColor == Alliance.Red
-                                                ? config.getRedAlliancePerspectiveRotation()
-                                                : config.getBlueAlliancePerspectiveRotation());
+                                                ? kRedAlliancePerspective
+                                                : kBlueAlliancePerspective);
                                 hasAppliedOperatorPerspective = true;
                             });
         }
@@ -500,7 +503,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
                 new Pose2d(
                         Units.feetToMeters(27.0),
                         Units.feetToMeters(27.0 / 2.0),
-                        config.getBlueAlliancePerspectiveRotation()));
+                        kBlueAlliancePerspective));
         double driveBaseRadius = .4; //or something
         for(var moduleLocation : getModuleLocations()) {
             driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
@@ -548,7 +551,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
             /* use the measured time delta, get battery voltage from WPILib */
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
-        m_simNotifier.startPeriodic(config.getKSimLoopPeriod());
+        m_simNotifier.startPeriodic(kSimulationLoopPeriod);
 }
     
 }

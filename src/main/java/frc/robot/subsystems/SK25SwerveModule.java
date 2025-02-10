@@ -9,7 +9,7 @@ import static frc.robot.Konstants.SwerveConstants.kDriveI;
 import static frc.robot.Konstants.SwerveConstants.kDriveP;
 import static frc.robot.Konstants.SwerveConstants.kMaxVelocityMetersPerSecond;
 import static frc.robot.Konstants.SwerveConstants.kPIDControllerToleranceDegrees;
-import static frc.robot.Konstants.SwerveConstants.kWheelCircumference;
+import static frc.robot.Konstants.SwerveConstants.kWheelCircumferenceMeters;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -120,7 +120,7 @@ public class SK25SwerveModule {
 
     private Double getDriveDistanceMeters()
     {
-        return getDriveDistanceAngle().in(Rotation) * kWheelCircumference;
+        return getDriveDistanceAngle().in(Rotation) * kWheelCircumferenceMeters;
     }
 
 

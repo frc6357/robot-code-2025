@@ -58,10 +58,10 @@ public class SK25DriveBinder implements CommandBinder{
 
             // Sets filters for driving axes
             kTranslationXPort.setFilter(new CubicDeadbandFilter(kDriveCoeff,
-                kJoystickDeadband, SwerveConstants.kMaxSpeedMetersPerSecond, true));
+                kJoystickDeadband, SwerveConstants.kMaxDriveSpeedMetersPerSecond, true));
 
             kTranslationYPort.setFilter(new CubicDeadbandFilter(kDriveCoeff,
-                kJoystickDeadband, SwerveConstants.kMaxSpeedMetersPerSecond, true));
+                kJoystickDeadband, SwerveConstants.kMaxDriveSpeedMetersPerSecond, true));
             
             kVelocityOmegaPort.setFilter(new CubicDeadbandFilter(kRotationCoeff, kJoystickDeadband,
                 Math.toRadians(SwerveConstants.kMaxModuleAngularSpeedDegreesPerSecond), true));
@@ -94,7 +94,7 @@ public class SK25DriveBinder implements CommandBinder{
     public void setGainCommand(double percent)
     {
         Filter translation = new CubicDeadbandFilter(kDriveCoeff, kJoystickDeadband,
-            SwerveConstants.kMaxSpeedMetersPerSecond * percent, true);
+            SwerveConstants.kMaxDriveSpeedMetersPerSecond * percent, true);
         kTranslationXPort.setFilter(translation);
         kTranslationYPort.setFilter(translation);
 

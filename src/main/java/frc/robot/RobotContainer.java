@@ -25,7 +25,7 @@ import frc.robot.bindings.SK25SwerveBinder;
 import frc.robot.subsystems.SK25Lights;
 import frc.robot.subsystems.SK25Swerve;
 import frc.robot.bindings.SK25DriveBinder;
-import frc.robot.subsystems.swerve.SwerveConfig;
+import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
 import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
@@ -82,7 +82,7 @@ public class RobotContainer {
             // This is decided by looking at Subsystems.json
             if(subsystems.isSwervePresent())
             {
-                SwerveConfig config = new SwerveConfig();
+                SwerveConstantsConfigurator config = new SwerveConstantsConfigurator();
                 //m_Swerve = Optional.of(new SK25Swerve(config));            //TODO: resolve collision in robot container with swerve constructor differences
             }
             if(subsystems.isLightsPresent())
