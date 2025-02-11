@@ -60,14 +60,21 @@ import frc.robot.utils.Util;
 
 
 public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements NTSendable, Subsystem {
+    //The constants config object containing all constants for the drivetrain.
     private SwerveConstantsConfigurator config;
+    //simulation stuff                
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+    //new rotation controller
     private RotationController rotationController;
+    //new pigeon gyro/accelerometer
     private Pigeon2 m_pigeon2;
 
+    //Determines if the robot should be facing toward the opposing driverstation at all times.    //TODO: rename constant and method, and move to constants
     private boolean hasAppliedOperatorPerspective = false;
 
+    /**New robot speed applier object which gives the chassisspeeds to the drivetrain object. 
+    *Current speeds are zero since constructor is empty.*/
     private final SwerveRequest.ApplyRobotSpeeds AutoRequest = new SwerveRequest.ApplyRobotSpeeds();
     
     //Creates publishers for logging
@@ -98,15 +105,18 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         config.getModules());
 
         this.config = config;
-        //setupPathPlanner();
+        //setupPathPlanner();                  //TODO: enable pathplanner setup at some point
         m_pigeon2 = this.getPigeon2();
 
         rotationController = new RotationController(config);
 
+        //start simulation when ran
         if(Utils.isSimulation()) {startSimThread();}
 
+        //log this class, which includes all of its data sent by the publishers
         SmartDashboard.putData(this);
 
+        //create a new open loop feild centric drive request
         fieldCentricDrive = new SwerveRequest.FieldCentric()
                 .withDeadband(
                         kSpeedAt12VoltsMeterPerSecond.in(MetersPerSecond) * kJoystickDeadband)
@@ -118,8 +128,12 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     @Override
     public void periodic()
     {
+      //periodicaly set the driver/operator perspective (the robot is set to face toward the 
+      //opposing driver station)
       this.setOperatorPerspective();
-      //SmartDashboard.putNumber("Pigeon", getPigeonHeading().getDegrees());
+      //SmartDashboard.putNumber("Pigeon", getPigeonHeading().getDegrees());      //TODO: Publish Pigeon data?
+      
+      //Update the publisher objects with the most recent states and odometry heading
       currentPublisher.set(this.getState().ModuleStates);
       targetPublisher.set(this.getState().ModuleTargets);
       odomPublisher.set(getOdomHeading());
@@ -127,6 +141,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
 
     //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
 
+    //create new tabs/porperties on the display with the builder object
     public void initSendable(NTSendableBuilder builder) {
         SmartDashboard.putData(
                 "Swerve Drive",
@@ -145,6 +160,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
                 });
     }
 
+    //assign properties to the modules on the dashboard using the their most recent values
     private void addModuleProperties(SendableBuilder builder, String moduleName, int moduleNumber) {
         builder.addDoubleProperty(
                 moduleName + " Angle",
@@ -156,16 +172,20 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
                 null);
     }
 
+    //runs the reset rotation controller method as a command
     protected Command resetTurnController() {
         return runOnce(() -> resetRotationController());
     }
 
+    //run the set target heading method as a command
     protected Command setTargetHeading(double targetHeading) {
         return runOnce(() -> config.setTargetHeading(targetHeading));
     }
 
+    //new feild centric swerve request
     private final SwerveRequest.FieldCentric fieldCentricDrive;
             
+    //new robot centric request
     private final SwerveRequest.RobotCentric robotCentricDrive =
             new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage).withDeadband(0).withRotationalDeadband(0);
 
@@ -200,7 +220,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
    }
 
    /**
-     * Reset the turn controller and then run the drive command with a angle supplier. This can be
+     * Reset the turn controller and then run the drive command with an angle supplier. This can be
      * used for aiming at a goal or heading locking, etc.
      */
     public void aimDrive(
@@ -209,6 +229,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         drive(
             velocityX.getAsDouble(),
             velocityY.getAsDouble(),
+            //rotate to the target from the current rotation
             calculateRotationController(targetRadians),
             true);
     }
@@ -220,20 +241,25 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
      */
     public void headingLock(DoubleSupplier velocityX, DoubleSupplier velocityY) {
         resetTurnController();
+        //set target heading to current heading
         setTargetHeading(getRotation().getRadians());
         drive(
                 velocityX.getAsDouble(),
                 velocityY.getAsDouble(),
+                //rotates to target heading when moving (this example uses the current heading, meaning
+                //the rotation value will always try to stay in the same place.
                 rotateToHeadingWhenMoving(
                         velocityX, velocityY, () -> config.getTargetHeading()).getAsDouble(),
                 true);
     }
 
+    /** Rotates to the specified heading. If not moving faster than 0.5 in the x and y direction, 
+     * don't rotate*/
     private DoubleSupplier rotateToHeadingWhenMoving(
             DoubleSupplier velocityX, DoubleSupplier velocityY, DoubleSupplier heading) {
         return () -> {
             if (Math.abs(velocityX.getAsDouble()) < 0.5
-                    && Math.abs(velocityY.getAsDouble()) < 0.5) {
+                    && Math.abs(velocityY.getAsDouble()) < 0.5) {            //TODO: see if 0.5 restriction is too much/little
                 return 0;
             } else {
                 return calculateRotationController(heading::getAsDouble);
@@ -258,6 +284,8 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         return reorientOperatorAngle(270);
     }
 
+    /**Gets the closest cardinal direction to the current rotation, and uses the reorient method to 
+     * reach that rotation.*/
     public Command cardinalReorient() {
         return runOnce(
                 () -> {
@@ -278,7 +306,10 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         return keepPoseOnField(pose);
     }
 
-    // Keep the robot on the field
+    /** Keep the robot on the field using the feild length from Util by checking if the position is off 
+     * the feild, then replacing it with the correct position
+     * @return The new pose after limiting out of feild possibilities.
+     */
     private Pose2d keepPoseOnField(Pose2d pose) {
         double halfRobot = kChassisLength / 2;
         double x = pose.getX();
@@ -294,11 +325,13 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         return pose;
     }
 
+    /** Gets the trigger containing the boolean of if the x value is within the min and max. */
     public Trigger inXzone(double minXmeter, double maxXmeter) {
         return new Trigger(
                 () -> Util.inRange(() -> getRobotPose().getX(), () -> minXmeter, () -> maxXmeter));
     }
 
+    /** Gets the trigger containing the boolean of if the y value is within the min and max. */
     public Trigger inYzone(double minYmeter, double maxYmeter) {
         return new Trigger(
                 () -> Util.inRange(() -> getRobotPose().getY(), () -> minYmeter, () -> maxYmeter));
@@ -330,8 +363,8 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
                 () -> Util.inRange(Field.flipYifRed(getRobotPose().getY()), minYmeter, maxYmeter));
     }
 
-    // Used to set a control request to the swerve module, ignores disable so commands are
-    //continuous.
+    /** Used to set a control request to the swerve module, ignores disable so commands are
+    *continuous.*/
     Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
         return run(() -> this.setControl(requestSupplier.get()));
     }
@@ -340,7 +373,11 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         return getKinematics().toChassisSpeeds(getState().ModuleStates);
     }
     
-    private void setOperatorPerspective() {
+    /** Stes the default oreintation of the robot to face away from our driverstation toward the
+     * opposing alliance's driverstation. This method should be ran periodicaly to ensure that the 
+     * perspective value remains unchanged in the event of a sudden error or disable.
+     */
+    private void setOperatorPerspective() {                    //TODO: see if this clashes with the set oreintation button
         /* Periodically try to apply the operator perspective */
         /* If we haven't applied the operator perspective before, then we should apply it regardless of DS state */
         /* This allows us to correct the perspective in case the robot code restarts mid-match */
@@ -359,6 +396,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         }
     }
 
+    /** Rotates the robot to the new rotation. */
     protected void reorient(double angleDegrees) {
         resetPose(
                 new Pose2d(
@@ -367,6 +405,8 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
                         Rotation2d.fromDegrees(angleDegrees)));
     }
 
+    /** Rotates the robot position using the reorient method to the new rotation with respect to the 
+     * driver/operator position/persepctive. */
     protected Command reorientOperatorAngle(double angleDegrees) {
         return runOnce(
                 () -> {
@@ -376,6 +416,9 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
                 });
     }
 
+    /** Gets the closest cardinal direction to the robot rotation.
+     * @return The direction to rotate to in degrees.
+     */
     protected double getClosestCardinal() {
         double heading = getRotation().getRadians();
         if (heading > -Math.PI / 4 && heading <= Math.PI / 4) {
@@ -389,6 +432,9 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         }
     }
 
+    /** Gets the closets 45 degree angle to the current robot rotation. 
+     * @return The closest angle which is a multiple of 45 in degrees.
+     */
     protected double getClosest45() {
         double angleRadians = getRotation().getRadians();
         double angleDegrees = Math.toDegrees(angleRadians);
@@ -407,6 +453,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     }
 
 
+    /** Stes the new front position of the robot by stating the current orientation as the default one. */
     public void setFront() {
         reorientOperatorAngle(0);
       }
@@ -453,6 +500,9 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
 
   
 
+  /** Gets if the robot is facing to the left relative to the forward facing orientation.
+   * @return if the robot is left tilted (true) or not (false).
+   */
   public boolean leftTilted()
   {
     double roll = this.getPigeon2().getRoll().getValueAsDouble();
@@ -462,6 +512,9 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     return false;
   }
 
+  /** Gets if the robot is facing to the right relative to the forward facing orientation.
+   * @return if the robot is right tilted (true) or not (false).
+   */
   public boolean rightTilted()
   {
     double roll = this.getPigeon2().getRoll().getValueAsDouble();

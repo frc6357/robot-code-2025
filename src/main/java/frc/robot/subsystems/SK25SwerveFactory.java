@@ -1,13 +1,9 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Radians;
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -38,6 +34,11 @@ public class SK25SwerveFactory {
         this.frontRightModule = frontRightModule;
         this.backLeftModule = backLeftModule;
         this.backRightModule = backRightModule;
+        frontLeftModule = new SK25SwerveModule(kFrontLeftDriveMotorPort.ID, kFrontLeftTurnMotorPort.ID, kFrontLeftEncoderPort.ID, kFrontLeftEncoderOffsetRadians, kFrontLeftDriveInverted);
+        frontRightModule = new SK25SwerveModule(kFrontRightDriveMotorPort.ID, kFrontRightTurnMotorPort.ID, kFrontRightEncoderPort.ID, kFrontRightEncoderOffsetRadians, kFrontRightDriveInverted);
+        backLeftModule = new SK25SwerveModule(kBackLeftDriveMotorPort.ID, kBackLeftTurnMotorPort.ID, kBackLeftEncoderPort.ID, kBackLeftEncoderOffsetRadians, kBackLeftDriveInverted);
+        backRightModule = new SK25SwerveModule(kBackRightDriveMotorPort.ID, kBackRightTurnMotorPort.ID, kBackRightEncoderPort.ID, kBackRightEncoderOffsetRadians, kBackRightDriveInverted);
+
         this.modules = new SK25SwerveModule[]{
             this.frontLeftModule,
             this.frontRightModule,

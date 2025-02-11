@@ -221,20 +221,4 @@ public class SwerveConstantsConfigurator {
 
         return this;
     }
-
-    /** Changes the encoder offset from its default value to the ones specified in this method call.
-     * @param frontLeft The offset of the front left encoder in radians.
-     * @param frontRight The offset of the front right encoder in radians.
-     * @param backLeft The offset of the back left encoder in radians.
-     * @param backRight The offset of the back right encoder in radians.
-     * @return The SwerveConfig object used to call this method.
-    */
-    public SwerveConstantsConfigurator configEncoderOffsets(                     //TODO: find if this encoder offsets are updated from default values, then edit this method
-            double frontLeft, double frontRight, double backLeft, double backRight) {
-        frontLeftEncoderOffset = Rotations.of(frontLeft);
-        frontRightEncoderOffset = Rotations.of(frontRight);
-        backLeftEncoderOffset = Rotations.of(backLeft);
-        backRightEncoderOffset = Rotations.of(backRight);
-        return updateConfig();
-    }
 }
