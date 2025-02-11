@@ -36,15 +36,15 @@ public final class Konstants
         public static enum ElevatorPosition
         {
             //TODO FIX_DURING_TESTING - Measure Elevator Heights
-            /** Set the angle to reach the top branch (L4) */
+            /** Set the height to reach the top branch (L4) */
             TopPosition(27),
-            /** Set the angle to reach the middle branch (L3) */
+            /** Set the height to reach the middle branch (L3) */
             MidPosition(22),
-            /** Set the angle to reach the low branch (L2) */
+            /** Set the height to reach the low branch (L2) */
             LowPosition(17),
-            /** Set the angle to reach the trough (L1) */
+            /** Set the height to reach the trough (L1) */
             TroughPosition(12),
-            /** Set the angle to reach the bottom */
+            /** Set the height to reach the bottom */
             ZeroPosition(0.0);
 
             public final double height;
@@ -55,8 +55,8 @@ public final class Konstants
             }
         }
 
-        public static final PIDConstants rightElevator = new PIDConstants(0.0375, 0.00075, 0.001);
-        public static final PIDConstants leftElevator = new PIDConstants(0.0375, 0.00075, 0.001);
+        public static final PIDConstants rightElevator = new PIDConstants(0.07, 0.00075, 0.001);
+        public static final PIDConstants leftElevator = new PIDConstants(0.07, 0.00075, 0.001);
         public static final PIDConstants balancePID = new PIDConstants(0.0, 0.0, 0.0);
 
         public static final double kMinInteg = 0.0;
@@ -88,7 +88,7 @@ public final class Konstants
         public static final double kMaxHeight = 28;
         public static final double kMinHeight = 0;
 
-        public static final double kJoystickChange   = 1.0; // Manual setpoint value for units from 0.0 - 1.0 moved per second
+        public static final double kJoystickChange   = 2.0; // Manual setpoint value for units from 0.0 - 1.0 moved per second
         public static final double kJoystickDeadband = 0.3;  // Manual arm movement axis deadband
 
         public static final boolean kJoystickReversed = true;  // Determines if the joystick movement is reversed
