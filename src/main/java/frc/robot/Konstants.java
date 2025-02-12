@@ -56,6 +56,13 @@ public final class Konstants
             }
         }
 
+        public static final class LightConstants
+        {
+            public static final int numLedOnBot = 240;
+            public static final double kLightsOffBrightness = 0.0;
+            public static final double kLightsOnBrightness = 0.5;
+        }   
+
         // PID Constants For Left & Right Elevator Motors (Should Be The Same)
         public static final PIDConstants leftElevator = new PIDConstants(0.07, 0.00075, 0.001);
         public static final PIDConstants rightElevator = new PIDConstants(0.07, 0.00075, 0.001);

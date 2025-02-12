@@ -1,27 +1,34 @@
 package frc.robot.bindings;
 
 import static frc.robot.Konstants.ElevatorConstants.*;
+import static frc.robot.Konstants.LightConstants.*;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.*;
 import static frc.robot.Ports.OperatorPorts.*;
 
 import java.util.Optional;
+
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Ports;
 import frc.robot.commands.ElevatorButtonCommand;
 import frc.robot.commands.ElevatorJoystickCommand;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.utils.filters.DeadbandFilter;
 
+import frc.robot.utils.SKCANLight;
+
 public class SK25ElevatorBinder implements CommandBinder{
     Optional<SK25Elevator> subsystem;
 
+    SKCANLight light;
     Trigger LowButton;
     Trigger MidButton;
     Trigger TopButton;
     Trigger TroughButton;
     Trigger zeroPositionButton;
-    //Trigger zeroPositionButtonDriver;
     Trigger resetPos;
     Trigger elevatorOverride;
+    Trigger operatorPartyButton;
 
     public SK25ElevatorBinder(Optional<SK25Elevator> subsystem){
         
@@ -34,6 +41,8 @@ public class SK25ElevatorBinder implements CommandBinder{
         this.TopButton          = kTopBranch.button;
         this.TroughButton       = kTrough.button;
         this.resetPos           = kResetElevatorPos.button;
+
+        this.operatorPartyButton = Ports.OperatorPorts.kPartyMode.button;
     }
 
     public void bindButtons()
@@ -45,6 +54,9 @@ public class SK25ElevatorBinder implements CommandBinder{
 
             double joystickGain = kJoystickReversed ? -kJoystickChange : kJoystickChange;
             kElevatorAxis.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
+
+            operatorPartyButton.onFalse(new InstantCommand(() -> light.setBrightness(kLightsOnBrightness)));
+            operatorPartyButton.onFalse(new InstantCommand(() -> light.setPartyMode()));
 
             // Elevator Position Buttons
             zeroPositionButton.onTrue(new ElevatorButtonCommand(ZeroPosition, elevator));

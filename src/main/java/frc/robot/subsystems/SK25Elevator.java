@@ -28,6 +28,8 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 // SmartDashboard
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+// Let There Be Light
+
 public class SK25Elevator extends Elevator
 {
     // Create Memory Motor Objects
@@ -63,6 +65,8 @@ public class SK25Elevator extends Elevator
         // Initializes a duty cycle encoder on DIO pins 0 to return a value of 4 for
         // a full rotation, with the encoder reporting 0 half way through rotation (2 out of 4)
         absoluteEncoder = new DutyCycleEncoder(0, 4.0, 2.0);
+
+        
 
         // PID Controllers - Setpoints
         lPID = new PIDController(leftElevator.kP, leftElevator.kI, leftElevator.kD);
