@@ -96,14 +96,6 @@ public class SwerveConstantsConfigurator {
     // TODO: Check Pigeon usage in Swerve
     @Getter private Pigeon2Configuration pigeonConfigs = null;
 
-    
-    //TODO: see if these encoder offset variables are needed for the update method at the bottom of SwerveConfig
-    @Getter private Angle frontLeftEncoderOffset = Rotations.of(kFrontLeftEncoderOffsetRadians);
-    @Getter private Angle frontRightEncoderOffset = Rotations.of(kFrontRightEncoderOffsetRadians);
-    @Getter private Angle backLeftEncoderOffset = Rotations.of(kBackLeftEncoderOffsetRadians);
-    @Getter private Angle backRightEncoderOffset = Rotations.of(kBackRightEncoderOffsetRadians);
-
-
     /* Contains a set of constants for a swerve drivetrain */
     @Getter private SwerveDrivetrainConstants drivetrainConstants;
 

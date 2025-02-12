@@ -1,21 +1,18 @@
 package frc.robot.commands;
 
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.Konstants.SwerveConstants.kJoystickDeadband;
 
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.SK25Swerve;
+import frc.robot.subsystems.SK25SwerveFactory;
 
 public class SwerveDefaultCommand extends Command{
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
     //declare swerve object
-    private final SK25Swerve Swerve;
+    private final SK25SwerveFactory Swerve;
 
     //declare the double version of joystick input values.
     //Suppliers are used to update the value periodicaly. 
@@ -30,7 +27,7 @@ public class SwerveDefaultCommand extends Command{
      * @param _leftX The X input of the left joystick on the controller used for translation.
      * @param _rightX The X input of the right joystick on the controller used for rotation.
      */
-    public SwerveDefaultCommand(SK25Swerve _swerve, Supplier<Double> _leftY, Supplier<Double> _leftX, Supplier<Double> _rightX)
+    public SwerveDefaultCommand(SK25SwerveFactory _swerve, Supplier<Double> _leftY, Supplier<Double> _leftX, Supplier<Double> _rightX)
     {
         //initialize objects and variables
         Swerve = _swerve;
@@ -76,12 +73,8 @@ public class SwerveDefaultCommand extends Command{
         double rotationMagnitude = deadZone(rightX.get(), kJoystickDeadband);
         double desiredRadiansPerSecond = rotationMagnitude * 2 * Math.PI;
 
-        //feild centric controls
-        //TODO: getAngle() is deprecated for removal in 2026, use getYaw() from CorePigeon2 class instead and convert to degrees.
-        // angle = angle.minus(Degrees.of(SK25Swerve.pigeon.getAngle()));
-
         //run the doSwerve method which handles all swerve movement possibilites.
-        SK25Swerve.factory.doSwerve(desiredRadiansPerSecond, velocity);
+        Swerve.doSwerve(desiredRadiansPerSecond, velocity);
 
         //SmartDashboard.putNumber("setpoint", Units.Radians.of(angle).in(Units.Degrees));
     }
@@ -92,7 +85,7 @@ public class SwerveDefaultCommand extends Command{
     public void end(boolean interrupted) 
     {
        //sets all wheels to stop moving. //TODO: change to account for direction currently
-       SK25Swerve.factory.doSwerve(0.0, new Translation2d());
+       Swerve.doSwerve(0.0, new Translation2d());
     }
 
     // Returns true when the command should end.

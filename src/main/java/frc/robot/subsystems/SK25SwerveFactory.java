@@ -10,8 +10,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static frc.robot.Ports.DrivePorts.*;
+import static frc.robot.Konstants.SwerveConstants.*;
 
-public class SK25SwerveFactory {
+public class SK25SwerveFactory extends SubsystemBase{
     
     SK25SwerveModule frontLeftModule;
     SK25SwerveModule frontRightModule;
@@ -27,17 +30,15 @@ public class SK25SwerveFactory {
 
     public Rotation2d currentAngle;
 
-    public SK25SwerveFactory(SK25SwerveModule frontLeftModule, SK25SwerveModule frontRightModule, SK25SwerveModule backLeftModule, SK25SwerveModule backRightModule, Pigeon2 bird)
+    public SK25SwerveFactory()
     {
         //make new swerve module objects 
-        this.frontLeftModule = frontLeftModule;
-        this.frontRightModule = frontRightModule;
-        this.backLeftModule = backLeftModule;
-        this.backRightModule = backRightModule;
-        frontLeftModule = new SK25SwerveModule(kFrontLeftDriveMotorPort.ID, kFrontLeftTurnMotorPort.ID, kFrontLeftEncoderPort.ID, kFrontLeftEncoderOffsetRadians, kFrontLeftDriveInverted);
-        frontRightModule = new SK25SwerveModule(kFrontRightDriveMotorPort.ID, kFrontRightTurnMotorPort.ID, kFrontRightEncoderPort.ID, kFrontRightEncoderOffsetRadians, kFrontRightDriveInverted);
-        backLeftModule = new SK25SwerveModule(kBackLeftDriveMotorPort.ID, kBackLeftTurnMotorPort.ID, kBackLeftEncoderPort.ID, kBackLeftEncoderOffsetRadians, kBackLeftDriveInverted);
-        backRightModule = new SK25SwerveModule(kBackRightDriveMotorPort.ID, kBackRightTurnMotorPort.ID, kBackRightEncoderPort.ID, kBackRightEncoderOffsetRadians, kBackRightDriveInverted);
+        this.frontLeftModule = new SK25SwerveModule(kFrontLeftDriveMotorPort.ID, kFrontLeftTurnMotorPort.ID, kFrontLeftEncoderPort.ID, kFrontLeftEncoderOffsetRadians, kFrontLeftDriveInverted);
+        this.frontRightModule = new SK25SwerveModule(kFrontRightDriveMotorPort.ID, kFrontRightTurnMotorPort.ID, kFrontRightEncoderPort.ID, kFrontRightEncoderOffsetRadians, kFrontRightDriveInverted);
+        this.backLeftModule = new SK25SwerveModule(kBackLeftDriveMotorPort.ID, kBackLeftTurnMotorPort.ID, kBackLeftEncoderPort.ID, kBackLeftEncoderOffsetRadians, kBackLeftDriveInverted);
+        this.backRightModule = new SK25SwerveModule(kBackRightDriveMotorPort.ID, kBackRightTurnMotorPort.ID, kBackRightEncoderPort.ID, kBackRightEncoderOffsetRadians, kBackRightDriveInverted);
+
+        this.bird = new Pigeon2(kPigeonPort.ID, kCANivoreNameString);
 
         this.modules = new SK25SwerveModule[]{
             this.frontLeftModule,
@@ -45,9 +46,8 @@ public class SK25SwerveFactory {
             this.backLeftModule,
             this.backRightModule
         };
-        this.bird = bird;
         //gets the current angle of the robot
-        currentAngle = bird.getRotation2d();
+        this.currentAngle = bird.getRotation2d();
         //reset gyro
         bird.reset();
     

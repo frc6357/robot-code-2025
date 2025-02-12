@@ -145,10 +145,10 @@ public class SK25SwerveModule {
      * The Transform2d class uses ideas of matrix operations to apply rotation via the rotational matrix
      * It also preforms vector operations to determine the change in translation.
      * The rotatoinal matrix is as follows, where x is the degrees to rotate:
-     * 
-     * Row 1: [cosx  -sinx  0]
-     * Row 2: [sinx  cosx   0]
-     * Row 3: [0     0      1]
+     * <p>
+     * Row 1: [cosx  -sinx  0] <p>
+     * Row 2: [sinx  cosx   0] <p>
+     * Row 3: [0     0      1] <p>
      * 
      * @param startPose The starting position of the robot before the transformation occurs.
      * @param endPose The ending position of the robot after the transformation occurs.
