@@ -12,10 +12,11 @@ public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     //stuff
     private SwerveConstantsConfigurator config = new SwerveConstantsConfigurator();
 
-
+ 
     //constructor
-    public TempSwerve()
+    public TempSwerve(SwerveConstantsConfigurator config)
     {
-        super(new TalonFX::new TalonFX::new CANcoder, config.getDrivetrainConstants(), config.getModules());)
+        super(TalonFX::new, TalonFX::new, CANcoder::new, config.getDrivetrainConstants(), config.getModules());
+        this.config = config;
     }
 }
