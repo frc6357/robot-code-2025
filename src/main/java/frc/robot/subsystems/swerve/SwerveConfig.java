@@ -31,11 +31,12 @@ public class SwerveConfig {
     @Getter private double robotLength = Units.inchesToMeters(kChassisLength);
 
     @Getter private double maxAngularRate = 1.5*Math.PI;
-    @Getter private double deadband = kDeadband;
 
-    // Rotation Controller Constants
+    // Rotation Controller Constants:
+    // Rotating movement constraints
     @Getter private double maxAngularVelocity = 2 * Math.PI; // rad/s
     @Getter private double maxAngularAcceleration = Math.pow(maxAngularVelocity, 2); // rad/s^2
+    // P
     @Getter private double kPRotationController = 8.0;
     @Getter private double kIRotationController = 0.0;
     @Getter private double kDRotationController = 0.2;

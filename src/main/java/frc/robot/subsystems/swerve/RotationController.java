@@ -32,8 +32,12 @@ public class RotationController {
                         config.getKDRotationController(),
                         constraints);
 
-        controller.enableContinuousInput(-Math.PI, Math.PI);
-        controller.setTolerance(config.getRotationTolerance());
+        // Effectively creates a unit circle of input for cocentric angles
+        controller.enableContinuousInput(-Math.PI, Math.PI); 
+        
+        // Sets the tolerance for the difference between robot and goal angle
+        // It is relatively looser than the HoldController tolerance to allow for smoother movement
+        controller.setTolerance(config.getRotationTolerance()); 
 
         // Hold controller is standard PID
         holdController =

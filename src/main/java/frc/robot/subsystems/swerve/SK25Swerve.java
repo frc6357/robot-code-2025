@@ -104,8 +104,8 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
 
         fieldCentricDrive = new SwerveRequest.FieldCentric()
                 .withDeadband(
-                        config.getSpeedAt12Volts().in(MetersPerSecond) * config.getDeadband())
-                .withRotationalDeadband(config.getMaxAngularRate() * config.getDeadband())
+                        config.getSpeedAt12Volts().in(MetersPerSecond) * kDeadband)
+                .withRotationalDeadband(config.getMaxAngularRate() * kDeadband)
                 .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
     
     }
