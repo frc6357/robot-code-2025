@@ -48,23 +48,24 @@ public class ElevatorJoystickCommand extends Command {
     @Override
     public void execute()
     {
+        double positionChange = controller.get() / 50; // Units per 20ms (20ms x 50 = 1s)
 
-        //double motorSpeed = controller.get();
-        //elevator.runLeftMotor(motorSpeed);
-        //elevator.runRightMotor(motorSpeed);
-
-        double positionChange = controller.get() / 50; // Units per 20ms from 0.0 to 1.0
-
-         // Sets the new angle to the current position plus or minus the constant change
+         // Sets the new height to the current position plus or minus the constant change
         double rightSetpoint = elevator.getRightTargetPosition() + positionChange;
         double leftSetpoint = elevator.getLeftTargetPosition() + positionChange;
 
         if(!override.get())
         {
+            /* 
+            Functions like an if statement could, makes the setpoint value stay 
+            within the minimum and maximum values that are set in Konstants.
+            */
+
             rightSetpoint = MathUtil.clamp(rightSetpoint, kMinHeight, kMaxHeight);
             leftSetpoint = MathUtil.clamp(leftSetpoint, kMinHeight, kMaxHeight);
         }
 
+        // These methods bring the motors up to the setpoint created above.
         elevator.setRightTargetHeight(rightSetpoint);
         elevator.setLeftTargetHeight(leftSetpoint);
     }
