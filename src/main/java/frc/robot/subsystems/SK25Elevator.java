@@ -59,33 +59,32 @@ public class SK25Elevator extends Elevator
     // Constructor For Public Command Access
     public SK25Elevator()
     {
-        // PID Controllers - Setpoints
-        rPID = new PIDController(rightElevator.kP, rightElevator.kI, rightElevator.kD);
-        lPID = new PIDController(leftElevator.kP, leftElevator.kI, leftElevator.kD);
-
-        rPID.setIntegratorRange(kMinInteg, kMaxInteg);
-        lPID.setIntegratorRange(kMinInteg, kMaxInteg);
-
-        rPID.setSetpoint(0.0);
-        lPID.setSetpoint(0.0);
-
-        // Motor Initialization With REV Sparkflex - Configurations
-        motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
-        motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
-
-        motorConfigL = new SparkFlexConfig();
-        motorConfigR = new SparkFlexConfig();
-        
         // TODO Change the channel, full range, and expected zero.
         // Initializes a duty cycle encoder on DIO pins 0 to return a value of 4 for
         // a full rotation, with the encoder reporting 0 half way through rotation (2 out of 4)
         absoluteEncoder = new DutyCycleEncoder(0, 4.0, 2.0);
 
+        // PID Controllers - Setpoints
+        lPID = new PIDController(leftElevator.kP, leftElevator.kI, leftElevator.kD);
+        rPID = new PIDController(rightElevator.kP, rightElevator.kI, rightElevator.kD);
+        
+        lPID.setIntegratorRange(kMinInteg, kMaxInteg);
+        rPID.setIntegratorRange(kMinInteg, kMaxInteg);
+
+        lPID.setSetpoint(0.0);
+        rPID.setSetpoint(0.0);
+        
+        // Motor Initialization With REV Sparkflex - Configurations
+        motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
+        motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
+        
+        motorConfigL = new SparkFlexConfig();
+        motorConfigR = new SparkFlexConfig();
+
         // Configurations For The Motors & Encoders
         motorConfigL
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(kElevatorCurrentLimit);
-
         motorConfigR
             .inverted(true)
             .idleMode(IdleMode.kBrake)
@@ -225,26 +224,25 @@ public class SK25Elevator extends Elevator
     {
         // Initialize Current & Target Positions
         double currentPosition = getEncoderPosition();
-
-        double rTargetPosition = getRightTargetPosition();
         double lTargetPosition = getLeftTargetPosition();
-
+        double rTargetPosition = getRightTargetPosition();
+        
         // Calculates Motor Speed & Puts It Within Operating Range
-        double rSpeed = MathUtil.clamp(rPID.calculate(currentPosition), kElevatorMotorMinOutput, kElevatorMotorMaxOutput);
-        motorR.set(rSpeed); 
-
         double lSpeed = MathUtil.clamp(lPID.calculate(currentPosition), kElevatorMotorMinOutput, kElevatorMotorMaxOutput);
-        motorL.set(lSpeed); 
+        double rSpeed = MathUtil.clamp(rPID.calculate(currentPosition), kElevatorMotorMinOutput, kElevatorMotorMaxOutput);
 
+        motorL.set(lSpeed); 
+        motorR.set(rSpeed); 
+        
         // SmartDashboard Current & Target Positions
         SmartDashboard.putNumber("Current Estimated Position", currentPosition);
+
+        SmartDashboard.putNumber("Left Target Position", lTargetPosition);
+        SmartDashboard.putBoolean("Left Elevator at Setpoint", isLeftAtTargetPosition());
 
         SmartDashboard.putNumber("Right Target Position", rTargetPosition);
         SmartDashboard.putBoolean("Right Elevator at Setpoint", isRightAtTargetPosition());
 
-        SmartDashboard.putNumber("Left Target Position", lTargetPosition);
-        SmartDashboard.putBoolean("Left Elevator at Setpoint", isLeftAtTargetPosition());
-        
         //TODO Uncomment below and add this to elastic dashboard once it's implemented.
         //SmartDashboard.putBoolean("Elevator At Top", atTop());
         //SmartDashboard.putBoolean("Elevator At Bottom", atBottom());

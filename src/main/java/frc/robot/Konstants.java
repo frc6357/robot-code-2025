@@ -35,7 +35,8 @@ public final class Konstants
         /** Heights for the different elevator positions */
         public static enum ElevatorPosition
         {
-            //TODO FIX_DURING_TESTING - Measure Elevator Heights
+            //TODO FIX DURING TESTING - Measure Elevator Heights
+
             /** Set the height to reach the top branch (L4) */
             TopPosition(27),
             /** Set the height to reach the middle branch (L3) */
@@ -55,42 +56,39 @@ public final class Konstants
             }
         }
 
-        public static final PIDConstants rightElevator = new PIDConstants(0.07, 0.00075, 0.001);
+        // PID Constants For Left & Right Elevator Motors (Should Be The Same)
         public static final PIDConstants leftElevator = new PIDConstants(0.07, 0.00075, 0.001);
+        public static final PIDConstants rightElevator = new PIDConstants(0.07, 0.00075, 0.001);
         public static final PIDConstants balancePID = new PIDConstants(0.0, 0.0, 0.0);
 
+        // Minimum & Maximum Integration Range For PID
         public static final double kMinInteg = 0.0;
         public static final double kMaxInteg = 0.15;
 
-        public static final double kPositiveAccelLimit = 1.0; // in %/sec
-        public static final double kNegativeAccelLimit = -5.0; // in %/sec
+        // Positive & Negative Acceleration Limits (In %/sec)
+        public static final double kPositiveAccelLimit = 1.0;
+        public static final double kNegativeAccelLimit = -1.0; // Previously -5
 
-        public static final double kElevatorBalanceTolerance = 5.0;
-        public static final double spoolDiameter = 1.273; //Inches
-        public static final double gearRatio = .1264; //Shaft rotations / 1 motor rotation
-        public static final double elevatorHeight = 28; //Inches
-
-        public static final double elevatorConversion = 1.0 / 87.0; //inches moved per motor rotation
+        // Position Tolerance For The ELevator (+ or - The Target Position)
         public static final double kPositionTolerance = 2.0;
+
+        // Minimum & Maximum Outputs For Elevator
         public static final double kElevatorMotorMinOutput = -0.5;
         public static final double kElevatorMotorMaxOutput = 0.8;
 
-        public static final double kElevatorUpSpeed = 1.0;
-        public static final double kElevatorDownSpeed = -1.0;
-
-        public static final double kCANCoderGearRatio = 160.0 / 48.0; //Convert encoder degree units to arm degrees
-
+        // Maximum Current Limit For The ELevator
         public static final int kElevatorCurrentLimit = 30;
-
-        //public static final double kElevatorUpSpeedLeft = -1.0;
-        //public static final double kElevatorDownSpeedLeft = 1.0;
-
+        
+        /*
+        Minumum & Maximum Heights The Elevator Can Be Within
+        TODO Change the height and see how that works, check SmartDashboard for elevator values first.
+        */
         public static final double kMaxHeight = 28;
         public static final double kMinHeight = 0;
 
+        // Important Joystick Settings
         public static final double kJoystickChange   = 2.0; // Manual setpoint value for units from 0.0 - 1.0 moved per second
         public static final double kJoystickDeadband = 0.3;  // Manual arm movement axis deadband
-
         public static final boolean kJoystickReversed = true;  // Determines if the joystick movement is reversed
     }
 
