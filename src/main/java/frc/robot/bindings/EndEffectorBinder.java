@@ -93,12 +93,13 @@ public class EndEffectorBinder implements CommandBinder{
             IntakeButton.onFalse(new EndEffectorStopCommand(endEffector));
             TopButton.onFalse(new EndEffectorStopCommand(endEffector));
 
-            endEffector.setDefaultCommand(
+            //endEffector.setDefaultCommand(
+                    
                     // Vertical movement of the arm is controlled by the Y axis of the right stick.
                     // Up on joystick moving arm up and down on stick moving arm down.
-                   new EndEffectorJoystickCommand(
-                        () -> {return endArm.getFilteredAxis();},
-                        endEffector));
+                  // new EndEffectorJoystickCommand(
+                        //() -> {return endArm.getFilteredAxis();},
+                       // endEffector));
                             
                              
         }

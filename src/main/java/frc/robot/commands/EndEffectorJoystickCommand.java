@@ -5,6 +5,9 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffectorV1;
 
+import static frc.robot.Konstants.EndEffectorConstants.kArmSpeed;
+import static frc.robot.Ports.OperatorPorts.endArm;
+
 public class EndEffectorJoystickCommand extends Command{
 
     private final EndEffectorV1 endEffector;
@@ -27,13 +30,23 @@ public class EndEffectorJoystickCommand extends Command{
     @Override
     public void execute()
     {
-        double angleChange = controller.get() / 50;
+        
+       if (controller.get() > 0)
+       {
+         endEffector.runArm(kArmSpeed);
+       }
 
-        double armSetpoint = endEffector.getTargetArmPosition() + angleChange;
+       if (controller.get() < 0)
+       {
+        double armspeed = -kArmSpeed;
+        endEffector.runArm(armspeed);
+       }
 
-        endEffector.setTargetAngle(armSetpoint);
+       if(controller.get() == 0)
+       {
+        endEffector.stopArm();
+       }
 
-        System.out.println("exec");
     }
 
     @Override

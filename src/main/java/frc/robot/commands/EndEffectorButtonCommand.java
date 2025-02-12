@@ -31,6 +31,8 @@ public class EndEffectorButtonCommand extends Command {
         System.out.println("position "+ mEncoder.getPosition());
         endEffector.setTargetAngle(position);
         System.out.println("Urmom");
+        System.out.println(endEffector.isArmAtTargetPosition()); 
+
     }
 
     @Override
@@ -40,6 +42,7 @@ public class EndEffectorButtonCommand extends Command {
         {
             if(endEffector.isArmAtTargetPosition())
             {
+                
                 return true;
             }
             else

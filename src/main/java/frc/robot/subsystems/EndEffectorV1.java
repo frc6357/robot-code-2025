@@ -58,7 +58,8 @@ public class EndEffectorV1  extends SubsystemBase{
         
         armConfig.absoluteEncoder 
             .positionConversionFactor(1)
-            .velocityConversionFactor(1);
+            .velocityConversionFactor(1)
+            .setSparkMaxDataPortConfig();
 
         armConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
@@ -77,6 +78,7 @@ public class EndEffectorV1  extends SubsystemBase{
             .smartCurrentLimit(30);
 
         mPID = armMotor.getClosedLoopController();
+        
 
         mEncoder = armMotor.getAbsoluteEncoder();
 
@@ -92,7 +94,7 @@ public class EndEffectorV1  extends SubsystemBase{
     {
         armTargetAngle = angle;
         //Come back and change this, need fraction for Encoder Rotations in place of angle
-        mPID.setReference(angle, ControlType.kPosition);
+        mPID.setReference(angle, ControlType.kPosition,ClosedLoopSlot.kSlot0 );
 
     }
 
@@ -110,7 +112,7 @@ public class EndEffectorV1  extends SubsystemBase{
 
     public boolean isArmAtTargetPosition()
     {
-        return Math.abs(getArmPosition() - getTargetArmPosition()) < armAngleTolerance;
+        return Math.abs( getTargetArmPosition() -getArmPosition()) == 0;
     }
 
     
@@ -122,9 +124,9 @@ public class EndEffectorV1  extends SubsystemBase{
         //rollerMotor.set(kRollerSpeed);
     }
 
-    public void runArm()
+    public void runArm(double armspeed)
     {
-        armMotor.set(kArmSpeed);
+        armMotor.set(armspeed);
     }
 
     //stops the motor
