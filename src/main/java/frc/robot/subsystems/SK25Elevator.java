@@ -1,38 +1,52 @@
 // Essentials
 package frc.robot.subsystems;
-import edu.wpi.first.math.MathUtil;
-import frc.robot.subsystems.superclasses.Elevator;
-
 // Constants (Muy Importante)
-import static frc.robot.Konstants.ElevatorConstants.*;
-import static frc.robot.Ports.ElevatorPorts.*;
+import static frc.robot.Konstants.ElevatorConstants.kElevatorCurrentLimit;
+import static frc.robot.Konstants.ElevatorConstants.kElevatorMotorMaxOutput;
+import static frc.robot.Konstants.ElevatorConstants.kElevatorMotorMinOutput;
+import static frc.robot.Konstants.ElevatorConstants.kMaxInteg;
+import static frc.robot.Konstants.ElevatorConstants.kMinInteg;
+import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
+import static frc.robot.Konstants.ElevatorConstants.leftElevator;
+import static frc.robot.Konstants.ElevatorConstants.rightElevator;
+import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
+import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
 
+// Encoder V3 (Still REV)
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.ClosedLoopSlot;
 // Motors - Sparkflex
 import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 // Configurations For Motors (REV)
 import com.revrobotics.spark.config.SparkFlexConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.MathUtil;
 // PID Controller
 import edu.wpi.first.math.controller.PIDController;
-
 // Limit Switches
 import edu.wpi.first.wpilibj.DigitalInput;
-
 // Absolute Encoder (REV)
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-
 // SmartDashboard
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
+import frc.robot.subsystems.superclasses.Elevator;
 
 public class SK25Elevator extends Elevator
 {
     // Create Memory Motor Objects
     SparkFlex motorR;
     SparkFlex motorL;
+
+    // REV CLOSED LOOP (V3)
+    SparkClosedLoopController closedLoopController;
+    RelativeEncoder encoder;
     
     // Encoder Memory Object
     DutyCycleEncoder absoluteEncoder;
@@ -64,6 +78,10 @@ public class SK25Elevator extends Elevator
         // a full rotation, with the encoder reporting 0 half way through rotation (2 out of 4)
         absoluteEncoder = new DutyCycleEncoder(0, 4.0, 2.0);
 
+        // Encoder V3
+        closedLoopController = motorL.getClosedLoopController();
+        encoder = motorL.getEncoder();
+
         // PID Controllers - Setpoints
         lPID = new PIDController(leftElevator.kP, leftElevator.kI, leftElevator.kD);
         rPID = new PIDController(rightElevator.kP, rightElevator.kI, rightElevator.kD);
@@ -81,10 +99,45 @@ public class SK25Elevator extends Elevator
         motorConfigL = new SparkFlexConfig();
         motorConfigR = new SparkFlexConfig();
 
-        // Configurations For The Motors & Encoders
+        // Configurations For The Left Motor & Encoder
         motorConfigL
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(kElevatorCurrentLimit);
+
+        /*
+         *  ALL REV CLOSED LOOP ENCODER STUFF
+         */
+
+        motorConfigL.encoder
+            .positionConversionFactor(1)
+            .velocityConversionFactor(1);
+        motorConfigL.closedLoop
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+            // Set PID values for position control. We don't need to pass a closed loop
+            // slot, as it will default to slot 0.
+            .p(0.1)
+            .i(0)
+            .d(0)
+            .outputRange(-1, 1)
+            // Set PID values for velocity control in slot 1
+            .p(0.0001, ClosedLoopSlot.kSlot1)
+            .i(0, ClosedLoopSlot.kSlot1)
+            .d(0, ClosedLoopSlot.kSlot1)
+            .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
+            .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+
+        // Initialize dashboard values
+        SmartDashboard.setDefaultNumber("Target Position", 0);
+        SmartDashboard.setDefaultNumber("Target Velocity", 0);
+        SmartDashboard.setDefaultBoolean("Control Mode", false);
+        SmartDashboard.setDefaultBoolean("Reset Encoder", false);
+
+
+
+
+
+
+        // Configurations For The Right Motor
         motorConfigR
             .inverted(true)
             .idleMode(IdleMode.kBrake)
@@ -222,6 +275,46 @@ public class SK25Elevator extends Elevator
     @Override
     public void periodic()
     {
+
+        /*
+         *  ALL REV CLOSED LOOP ENCODER STUFF
+         */
+
+        if (SmartDashboard.getBoolean("Control Mode", false)) 
+        {
+            /*
+            * Get the target velocity from SmartDashboard and set it as the setpoint
+            * for the closed loop controller.
+            */
+            double targetVelocity = SmartDashboard.getNumber("Target Velocity", 0);
+            closedLoopController.setReference(targetVelocity, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
+        } 
+        else 
+        {
+            /*
+            * Get the target position from SmartDashboard and set it as the setpoint
+            * for the closed loop controller.
+            */
+            double targetPosition = SmartDashboard.getNumber("Target Position", 0);
+            closedLoopController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        }
+
+        // Display encoder position and velocity
+        SmartDashboard.putNumber("Actual Position", encoder.getPosition());
+        SmartDashboard.putNumber("Actual Velocity", encoder.getVelocity());
+
+        if (SmartDashboard.getBoolean("Reset Encoder", false)) 
+        {
+            SmartDashboard.putBoolean("Reset Encoder", false);
+            // Reset the encoder position to 0
+            encoder.setPosition(0);
+        }
+
+
+
+
+
+
         // Initialize Current & Target Positions
         double currentPosition = getEncoderPosition();
         double lTargetPosition = getLeftTargetPosition();
