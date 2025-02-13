@@ -63,10 +63,10 @@ public class EndEffectorV1  extends SubsystemBase{
 
         armConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .p(0.1)
+            .p(3)
             .i(0)
-            .d(0)
-            .outputRange(-1, 1);
+            .d(1)
+            .outputRange(-.1, .1);
             //.p(0, ClosedLoopSlot.kSlot1)
             //.i(0, ClosedLoopSlot.kSlot1)
             //.d(0, ClosedLoopSlot.kSlot1)
