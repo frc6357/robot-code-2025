@@ -15,6 +15,8 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.LinearVelocity;
+import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
+
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
 
@@ -139,6 +141,10 @@ public final class Konstants
         public static final double kDriveP = 0.5;
         public static final double kDriveI = 0.0;
         public static final double kDriveD = 0.0;
+        public static final double kDriveS = 0.25;
+        public static final double kDriveV = 0.12;
+        public static final double kDriveA = 0.01;
+
 
         //rotation controller PID values
         public static final double kPRotationController = 8.0;
@@ -241,6 +247,9 @@ public final class Konstants
         //Other Constants
 
 
+
+        //Object containing all the neccessary coonstant values for the Swerve subsystem
+        public static final SwerveConstantsConfigurator config = new SwerveConstantsConfigurator();
 
         //the deadzone on the controller's joysticks
         public static final double kJoystickDeadband = 0.2;   //TODO: find approperiate deaband

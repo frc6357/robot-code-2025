@@ -3,7 +3,6 @@ package frc.robot.subsystems.swerve;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Konstants.SwerveConstants.kBackLeftEncoderOffsetRadians;
 import static frc.robot.Konstants.SwerveConstants.kBackLeftXPos;
@@ -64,7 +63,6 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 
-import edu.wpi.first.units.measure.Angle;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -107,16 +105,17 @@ public class SwerveConstantsConfigurator {
 
     //Create new SwerveModuleConstants objects for each module.
     //These will hold constants values for each module.
-    @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants frontLeft;
-    @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants frontRight;
-    @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants backLeft;
-    @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants backRight;
+    @SuppressWarnings("rawtypes") @Getter public SwerveModuleConstants frontLeft;
+    @SuppressWarnings("rawtypes") @Getter public SwerveModuleConstants frontRight;
+    @SuppressWarnings("rawtypes") @Getter public SwerveModuleConstants backLeft;
+    @SuppressWarnings("rawtypes") @Getter public SwerveModuleConstants backRight;
 
     //Makes an array of the swerve module constants objects
     @SuppressWarnings("rawtypes")
     public SwerveModuleConstants[] getModules() {
         return new SwerveModuleConstants[] {frontLeft, frontRight, backLeft, backRight};
     }
+    
 
 
     /** Creates a new SwerveConstantsConfigurator which applies all constants to the drivetrain and its modules.*/

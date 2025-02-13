@@ -23,7 +23,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
  * angle.
  */
 public class RotationController {
-    SK25Swerve swerve;
+
     SwerveConstantsConfigurator config;
     ProfiledPIDController controller;
     PIDController holdController;
@@ -42,7 +42,7 @@ public class RotationController {
                         kPRotationController,
                         kIRotationController,
                         kDRotationController,
-                        constraints);
+                        constraints); 
 
         //Allow the controller to wrap its angular output. In other words, don't allow 
         //the radian values to go above or below Pie or -Pie. Instead, jump from one 
