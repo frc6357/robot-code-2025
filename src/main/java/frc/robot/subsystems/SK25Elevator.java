@@ -255,22 +255,6 @@ public class SK25Elevator extends Elevator
             return false;
     }
 
-    public void runLeftMotor(double motorSpeed)
-    {
-        motorL.set(motorSpeed);
-    }
-
-    public void runRightMotor(double motorSpeed)
-    {
-        motorR.set(motorSpeed);
-    }
-
-    public void stopMotors()
-    {
-        motorL.stopMotor();
-        motorR.stopMotor();
-    }
-
     @Override
     public void periodic()
     {
@@ -315,6 +299,7 @@ public class SK25Elevator extends Elevator
 
 
         // Initialize Current & Target Positions
+        /*
         double currentPosition = getEncoderPosition();
         double lTargetPosition = getLeftTargetPosition();
         double rTargetPosition = getRightTargetPosition();
@@ -338,6 +323,7 @@ public class SK25Elevator extends Elevator
         //TODO Uncomment below and add this to elastic dashboard once it's implemented.
         //SmartDashboard.putBoolean("Elevator At Top", atTop());
         //SmartDashboard.putBoolean("Elevator At Bottom", atBottom());
+        */
     }
     public void testPeriodic(){}
     public void testInit(){}
