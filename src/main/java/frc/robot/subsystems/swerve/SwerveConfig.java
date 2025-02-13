@@ -4,7 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.Konstants.SwerveConstants.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import frc.robot.Konstants.SwerveConstants;
+import frc.robot.utils.Field;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
 
@@ -36,7 +41,7 @@ public class SwerveConfig {
     // Rotating movement constraints
     @Getter private double maxAngularVelocity = 2 * Math.PI; // rad/s
     @Getter private double maxAngularAcceleration = Math.pow(maxAngularVelocity, 2); // rad/s^2
-    // P
+    // PID values to be passed into the RotationController
     @Getter private double kPRotationController = 8.0;
     @Getter private double kIRotationController = 0.0;
     @Getter private double kDRotationController = 0.2;
@@ -45,6 +50,20 @@ public class SwerveConfig {
     @Getter private double kPHoldController = 12.0;
     @Getter private double kIHoldController = 0.0;
     @Getter private double kDHoldController = 0.0;
+
+    // Angular headings (in degrees) used for robot rotation control
+    private Map<String, Rotation2d> targetHeadings = new HashMap<>();
+    public void configureTargetHeadings() {
+        targetHeadings.put("Processor", Field.Processor.centerFace.getRotation());
+        targetHeadings.put("LeftCoralStation", Field.CoralStation.leftCenterFace.getRotation());
+        targetHeadings.put("RightCoralStation", Field.CoralStation.rightCenterFace.getRotation());
+        targetHeadings.put("NReefFace", Field.Reef.centerFaces[3].getRotation());       //       _3_3_ 
+        targetHeadings.put("NEastReefFace", Field.Reef.centerFaces[4].getRotation());   //   /2/       \4\
+        targetHeadings.put("SEastReefFace", Field.Reef.centerFaces[5].getRotation());   //  /2/         \4\      Reef facings (from driver's 
+        targetHeadings.put("SReefFace", Field.Reef.centerFaces[0].getRotation());       //  \1\         /5/      perspective) and their
+        targetHeadings.put("SWestReefFace", Field.Reef.centerFaces[1].getRotation());   //   \1\ _____ /5/       array indexes from Field.java
+        targetHeadings.put("NWestReefFace", Field.Reef.centerFaces[2].getRotation());   //    \___0_0___/
+    }
 
     // Blue alliance sees forward as 0 degrees (toward red alliance wall)
     @Getter private final Rotation2d BlueAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
@@ -153,9 +172,6 @@ public class SwerveConfig {
     @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants frontRight;
     @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants backLeft;
     @SuppressWarnings("rawtypes") @Getter private SwerveModuleConstants backRight;
-
-    // Angular heading used for robot rotation control
-    @Getter @Setter private double targetHeading = 0;
 
     @SuppressWarnings("rawtypes")
     public SwerveModuleConstants[] getModules() {

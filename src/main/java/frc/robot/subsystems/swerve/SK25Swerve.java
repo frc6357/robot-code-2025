@@ -49,7 +49,6 @@ import frc.robot.utils.Field;
 import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.Util;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
 import static frc.robot.Konstants.AutoConstants.*;
 import static frc.robot.Konstants.SwerveConstants.kDeadband;
 
@@ -62,6 +61,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     private double m_lastSimTime;
     private RotationController rotationController;
     private Pigeon2 m_pigeon2;
+    private double targetHeading;
 
     private boolean hasAppliedOperatorPerspective = false;
 
@@ -93,7 +93,9 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         config.getModules());
 
         this.config = config;
-        //setupPathPlanner();
+        this.config.configureTargetHeadings();
+        resetTargetHeading();
+        //setupPathPlanner(); TODO: Make this work
         m_pigeon2 = this.getPigeon2();
 
         rotationController = new RotationController(config);
@@ -101,13 +103,6 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         if(Utils.isSimulation()) {startSimThread();}
 
         SmartDashboard.putData(this);
-
-        fieldCentricDrive = new SwerveRequest.FieldCentric()
-                .withDeadband(
-                        config.getSpeedAt12Volts().in(MetersPerSecond) * kDeadband)
-                .withRotationalDeadband(config.getMaxAngularRate() * kDeadband)
-                .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-    
     }
 
     @Override
@@ -156,10 +151,12 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     }
 
     protected Command setTargetHeading(double targetHeading) {
-        return runOnce(() -> config.setTargetHeading(targetHeading));
+        return runOnce(() -> this.targetHeading = targetHeading);
     }
 
-    private final SwerveRequest.FieldCentric fieldCentricDrive;
+    private final SwerveRequest.FieldCentric  fieldCentricDrive = new SwerveRequest.FieldCentric()
+    .withDeadband(0).withRotationalDeadband(0) // These are 0 because the command binder accounts for deadband
+    .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
             
     private final SwerveRequest.RobotCentric robotCentricDrive =
             new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage).withDeadband(0).withRotationalDeadband(0);
@@ -220,7 +217,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
                 velocityX.getAsDouble(),
                 velocityY.getAsDouble(),
                 rotateToHeadingWhenMoving(
-                        velocityX, velocityY, () -> config.getTargetHeading()).getAsDouble(),
+                        velocityX, velocityY, () -> targetHeading).getAsDouble(),
                 true);
     }
 
@@ -234,6 +231,10 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
                 return calculateRotationController(heading::getAsDouble);
             }
         };
+    }
+
+    public void resetTargetHeading() {
+        targetHeading = 0;
     }
 
     // Reorient Commands
@@ -355,11 +356,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     }
 
     protected void reorient(double angleDegrees) {
-        resetPose(
-                new Pose2d(
-                        getRobotPose().getX(),
-                        getRobotPose().getY(),
-                        Rotation2d.fromDegrees(angleDegrees)));
+        resetRotation(Rotation2d.fromDegrees(angleDegrees));
     }
 
     protected Command reorientOperatorAngle(double angleDegrees) {
@@ -471,7 +468,7 @@ public class SK25Swerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
    * @param angle {@link Rotation2d} to set the robot heading to
    */
   public void setHeading(Rotation2d angle){
-    resetPose(new Pose2d(this.getRobotPose().getTranslation(), angle));
+    resetRotation(angle);
   }
 
   /**
