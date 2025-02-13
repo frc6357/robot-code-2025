@@ -14,7 +14,7 @@ import static frc.robot.Ports.DriverPorts.kSlowMode;
 import static frc.robot.Ports.DriverPorts.kTranslationXPort;
 import static frc.robot.Ports.DriverPorts.kTranslationYPort;
 import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;
-import static frc.robot.Ports.DriverPorts.kDriveFn;
+import static frc.robot.Ports.DriverPorts.kFn;
 
 // Filters used for input types (specifically Axis inputs)
 import frc.robot.utils.filters.CubicDeadbandFilter;
@@ -35,7 +35,7 @@ public class SK25DriveBinder implements CommandBinder{
     Optional<SK25Swerve>  m_drive;
 
     // Driver Buttons
-    public final Trigger fn = kDriveFn.button;
+    public final Trigger fn = kFn.button;
     public final Trigger noFn = fn.negate();
 
     private final Trigger robotCentric = kRobotCentricMode.button.and(fn);

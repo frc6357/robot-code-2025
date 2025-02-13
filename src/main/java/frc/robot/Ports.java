@@ -25,7 +25,7 @@ public class Ports
         public static final FilteredAxis kVelocityOmegaPort    = new FilteredAxis(() -> kDriver.getRawAxis(kRightX.value)); 
         
         // Driver Function Button (Activates secondary control scheme when held)
-        public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kLeftBumper.value, BUTTON);
+        public static final SKTrigger kFn = new SKTrigger(kDriver, kLeftBumper.value, BUTTON);
 
         // Switch modes
         public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, 180, POV); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
