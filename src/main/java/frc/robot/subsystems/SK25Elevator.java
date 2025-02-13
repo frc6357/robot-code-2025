@@ -191,9 +191,8 @@ public class SK25Elevator extends Elevator
      */
     public double getEncoderPosition()
     {
-        double encoderPositionValue = absoluteEncoder.get();
+        double encoderPositionValue = encoder.getPosition();
         return encoderPositionValue;
-
     }
 
     /**
