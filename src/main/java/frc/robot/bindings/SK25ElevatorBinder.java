@@ -58,7 +58,7 @@ public class SK25ElevatorBinder implements CommandBinder{
                          // Up on the joystick moves elevator up, and down on stick moves the elevator down.
                          new ElevatorJoystickCommand(
                              () -> {return kElevatorAxis.getFilteredAxis();},
-                             kElevatorOverride.button::getAsBoolean,
+                             () -> {return kElevatorOverride.button.getAsBoolean();},
                              elevator));
         }
     }
