@@ -83,7 +83,7 @@ public final class Konstants
         Minumum & Maximum Heights The Elevator Can Be Within
         TODO Change the height and see how that works, check SmartDashboard for elevator values first.
         */
-        public static final double kMaxHeight = 28;
+        public static final double kMaxHeight = 35;
         public static final double kMinHeight = 0;
 
         // Important Joystick Settings
