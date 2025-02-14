@@ -78,10 +78,6 @@ public class SK25Elevator extends Elevator
         // a full rotation, with the encoder reporting 0 half way through rotation (2 out of 4)
         absoluteEncoder = new DutyCycleEncoder(0, 4.0, 2.0);
 
-        // Encoder V3
-        closedLoopController = motorL.getClosedLoopController();
-        encoder = motorL.getEncoder();
-
         // PID Controllers - Setpoints
         lPID = new PIDController(leftElevator.kP, leftElevator.kI, leftElevator.kD);
         rPID = new PIDController(rightElevator.kP, rightElevator.kI, rightElevator.kD);
@@ -95,6 +91,8 @@ public class SK25Elevator extends Elevator
         // Motor Initialization With REV Sparkflex - Configurations
         motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
         motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
+
+        
         
         motorConfigL = new SparkFlexConfig();
         motorConfigR = new SparkFlexConfig();
@@ -146,6 +144,10 @@ public class SK25Elevator extends Elevator
         // Apply Motor Configurations
         motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+
+        // Encoder V3
+        closedLoopController = motorL.getClosedLoopController();
+        encoder = motorL.getEncoder();
 
         // Current, Target, and Reset Positions
         RtargetHeight = 0.0;
