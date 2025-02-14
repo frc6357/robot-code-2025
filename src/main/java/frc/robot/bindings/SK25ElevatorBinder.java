@@ -19,7 +19,7 @@ public class SK25ElevatorBinder implements CommandBinder{
     Trigger TopButton;
     Trigger TroughButton;
     Trigger zeroPositionButton;
-    //Trigger zeroPositionButtonDriver;
+    //Trigger zeroPositionButtonDriver; //
     Trigger resetPos;
     Trigger elevatorOverride;
 
