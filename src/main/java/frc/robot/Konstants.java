@@ -57,8 +57,8 @@ public final class Konstants
         }
 
         // PID Constants For Left & Right Elevator Motors (Should Be The Same)
-        public static final PIDConstants leftElevator = new PIDConstants(0.07, 0.00075, 0.001);
-        public static final PIDConstants rightElevator = new PIDConstants(0.07, 0.00075, 0.001);
+        public static final PIDConstants leftElevator = new PIDConstants(0.01, 0.00075, 0.001);
+        public static final PIDConstants rightElevator = new PIDConstants(0.01, 0.00075, 0.001);
         public static final PIDConstants balancePID = new PIDConstants(0.0, 0.0, 0.0);
 
         // Minimum & Maximum Integration Range For PID
@@ -83,11 +83,11 @@ public final class Konstants
         Minumum & Maximum Heights The Elevator Can Be Within
         TODO Change the height and see how that works, check SmartDashboard for elevator values first.
         */
-        public static final double kMaxHeight = 35;
+        public static final double kMaxHeight = 70;
         public static final double kMinHeight = 0;
 
         // Important Joystick Settings
-        public static final double kJoystickChange   = 2.0; // Manual setpoint value for units from 0.0 - 1.0 moved per second
+        public static final double kJoystickChange   = 1.0; // Manual setpoint value for units from 0.0 - 1.0 moved per second
         public static final double kJoystickDeadband = 0.3;  // Manual arm movement axis deadband
         public static final boolean kJoystickReversed = true;  // Determines if the joystick movement is reversed
     }
