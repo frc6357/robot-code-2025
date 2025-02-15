@@ -55,10 +55,10 @@ public final class Konstants
         public static final int kBackRightEncoderID = 24; //24
 
         //The offset of the encoders in radians
-        public static final Double kFrontLeftEncoderOffsetRadians = -0.184326171875;
-        public static final Double kFrontRightEncoderOffsetRadians = 0.113525390625;
-        public static final Double kBackLeftEncoderOffsetRadians = -0.036865234375;
-        public static final Double kBackRightEncoderOffsetRadians = 0.441162109375;
+        public static final Double kFrontLeftEncoderOffsetRadians = (Math.PI / 6); //-0.184326171875;
+        public static final Double kFrontRightEncoderOffsetRadians = (-Math.PI / 3); //0.113525390625;
+        public static final Double kBackLeftEncoderOffsetRadians = ((7 * Math.PI) / 4); //-0.036865234375;
+        public static final Double kBackRightEncoderOffsetRadians = ((5 * Math.PI) / 4); //0.441162109375;
 
         //determines if the encoders are inverted
         public static final boolean kIsFrontLeftEncoderInverted = false;
