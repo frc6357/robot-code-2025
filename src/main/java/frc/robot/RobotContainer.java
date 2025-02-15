@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static frc.robot.Konstants.SwerveConstants.config;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,9 +23,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.SK25LightsBinder;
-import frc.robot.bindings.SK25SwerveBinder;
+import frc.robot.bindings.TempSwerveBinder;
 import frc.robot.subsystems.SK25Lights;
-import frc.robot.subsystems.SK25SwerveFactory;
+import frc.robot.subsystems.TempSwerve;
 import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
@@ -36,7 +38,7 @@ import frc.robot.utils.filters.FilteredJoystick;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private Optional<SK25Lights> m_lights = Optional.empty();
-  private Optional<SK25SwerveFactory> m_swerve = Optional.empty();
+  private Optional<TempSwerve> m_swerve = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -89,7 +91,7 @@ public class RobotContainer {
             }
             if(subsystems.isSwervePresent())
             {
-                m_swerve = Optional.of(new SK25SwerveFactory());
+                m_swerve = Optional.of(new TempSwerve(config));
             }
 
         }
@@ -110,7 +112,7 @@ public class RobotContainer {
 
         // Adding all the binding classes to the list
         buttonBinders.add(new SK25LightsBinder(m_lights));
-        buttonBinders.add(new SK25SwerveBinder(m_swerve));
+        buttonBinders.add(new TempSwerveBinder(m_swerve));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)

@@ -1,15 +1,15 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static frc.robot.Konstants.SwerveConstants.kBackLeftXPos;
-import static frc.robot.Konstants.SwerveConstants.kBackLeftYPos;
-import static frc.robot.Konstants.SwerveConstants.kBackRightXPos;
-import static frc.robot.Konstants.SwerveConstants.kBackRightYPos;
+import static frc.robot.Konstants.SwerveConstants.kBackLeftDriveInverted;
+import static frc.robot.Konstants.SwerveConstants.kBackLeftEncoderOffsetRadians;
+import static frc.robot.Konstants.SwerveConstants.kBackRightDriveInverted;
+import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderOffsetRadians;
 import static frc.robot.Konstants.SwerveConstants.kChassisLength;
-import static frc.robot.Konstants.SwerveConstants.kFrontLeftXPos;
-import static frc.robot.Konstants.SwerveConstants.kFrontLeftYPos;
-import static frc.robot.Konstants.SwerveConstants.kFrontRightXPos;
-import static frc.robot.Konstants.SwerveConstants.kFrontRightYPos;
+import static frc.robot.Konstants.SwerveConstants.kFrontLeftDriveInverted;
+import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderOffsetRadians;
+import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveInverted;
+import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderOffsetRadians;
 import static frc.robot.Konstants.SwerveConstants.kJoystickDeadband;
 import static frc.robot.Konstants.SwerveConstants.kMaxAngularRate;
 import static frc.robot.Konstants.SwerveConstants.kSpeedAt12VoltsMeterPerSecond;
@@ -73,28 +73,37 @@ public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     //constructor
     public TempSwerve(SwerveConstantsConfigurator config)
     {
-        super(TalonFX::new, TalonFX::new, CANcoder::new, config.getDrivetrainConstants(), config.getModules());
+        //TODO: new motors and encoder why???
+        super(TalonFX::new, TalonFX::new, CANcoder::new, config.getDrivetrainConstants(), config.frontLeft, config.frontRight, config.backLeft, config.backRight);
         this.config = config;
-
-        fL = new TempModule(kFrontLeftXPos, kFrontLeftYPos);
-        fR = new TempModule(kFrontRightXPos, kFrontRightYPos);
-        bL = new TempModule(kBackLeftXPos, kBackLeftYPos);
-        bR = new TempModule(kBackRightXPos, kBackRightYPos);
+      
+    
+        fL = new TempModule(config.frontLeft, kFrontLeftDriveInverted, kFrontLeftEncoderOffsetRadians, m_drivetrainId, 0);
+        fR = new TempModule(config.frontRight, kFrontRightDriveInverted, kFrontRightEncoderOffsetRadians, m_drivetrainId, 1);
+        bL = new TempModule(config.backLeft, kBackLeftDriveInverted, kBackLeftEncoderOffsetRadians, m_drivetrainId, 2);
+        bR = new TempModule(config.backRight, kBackRightDriveInverted, kBackRightEncoderOffsetRadians, m_drivetrainId, 3);
         controller = new RotationController(config);
         bird = this.getPigeon2();
 
         odometry = new SwerveDriveOdometry(getDrivetrainKinematics(), getPigeonRotation(), positions, new Pose2d());     //TODO: alter initial pose mabye
 
         fieldCentricRequest = new SwerveRequest.FieldCentric()
-                .withDeadband(kSpeedAt12VoltsMeterPerSecond.in(MetersPerSecond) * kJoystickDeadband)
-                .withRotationalDeadband(kMaxAngularRate * kJoystickDeadband)      //TODO: use cubicDeadband filter instead
+                //.withDeadband(kSpeedAt12VoltsMeterPerSecond.in(MetersPerSecond) * kJoystickDeadband)    //TODO: use cubicDeadband filter instead
                 .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+                //.withRotationalDeadband(kMaxAngularRate * kJoystickDeadband)  
     }
 
 
     //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
 
-    
+    private void updateModulePositions()
+    {
+        SwerveModulePosition[] newPositions = getModulePositions();
+        positions[0] = newPositions[0];
+        positions[1] = newPositions[1];
+        positions[2] = newPositions[2];
+        positions[3] = newPositions[3];
+    }
 
 
     //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
@@ -103,6 +112,11 @@ public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         this.setControl(fieldCentricRequest.withVelocityX(xSpeed)
         .withVelocityY(ySpeed)
         .withRotationalRate(rotation));
+        
+        // fL.driveOpenLoop(fL.getTargetModuleState());
+        // fR.driveOpenLoop(fR.getTargetModuleState());
+        // bL.driveOpenLoop(bL.getTargetModuleState());
+        // bR.driveOpenLoop(bR.getTargetModuleState());
     }
     
 
@@ -150,7 +164,8 @@ public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
 
     //getters
 
-     private ChassisSpeeds getCurrentRobotChassisSpeeds() {
+    private ChassisSpeeds getCurrentRobotChassisSpeeds()
+    {
         return getKinematics().toChassisSpeeds(getState().ModuleStates);
     }
 
@@ -169,11 +184,6 @@ public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         return this.getKinematics();
     }
 
-    //private SwerveModuleState getModuleStates()
-    //{
-        //return this.getModuleStates();
-    //}
-
     private Translation2d[] getModuleLocation()
     {
         return this.getModuleLocations();
@@ -181,17 +191,7 @@ public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
 
   //odometry
 
-    //gets the swerve module position
-    /**
-     * Gets the position of the swerve modules on the feild using the module rotation and distance driven by the drive motor.
-     * @return The object containing the module position.
-     */
-    public SwerveModulePosition getLatestSwerveModulePosition()
-    {
-        //new swerve module position with the current distance driven and current module rotation
-        return new SwerveModulePosition(getDriveDistanceMeters(), getModuleRotation());
-        getModulePositions();
-    }
+    
 
     public void updateOdometry() 
     {
@@ -211,16 +211,12 @@ public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
      * Gets the position of the swerve modules on the feild using the module rotation and distance driven by the drive motor.
      * @return The object containing the module position.
      */
-    public SwerveModulePosition[] getLatestSwerveModulePosition()
+    public SwerveModulePosition[] getModulePositions()
     {
         //new swerve module position with the current distance driven and current module rotation
-        return drivetrainState.getPosition();
+        return drivetrainState.ModulePositions;
     }
-
-    public TalonFX getModuleDriveMotor()
-    {
-        return drivetrainState.getDriveMotor();
-    }
+    
 
 
 
@@ -228,7 +224,7 @@ public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     //occurs every 20 miliseconds, usually not tied to a command, binder, etc...
     public void periodic()
     {
-        updateOdometry();
+        //updateOdometry();
     } 
 
     public void testInit()
@@ -237,6 +233,6 @@ public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     
     public void testPeriodic()
     {
-        updateOdometry();
+        //updateOdometry();
     }
 }

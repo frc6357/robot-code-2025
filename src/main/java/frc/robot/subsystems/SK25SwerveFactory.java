@@ -157,7 +157,11 @@ public class SK25SwerveFactory extends SubsystemBase{
         return getUpdatedOdometryPose();
     }
 
-    //occurs every 20 miliseconds, usually not tied to a command, binder, etc...
+    public void Init()
+    {
+    }
+
+    //occurs every 20 miliseconds
     public void periodic()
     {
         updateOdometry();

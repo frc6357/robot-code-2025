@@ -130,14 +130,14 @@ public class SKController
     }
 
     //only works for xbox
-    public FilteredXboxController getUnderlyingXboxController()
+    public FilteredXboxController getUnderlyingXboxController() throws Exception
     {
         switch(type)
         {
             case XBOX:
                 return xboxController;
             default:
-                return null;
+                throw new Exception("Attempted to call getUnderlyingXboxController on a controller not of enum type XBOX");
         } 
     }
 

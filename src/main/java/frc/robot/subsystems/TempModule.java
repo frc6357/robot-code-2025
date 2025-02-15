@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Rotation;
-import static frc.robot.Konstants.SwerveConstants.config;
 import static frc.robot.Konstants.SwerveConstants.kCANivoreNameString;
 import static frc.robot.Konstants.SwerveConstants.kDriveA;
 import static frc.robot.Konstants.SwerveConstants.kDriveD;
@@ -16,7 +15,7 @@ import static frc.robot.Konstants.SwerveConstants.kRotationToleranceRadians;
 import static frc.robot.Konstants.SwerveConstants.kWheelCircumferenceMeters;
 
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreCANcoder;
 import com.ctre.phoenix6.swerve.SwerveModule;
@@ -24,7 +23,6 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -33,25 +31,17 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.utils.SKPIDController;
 
-public class TempModule extends SwerveModule<TalonFX, TalonFX, CoreCANcoder>
+public class TempModule extends SwerveModule<TalonFX, TalonFX, CANcoder>
 {
-    
-    public static enum ModuleName
-    {
-        FRONTLEFT,
-        FRONTRIGHT,
-        BACKLEFT,
-        BACKRIGHT;
-    }
-
-    public ModuleName name;
 
     //the contsantsConfig class will handle logic with the motors, encoders, and most wpilib classes
+    //public static double moduleIndex =  this.m_moduleIdx;
 
     public TalonFX driveMotor;
     public TalonFX turnMotor;
-    public CoreCANcoder encoder;
+    public CANcoder encoder;
     public double inverted;
+    double encoderOffset;
 
     public Constraints trapezoidPIDRestraints;
     public Translation2d moduleLocation;
@@ -69,44 +59,26 @@ public class TempModule extends SwerveModule<TalonFX, TalonFX, CoreCANcoder>
 
     //constructor (configs)
     public TempModule(
-        TalonFX driveMotor, 
-        TalonFX turnMotor, 
-        CoreCANcoder encoder, 
-        SwerveModuleConstants<?, ?, ?> moduleConstants, 
-        double inverted, 
+        SwerveModuleConstants moduleConstants, 
+        double driveMotorInverted,
+        double encoderOffset, 
         int drivetrainID, 
-        int moduleIndex, 
-        ModuleName name)
-    {
-        super(driveMotor, turnMotor, encoder, moduleConstants, kCANivoreNameString, drivetrainID, moduleIndex);
+        int moduleIndex
+        )
+    {  
+        //Uses lambdas to create new motors and encoder because the internal logic of the phoenix 
+        //SwerveModule class handle ID and CANbus assignments via the passed SwerveModuleConstants object.
+        super(TalonFX::new, TalonFX::new, CANcoder::new, moduleConstants, kCANivoreNameString, drivetrainID, moduleIndex);
 
         trapezoidPIDRestraints = new Constraints(kMaxAngularVelocity, kMaxAngularAcceleration);
         velocityLimiter = new SlewRateLimiter(kMaxVelocityMetersPerSecond);
         modulePID = new SKPIDController(kDriveP, kDriveI, kDriveD, trapezoidPIDRestraints);
    
-        this.name = name;
-        this.inverted = inverted;
+        this.inverted = driveMotorInverted;
+        this.encoderOffset = encoderOffset;
         this.driveMotor = this.getDriveMotor();
         this.turnMotor = this.getSteerMotor();
         this.encoder = this.getEncoder();
-    }
-
-    @SuppressWarnings("rawtypes")
-    public SwerveModuleConstants getModuleConstants() throws Exception
-    {
-        switch(name)
-        {
-            case FRONTLEFT:
-                return config.frontRight;
-            case FRONTRIGHT:
-                return config.frontRight;
-            case BACKLEFT:
-                return config.backLeft;
-            case BACKRIGHT:
-                return config.backRight;
-            default:
-                throw new Exception("Unidentifiable module name at getModuleConstants()");
-        }
     }
 
 
@@ -178,7 +150,6 @@ public class TempModule extends SwerveModule<TalonFX, TalonFX, CoreCANcoder>
         return getDriveDistanceAngle().in(Rotation) * kWheelCircumferenceMeters;
     }
 
-   //gets the swerve module position
     /**
      * Gets the position of the swerve modules on the feild using the module rotation and distance driven by the drive motor.
      * @return The object containing the module position.
@@ -198,7 +169,7 @@ public class TempModule extends SwerveModule<TalonFX, TalonFX, CoreCANcoder>
     {
         //rotation2d is a rotation coordinate on the unit circle. This version of the method takes radian values as doubles (0.0 to 2 * Math.PI).
         //this object holds an angle with turning encoder's current pos.
-        return new Rotation2d(getEncoderPos(encoder));
+        return new Rotation2d(getOffsetEncoderPos(encoder, encoderOffset));
     }
 
     /**
@@ -207,10 +178,10 @@ public class TempModule extends SwerveModule<TalonFX, TalonFX, CoreCANcoder>
      * @param offset The offset of the encoder in radians.
      * @return The encoder position in radians with respect to the specified offset.
      */
-    private double getEncoderPos(CoreCANcoder encoder)
+    private double getOffsetEncoderPos(CoreCANcoder encoder, double offset)
     {
         //convert the StatusSignal<Angle> return type of the encoder to an angle, then to radians, then substract the offset.
-        return (getEncoderAbsRotations().getValue().in(Units.Radians));
+        return (getEncoderAbsRotations().getValue().in(Units.Radians) - offset);
     }
 
      /** gets the absolute position of the turn motor in rotations */
@@ -219,35 +190,10 @@ public class TempModule extends SwerveModule<TalonFX, TalonFX, CoreCANcoder>
         return encoder.getAbsolutePosition();
     }
 
+    public SwerveModuleState getTargetModuleState()
+    {
+        return this.getTargetState();
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    //getModuleRotation
-    //getModuleState
-    //getPosition
-    public Transform2d m = new Transform2d(new Translation2d(), new Rotation2d());
-
-
-    //setters
-
-    //setModuleState
-
-
-
-    //others
-
-    //state.optimize
-    //state.decreaseError
-    //apply PID
-
+    //public Transform2d m = new Transform2d(new Translation2d(), new Rotation2d());
 }
