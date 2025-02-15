@@ -65,9 +65,15 @@ public class Ports
         public static final SKTrigger kResetElevatorPos = new SKTrigger(kOperator, kBack.value, BUTTON);
         public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
 
-        // Party mode
-        public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
-        public static final SKTrigger kLightsOff = new SKTrigger(kOperator, 90, POV);
+    
+        public static final SKTrigger armTrough = new SKTrigger(kOperator, kX.value, BUTTON);
+        public static final SKTrigger armMiddleLow = new SKTrigger(kOperator, kY.value, BUTTON);
+        public static final SKTrigger armHigh = new SKTrigger(kOperator, kA.value, BUTTON);
+        public static final SKTrigger intakebut = new SKTrigger(kOperator, kB.value, BUTTON);
+        public static final SKTrigger zeropos = new SKTrigger(kOperator, kStart.value, BUTTON);
+
+        public static final FilteredAxis endArm = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
+
     }
 
     /*
@@ -108,6 +114,14 @@ public class Ports
         public static final CANPort kLeftElevatorMotor = new CANPort(41, busName);
         public static final CANPort kEncoderL = new CANPort(43, busName);
         public static final CANPort kEncoderR = new CANPort(44, busName); 
+    }
+    public static class EndEffectorPorts
+    {
+        private static final String busName = "";
+        //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
+        public static final CANPort kEndEffectorArmMotor = new CANPort(40, busName);
+        public static final CANPort kEndEffectorRollerMotor = new CANPort(41, busName);
+
     }
 
 
