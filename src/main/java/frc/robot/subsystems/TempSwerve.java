@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
 import static frc.robot.Konstants.SwerveConstants.kBackLeftDriveInverted;
 import static frc.robot.Konstants.SwerveConstants.kBackLeftEncoderOffsetRadians;
 import static frc.robot.Konstants.SwerveConstants.kBackRightDriveInverted;
@@ -10,12 +9,11 @@ import static frc.robot.Konstants.SwerveConstants.kFrontLeftDriveInverted;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderOffsetRadians;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveInverted;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderOffsetRadians;
-import static frc.robot.Konstants.SwerveConstants.kJoystickDeadband;
-import static frc.robot.Konstants.SwerveConstants.kMaxAngularRate;
-import static frc.robot.Konstants.SwerveConstants.kSpeedAt12VoltsMeterPerSecond;
+import static frc.robot.Konstants.SwerveConstants.kSimulationLoopPeriod;
 
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -31,14 +29,36 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NTSendable;
+import edu.wpi.first.networktables.NTSendableBuilder;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.swerve.RotationController;
 import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
 import frc.robot.utils.Field;
 import frc.robot.utils.Util;
 
-public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements Subsystem
+public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements NTSendable, Subsystem
 {
+
+
+
+     //simulation stuff                
+     private Notifier m_simNotifier = null;
+     private double m_lastSimTime;
+
+
+
+
+
+
     //stuff
     private SwerveConstantsConfigurator config = new SwerveConstantsConfigurator();
 
@@ -112,11 +132,15 @@ public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         this.setControl(fieldCentricRequest.withVelocityX(xSpeed)
         .withVelocityY(ySpeed)
         .withRotationalRate(rotation));
+
+        SmartDashboard.putNumber("xSpeed", xSpeed);
+        SmartDashboard.putNumber("ySpeed", ySpeed);
+        SmartDashboard.putNumber("rotation", rotation);
         
-        // fL.driveOpenLoop(fL.getTargetModuleState());
-        // fR.driveOpenLoop(fR.getTargetModuleState());
-        // bL.driveOpenLoop(bL.getTargetModuleState());
-        // bR.driveOpenLoop(bR.getTargetModuleState());
+        //fL.driveOpenLoop(fL.getTargetModuleState());
+        //fR.driveOpenLoop(fR.getTargetModuleState());
+        //bL.driveOpenLoop(bL.getTargetModuleState());
+        //bR.driveOpenLoop(bR.getTargetModuleState());
     }
     
 
@@ -216,8 +240,71 @@ public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         //new swerve module position with the current distance driven and current module rotation
         return drivetrainState.ModulePositions;
     }
-    
 
+
+
+
+
+
+
+
+    //log the current swerve states
+    StructArrayPublisher<SwerveModuleState> currentPublisher = 
+    NetworkTableInstance.getDefault().
+    getStructArrayTopic("CurrentSwerveStates", SwerveModuleState.struct).publish();
+    //log the target swerve states
+    StructArrayPublisher<SwerveModuleState> targetPublisher = 
+    NetworkTableInstance.getDefault().
+    getStructArrayTopic("TargetSwerveStates", SwerveModuleState.struct).publish();
+    //log the rotation of the robot
+    StructPublisher<Rotation2d> odomPublisher = NetworkTableInstance.getDefault().
+    getStructTopic("Rotation", Rotation2d.struct).publish();
+
+    //create new tabs/porperties on the display with the builder object
+    public void initSendable(NTSendableBuilder builder) {
+        SmartDashboard.putData(
+                "Swerve Drive",
+                new Sendable() {
+                    @Override
+                    public void initSendable(SendableBuilder builder) {
+                        builder.setSmartDashboardType("SwerveDrive");
+
+                        addModuleProperties(builder, "Front Left", 0);
+                        addModuleProperties(builder, "Front Right", 1);
+                        addModuleProperties(builder, "Back Left", 2);
+                        addModuleProperties(builder, "Back Right", 3);
+
+                        builder.addDoubleProperty("Robot Angle", () -> getRotationRadians(), null);
+                    }
+                });
+    }
+
+    //assign properties to the modules on the dashboard using the their most recent values
+    private void addModuleProperties(SendableBuilder builder, String moduleName, int moduleNumber) {
+        builder.addDoubleProperty(
+                moduleName + " Angle",
+                () -> getModule(moduleNumber).getCurrentState().angle.getRadians(),
+                null);
+        builder.addDoubleProperty(
+                moduleName + " Velocity",
+                () -> getModule(moduleNumber).getCurrentState().speedMetersPerSecond,
+                null);
+    }
+    
+    private void startSimThread() { 
+        m_lastSimTime = Utils.getCurrentTimeSeconds();
+
+        /* Run simulation at a faster rate so PID gains behave more reasonably */
+        m_simNotifier = new Notifier(() -> {
+            final double currentTime = Utils.getCurrentTimeSeconds();
+            double deltaTime = currentTime - m_lastSimTime;
+            m_lastSimTime = currentTime;
+
+            /* use the measured time delta, get battery voltage from WPILib */
+            updateSimState(deltaTime, RobotController.getBatteryVoltage());
+        });
+        m_simNotifier.startPeriodic(kSimulationLoopPeriod);
+}
 
 
 
@@ -225,6 +312,13 @@ public class TempSwerve extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     public void periodic()
     {
         //updateOdometry();
+
+      SmartDashboard.putNumber("test", 0.0);
+      //Update the publisher objects with the most recent states and odometry heading
+      currentPublisher.set(this.getState().ModuleStates);
+      targetPublisher.set(this.getState().ModuleTargets);
+      odomPublisher.set(getOdomHeading());
+      SmartDashboard.putData(this);
     } 
 
     public void testInit()

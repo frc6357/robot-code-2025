@@ -55,10 +55,10 @@ public final class Konstants
         public static final int kBackRightEncoderID = 24; //24
 
         //The offset of the encoders in radians
-        public static final Double kFrontLeftEncoderOffsetRadians = 0.40283203125;
-        public static final Double kFrontRightEncoderOffsetRadians = -0.044677734375;
-        public static final Double kBackLeftEncoderOffsetRadians = -0.21875;
-        public static final Double kBackRightEncoderOffsetRadians = -0.08642578125;
+        public static final Double kFrontLeftEncoderOffsetRadians = -0.184326171875;
+        public static final Double kFrontRightEncoderOffsetRadians = 0.113525390625;
+        public static final Double kBackLeftEncoderOffsetRadians = -0.036865234375;
+        public static final Double kBackRightEncoderOffsetRadians = 0.441162109375;
 
         //determines if the encoders are inverted
         public static final boolean kIsFrontLeftEncoderInverted = false;
@@ -90,9 +90,9 @@ public final class Konstants
         public static final int kChassisWidth = 27;
 
         // "Front-to-back Encoder Distance in inches"
-        public static final double kFrontToBackEncoderDistInches = 21.6875;
+        public static final double kFrontToBackEncoderDistInches = 21.625;
         //"Left-to-right Encoder Distance in inches"
-        public static final double kLeftToRightEncoderDistInches = 21.59375;
+        public static final double kLeftToRightEncoderDistInches = 21.625;
 
         // Module positions for kinematics, distances between encoders divided by two
         // Front left                                                                      //TODO: decide on module position in x and y or translation 2ds
@@ -119,7 +119,7 @@ public final class Konstants
         // Combines a margin of error with the known wheel radius 
         // to determine an optimized value for odometry
         public static final double kWheelErrorMargin = 0.0; //inches
-        public static final double kWheelRadius = (kWheelRadiusInches + kWheelErrorMargin / 2); //inches
+        public static final double kWheelRadius = ((kWheelRadiusInches + kWheelErrorMargin) / 2); //inches
 
         // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
         // This may need to be tuned to your individual robot
@@ -159,15 +159,15 @@ public final class Konstants
         // The steer motor uses any SwerveModule.SteerRequestType control request with the
         // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
         public static final Slot0Configs kSteerGains = new Slot0Configs() //TODO - tune steering gains drive
-        .withKP(4.8).withKI(0).withKD(0.1)
-        .withKS(0.25).withKV(0.12).withKA(0.01);
+        .withKP(100.0).withKI(0).withKD(0.5)
+        .withKS(0.1).withKV(2.66).withKA(0.0);
 
         // When using closed-loop control, the drive motor uses the control
         // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
         //TODO: THIS IS 2024 TUNING!!!! PLEASE UPDATE ME!!!!
         public static final Slot0Configs kDriveGains = new Slot0Configs() //TODO - tune driving gains drive
-        .withKP(2.3).withKI(0).withKD(0)
-        .withKS(0).withKV(0).withKA(0);
+        .withKP(0.1).withKI(0).withKD(0)
+        .withKS(0).withKV(0.124).withKA(0);
 
          // The closed-loop output type to use for the steer motors;
         // This affects the PID/FF gains for the steer motors
@@ -236,7 +236,7 @@ public final class Konstants
 
         /**The stator current at which the wheels start to slip.
         *This needs to be tuned to your individual robot*/
-        public static final double kSlipCurrentAmps = 300.0;            //TODO: Tune SlipCurrent
+        public static final double kSlipCurrentAmps = 120;            //TODO: Tune SlipCurrent
 
         // Simulated voltage necessary to overcome friction
         public static final double kTurnFrictionVoltage = 0.25;

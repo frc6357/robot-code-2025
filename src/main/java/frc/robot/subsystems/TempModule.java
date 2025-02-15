@@ -93,18 +93,18 @@ public class TempModule extends SwerveModule<TalonFX, TalonFX, CANcoder>
         driveMotor.setVoltage(inverted * getLimitedVelocity(percentOutput * 12));
 
         //set the PID controller to reach the desired angle (always closed loop control)
-        turnMotor.setPosition(
-            modulePID.applyAllPID(
-                true, 
-                currentPoint, 
-                targetPoint, 
-                kRotationToleranceRadians, 
-                kDriveS, 
-                kDriveV, 
-                kDriveA, 
-                currentVelocity, 
-                targetVelocity, 
-                targetAcceleration));
+        // turnMotor.setPosition(
+        //     modulePID.applyAllPID(
+        //         true, 
+        //         currentPoint, 
+        //         targetPoint, 
+        //         kRotationToleranceRadians, 
+        //         kDriveS, 
+        //         kDriveV, 
+        //         kDriveA, 
+        //         currentVelocity, 
+        //         targetVelocity, 
+        //         targetAcceleration));
     }
 
     /**

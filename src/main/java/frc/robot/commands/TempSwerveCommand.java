@@ -48,7 +48,7 @@ public class TempSwerveCommand extends Command{
         double desiredRadiansPerSecond = rightX.get() * 2 * Math.PI;
 
         //run the doSwerve method which handles all swerve movement possibilites.
-        Swerve.normalDrive(leftX.get(), leftY.get(), desiredRadiansPerSecond);
+        Swerve.normalDrive(leftX.get(), leftY.get(), rightX.get());
     }
     
 
