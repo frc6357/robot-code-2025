@@ -71,6 +71,7 @@ public class Ports
         public static final SKTrigger armHigh = new SKTrigger(kOperator, kA.value, BUTTON);
         public static final SKTrigger intakebut = new SKTrigger(kOperator, kB.value, BUTTON);
         public static final SKTrigger zeropos = new SKTrigger(kOperator, kStart.value, BUTTON);
+        public static final SKTrigger resetencoder = new SKTrigger(kOperator, kRightStick.value, BUTTON);
 
         public static final FilteredAxis endArm = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
 

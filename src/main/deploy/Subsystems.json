@@ -1,5 +1,6 @@
 {
     "elevator": true,
     "swerve": true,
-    "example": true
+    "example": true,
+    "endeffector": true
 }

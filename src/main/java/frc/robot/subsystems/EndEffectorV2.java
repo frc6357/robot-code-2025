@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Konstants.EndEffectorConstants.kEndEffectorMotorMaxOutput;
-import static frc.robot.Konstants.EndEffectorConstants.kEndEffetorMotorMinOutput;
 import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
@@ -40,7 +38,7 @@ public class EndEffectorV2 extends SubsystemBase
     double mTargetAngle;
     double mCurrentAngle;
 
-    private SparkRelativeEncoder mEncoder;
+    public SparkRelativeEncoder mEncoder;
 
     ArmFeedforward  armFeedforward;
 
@@ -85,21 +83,31 @@ public class EndEffectorV2 extends SubsystemBase
         mCurrentAngle = 0.0;
     }
 
+    public void initialize()
+    {
+        mEncoder.setPosition(0);
+    }
+
+    public void resetEncoder()
+    {
+        mEncoder.setPosition(0);
+    }
+
     public void setTargetAngle(double angle)
     {
         mTargetAngle = angle;
 
-        angle = (angle/degrees/gear2Rotation) * gear1Rotation * motorRatio;
+        double motorRotations = (angle/degrees/gear2Rotation) * gear1Rotation * motorRatio;
         //Come back and change this, need fraction for Encoder Rotations in place of angle
-        mPID.setReference(angle, ControlType.kPosition,ClosedLoopSlot.kSlot0 );
+        mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0 );
 
     }
 
     public double getArmPosition()
     {
         //Set conversion factor
-        double angle = mEncoder.getPosition();
-        angle = (angle * gear2Rotation * degrees) / motorRatio / gear1Rotation;
+        double motorRotations = mEncoder.getPosition();
+        double angle = (motorRotations * gear2Rotation * degrees) / motorRatio / gear1Rotation;
         return angle;
     }
 
@@ -112,6 +120,27 @@ public class EndEffectorV2 extends SubsystemBase
     public boolean isArmAtTargetPosition()
     {
         return Math.abs( getTargetArmPosition() -getArmPosition()) < kArmTolerance;
+    }
+
+     /*public void runRoller()
+     {
+        rollerMotor.set(kRollerSpeed);
+    }*/
+
+    public void runArm(double armspeed)
+    {
+        armMotor.set(armspeed);
+    }
+
+    /*stops the motor
+    //public void stopRoller()
+    {
+        rollerMotor.stopMotor();
+    }*/
+
+    public void stopArm()
+    {
+        armMotor.stopMotor();
     }
 
      public void periodic()

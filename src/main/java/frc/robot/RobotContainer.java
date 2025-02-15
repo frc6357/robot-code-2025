@@ -23,6 +23,8 @@ import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.SK25ElevatorBinder;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SK25Elevator;
+import frc.robot.bindings.EndEffectorBinder;
+import frc.robot.subsystems.EndEffectorV2;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
 
@@ -36,6 +38,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
   private Optional<SK25Elevator>    elevatorSubsystem    = Optional.empty();
+  private Optional<EndEffectorV2> endEffector = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -85,6 +88,10 @@ public class RobotContainer {
             {
                 elevatorSubsystem = Optional.of(new SK25Elevator());
             }
+            if(subsystems.isEndEffectorPresent())
+            {
+                endEffector = Optional.of(new EndEffectorV2());
+            }
         }
         catch (IOException e)
         {
@@ -103,6 +110,7 @@ public class RobotContainer {
 
         // Adding all the binding classes to the list
         buttonBinders.add(new SK25ElevatorBinder(elevatorSubsystem));
+        buttonBinders.add(new EndEffectorBinder(endEffector));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
@@ -112,7 +120,12 @@ public class RobotContainer {
 
     }
 
-    private void configurePathPlanner(){}
+    private void configurePathPlanner(){
+
+        if(endEffector.isPresent())
+        {
+        }
+    }
 
   /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -133,6 +146,10 @@ public class RobotContainer {
         {
             elevatorSubsystem.get().testPeriodic();
         }
+        if(endEffector.isPresent())
+        {
+            endEffector.get().testPeriodic();
+        }
     }
     public void testInit(){
         if(mySubsystem.isPresent())
@@ -142,6 +159,10 @@ public class RobotContainer {
         if(elevatorSubsystem.isPresent())
         {
             elevatorSubsystem.get().testInit();
+        }
+        if(endEffector.isPresent())
+        {
+            endEffector.get().testInit();
         }
     }
 
@@ -154,6 +175,12 @@ public class RobotContainer {
             //elevator.setRightTargetHeight(0.0);
             //elevator.setLeftTargetHeight(0.0);
         }
+
+        if(endEffector.isPresent())
+        {
+            EndEffectorV2 endeffector = endEffector.get();
+        }
+        
     }
 
     public void teleopInit()
