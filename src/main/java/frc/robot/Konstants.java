@@ -66,8 +66,8 @@ public final class Konstants
         public static final double kMaxInteg = 0.15;
 
         // Positive & Negative Acceleration Limits (In %/sec)
-        public static final double kPositiveAccelLimit = 2.0;
-        public static final double kNegativeAccelLimit = -1.0; // Previously -5
+        public static final double kPositiveAccelLimit = 1.0;
+        public static final double kNegativeAccelLimit = -5.0; // Previously -5
 
         // Position Tolerance For The ELevator (+ or - The Target Position)
         public static final double kPositionTolerance = 2.0;
@@ -83,7 +83,7 @@ public final class Konstants
         Minumum & Maximum Heights The Elevator Can Be Within
         TODO Change the height and see how that works, check SmartDashboard for elevator values first.
         */
-        public static final double kMaxHeight = 70;
+        public static final double kMaxHeight = 50;
         public static final double kMinHeight = 0;
 
         // Important Joystick Settings

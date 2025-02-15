@@ -243,13 +243,6 @@ public class SK25Elevator extends Elevator
         SmartDashboard.putNumber("Actual Position", encoder.getPosition());
         SmartDashboard.putNumber("Actual Velocity", encoder.getVelocity());
 
-        if (SmartDashboard.getBoolean("Reset Encoder", false)) 
-        {
-            SmartDashboard.putBoolean("Reset Encoder", false);
-            // Reset the encoder position to 0
-            encoder.setPosition(0);
-        }
-
         // Initialize Current & Target Positions
         double currentPosition = getEncoderPosition();
         double lTargetPosition = getLeftTargetPosition();
