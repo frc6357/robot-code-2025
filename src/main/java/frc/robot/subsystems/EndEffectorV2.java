@@ -7,7 +7,9 @@ import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -35,8 +37,8 @@ public class EndEffectorV2 extends SubsystemBase
     SparkMaxConfig armConfig;
 
     SparkClosedLoopController mPID;
-    double mtargetPosition;
-    double mcurrentPosition;
+    double mTargetAngle;
+    double mCurrentAngle;
 
     private SparkRelativeEncoder mEncoder;
 
@@ -72,14 +74,81 @@ public class EndEffectorV2 extends SubsystemBase
             .smartCurrentLimit(30);
 
         mPID = armMotor.getClosedLoopController();
+
+        mEncoder.getPosition();
         
         armFeedforward = new ArmFeedforward(0.22,0.58, 0.10, 0.01 );
 
-       armMotor.configure(armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        armMotor.configure(armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-       armTargetAngle = 0.0;
+        mTargetAngle = 0.0;
+        mCurrentAngle = 0.0;
+    }
+
+    public void setTargetAngle(double angle)
+    {
+        mTargetAngle = angle;
+
+        angle = (angle/degrees/gear2Rotation) * gear1Rotation * motorRatio;
+        //Come back and change this, need fraction for Encoder Rotations in place of angle
+        mPID.setReference(angle, ControlType.kPosition,ClosedLoopSlot.kSlot0 );
 
     }
 
+    public double getArmPosition()
+    {
+        //Set conversion factor
+        double angle = mEncoder.getPosition();
+        angle = (angle * gear2Rotation * degrees) / motorRatio / gear1Rotation;
+        return angle;
+    }
+
+    public double getTargetArmPosition()
+    {
+       return mTargetAngle;
+
+    }
+
+    public boolean isArmAtTargetPosition()
+    {
+        return Math.abs( getTargetArmPosition() -getArmPosition()) < kArmTolerance;
+    }
+
+     public void periodic()
+    {
+
+        
+        if (SmartDashboard.getBoolean("Control Mode", false)) 
+        {
+            double targetVelocity = SmartDashboard.getNumber("Target Velocity", 0);
+            mPID.setReference(targetVelocity, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
+        } 
+        else 
+        {
+            double targetPosition = SmartDashboard.getNumber("Target Position", 0);
+            mPID.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        }
+
+        SmartDashboard.putNumber("Actual Position", mEncoder.getPosition());
+        SmartDashboard.putNumber("Actual Velocity", mEncoder.getVelocity());
+
+        if (SmartDashboard.getBoolean("Reset Encoder", false)) 
+        {
+            SmartDashboard.putBoolean("Reset Encoder", false);
+            mEncoder.setPosition(0);
+        }
+        
+        double currentPosition = getArmPosition();
+        double armTargetPosition = getTargetArmPosition();
+        
+        SmartDashboard.putNumber("Current Estimated Position", currentPosition);
+
+        SmartDashboard.putNumber("Arm Target Position", armTargetPosition);
+        SmartDashboard.putBoolean("Arm at Setpoint", isArmAtTargetPosition());
+        
+    }
+
+    public void testPeriodic(){}
+    public void testInit(){}
 
 }
