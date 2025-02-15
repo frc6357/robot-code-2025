@@ -38,11 +38,11 @@ public final class Konstants
             //TODO FIX DURING TESTING - Measure Elevator Heights
 
             /** Set the height to reach the top branch (L4) */
-            TopPosition(27),
+            TopPosition(48),
             /** Set the height to reach the middle branch (L3) */
-            MidPosition(22),
+            MidPosition(36),
             /** Set the height to reach the low branch (L2) */
-            LowPosition(17),
+            LowPosition(24),
             /** Set the height to reach the trough (L1) */
             TroughPosition(12),
             /** Set the height to reach the bottom */
@@ -57,8 +57,8 @@ public final class Konstants
         }
 
         // PID Constants For Left & Right Elevator Motors (Should Be The Same)
-        public static final PIDConstants leftElevator = new PIDConstants(0.01, 0.00075, 0.001);
-        public static final PIDConstants rightElevator = new PIDConstants(0.01, 0.00075, 0.001);
+        public static final PIDConstants leftElevator = new PIDConstants(0.07, 0.00075, 0.001);
+        public static final PIDConstants rightElevator = new PIDConstants(0.07, 0.00075, 0.001);
         public static final PIDConstants balancePID = new PIDConstants(0.0, 0.0, 0.0);
 
         // Minimum & Maximum Integration Range For PID
@@ -66,7 +66,7 @@ public final class Konstants
         public static final double kMaxInteg = 0.15;
 
         // Positive & Negative Acceleration Limits (In %/sec)
-        public static final double kPositiveAccelLimit = 1.0;
+        public static final double kPositiveAccelLimit = 2.0;
         public static final double kNegativeAccelLimit = -1.0; // Previously -5
 
         // Position Tolerance For The ELevator (+ or - The Target Position)
@@ -87,8 +87,8 @@ public final class Konstants
         public static final double kMinHeight = 0;
 
         // Important Joystick Settings
-        public static final double kJoystickChange   = 1.0; // Manual setpoint value for units from 0.0 - 1.0 moved per second
-        public static final double kJoystickDeadband = 0.3;  // Manual arm movement axis deadband
+        public static final double kJoystickChange   = 10.0;
+        public static final double kJoystickDeadband = 0.2;  // Manual elevator movement axis deadband
         public static final boolean kJoystickReversed = true;  // Determines if the joystick movement is reversed
     }
 

@@ -16,11 +16,11 @@ import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
 
 // Encoder V3 (Still REV)
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.ClosedLoopSlot;
+//import com.revrobotics.spark.ClosedLoopSlot;
 
 // Motors - Sparkflex
 import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkBase.ControlType;
+//import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -98,8 +98,8 @@ public class SK25Elevator extends Elevator
             .positionConversionFactor(1)
             .velocityConversionFactor(1);
         motorConfigL.closedLoop
-            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1);
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+            //.velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1);
             // Set PID values for position control. We don't need to pass a closed loop
             // slot, as it will default to slot 0.
             //.p(0.1)
@@ -238,26 +238,7 @@ public class SK25Elevator extends Elevator
 
     @Override
     public void periodic()
-    {
-        if (SmartDashboard.getBoolean("Control Mode", false)) 
-        {
-            /*
-            * Get the target velocity from SmartDashboard and set it as the setpoint
-            * for the closed loop controller.
-            */  
-            double targetVelocity = SmartDashboard.getNumber("Target Velocity", 0);
-            closedLoopController.setReference(targetVelocity, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
-        } 
-        else 
-        {
-            /*
-            * Get the target position from SmartDashboard and set it as the setpoint
-            * for the closed loop controller.
-            */
-            double targetPosition = SmartDashboard.getNumber("Target Position", 0);
-            closedLoopController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-        }
-
+    {   
         // Display encoder position and velocity
         SmartDashboard.putNumber("Actual Position", encoder.getPosition());
         SmartDashboard.putNumber("Actual Velocity", encoder.getVelocity());
