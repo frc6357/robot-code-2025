@@ -112,7 +112,7 @@ public class EndEffectorV1  extends SubsystemBase{
 
     public boolean isArmAtTargetPosition()
     {
-        return Math.abs( getTargetArmPosition() -getArmPosition()) == 0;
+        return Math.abs( getTargetArmPosition() -getArmPosition()) < armAngleTolerance;
     }
 
     
