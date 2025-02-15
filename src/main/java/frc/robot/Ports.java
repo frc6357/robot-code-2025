@@ -111,10 +111,10 @@ public class Ports
     {
         private static final String busName = "";
         //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
-        public static final CANPort kRightElevatorMotor = new CANPort(40, busName);
-        public static final CANPort kLeftElevatorMotor = new CANPort(41, busName);
-        public static final CANPort kEncoderL = new CANPort(43, busName);
-        public static final CANPort kEncoderR = new CANPort(44, busName); 
+        public static final CANPort kRightElevatorMotor = new CANPort(0, busName);
+        public static final CANPort kLeftElevatorMotor = new CANPort(0, busName);
+        public static final CANPort kEncoderL = new CANPort(0, busName);
+        public static final CANPort kEncoderR = new CANPort(0, busName); 
     }
     public static class EndEffectorPorts
     {

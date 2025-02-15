@@ -83,7 +83,7 @@ public class EndEffectorBinder implements CommandBinder {
 
         
 
-            // endEffector Position Buttons (Kurian)
+            // endEffector Position Buttons
 
             
             zeroPositionButton.onTrue(new EndEffectorButtonCommand(hortizontal, endEffector));

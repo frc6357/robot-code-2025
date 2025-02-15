@@ -13,8 +13,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
-
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkRelativeEncoder;
@@ -38,7 +37,7 @@ public class EndEffectorV2 extends SubsystemBase
     double mTargetAngle;
     double mCurrentAngle;
 
-    public SparkRelativeEncoder mEncoder;
+    public RelativeEncoder mEncoder;
 
     ArmFeedforward  armFeedforward;
 
@@ -56,7 +55,7 @@ public class EndEffectorV2 extends SubsystemBase
         armConfig = new SparkMaxConfig();
         
         armConfig.closedLoop
-            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .p(3)
             .i(0)
             .d(1)
@@ -73,19 +72,22 @@ public class EndEffectorV2 extends SubsystemBase
 
         mPID = armMotor.getClosedLoopController();
 
-        mEncoder.getPosition();
+        mEncoder = armMotor.getEncoder();
         
-        armFeedforward = new ArmFeedforward(0.22,0.58, 0.10, 0.01 );
+        //armFeedforward = new ArmFeedforward(0.22,0.58, 0.10, 0.01 );
 
         armMotor.configure(armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
         mTargetAngle = 0.0;
         mCurrentAngle = 0.0;
+
+        mEncoder.setPosition(0);
     }
 
     public void initialize()
     {
-        mEncoder.setPosition(0);
+        
+       
     }
 
     public void resetEncoder()
@@ -147,7 +149,7 @@ public class EndEffectorV2 extends SubsystemBase
     {
 
         
-        if (SmartDashboard.getBoolean("Control Mode", false)) 
+        /*if (SmartDashboard.getBoolean("Control Mode", false)) 
         {
             double targetVelocity = SmartDashboard.getNumber("Target Velocity", 0);
             mPID.setReference(targetVelocity, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
@@ -156,7 +158,7 @@ public class EndEffectorV2 extends SubsystemBase
         {
             double targetPosition = SmartDashboard.getNumber("Target Position", 0);
             mPID.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-        }
+        }*/
 
         SmartDashboard.putNumber("Actual Position", mEncoder.getPosition());
         SmartDashboard.putNumber("Actual Velocity", mEncoder.getVelocity());
