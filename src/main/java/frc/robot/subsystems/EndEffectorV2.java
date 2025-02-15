@@ -14,6 +14,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
+
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkRelativeEncoder;
@@ -25,12 +26,14 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 
 public class EndEffectorV2 extends SubsystemBase
 {
+    //change to 25 when done testing.
     final int motorRatio = 5;
     final int gear1Rotation = 40;
     final int gear2Rotation = 42;
     final int degrees = 360;
 
     SparkMax armMotor;
+    SparkMax rollerMotor;
     SparkMaxConfig armConfig;
 
     SparkClosedLoopController mPID;
@@ -49,7 +52,7 @@ public class EndEffectorV2 extends SubsystemBase
 
         
         //initialize the new motor object with its motor ID and type
-        //rollerMotor = new SparkMax(kRollerMotor.ID, MotorType.kBrushless);
+        rollerMotor = new SparkMax(kEndEffectorRollerMotor.ID, MotorType.kBrushless);
         armMotor = new SparkMax(kEndEffectorArmMotor.ID, MotorType.kBrushless);
 
         armConfig = new SparkMaxConfig();
@@ -86,10 +89,10 @@ public class EndEffectorV2 extends SubsystemBase
 
     public void initialize()
     {
-        
-       
-    }
 
+    }
+        
+    
     public void resetEncoder()
     {
         mEncoder.setPosition(0);
@@ -100,6 +103,9 @@ public class EndEffectorV2 extends SubsystemBase
         mTargetAngle = angle;
 
         double motorRotations = (angle/degrees/gear2Rotation) * gear1Rotation * motorRatio;
+
+        System.out.println("Motor " + motorRotations);
+        System.out.println("Encoder " + mEncoder.getPosition());
         //Come back and change this, need fraction for Encoder Rotations in place of angle
         mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0 );
 
@@ -124,28 +130,28 @@ public class EndEffectorV2 extends SubsystemBase
         return Math.abs( getTargetArmPosition() -getArmPosition()) < kArmTolerance;
     }
 
-     /*public void runRoller()
+     public void runRoller(double rollerspeed)
      {
-        rollerMotor.set(kRollerSpeed);
-    }*/
+        rollerMotor.set(rollerspeed);
+    }
 
     public void runArm(double armspeed)
     {
         armMotor.set(armspeed);
     }
 
-    /*stops the motor
-    //public void stopRoller()
+    //stops the motor
+    public void stopRoller()
     {
         rollerMotor.stopMotor();
-    }*/
+    }
 
     public void stopArm()
     {
         armMotor.stopMotor();
     }
 
-     public void periodic()
+    public void periodic()
     {
 
         
@@ -158,7 +164,7 @@ public class EndEffectorV2 extends SubsystemBase
         {
             double targetPosition = SmartDashboard.getNumber("Target Position", 0);
             mPID.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-        }*/
+        }
 
         SmartDashboard.putNumber("Actual Position", mEncoder.getPosition());
         SmartDashboard.putNumber("Actual Velocity", mEncoder.getVelocity());
@@ -175,7 +181,7 @@ public class EndEffectorV2 extends SubsystemBase
         SmartDashboard.putNumber("Current Estimated Position", currentPosition);
 
         SmartDashboard.putNumber("Arm Target Position", armTargetPosition);
-        SmartDashboard.putBoolean("Arm at Setpoint", isArmAtTargetPosition());
+        SmartDashboard.putBoolean("Arm at Setpoint", isArmAtTargetPosition());*/
         
     }
 

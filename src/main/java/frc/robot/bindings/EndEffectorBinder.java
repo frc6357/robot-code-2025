@@ -2,6 +2,9 @@ package frc.robot.bindings;
 
 import frc.robot.commands.EndEffectorButtonCommand;
 import frc.robot.commands.EndEffectorJoystickCommand;
+import frc.robot.commands.EndEffectorRollerIntakeCommand;
+import frc.robot.commands.EndEffectorRollerOutputCommand;
+import frc.robot.commands.EndEffectorRollerStopCommand;
 import frc.robot.commands.EndEffectorEncoderResetCommand;
 
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickChange;
@@ -19,7 +22,8 @@ import static frc.robot.Ports.OperatorPorts.intakebut;
 import static frc.robot.Ports.OperatorPorts.zeropos;
 import static frc.robot.Ports.OperatorPorts.endArm;
 import static frc.robot.Ports.OperatorPorts.resetencoder;
-
+import static frc.robot.Ports.OperatorPorts.rollerintake;
+import static frc.robot.Ports.OperatorPorts.rolleroutput;
 
 import java.util.Optional;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -43,6 +47,8 @@ public class EndEffectorBinder implements CommandBinder {
     Trigger TroughButton;
     Trigger IntakeButton;
     Trigger ResetEncoderButton;
+    Trigger RollerIntake;
+    Trigger RollerOutPut;
 
     Trigger zeroPositionButton;
     Trigger zeroPositionButtonDriver;
@@ -60,11 +66,13 @@ public class EndEffectorBinder implements CommandBinder {
         
 
         this.zeroPositionButton = zeropos.button;
-        this.LowMidButton          = armMiddleLow.button;
-        this.IntakeButton          = intakebut.button;
-        this.TopButton          = armHigh.button;
-        this.TroughButton       = armTrough.button;
+        this.LowMidButton = armMiddleLow.button;
+        this.IntakeButton = intakebut.button;
+        this.TopButton = armHigh.button;
+        this.TroughButton = armTrough.button;
         this.ResetEncoderButton = resetencoder.button;
+        this.RollerIntake = rollerintake.button;
+        this.RollerOutPut = rolleroutput.button;
 
     }
 
@@ -92,6 +100,10 @@ public class EndEffectorBinder implements CommandBinder {
             IntakeButton.onTrue(new EndEffectorButtonCommand(intake, endEffector));
             TopButton.onTrue(new EndEffectorButtonCommand(level4Angle, endEffector));
             ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector));
+            RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
+            RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
+            RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
+            RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
 
             endEffector.setDefaultCommand(
                     
