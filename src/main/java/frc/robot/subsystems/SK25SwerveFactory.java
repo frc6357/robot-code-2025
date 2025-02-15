@@ -97,7 +97,7 @@ public class SK25SwerveFactory {
 
         //swerve module states
         SwerveModuleState[] desiredModuleStates = m_kinematics.toSwerveModuleStates(desiredSpeeds);
-        driveOpenLoop(desiredModuleStates);
+        driveAllOpenLoop(desiredModuleStates);
         return;
         //position of the robot
         //Pose2d currentRobotPose = new Pose2d(robotTranslation, currentAngle);
@@ -124,7 +124,7 @@ public class SK25SwerveFactory {
     }
 
     //drive all modules
-    private void driveOpenLoop(SwerveModuleState[] states) {
+    private void driveAllOpenLoop(SwerveModuleState[] states) {
         for (int i = 0; i < 4; ++i) {
             SK25SwerveModule module = this.modules[i];
             SwerveModuleState desiredState = states[i];

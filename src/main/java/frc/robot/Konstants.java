@@ -67,7 +67,7 @@ public final class Konstants
         public static final double kJoystickDeadzone = 0.2;
 
         //the velocity limit for the swerve drive modules
-        public static final double kMaxVelocityMetersPerSecond = 1.0;
+        public static final double kMaxVelocityMetersPerSecond = 10.0;
 
         //radius of the wheels in inches
         private static final Double kWheelRadiusInches = 2.0;   //inches
