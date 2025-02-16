@@ -30,7 +30,7 @@ public abstract class Elevator extends SubsystemBase
      * @param height
      *            Height to which the elevator is set to (inches)
      */
-    public abstract void setRightTargetHeight(double height);
+    //public abstract void setRightTargetHeight(double height);
 
     /**
      * Sets the left elevator motor to the specified height in inches
@@ -38,7 +38,7 @@ public abstract class Elevator extends SubsystemBase
      * @param height
      *            Height to which the elevator is set to (inches)
      */
-    public abstract void setLeftTargetHeight(double height);
+    //public abstract void setLeftTargetHeight(double height);
 
 
     /*

@@ -66,8 +66,8 @@ public class ElevatorJoystickCommand extends Command {
         }
 
         // These methods bring the motors up to the setpoint created above.
-        elevator.setRightTargetHeight(rightSetpoint);
-        elevator.setLeftTargetHeight(leftSetpoint);
+        elevator.setTheTargetHeight(rightSetpoint);
+        //elevator.setLeftTargetHeight(leftSetpoint);
     }
 
     @Override
