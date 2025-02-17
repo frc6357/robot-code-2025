@@ -43,11 +43,14 @@ public final class Konstants
         //to be changed
         public static final int kRightClimbMotorId = 0;
         public static final int kLeftClimbMotorId = 9;
-        public static final double climbkP = 0.0;
+        //Keeping P value at 0 will result in motor not spinning
+        public static final double climbkP = 1.0;         //TODO: tune climb PID
         public static final double climbkI = 0.0;
         public static final double climbKD = 0.0;
       //  public static final double kClimbSetpoint = 5.0;
-        public static final double kSpeed = .03;
+        public static final double kMaxSpeed = 4200;
+        public static final double kMaxAcceleration = 6000;
+        public static final int kCurrentLimit = 50;
         public static final double kClimbMaxPosition = 15;
         public static final double kClimbMinPosition = 0.0;
         public static final double kPositionTolerance = 0.2;

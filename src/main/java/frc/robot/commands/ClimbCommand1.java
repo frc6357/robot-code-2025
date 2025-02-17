@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import static frc.robot.Konstants.ClimbConstants.*;
-import static frc.robot.Konstants.ClimbConstants.*;
 
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,7 +20,6 @@ public class ClimbCommand1 extends Command{
     @Override
     public void execute() {
         climb.setPoint(kClimbMaxPosition);
-       // climb.runMotor(-kSpeed);
     }
 
     @Override

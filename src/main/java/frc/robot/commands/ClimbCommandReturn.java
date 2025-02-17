@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
-import static frc.robot.Konstants.ClimbConstants.kClimbMinPosition;
-import static frc.robot.Konstants.ClimbConstants.kSpeed;
+import static frc.robot.Konstants.ClimbConstants.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SK25Climb;
