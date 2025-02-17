@@ -107,10 +107,10 @@ public class EndEffectorBinder implements CommandBinder {
             IntakeButton.onTrue(new EndEffectorButtonCommand(intake, endEffector));
             TopButton.onTrue(new EndEffectorButtonCommand(level4Angle, endEffector));
             ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector));
-            //RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
-            //RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
-            //RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
-            //RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
+            RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
+            RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
+            RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
+            RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
 
 
             endEffector.setDefaultCommand(

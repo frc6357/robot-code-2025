@@ -82,7 +82,7 @@ public class EndEffectorV2 extends SubsystemBase
 
         mEncoder = armMotor.getEncoder();
         
-        //armFeedforward = new ArmFeedforward(0.22,0.58, 0.10, 0.01 );
+        armFeedforward = new ArmFeedforward(0.22,0.58, 0.10, 0.01 );
 
         armMotor.configure(armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 

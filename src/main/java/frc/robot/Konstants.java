@@ -103,7 +103,7 @@ public final class Konstants
        public static final double hortizontal = 50;
 
        public static final double kArmSpeed = 0.1;
-       public static final double kRollerSpeed = 0.5;
+       public static final double kRollerSpeed = 0.7;
 
        public static final double kArmTolerance = 0.01;
 

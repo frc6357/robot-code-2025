@@ -9,6 +9,8 @@ import static frc.robot.Konstants.EndEffectorConstants.kArmSpeed;
 
 import com.revrobotics.RelativeEncoder;
 
+import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
+
 public class EndEffectorJoystickCommand extends Command {
     private final EndEffectorV2 endEffector;
     private final Supplier<Double> controller;
@@ -34,21 +36,21 @@ public class EndEffectorJoystickCommand extends Command {
     {
        
         
-       if (controller.get() > 0)
+       if (controller.get() > kJoystickDeadband)
        {
         double armspeed = -kArmSpeed;
         System.out.println("Position: " + mEncoder.getPosition());
          endEffector.runArm(armspeed);
        }
 
-       if (controller.get() < 0)
+       else if (controller.get() < -kJoystickDeadband)
        {
         System.out.println("Position: " + mEncoder.getPosition());
         double armspeed = kArmSpeed;
         endEffector.runArm(armspeed);
        }
 
-       if(controller.get() == 0)
+       else
        {
         endEffector.stopArm();
        }
