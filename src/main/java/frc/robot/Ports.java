@@ -116,6 +116,8 @@ public class Ports
 
         public static final CANPort kRollerMotor = new CANPort(55, busName );
         public static final CANPort kArmMotor = new CANPort(40, busName );
+
+        public static final CANPort kLaserCanEndEffector = new CANPort(46, busName);
     }
 
 }

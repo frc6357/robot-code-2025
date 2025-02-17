@@ -10,16 +10,20 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Ports.EndEffectorPorts.kArmMotor;
 import static frc.robot.Konstants.EndEffectorConstants.armAngleTolerance;
+import static frc.robot.Konstants.EndEffectorConstants.coralToLaserCanDistance;
 //import static frc.robot.Ports.EndEffectorPorts.kRollerMotor;
+import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
 import static frc.robot.Konstants.EndEffectorConstants.kArmSpeed;
 //import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import au.grapplerobotics.LaserCan;
 
 
 
@@ -41,6 +45,9 @@ public class EndEffectorV1  extends SubsystemBase{
     ArmFeedforward  armFeedforward;
 
     double armTargetAngle;
+
+    LaserCan laserCanSensor;
+
 
     
 
@@ -88,6 +95,8 @@ public class EndEffectorV1  extends SubsystemBase{
 
        armTargetAngle = 0.0;
 
+       laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
+
     }
 
     public void setTargetAngle(double angle)
@@ -113,6 +122,20 @@ public class EndEffectorV1  extends SubsystemBase{
     public boolean isArmAtTargetPosition()
     {
         return Math.abs( getTargetArmPosition() -getArmPosition()) < armAngleTolerance;
+    }
+
+    public boolean haveCoral()
+    {
+        LaserCan.Measurement sensorMeasurement = laserCanSensor.getMeasurement();
+
+        if ((sensorMeasurement != null && sensorMeasurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)) {
+            SmartDashboard.putNumber("LaserCan distance", sensorMeasurement.distance_mm);
+          if(sensorMeasurement.distance_mm < (coralToLaserCanDistance+10))//plus 10 so theres room for error
+          {
+            return true;
+          }
+        } 
+        return false;
     }
 
     
