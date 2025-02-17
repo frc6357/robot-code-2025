@@ -175,7 +175,7 @@ public class SK25Elevator extends Elevator
     public void setTheTargetHeight(double height)
     {
         LtargetHeight = height;
-        closedLoopController.setReference(LtargetHeight, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        closedLoopController.setReference(LtargetHeight, ControlType.kPosition, ClosedLoopSlot.kSlot0);
         //lPID.setSetpoint(LtargetHeight);
     }
 
