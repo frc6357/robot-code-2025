@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 // SmartDashboard
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.WPILibVersion;
 import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
 import frc.robot.subsystems.superclasses.Elevator;
 
@@ -101,7 +102,7 @@ public class SK25Elevator extends Elevator
             .velocityConversionFactor(1);
         motorConfigL.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .velocityFF(1.0 / 565, ClosedLoopSlot.kSlot1)
+            .velocityFF(1.0 / 565, ClosedLoopSlot.kSlot0)
             //Set PID values for position control. We don't need to pass a closed loop
             //slot, as it will default to slot 0.
             .p(0.1)
@@ -109,30 +110,32 @@ public class SK25Elevator extends Elevator
             .d(0)
             .outputRange(-1, 1)
             //Set PID values for velocity control in slot 1
-            .p(0.0001, ClosedLoopSlot.kSlot1)
-            .i(0, ClosedLoopSlot.kSlot1)
-            .d(0, ClosedLoopSlot.kSlot1)
-            .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+            .p(0.0001, ClosedLoopSlot.kSlot0)
+            .i(0, ClosedLoopSlot.kSlot0)
+            .d(0, ClosedLoopSlot.kSlot0)
+            .outputRange(-1, 1, ClosedLoopSlot.kSlot0);
         motorConfigL.closedLoop.maxMotion
             // Set MAXMotion parameters for position control. We don't need to pass
             // a closed loop slot, as it will default to slot 0.
             .maxVelocity(1000)
             .maxAcceleration(1000)
             .allowedClosedLoopError(1)
-            // Set MAXMotion parameters for velocity control in slot 1
-            .maxAcceleration(500, ClosedLoopSlot.kSlot1)
-            .maxVelocity(6000, ClosedLoopSlot.kSlot1)
-            .allowedClosedLoopError(1, ClosedLoopSlot.kSlot1);
-        // Configurations For The Right Motor
-        motorConfigR
-            .follow(40, true);
-            //.inverted(true)
-            //.idleMode(IdleMode.kBrake)
-            //.smartCurrentLimit(kElevatorCurrentLimit);
+            // Set MAXMotion parameters for velocity control in slot 0
+            .maxAcceleration(500, ClosedLoopSlot.kSlot0)
+            .maxVelocity(6000, ClosedLoopSlot.kSlot0)
+            .allowedClosedLoopError(1, ClosedLoopSlot.kSlot0);
         
         // Apply Motor Configurations
-        motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+
+        // Configurations For The Right Motor
+        motorConfigR
+            .follow(motorL, true)
+            .idleMode(IdleMode.kBrake)
+            .smartCurrentLimit(kElevatorCurrentLimit);
+            //.inverted(true)
+
+        motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
         // Encoder V3
         closedLoopController = motorL.getClosedLoopController();
@@ -145,11 +148,7 @@ public class SK25Elevator extends Elevator
         LtargetHeight = 0.0;
         LcurrentHeight = 0.0;
 
-        // Initialize dashboard values
-        SmartDashboard.setDefaultNumber("Target Position", 0);
-        SmartDashboard.setDefaultNumber("Target Velocity", 0);
-        SmartDashboard.setDefaultBoolean("Control Mode", false);
-        SmartDashboard.setDefaultBoolean("Reset Encoder", false);
+        closedLoopController.setReference(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }
 
     /**
@@ -180,7 +179,7 @@ public class SK25Elevator extends Elevator
     public void setTheTargetHeight(double height)
     {
         LtargetHeight = height;
-        closedLoopController.setReference(LtargetHeight, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+        closedLoopController.setReference(LtargetHeight, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
         //lPID.setSetpoint(LtargetHeight);
     }
 
@@ -255,34 +254,7 @@ public class SK25Elevator extends Elevator
 
     @Override
     public void periodic()
-    {   
-        if (SmartDashboard.getBoolean("Control Mode", false)) 
-        {
-            /*
-             * Get the target velocity from SmartDashboard and set it as the setpoint
-             * for the closed loop controller with MAXMotionVelocityControl as the
-             * control type.
-             */
-            double targetVelocity = SmartDashboard.getNumber("Target Velocity", 0);
-            closedLoopController.setReference(targetVelocity, ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot1);
-        } 
-        else 
-        {
-            /*
-             * Get the target position from SmartDashboard and set it as the setpoint
-             * for the closed loop controller with MAXMotionPositionControl as the
-             * control type.
-             */
-            double targetPosition = SmartDashboard.getNumber("Target Position", 0);
-            closedLoopController.setReference(targetPosition, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-        }
-        if (SmartDashboard.getBoolean("Reset Encoder", false)) 
-        {
-            SmartDashboard.putBoolean("Reset Encoder", false);
-            // Reset the encoder position to 0
-            encoder.setPosition(0);
-        }
-
+    {  
         // Display encoder position and velocity
         SmartDashboard.putNumber("Actual Position", encoder.getPosition());
         SmartDashboard.putNumber("Actual Velocity", encoder.getVelocity());
