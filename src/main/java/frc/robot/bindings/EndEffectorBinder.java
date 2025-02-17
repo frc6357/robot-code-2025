@@ -6,6 +6,7 @@ import frc.robot.commands.EndEffectorRollerIntakeCommand;
 import frc.robot.commands.EndEffectorRollerOutputCommand;
 import frc.robot.commands.EndEffectorRollerStopCommand;
 import frc.robot.commands.EndEffectorEncoderResetCommand;
+import frc.robot.commands.EndEffectorStop;
 
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickChange;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
@@ -24,6 +25,8 @@ import static frc.robot.Ports.OperatorPorts.endArm;
 import static frc.robot.Ports.OperatorPorts.resetencoder;
 import static frc.robot.Ports.OperatorPorts.rollerintake;
 import static frc.robot.Ports.OperatorPorts.rolleroutput;
+
+import com.revrobotics.RelativeEncoder;
 
 import java.util.Optional;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -58,6 +61,8 @@ public class EndEffectorBinder implements CommandBinder {
     
     Trigger endEffectorAxis;
 
+    RelativeEncoder mEncoder;
+
 
     public EndEffectorBinder(Optional<EndEffectorV2> subsystem){
         
@@ -73,6 +78,8 @@ public class EndEffectorBinder implements CommandBinder {
         this.ResetEncoderButton = resetencoder.button;
         this.RollerIntake = rollerintake.button;
         this.RollerOutPut = rolleroutput.button;
+        
+
 
     }
 
@@ -100,10 +107,11 @@ public class EndEffectorBinder implements CommandBinder {
             IntakeButton.onTrue(new EndEffectorButtonCommand(intake, endEffector));
             TopButton.onTrue(new EndEffectorButtonCommand(level4Angle, endEffector));
             ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector));
-            RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
-            RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
-            RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
-            RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
+            //RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
+            //RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
+            //RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
+            //RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
+
 
             endEffector.setDefaultCommand(
                     

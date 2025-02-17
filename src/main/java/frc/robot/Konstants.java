@@ -96,11 +96,11 @@ public final class Konstants
     {
         /** Angles for the different endeffector positions */
     
-       public static final double level4Angle = 140;
-       public static final double level23Angle = 50;
-       public static final double level1Angle = 110;
-       public static final double intake = 90;
-       public static final double hortizontal = 70;
+       public static final double level4Angle = 10;
+       public static final double level23Angle = 20;
+       public static final double level1Angle = 30;
+       public static final double intake = 40;
+       public static final double hortizontal = 50;
 
        public static final double kArmSpeed = 0.1;
        public static final double kRollerSpeed = 0.5;

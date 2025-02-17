@@ -36,14 +36,15 @@ public class EndEffectorJoystickCommand extends Command {
         
        if (controller.get() > 0)
        {
+        double armspeed = -kArmSpeed;
         System.out.println("Position: " + mEncoder.getPosition());
-         endEffector.runArm(kArmSpeed);
+         endEffector.runArm(armspeed);
        }
 
        if (controller.get() < 0)
        {
         System.out.println("Position: " + mEncoder.getPosition());
-        double armspeed = -kArmSpeed;
+        double armspeed = kArmSpeed;
         endEffector.runArm(armspeed);
        }
 

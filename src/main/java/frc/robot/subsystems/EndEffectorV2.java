@@ -28,8 +28,8 @@ public class EndEffectorV2 extends SubsystemBase
 {
     //change to 25 when done testing.
     final int motorRatio = 25;
-    final int gear1Rotation = 40;
-    final int gear2Rotation = 42;
+    final int gear1Rotation = 1;
+    final int gear2Rotation = 1;
     final int degrees = 360;
 
     SparkMax armMotor;
@@ -59,9 +59,9 @@ public class EndEffectorV2 extends SubsystemBase
         
         armConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .p(1.5)
-            .i(0)
-            .d(0.7)
+            .p(1.9)
+            .i(.0002)
+            .d(2.1)
             .outputRange(-.1, .1);
             //.p(0, ClosedLoopSlot.kSlot1)
             //.i(0, ClosedLoopSlot.kSlot1)
