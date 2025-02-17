@@ -105,15 +105,11 @@ public class SK25Elevator extends Elevator
             .velocityFF(1.0 / 565, ClosedLoopSlot.kSlot0)
             //Set PID values for position control. We don't need to pass a closed loop
             //slot, as it will default to slot 0.
-            .p(0.1)
-            .i(0)
-            .d(0)
-            .outputRange(-1, 1)
-            //Set PID values for velocity control in slot 1
-            .p(0.0001, ClosedLoopSlot.kSlot0)
-            .i(0, ClosedLoopSlot.kSlot0)
-            .d(0, ClosedLoopSlot.kSlot0)
-            .outputRange(-1, 1, ClosedLoopSlot.kSlot0);
+            .p(0.07)
+            .i(0.00075)
+            .d(0.001)
+            //0.07, 0.00075, 0.001
+            .outputRange(-1, 1);
         motorConfigL.closedLoop.maxMotion
             // Set MAXMotion parameters for position control. We don't need to pass
             // a closed loop slot, as it will default to slot 0.
