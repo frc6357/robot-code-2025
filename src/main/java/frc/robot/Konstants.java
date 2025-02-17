@@ -96,16 +96,16 @@ public final class Konstants
     {
         /** Angles for the different endeffector positions */
     
-       public static final double level4Angle = 90;
-       public static final double level23Angle = 80;
-       public static final double level1Angle = 70;
-       public static final double intake = 60;
-       public static final double hortizontal = 50;
+       public static final double level4Angle = 140;
+       public static final double level23Angle = 50;
+       public static final double level1Angle = 110;
+       public static final double intake = 90;
+       public static final double hortizontal = 70;
 
        public static final double kArmSpeed = 0.1;
        public static final double kRollerSpeed = 0.5;
 
-       public static final double kArmTolerance = 0.1;
+       public static final double kArmTolerance = 0.01;
 
         // Important Joystick Settings
         public static final double kJoystickChange   = 0.05; // Manual setpoint value for units from 0.0 - 1.0 moved per second

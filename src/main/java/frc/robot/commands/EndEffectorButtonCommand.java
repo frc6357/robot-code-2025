@@ -49,6 +49,11 @@ public class EndEffectorButtonCommand extends Command{
         }
         else
         {
+            System.out.println(endEffector.isArmAtTargetPosition());
+            //System.out.println(Math.abs( endEffector.getTargetArmPosition() - endEffector.getArmPosition()));
+            //System.out.println(endEffector.getTargetArmPosition());
+            //System.out.println(endEffector.getArmPosition());
+
             if(endEffector.isArmAtTargetPosition())
             {
                 
