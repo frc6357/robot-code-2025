@@ -107,8 +107,8 @@ public class Ports
     public static class ElevatorPorts
     {
         private static final String busName = "";
-        public static final CANPort kRightElevatorMotor = new CANPort(40, busName);
-        public static final CANPort kLeftElevatorMotor = new CANPort(41, busName);
+        //public static final CANPort kRightElevatorMotor = new CANPort(40, busName);
+        //public static final CANPort kLeftElevatorMotor = new CANPort(41, busName);
         
     }
 

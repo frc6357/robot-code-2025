@@ -7,7 +7,6 @@ package frc.robot;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static frc.robot.Konstants.SwerveConstants.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,20 +23,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.SK25LightsBinder;
-import frc.robot.bindings.TempSwerveBinder;
+//import frc.robot.bindings.TempSwerveBinder;
+//import frc.robot.bindings.TempSwerveBinder;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.SK25Lights;
-import frc.robot.subsystems.TempSwerve;
-import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
+//import frc.robot.subsystems.TempSwerve;
+//import frc.robot.subsystems.TempSwerve;
+//import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
+//import static frc.robot.subsystems.TempSwerve.config;
 
 
 /**
@@ -101,7 +103,7 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private Optional<SK25Lights> m_lights = Optional.empty();
-  private Optional<TempSwerve> m_swerve = Optional.empty();
+  //private Optional<TempSwerve> m_swerve = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -146,19 +148,14 @@ public class RobotContainer {
 
             // Instantiating subsystems if they are present
             // This is decided by looking at Subsystems.json
-            if(subsystems.isSwervePresent())
-            {
-                SwerveConstantsConfigurator config = new SwerveConstantsConfigurator();
-                //m_Swerve = Optional.of(new SK25Swerve(config));            //TODO: resolve collision in robot container with swerve constructor differences
-            }
             if(subsystems.isLightsPresent())
             {
                 m_lights = Optional.of(new SK25Lights());
             }
-            if(subsystems.isSwervePresent())
-            {
-                m_swerve = Optional.of(new TempSwerve(config));
-            }
+            // if(subsystems.isSwervePresent())
+            // {
+            //     m_swerve = Optional.of(new TempSwerve(config));
+            // }
 
         }
         catch (IOException e)
@@ -178,7 +175,7 @@ public class RobotContainer {
 
         // Adding all the binding classes to the list
         buttonBinders.add(new SK25LightsBinder(m_lights));
-        buttonBinders.add(new TempSwerveBinder(m_swerve));
+        //buttonBinders.add(new TempSwerveBinder(m_swerve));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
@@ -191,23 +188,23 @@ public class RobotContainer {
 
     private void configurePathPlanner()
     {
-        if(m_swerve.isPresent())
-        {
-           // NamedCommands.registerCommand("DefaultSwerveCommand", getAutonomousCommand());
+        // if(m_swerve.isPresent())
+        // {
+        //    // NamedCommands.registerCommand("DefaultSwerveCommand", getAutonomousCommand());
 
-            //Register commands for use in auto
-            //NamedCommands.registerCommand("StartLauncherCommand", new LaunchCommandAuto(kLauncherLeftSpeed, kLauncherRightSpeed, launcher));
+        //     //Register commands for use in auto
+        //     //NamedCommands.registerCommand("StartLauncherCommand", new LaunchCommandAuto(kLauncherLeftSpeed, kLauncherRightSpeed, launcher));
             
-        }
+        // }
 
-        if(m_swerve.isPresent()){
+        // if(m_swerve.isPresent()){
             
-            // Configures the autonomous paths and smartdashboard chooser
+        //     // Configures the autonomous paths and smartdashboard chooser
             
-            //SK25AutoBuilder.setAutoNames(autoList);
-            //autoCommandSelector = SK25AutoBuilder.buildAutoChooser("P4_Taxi");
-            //SmartDashboard.putData("Auto Chooser", autoCommandSelector);
-        }
+        //     //SK25AutoBuilder.setAutoNames(autoList);
+        //     //autoCommandSelector = SK25AutoBuilder.buildAutoChooser("P4_Taxi");
+        //     //SmartDashboard.putData("Auto Chooser", autoCommandSelector);
+        // }
     }
 
   /**
@@ -222,20 +219,20 @@ public class RobotContainer {
 
     public void testPeriodic()
     {
-        if(m_swerve.isPresent())
-        {
-            m_swerve.get().testPeriodic();
-        }
+        // if(m_swerve.isPresent())
+        // {
+        //     m_swerve.get().testPeriodic();
+        // }
         if(m_lights.isPresent())
         {
             m_lights.get().testPeriodic();
         }
     }
     public void testInit(){
-        if(m_swerve.isPresent())
-        {
-            m_swerve.get().testInit();
-        }
+        // if(m_swerve.isPresent())
+        // {
+        //     m_swerve.get().testInit();
+        // }
         if(m_lights.isPresent())
         {
             m_lights.get().testInit();

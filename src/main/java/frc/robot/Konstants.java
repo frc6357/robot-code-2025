@@ -13,11 +13,14 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.LinearVelocity;
-import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
+//import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.Radians;
 
 
 //import edu.wpi.first.units.measure.Distance;
@@ -55,10 +58,15 @@ public final class Konstants
         public static final int kBackRightEncoderID = 24; //24
 
         //The offset of the encoders in radians
-        public static final Double kFrontLeftEncoderOffsetRadians = (Math.PI / 6); //-0.184326171875;
-        public static final Double kFrontRightEncoderOffsetRadians = (-Math.PI / 3); //0.113525390625;
-        public static final Double kBackLeftEncoderOffsetRadians = ((7 * Math.PI) / 4); //-0.036865234375;
-        public static final Double kBackRightEncoderOffsetRadians = ((5 * Math.PI) / 4); //0.441162109375;
+        //fl 0.35
+        //fr 2.225
+        //bl 1.35
+        //br 4.353
+
+        public static final Double kFrontLeftEncoderOffsetRadians = (0.35); //old offset, don't delete: -0.184326171875;
+        public static final Double kFrontRightEncoderOffsetRadians = (2.225); //old offset, don't delete: 0.113525390625;
+        public static final Double kBackLeftEncoderOffsetRadians = (1.35); //old offset, don't delete: -0.036865234375;
+        public static final Double kBackRightEncoderOffsetRadians = (4.353); //old offset, don't delete: 0.441162109375;
 
         //determines if the encoders are inverted
         public static final boolean kIsFrontLeftEncoderInverted = false;
@@ -249,7 +257,7 @@ public final class Konstants
 
 
         //Object containing all the neccessary coonstant values for the Swerve subsystem
-        public static final SwerveConstantsConfigurator config = new SwerveConstantsConfigurator();
+        //public static final SwerveConstantsConfigurator config = new SwerveConstantsConfigurator();
 
         //the deadzone on the controller's joysticks
         public static final double kJoystickDeadband = 0.2;   //TODO: find approperiate deaband
