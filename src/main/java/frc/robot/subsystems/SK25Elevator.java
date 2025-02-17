@@ -141,7 +141,7 @@ public class SK25Elevator extends Elevator
         // Current, Target, and Reset Positions
         RtargetHeight = 0.0;
         RcurrentHeight = 0.0;
-
+        
         LtargetHeight = 0.0;
         LcurrentHeight = 0.0;
 
