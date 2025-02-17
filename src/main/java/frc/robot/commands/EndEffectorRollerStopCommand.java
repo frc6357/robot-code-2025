@@ -12,7 +12,7 @@ public class EndEffectorRollerStopCommand extends Command{
 
     public void initialize()
     {
-        Subsystem.stopArm();
+        Subsystem.stopRoller();
     }
     public boolean isFinished()
     {

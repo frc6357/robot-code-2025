@@ -124,7 +124,6 @@ public class Ports
         //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
         public static final CANPort kEndEffectorArmMotor = new CANPort(40, busName);
         public static final CANPort kEndEffectorRollerMotor = new CANPort(41, busName);
-        public static final CANPort kLaserCanEndEffector = new CANPort(46, busName);
 
     }
 

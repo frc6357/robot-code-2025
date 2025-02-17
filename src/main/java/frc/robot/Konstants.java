@@ -96,16 +96,16 @@ public final class Konstants
     {
         /** Angles for the different endeffector positions */
     
-       public static final double level4Angle = 90;
-       public static final double level23Angle = 80;
-       public static final double level1Angle = 70;
-       public static final double intake = 60;
+       public static final double level4Angle = 10;
+       public static final double level23Angle = 20;
+       public static final double level1Angle = 30;
+       public static final double intake = 40;
        public static final double hortizontal = 50;
 
        public static final double kArmSpeed = 0.1;
-       public static final double kRollerSpeed = 0.5;
+       public static final double kRollerSpeed = 0.7;
 
-       public static final double kArmTolerance = 0.1;
+       public static final double kArmTolerance = 0.01;
 
        public static final double coralToLaserCanDistance = 24;
 

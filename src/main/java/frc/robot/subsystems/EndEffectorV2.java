@@ -27,9 +27,9 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 public class EndEffectorV2 extends SubsystemBase
 {
     //change to 25 when done testing.
-    final int motorRatio = 5;
-    final int gear1Rotation = 40;
-    final int gear2Rotation = 42;
+    final int motorRatio = 25;
+    final int gear1Rotation = 1;
+    final int gear2Rotation = 1;
     final int degrees = 360;
 
     SparkMax armMotor;
@@ -59,15 +59,20 @@ public class EndEffectorV2 extends SubsystemBase
         
         armConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .p(3)
-            .i(0)
-            .d(1)
+            .p(1.9)
+            .i(.0002)
+            .d(2.1)
             .outputRange(-.1, .1);
             //.p(0, ClosedLoopSlot.kSlot1)
             //.i(0, ClosedLoopSlot.kSlot1)
             //.d(0, ClosedLoopSlot.kSlot1)
             //.velocityFF(1.0/5767, ClosedLoopSlot.kSlot1)
             //.outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+
+        armConfig.closedLoop.maxMotion
+            .maxAcceleration(500)
+            .maxVelocity(500)
+            .allowedClosedLoopError(1);
 
         armConfig
             .idleMode(IdleMode.kBrake)
@@ -77,7 +82,7 @@ public class EndEffectorV2 extends SubsystemBase
 
         mEncoder = armMotor.getEncoder();
         
-        //armFeedforward = new ArmFeedforward(0.22,0.58, 0.10, 0.01 );
+        armFeedforward = new ArmFeedforward(0.22,0.58, 0.10, 0.01 );
 
         armMotor.configure(armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
@@ -107,7 +112,7 @@ public class EndEffectorV2 extends SubsystemBase
         System.out.println("Motor " + motorRotations);
         System.out.println("Encoder " + mEncoder.getPosition());
         //Come back and change this, need fraction for Encoder Rotations in place of angle
-        mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0 );
+        mPID.setReference(motorRotations, ControlType.kPosition, ClosedLoopSlot.kSlot0 );
 
     }
 
@@ -127,11 +132,11 @@ public class EndEffectorV2 extends SubsystemBase
 
     public boolean isArmAtTargetPosition()
     {
-        return Math.abs( getTargetArmPosition() -getArmPosition()) < kArmTolerance;
+        return Math.abs( getTargetArmPosition() -getArmPosition()) < 1;
     }
 
      public void runRoller(double rollerspeed)
-     {
+    {
         rollerMotor.set(rollerspeed);
     }
 

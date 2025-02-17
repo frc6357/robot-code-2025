@@ -29,7 +29,7 @@ public class EndEffectorButtonCommand extends Command{
     {
         System.out.println("Position: " + position);
         System.out.println("Encoder position: " + mEncoder.getPosition());
-        endEffector.setTargetAngle(position);
+        endEffector.setTargetAngle(-position);
     }
 
     @Override
@@ -49,6 +49,11 @@ public class EndEffectorButtonCommand extends Command{
         }
         else
         {
+            System.out.println(endEffector.isArmAtTargetPosition());
+            //System.out.println(Math.abs( endEffector.getTargetArmPosition() - endEffector.getArmPosition()));
+            //System.out.println(endEffector.getTargetArmPosition());
+            //System.out.println(endEffector.getArmPosition());
+
             if(endEffector.isArmAtTargetPosition())
             {
                 
