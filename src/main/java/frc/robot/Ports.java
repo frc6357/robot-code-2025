@@ -1,4 +1,4 @@
-package frc.robot;
+    package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.utils.SKTrigger;
@@ -63,6 +63,7 @@ public class Ports
         //Climb
         public static final SKTrigger climbRaiseButton = new SKTrigger(kOperator, 0, POV);
         public static final SKTrigger climbLowerButton = new SKTrigger(kOperator, 180, POV);
+        public static final SKTrigger climbStopButton = new SKTrigger(kOperator, 90, POV);
     }
 
     /**
@@ -98,7 +99,7 @@ public class Ports
     public static class ClimbPorts
     {
         private static final String busName = "";
-        public static final CANPort kClimbMotor = new CANPort(50, busName);
+        public static final CANPort kClimbMotor = new CANPort(40, busName);
         
     }
 

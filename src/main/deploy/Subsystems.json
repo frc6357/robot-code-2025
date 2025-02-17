@@ -1,0 +1,5 @@
+{
+    "climb": true,
+    "swerve" : false,
+    "example" : false
+}

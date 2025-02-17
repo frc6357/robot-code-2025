@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.config.PIDConstants;
+import com.revrobotics.spark.SparkClosedLoopController;
 
 public final class Konstants
 {
@@ -42,12 +43,14 @@ public final class Konstants
         //to be changed
         public static final int kRightClimbMotorId = 0;
         public static final int kLeftClimbMotorId = 9;
-        public static final PIDConstants pid = new PIDConstants(0.0, 0.0, 0.0);
-        public static final double kClimbSetpoint = 0.0;
-        public static final double kSpeed = .3;
-        public static final double kClimbMaxPosition = 0.0;
+        public static final double climbkP = 0.0;
+        public static final double climbkI = 0.0;
+        public static final double climbKD = 0.0;
+      //  public static final double kClimbSetpoint = 5.0;
+        public static final double kSpeed = .03;
+        public static final double kClimbMaxPosition = 15;
         public static final double kClimbMinPosition = 0.0;
-        public static final double kPositionTolerance = 0.0;
+        public static final double kPositionTolerance = 0.2;
 
     }
 

@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import static frc.robot.Konstants.ClimbConstants.kClimbSetpoint;
+import static frc.robot.Konstants.ClimbConstants.*;
 import static frc.robot.Konstants.ClimbConstants.*;
 
 
@@ -20,13 +20,13 @@ public class ClimbCommand1 extends Command{
 
     @Override
     public void execute() {
-        climb.setPoint(kClimbSetpoint);
-        climb.runMotor(kSpeed);
+        climb.setPoint(kClimbMaxPosition);
+       // climb.runMotor(-kSpeed);
     }
 
     @Override
     public void end(boolean interrupted) {
-        climb.stop();
+
     }
 
     @Override
