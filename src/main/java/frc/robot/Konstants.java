@@ -1,6 +1,7 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,14 +14,9 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.LinearVelocity;
-//import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
-
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.Radians;
+import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
 
 
 //import edu.wpi.first.units.measure.Distance;
@@ -94,8 +90,8 @@ public final class Konstants
 
 
         //swerve chassis width and length in inches 
-        public static final int kChassisLength = 27;
-        public static final int kChassisWidth = 27;
+        public static final double kChassisLength = 21.625;
+        public static final double kChassisWidth = 21.625;
 
         // "Front-to-back Encoder Distance in inches"
         public static final double kFrontToBackEncoderDistInches = 21.625;
@@ -256,8 +252,8 @@ public final class Konstants
 
 
 
-        //Object containing all the neccessary coonstant values for the Swerve subsystem
-        //public static final SwerveConstantsConfigurator config = new SwerveConstantsConfigurator();
+        //Object containing all the neccessary constant values for the Swerve subsystem
+        public static final SwerveConstantsConfigurator config = new SwerveConstantsConfigurator();
 
         //the deadzone on the controller's joysticks
         public static final double kJoystickDeadband = 0.2;   //TODO: find approperiate deaband
