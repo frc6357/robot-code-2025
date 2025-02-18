@@ -4,6 +4,8 @@ import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
+import static frc.robot.Konstants.EndEffectorConstants.coralToLaserCanDistance;
+import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -14,6 +16,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
+import au.grapplerobotics.LaserCan;
 
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
@@ -46,6 +49,8 @@ public class EndEffectorV2 extends SubsystemBase
 
     double armTargetAngle;
 
+    LaserCan laserCanSensor;
+
     public EndEffectorV2()
     {
         
@@ -69,7 +74,7 @@ public class EndEffectorV2 extends SubsystemBase
             //.velocityFF(1.0/5767, ClosedLoopSlot.kSlot1)
             //.outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
-        armConfig.closedLoop.maxMotion
+            armConfig.closedLoop.maxMotion
             .maxAcceleration(500)
             .maxVelocity(500)
             .allowedClosedLoopError(1);
@@ -90,6 +95,8 @@ public class EndEffectorV2 extends SubsystemBase
         mCurrentAngle = 0.0;
 
         mEncoder.setPosition(0);
+
+        laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
     }
 
     public void initialize()
@@ -112,7 +119,7 @@ public class EndEffectorV2 extends SubsystemBase
         System.out.println("Motor " + motorRotations);
         System.out.println("Encoder " + mEncoder.getPosition());
         //Come back and change this, need fraction for Encoder Rotations in place of angle
-        mPID.setReference(motorRotations, ControlType.kPosition, ClosedLoopSlot.kSlot0 );
+        mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0 );
 
     }
 
@@ -132,8 +139,22 @@ public class EndEffectorV2 extends SubsystemBase
 
     public boolean isArmAtTargetPosition()
     {
-        return Math.abs( getTargetArmPosition() -getArmPosition()) < 1;
+        return Math.abs( getTargetArmPosition() -getArmPosition()) < kArmTolerance;
     }
+
+    public boolean haveCoral()
+    {
+        LaserCan.Measurement sensorMeasurement = laserCanSensor.getMeasurement();
+        if ((sensorMeasurement != null && sensorMeasurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)) {
+            SmartDashboard.putNumber("LaserCan distance", sensorMeasurement.distance_mm);
+          if(sensorMeasurement.distance_mm < (coralToLaserCanDistance+10))//plus 10 so theres room for error
+          {
+            return true;
+          }
+        } 
+        return false;
+    }
+
 
      public void runRoller(double rollerspeed)
     {
