@@ -47,19 +47,24 @@ public class SK25ElevatorBinder implements CommandBinder{
             kElevatorAxis.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
 
             // Elevator Position Buttons
-            zeroPositionButton.onTrue(new ElevatorButtonCommand(ZeroPosition, elevator));
-            TroughButton.onTrue(new ElevatorButtonCommand(TroughPosition, elevator));
-            LowButton.onTrue(new ElevatorButtonCommand(LowPosition, elevator));
-            MidButton.onTrue(new ElevatorButtonCommand(MidPosition, elevator));
-            TopButton.onTrue(new ElevatorButtonCommand(TopPosition, elevator));
+            zeroPositionButton.onTrue(new ElevatorButtonCommand(kZeroPosition, elevator));
+            TroughButton.onTrue(new ElevatorButtonCommand(kTroughPosition, elevator));
+            LowButton.onTrue(new ElevatorButtonCommand(kLowPosition, elevator));
+            MidButton.onTrue(new ElevatorButtonCommand(kMidPosition, elevator));
+            TopButton.onTrue(new ElevatorButtonCommand(kTopPosition, elevator));
 
-            elevator.setDefaultCommand(
-                         // Vertical movement of the elevator is controlled by the Y axis of the left stick.
-                         // Up on the joystick moves elevator up, and down on stick moves the elevator down.
-                         new ElevatorJoystickCommand(
-                             () -> {return kElevatorAxis.getFilteredAxis();},
-                             () -> {return kElevatorOverride.button.getAsBoolean();},
-                             elevator));
+            elevatorOverride.whileTrue(new ElevatorJoystickCommand(
+                () -> {return kElevatorAxis.getFilteredAxis();},
+                () -> {return kElevatorOverride.button.getAsBoolean();},
+                elevator));
+
+            // elevator.setDefaultCommand(
+            //              // Vertical movement of the elevator is controlled by the Y axis of the left stick.
+            //              // Up on the joystick moves elevator up, and down on stick moves the elevator down.
+            //              new ElevatorJoystickCommand(
+            //                  () -> {return kElevatorAxis.getFilteredAxis();},
+            //                  () -> {return kElevatorOverride.button.getAsBoolean();},
+            //                  elevator));
         }
     }
 }

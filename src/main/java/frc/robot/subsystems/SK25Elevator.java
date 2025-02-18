@@ -32,7 +32,11 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 // PID Controller
 import edu.wpi.first.math.controller.PIDController;
-
+import edu.wpi.first.networktables.NTSendable;
+import edu.wpi.first.networktables.NTSendableBuilder;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 // Limit Switches
 import edu.wpi.first.wpilibj.DigitalInput;
 
@@ -40,7 +44,13 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.WPILibVersion;
 import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
+import frc.robot.preferences.Pref;
+import frc.robot.preferences.SKPreferences;
+import frc.robot.Robot;
 import frc.robot.subsystems.superclasses.Elevator;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public class SK25Elevator extends Elevator
 {
@@ -60,9 +70,16 @@ public class SK25Elevator extends Elevator
     PIDController rPID;
     PIDController lPID;
 
+    private double kP;
+    private double kI;
+    private double kD;
+
     // Target & Current Position
-    double LtargetHeight;
-    double LcurrentHeight;
+    // double targetHeight;
+    // double currentHeight;
+
+    double targetHeight;
+    double currentHeight;
 
     double RtargetHeight;
     double RcurrentHeight;
@@ -70,6 +87,43 @@ public class SK25Elevator extends Elevator
     // Touch Sensor Objects
     DigitalInput touchSensorTop;
     DigitalInput touchSensorBottom;
+
+    Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.007)
+        .onChange((newValue) -> {
+            motorConfigL.closedLoop.p(newValue);
+        });
+
+    Pref<Double> kIPref = SKPreferences.attach("elevatorKi", 0.0)
+        .onChange((newValue) -> {
+            motorConfigL.closedLoop.i(newValue);
+        });
+    Pref<Double> kDPref = SKPreferences.attach("elevatorkD", 0.0)
+        .onChange((newValue) -> {
+            motorConfigL.closedLoop.d(newValue);
+        });
+
+    // @Override
+    // public void initSendable(NTSendableBuilder builder) {
+    //     SmartDashboard.putData(
+    //         "ElevatorSubsystem",
+    //         new Sendable() {
+    //             @Override
+    //             public void initSendable(SendableBuilder builder) {
+    //                 builder.setSmartDashboardType("Elevator");
+
+    //                 builder.addDoubleProperty(getName() + " kP",
+    //                 () -> getKP(),
+    //                 null);
+    //                 builder.addDoubleProperty(getName() + " kI",
+    //                 () -> getKI(),
+    //                 () -> setKI());
+    //                 builder.addDoubleProperty(getName() + " kD",
+    //                 () -> getKD(),
+    //                 () -> setKD());
+    //             }
+    //         }
+    //     );
+    // }
 
     // Constructor For Public Command Access
     public SK25Elevator()
@@ -85,7 +139,13 @@ public class SK25Elevator extends Elevator
         lPID.setSetpoint(0.0);
         rPID.setSetpoint(0.0);
         */
+
+        // kP = 0.007;
+        // kI = 0; //0.00075
+        // kD = 0; //0.0001
+
         
+
         // Motor Initialization With REV Sparkflex - Configurations
         motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
         motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
@@ -95,31 +155,27 @@ public class SK25Elevator extends Elevator
 
         // Configurations For The Left Motor & Encoder
         motorConfigL
-            .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(kElevatorCurrentLimit);
+            .idleMode(IdleMode.kBrake);
+            //.smartCurrentLimit(kElevatorCurrentLimit);
         motorConfigL.encoder
             .positionConversionFactor(1)
             .velocityConversionFactor(1);
         motorConfigL.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .velocityFF(1.0 / 565, ClosedLoopSlot.kSlot0)
+            .velocityFF(0, ClosedLoopSlot.kSlot0)
             //Set PID values for position control. We don't need to pass a closed loop
             //slot, as it will default to slot 0.
-            .p(0.07)
-            .i(0.00075)
-            .d(0.001)
-            //0.07, 0.00075, 0.001
-            .outputRange(-1, 1);
+            .p(kPPref.get())
+            .i(kIPref.get()) 
+            .d(kDPref.get()) 
+            .outputRange(-.3, .3);
         motorConfigL.closedLoop.maxMotion
             // Set MAXMotion parameters for position control. We don't need to pass
             // a closed loop slot, as it will default to slot 0.
-            .maxVelocity(1000)
-            .maxAcceleration(1000)
-            .allowedClosedLoopError(1)
             // Set MAXMotion parameters for velocity control in slot 0
-            .maxAcceleration(500, ClosedLoopSlot.kSlot0)
-            .maxVelocity(6000, ClosedLoopSlot.kSlot0)
-            .allowedClosedLoopError(1, ClosedLoopSlot.kSlot0);
+            .maxAcceleration(6000, ClosedLoopSlot.kSlot0)
+            .maxVelocity(4200, ClosedLoopSlot.kSlot0)
+            .allowedClosedLoopError(.5, ClosedLoopSlot.kSlot0);
         
         // Apply Motor Configurations
         motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
@@ -127,8 +183,8 @@ public class SK25Elevator extends Elevator
         // Configurations For The Right Motor
         motorConfigR
             .follow(motorL, true)
-            .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(kElevatorCurrentLimit);
+            .idleMode(IdleMode.kBrake);
+            //.smartCurrentLimit(kElevatorCurrentLimit);
             //.inverted(true)
 
         motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
@@ -138,23 +194,17 @@ public class SK25Elevator extends Elevator
         encoder = motorL.getEncoder();
 
         // Current, Target, and Reset Positions
-        RtargetHeight = 0.0;
-        RcurrentHeight = 0.0;
+        // RtargetHeight = 0.0;
+        // RcurrentHeight = 0.0;
         
-        LtargetHeight = 0.0;
-        LcurrentHeight = 0.0;
+        targetHeight = 0.0;
+        currentHeight = 0.0;
 
-        closedLoopController.setReference(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        closedLoopController.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    
-    public void setTargetHeight(ElevatorPosition height)
-    {
-        setTheTargetHeight(height.height);
-        //setLeftTargetHeight(height.height);
+    public void stop() {
+        closedLoopController.setReference(0, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
     }
     
 
@@ -172,11 +222,14 @@ public class SK25Elevator extends Elevator
     /**
      * {@inheritDoc}
      */
-    public void setTheTargetHeight(double height)
+    public void setTargetHeight(ElevatorPosition pos)
     {
-        LtargetHeight = height;
-        closedLoopController.setReference(LtargetHeight, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-        //lPID.setSetpoint(LtargetHeight);
+        setTargetHeight(pos.height);
+    }
+
+    public void setTargetHeight(double targetHeight) {
+        this.targetHeight = targetHeight;
+        closedLoopController.setReference(this.targetHeight, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
     /**
@@ -199,9 +252,9 @@ public class SK25Elevator extends Elevator
     /**
      * {@inheritDoc}
      */
-    public double getLeftTargetPosition()
+    public double getTargetPosition()
     {
-        return LtargetHeight;
+        return targetHeight;
     }
 
     /**
@@ -215,9 +268,9 @@ public class SK25Elevator extends Elevator
     /**
      * {@inheritDoc}
      */
-    public boolean isLeftAtTargetPosition()
+    public boolean isAtTargetPosition()
     {
-        return Math.abs(getEncoderPosition() - getLeftTargetPosition()) < kPositionTolerance;
+        return Math.abs(getEncoderPosition() - getTargetPosition()) < kPositionTolerance;
     }
 
     // Button Sensor Methods
@@ -251,14 +304,24 @@ public class SK25Elevator extends Elevator
     @Override
     public void periodic()
     {  
+        kP = SmartDashboard.getNumber("kP", 0.07);
+        kI = SmartDashboard.getNumber("kI", 0);
+        kD = SmartDashboard.getNumber("kD", 0);
+
+        SmartDashboard.putNumber("kP", kP);
+        SmartDashboard.putNumber("kI", kI);
+        SmartDashboard.putNumber("kD", kD);
+
+
         // Display encoder position and velocity
         SmartDashboard.putNumber("Actual Position", encoder.getPosition());
         SmartDashboard.putNumber("Actual Velocity", encoder.getVelocity());
 
         // Initialize Current & Target Positions
         double currentPosition = getEncoderPosition();
-        double lTargetPosition = getLeftTargetPosition();
-        double rTargetPosition = getRightTargetPosition();
+        // double lTargetPosition = getLeftTargetPosition();
+        double targetPosition = getTargetPosition();
+        // double rTargetPosition = getRightTargetPosition();
         
         // Calculates Motor Speed & Puts It Within Operating Range
         /* 
@@ -271,10 +334,10 @@ public class SK25Elevator extends Elevator
         
         // SmartDashboard Current & Target Positions
         SmartDashboard.putNumber("Current Estimated Position", currentPosition);
-        SmartDashboard.putNumber("Left Target Position", lTargetPosition);
-        SmartDashboard.putBoolean("Left Elevator at Setpoint", isLeftAtTargetPosition());
-        SmartDashboard.putNumber("Right Target Position", rTargetPosition);
-        SmartDashboard.putBoolean("Right Elevator at Setpoint", isRightAtTargetPosition()); 
+        SmartDashboard.putNumber("Target Position", targetPosition);
+        SmartDashboard.putBoolean("Elevator at Setpoint", isAtTargetPosition());
+        // SmartDashboard.putNumber("Right Target Position", rTargetPosition);
+        // SmartDashboard.putBoolean("Right Elevator at Setpoint", isRightAtTargetPosition()); 
     }
     public void testPeriodic(){}
     public void testInit(){}

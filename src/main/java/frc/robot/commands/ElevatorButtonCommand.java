@@ -43,20 +43,11 @@ public class ElevatorButtonCommand extends Command
     @Override
     public boolean isFinished()
     {
-        if(DriverStation.isAutonomousEnabled())
-        {
-            if (elevator.isRightAtTargetPosition() && elevator.isRightAtTargetPosition())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return true;
-        }
+        return elevator.isAtTargetPosition();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        elevator.stop();
     }
 }

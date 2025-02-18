@@ -51,8 +51,8 @@ public class ElevatorJoystickCommand extends Command {
         double positionChange = controller.get() / 50; // Units per 20ms (20ms x 50 = 1s)
 
          // Sets the new height to the current position plus or minus the constant change
-        double rightSetpoint = elevator.getRightTargetPosition() + positionChange;
-        double leftSetpoint = elevator.getLeftTargetPosition() + positionChange;
+        // double rightSetpoint = elevator.getRightTargetPosition() + positionChange;
+        double setpoint = elevator.getTargetPosition() + positionChange;
 
         if(!override.get())
         {
@@ -61,12 +61,12 @@ public class ElevatorJoystickCommand extends Command {
             within the minimum and maximum values that are set in Konstants.
             */
 
-            rightSetpoint = MathUtil.clamp(rightSetpoint, kMinHeight, kMaxHeight);
-            leftSetpoint = MathUtil.clamp(leftSetpoint, kMinHeight, kMaxHeight);
+            // rightSetpoint = MathUtil.clamp(rightSetpoint, kMinHeight, kMaxHeight);
+            setpoint = MathUtil.clamp(setpoint, kMinHeight, kMaxHeight);
         }
 
         // These methods bring the motors up to the setpoint created above.
-        elevator.setTheTargetHeight(rightSetpoint);
+        elevator.setTargetHeight(setpoint);
         //elevator.setLeftTargetHeight(leftSetpoint);
     }
 

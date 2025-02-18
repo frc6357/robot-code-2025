@@ -60,7 +60,7 @@ public abstract class Elevator extends SubsystemBase
     /**
      * @return Returns the current setpoint that the elevator is attempting to reach
      */
-    public abstract double getLeftTargetPosition();
+    public abstract double getTargetPosition();
 
     /**
      * @return Returns the current setpoint that the elevator is attempting to reach
@@ -83,5 +83,5 @@ public abstract class Elevator extends SubsystemBase
      * 
      * @return Returns true if the elevator has reached its current set point.
      */
-    public abstract boolean isLeftAtTargetPosition();
+    public abstract boolean isAtTargetPosition();
 }
