@@ -14,14 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -30,7 +29,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.bindings.CommandBinder;
-import frc.robot.utils.SK25AutoBuilder;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.SK25Elevator;
+import frc.robot.subsystems.SK25Lights;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
 //import static frc.robot.subsystems.TempSwerve.config;
@@ -96,8 +97,9 @@ public class RobotContainer {
 
 
   // The robot's subsystems and commands are defined here...
-  private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
-  private Optional<PracticeSwerve> m_PracticeSwerve = Optional.empty();
+  private Optional<SK25Elevator> m_elevator = Optional.empty();
+  private Optional<SK25Lights> m_lights = Optional.empty();
+  //private Optional<PracticeSwerve> m_PracticeSwerve = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -142,9 +144,17 @@ public class RobotContainer {
 
             // Instantiating subsystems if they are present
             // This is decided by looking at Subsystems.json
+            // if(subsystems.isSwervePresent())
+            // {
+            //     m_swerve = Optional.of(new SK25Swerve());
+            // }
             if(subsystems.isLightsPresent())
             {
                 m_lights = Optional.of(new SK25Lights());
+            }
+            if(subsystems.isElevatorPresent())
+            {
+                m_elevator = Optional.of(new SK25Elevator());
             }
         }
         catch (IOException e)
@@ -217,9 +227,9 @@ public class RobotContainer {
         {
             m_lights.get().testPeriodic();
         }
-        if(elevatorSubsystem.isPresent())
+        if(m_elevator.isPresent())
         {
-            elevatorSubsystem.get().testPeriodic();
+            m_elevator.get().testPeriodic();
         }
     }
     public void testInit(){
@@ -231,21 +241,21 @@ public class RobotContainer {
         {
             m_lights.get().testInit();
         }
-        if(elevatorSubsystem.isPresent())
+        if(m_elevator.isPresent())
         {
-            elevatorSubsystem.get().testInit();
+            m_elevator.get().testInit();
         }
     }
 
     public void matchInit()
     {
-        if (elevatorSubsystem.isPresent())
-        {
+        //if (elevatorSubsystem.isPresent())
+        //{
             //SK25Elevator elevator = elevatorSubsystem.get();
             //TODO Add this back :)
             //elevator.setRightTargetHeight(0.0);
             //elevator.setLeftTargetHeight(0.0);
-        }
+        //}
     }
 
     public void teleopInit()
