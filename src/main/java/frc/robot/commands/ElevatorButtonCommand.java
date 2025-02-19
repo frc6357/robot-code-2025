@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
 import frc.robot.subsystems.SK25Elevator;
