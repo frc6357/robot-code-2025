@@ -4,7 +4,7 @@ import com.revrobotics.spark.SparkFlex;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Konstants.ExampleConstants.kExampleSpeed;
-import static frc.robot.ExamplePorts.ExamplePorts.kExampleMotor;
+import static frc.robot.Ports.ExamplePorts.kExampleMotor;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class ExampleSubsystem extends SubsystemBase
