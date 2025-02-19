@@ -14,7 +14,7 @@ public class ElevatorButtonCommand extends Command
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
     private final SK25Elevator      elevator;
-    private final ElevatorPosition  position;
+    private final ElevatorPosition  pos;
 
     /**
      * This command allows the operator to set the angle of the arm to a specified
@@ -25,9 +25,9 @@ public class ElevatorButtonCommand extends Command
      * @param Elevator
      *            The Elevator subsystem the command operates on.
      */
-    public ElevatorButtonCommand(ElevatorPosition position, SK25Elevator elevator)
+    public ElevatorButtonCommand(ElevatorPosition pos, SK25Elevator elevator)
     {
-        this.position = position;
+        this.pos = pos;
         this.elevator = elevator;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(elevator);
@@ -36,7 +36,7 @@ public class ElevatorButtonCommand extends Command
     @Override
     public void initialize()
     {
-        elevator.setTargetHeight(position);
+        elevator.setTargetHeight(pos);
     }
 
     // Returns true when the command should end.
@@ -44,10 +44,5 @@ public class ElevatorButtonCommand extends Command
     public boolean isFinished()
     {
         return elevator.isAtTargetPosition();
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        elevator.stop();
     }
 }
