@@ -12,7 +12,7 @@ import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
 import frc.robot.utils.CANPort;
 import frc.robot.utils.filters.FilteredAxis;
 
-public class Ports
+public class ExamplePorts
 {
     public static class DriverPorts
     {

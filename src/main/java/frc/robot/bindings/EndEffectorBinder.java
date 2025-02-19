@@ -16,15 +16,15 @@ import static frc.robot.Konstants.EndEffectorConstants.level23Angle;
 import static frc.robot.Konstants.EndEffectorConstants.level4Angle;
 import static frc.robot.Konstants.EndEffectorConstants.intake;
 import static frc.robot.Konstants.EndEffectorConstants.hortizontal;
-import static frc.robot.Ports.OperatorPorts.armHigh;
-import static frc.robot.Ports.OperatorPorts.armMiddleLow;
-import static frc.robot.Ports.OperatorPorts.armTrough;
-import static frc.robot.Ports.OperatorPorts.intakebut;
-import static frc.robot.Ports.OperatorPorts.zeropos;
-import static frc.robot.Ports.OperatorPorts.endArm;
-import static frc.robot.Ports.OperatorPorts.resetencoder;
-import static frc.robot.Ports.OperatorPorts.rollerintake;
-import static frc.robot.Ports.OperatorPorts.rolleroutput;
+import static frc.robot.ExamplePorts.OperatorPorts.armHigh;
+import static frc.robot.ExamplePorts.OperatorPorts.armMiddleLow;
+import static frc.robot.ExamplePorts.OperatorPorts.armTrough;
+import static frc.robot.ExamplePorts.OperatorPorts.intakebut;
+import static frc.robot.ExamplePorts.OperatorPorts.zeropos;
+import static frc.robot.ExamplePorts.OperatorPorts.endArm;
+import static frc.robot.ExamplePorts.OperatorPorts.resetencoder;
+import static frc.robot.ExamplePorts.OperatorPorts.rollerintake;
+import static frc.robot.ExamplePorts.OperatorPorts.rolleroutput;
 
 import com.revrobotics.RelativeEncoder;
 

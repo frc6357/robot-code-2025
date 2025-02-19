@@ -9,8 +9,8 @@ import static frc.robot.Konstants.ElevatorConstants.kMinInteg;
 import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
 import static frc.robot.Konstants.ElevatorConstants.leftElevator;
 import static frc.robot.Konstants.ElevatorConstants.rightElevator;
-import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
-import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
+import static frc.robot.ExamplePorts.ElevatorPorts.kLeftElevatorMotor;
+import static frc.robot.ExamplePorts.ElevatorPorts.kRightElevatorMotor;
 
 // Encoder V3 (Still REV)
 import com.revrobotics.RelativeEncoder;

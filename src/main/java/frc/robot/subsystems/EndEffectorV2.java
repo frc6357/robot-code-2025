@@ -1,11 +1,11 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
-import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
-import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
+import static frc.robot.ExamplePorts.EndEffectorPorts.kEndEffectorArmMotor;
+import static frc.robot.ExamplePorts.EndEffectorPorts.kEndEffectorRollerMotor;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.coralToLaserCanDistance;
-import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
+import static frc.robot.ExamplePorts.EndEffectorPorts.kLaserCanEndEffector;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
