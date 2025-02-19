@@ -25,7 +25,7 @@ public class SubsystemControls
     public SubsystemControls(
         @JsonProperty(required = true, value = "swerve")      boolean swerve,
         @JsonProperty(required = true, value = "example")      boolean example,
-        @JsonProperty(required = true, value = "lights")      boolean lights
+        @JsonProperty(required = true, value = "lights")      boolean lights,
         @JsonProperty(required = true, value = "elevator")      boolean elevator
     )
     {
@@ -53,6 +53,7 @@ public class SubsystemControls
     public boolean isLightsPresent()
     {
         return lights;
+    }
     public boolean isElevatorPresent()
     {
         return elevator;

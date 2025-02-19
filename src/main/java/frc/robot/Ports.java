@@ -51,7 +51,6 @@ public class Ports
 
         // Reset gyro
         public static final SKTrigger kResetGyroPos = new SKTrigger(swerveController, kRightStick.value, BUTTON);
-        public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kLeftStick.value, BUTTON);
 
         // Party mode
         

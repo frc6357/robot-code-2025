@@ -32,8 +32,8 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 // Limit Switches
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 
-// // SmartDashboard
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// SmartDashboard
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // Preferences
 import frc.robot.preferences.Pref;

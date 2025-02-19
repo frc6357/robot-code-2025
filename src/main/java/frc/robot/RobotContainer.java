@@ -30,10 +30,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.bindings.CommandBinder;
-import frc.robot.bindings.ExampleBinder;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.PracticeSwerve;
 import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
@@ -165,11 +161,6 @@ public class RobotContainer {
      */
     private void configureButtonBindings()
     {
-
-        // Adding all the binding classes to the list
-        buttonBinders.add(new ExampleBinder(mySubsystem));
-
-
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
         {
@@ -181,7 +172,8 @@ public class RobotContainer {
 
     private void configurePathPlanner()
     {
-        if(m_PracticeSwerve.isPresent())
+        /* 
+        if(m_Swerve.isPresent())
         {
                 ExampleSubsystem subsystem = mySubsystem.get();
                 
@@ -192,6 +184,7 @@ public class RobotContainer {
             //NamedCommands.registerCommand("StartLauncherCommand", new LaunchCommandAuto(kLauncherLeftSpeed, kLauncherRightSpeed, launcher));
             
         }
+        
 
         if(m_PracticeSwerve.isPresent()){
             
@@ -201,6 +194,7 @@ public class RobotContainer {
             autoCommandSelector = SK25AutoBuilder.buildAutoChooser("P4_Taxi");
             //SmartDashboard.putData("Auto Chooser", autoCommandSelector);
         }
+        */
     }
 
   /**
