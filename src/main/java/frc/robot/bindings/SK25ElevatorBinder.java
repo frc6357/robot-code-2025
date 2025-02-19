@@ -2,7 +2,7 @@ package frc.robot.bindings;
 
 import static frc.robot.Konstants.ElevatorConstants.*;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.*;
-import static frc.robot.ExamplePorts.OperatorPorts.*;
+import static frc.robot.Ports.OperatorPorts.*;
 
 import java.util.Optional;
 import edu.wpi.first.wpilibj2.command.button.Trigger;

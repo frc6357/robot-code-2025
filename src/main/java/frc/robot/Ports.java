@@ -12,7 +12,7 @@ import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
 import frc.robot.utils.CANPort;
 import frc.robot.utils.filters.FilteredAxis;
 
-public class ExamplePorts
+public class Ports
 {
     public static class DriverPorts
     {
@@ -129,12 +129,12 @@ public class ExamplePorts
     }
 
 
-    public static class ExamplePorts
-    {
-        //bus name is null
-        private static final String busName = "";
+    // public static class ExamplePorts
+    // {
+    //     //bus name is null
+    //     private static final String busName = "";
 
-        //assign a motor ID of 49 to the example motor
-        public static final CANPort kExampleMotor = new CANPort(59, busName); 
-    }
+    //     //assign a motor ID of 49 to the example motor
+    //     public static final CANPort kExampleMotor = new CANPort(59, busName); 
+    // }
 }
