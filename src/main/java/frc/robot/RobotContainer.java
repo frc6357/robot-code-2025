@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.SK25ElevatorBinder;
-import frc.robot.subsystems.ExampleSubsystem;
+// import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.bindings.EndEffectorBinder;
 import frc.robot.subsystems.EndEffectorV2;
@@ -36,7 +36,7 @@ import frc.robot.utils.filters.FilteredJoystick;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
+//   private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
   private Optional<SK25Elevator>    elevatorSubsystem    = Optional.empty();
   private Optional<EndEffectorV2> endEffector = Optional.empty();
 
@@ -80,10 +80,10 @@ public class RobotContainer {
 
             // Instantiating subsystems if they are present
             // This is decided by looking at Subsystems.json
-            if(subsystems.isExamplePresent())
-            {
-                mySubsystem = Optional.of(new ExampleSubsystem());
-            }
+            // if(subsystems.isExamplePresent())
+            // {
+            //     mySubsystem = Optional.of(new ExampleSubsystem());
+            // }
             if(subsystems.isElevatorPresent())
             {
                 elevatorSubsystem = Optional.of(new SK25Elevator());
@@ -138,10 +138,10 @@ public class RobotContainer {
     }
 
     public void testPeriodic(){
-        if(mySubsystem.isPresent())
-        {
-            mySubsystem.get().testPeriodic();
-        }
+        // if(mySubsystem.isPresent())
+        // {
+        //     mySubsystem.get().testPeriodic();
+        // }
         if(elevatorSubsystem.isPresent())
         {
             elevatorSubsystem.get().testPeriodic();
@@ -152,10 +152,10 @@ public class RobotContainer {
         }
     }
     public void testInit(){
-        if(mySubsystem.isPresent())
-        {
-            mySubsystem.get().testInit();
-        }
+        // if(mySubsystem.isPresent())
+        // {
+        //     mySubsystem.get().testInit();
+        // }
         if(elevatorSubsystem.isPresent())
         {
             elevatorSubsystem.get().testInit();

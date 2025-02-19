@@ -67,7 +67,7 @@ public class EndEffectorV2 extends SubsystemBase
             .p(1.9)
             .i(.0002)
             .d(2.1)
-            .outputRange(-.1, .1);
+            .outputRange(-.1, .1); //TODO: Add a velocityFF in order to provide a feedforwards to counteract gravity and maintain the arm at a set point
             //.p(0, ClosedLoopSlot.kSlot1)
             //.i(0, ClosedLoopSlot.kSlot1)
             //.d(0, ClosedLoopSlot.kSlot1)
@@ -81,13 +81,13 @@ public class EndEffectorV2 extends SubsystemBase
 
         armConfig
             .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(30);
+            .smartCurrentLimit(30); // TODO: Consider adding a .voltageCompensation(double nominalVoltage) in order to limit maximum volts to the motor
 
         mPID = armMotor.getClosedLoopController();
 
         mEncoder = armMotor.getEncoder();
         
-        armFeedforward = new ArmFeedforward(0.22,0.58, 0.10, 0.01 );
+        armFeedforward = new ArmFeedforward(0.22,0.58, 0.10, 0.01 ); // Is this used anywhere?
 
         armMotor.configure(armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
