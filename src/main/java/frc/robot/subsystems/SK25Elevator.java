@@ -1,242 +1,188 @@
-// // Essentials
-// package frc.robot.subsystems;
-// import edu.wpi.first.wpilibj2.command.SubsystemBase;
+// Essentials
+package frc.robot.subsystems;
+import frc.robot.subsystems.superclasses.Elevator;
+//import edu.wpi.first.math.MathUtil;
 
-// // Motors - Sparkflex
-// import com.revrobotics.spark.SparkFlex;
-// import com.revrobotics.spark.SparkLowLevel.MotorType;
+// Constants (Muy Importante)
+import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
+import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
 
-// // Encoders - Sensors
-// import com.revrobotics.RelativeEncoder;
-// import edu.wpi.first.wpilibj.DigitalInput;
+// Ports
+import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
+import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
 
-// // Constants (Muy Importante)
-// import static frc.robot.Konstants.ElevatorConstants.*;
-// import static frc.robot.Ports.ElevatorPorts.*;
+// Encoder V3
+import com.revrobotics.RelativeEncoder;
 
-// // Configurations For Stuff (Thanks REV)
-// import com.revrobotics.spark.config.SparkFlexConfig;
-// import com.revrobotics.sim.SparkFlexExternalEncoderSim;
+// Closed Loop
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-// // SparkBase
-// import com.revrobotics.spark.SparkBase;
+// Motors - Sparkflex
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-// // PID Controller
-// import edu.wpi.first.math.controller.PIDController;
+// Configurations For Motors
+import com.revrobotics.spark.config.SparkFlexConfig;
+
+// Limit Switches
+import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 
 // // SmartDashboard
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-// // Unused Imports (Maybe In The Future)
-// //import com.revrobotics.spark.config.SparkMaxConfig;
-// //import com.revrobotics.spark.config.SparkBaseConfig;
-// //import com.revrobotics.spark.SparkRelativeEncoder;
-// //import com.revrobotics.spark.SparkMax;
+// Preferences
+import frc.robot.preferences.Pref;
+import frc.robot.preferences.SKPreferences;
 
-// public class SK25Elevator extends SubsystemBase
-// {
-//     // Create Memory Motor Objects
-//     SparkFlex motorR;
-//     SparkFlex motorL;
+public class SK25Elevator extends Elevator
+{
+    // Create Memory Motor Objects
+    SparkFlex motorR;
+    SparkFlex motorL;
 
-//     // Creating Testing Objects
-//     SparkFlexExternalEncoderSim encoderTestRight;
+    // Encoder & ClosedLoop
+    SparkClosedLoopController closedLoopController;
+    RelativeEncoder encoder;
 
-//     SparkFlexConfig config;
+    // Creating Config Object
+    SparkFlexConfig motorConfigL;
+    SparkFlexConfig motorConfigR;
 
-//     //Create Memory PID Objects
-//     PIDController rPID;
-//     PIDController lPID;
+    // Target & Current Position
+    double targetHeight;
+    double currentHeight;
 
-//     // Target & Current Position Objects
-//     double LtargetPosition;
-//     double LcurrentPosition;
-//     double RtargetPosition;
-//     double RcurrentPosition;
+    // SKPreferences for PID
+    Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.007)
+        .onChange((newValue) -> {
+            motorConfigL.closedLoop.p(newValue);
+        });
+    Pref<Double> kIPref = SKPreferences.attach("elevatorKi", 0.0)
+        .onChange((newValue) -> {
+            motorConfigL.closedLoop.i(newValue);
+        });
+    Pref<Double> kDPref = SKPreferences.attach("elevatorkD", 0.0)
+        .onChange((newValue) -> {
+            motorConfigL.closedLoop.d(newValue);
+        });
+    Pref<Double> kFFPref = SKPreferences.attach("elevatorkFF", 0.00196078431) // 1/500
+        .onChange((newValue) -> {
+            motorConfigL.closedLoop.velocityFF(newValue);
+        });
 
-//     // Encoder Objects
-//     RelativeEncoder encoderL;
-//     RelativeEncoder encoderR;
+    // Constructor For Public Command Access
+    public SK25Elevator()
+    {
+        // Motor Initialization With REV Sparkflex - Configurations
+        motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
+        motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
 
-//     // Touch Sensor Objects
-//     DigitalInput touchSensorTop;
-//     DigitalInput touchSensorBottom;
+        motorConfigL = new SparkFlexConfig();
+        motorConfigR = new SparkFlexConfig();
 
-//     // Magnetic Encoder Objects
-//     DigitalInput magEncoder1;
-//     DigitalInput magEncoder2;
-//     DigitalInput magEncoder3;
-//     DigitalInput magEncoder4;
+        // Encoder V3
+        closedLoopController = motorL.getClosedLoopController();
+        encoder = motorL.getEncoder();
 
-//     // Constructor For Public Command Access
-//     public SK25Elevator()
-//     {
-//         // PID Controllers - Setpoints
-//         rPID = new PIDController(rightElevator.kP, rightElevator.kI, rightElevator.kD);
-//         rPID.setSetpoint(0.0);
-
-//         lPID = new PIDController(leftElevator.kP, leftElevator.kI, leftElevator.kD);
-//         lPID.setSetpoint(0.0);
-
-//         // Motor Initialization With REV - Configurations
-//         motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
-//         motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
-//         config = new SparkFlexConfig();
-
-//         // Configurations For The Motor & Encoder
-//         config.
-//             inverted(true);
-//         config.encoder
-//             .positionConversionFactor(elevatorConversion);
+        // Configurations For The Left Motor & Encoder
+        motorConfigL
+            .idleMode(IdleMode.kCoast).smartCurrentLimit(50).voltageCompensation(12);
+        motorConfigL.encoder
+            .positionConversionFactor(1)
+            .velocityConversionFactor(1);
+        motorConfigL.limitSwitch
+            .reverseLimitSwitchEnabled(true)
+            .reverseLimitSwitchType(Type.kNormallyOpen);
+        motorConfigL.closedLoop
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+            //Set PID values for position control. We don't need to pass a closed loop
+            //slot, as it will default to slot 0.
+            .velocityFF(kFFPref.get())
+            .p(kPPref.get())
+            .i(kIPref.get()) 
+            .d(kDPref.get()) 
+            .outputRange(-1, 1)
+            .maxMotion
+            .maxAcceleration(6000)
+            .maxVelocity(4200)
+            .allowedClosedLoopError(.5);
         
-//         motorR.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        // Apply Motor Configurations
+        motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
-//         // Encoder Objects
-//         encoderL = motorL.getEncoder();
-//         encoderR = motorR.getEncoder();
+        // Configurations For The Right Motor
+        motorConfigR
+            .follow(motorL, true)
+            .idleMode(IdleMode.kBrake);
 
-//         // Current And Target Positions
-//         RtargetPosition = 0.0;
-//         RcurrentPosition = 0.0;
+        // Apply Motor Configurations
+        motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
-//         LtargetPosition = 0.0;
-//         LcurrentPosition = 0.0;
-
-//         resetPosition(0.0);
-
-//         // Touch Sensor
-//         touchSensorTop = new DigitalInput(1);
-//         touchSensorBottom = new DigitalInput(2);
-//     }
-
-//     // Button Sensor Methods
-//     public Boolean isTopSensorPressed()
-//     {
-//         return !touchSensorTop.get();
-//     }
-
-//     public Boolean isBottomSensorPressed()
-//     {
-//         return !touchSensorBottom.get();
-//     }
-
-//     // Button Sensor Methods For Use By Commands
-//     public boolean atTop()
-//     {
-//         if(isTopSensorPressed())
-//             return true;
-//         else
-//             return false;
-//     }
-
-//     public boolean atBottom()
-//     {
-//         if(isBottomSensorPressed())
-//             return true;
-//         else
-//             return false;
-//     }
-
-//     // Encoder Value Method
-//     public Double getEncoderValue()
-//     {
-//         return encoderL.getPosition();
-
-//     }
-
-//     // Motor Methods
-//     public void setRightMotor(double location)
-//     {
-//         RtargetPosition = location;
-//         rPID.setSetpoint(location);
-//     }
+        // Current, Target, and Reset Positions
+        targetHeight = 0.0;
+        currentHeight = 0.0;
+        closedLoopController.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    }
     
-//     public void setLeftMotor(double location)
-//     {
-//         LtargetPosition = location;
-//         lPID.setSetpoint(location);
-//     }
+    /**
+     * {@inheritDoc}
+     */
+    public void setTargetHeight(ElevatorPosition pos)
+    {
+        setTargetHeight(pos.height);
+    }
+    public void setTargetHeight(double targetHeight) 
+    {
+        this.targetHeight = targetHeight;
+        closedLoopController.setReference(this.targetHeight, ControlType.kMAXMotionPositionControl);
+    }
 
-//     public void runLeftMotor(double speed)
-//     {
-//         motorL.set(speed);
-//     }
+    /**
+     * {@inheritDoc}
+     */
+    public double getEncoderPosition()
+    {
+        double encoderPositionValue = encoder.getPosition();
+        return encoderPositionValue;
+    }
 
-//     public void runRightMotor(double speed)
-//     {
-//         motorR.set(speed);
-//     }
+    /**
+     * {@inheritDoc}
+     */
+    public double getTargetPosition()
+    {
+        return targetHeight;
+    }
 
-//     // Position Methods
-//     public double getLeftPosition()
-//     {
-//         return encoderL.getPosition();
-//     }
-    
-//     public double getRightPosition()
-//     {
-//         return encoderR.getPosition();
-//     }
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isAtTargetPosition()
+    {
+        return Math.abs(getEncoderPosition() - getTargetPosition()) < kPositionTolerance;
+    }
 
-//     public double getRightTargetPosition(){
-//         return RtargetPosition;
-//     }
+    @Override
+    public void periodic()
+    {  
+        // Display encoder position and velocity
+        SmartDashboard.putNumber("Actual Position", encoder.getPosition());
+        SmartDashboard.putNumber("Actual Velocity", encoder.getVelocity());
 
-//     public double getLeftTargetPosition(){
-//         return LtargetPosition;
-//     }
-
-//     public boolean isRightAtTargetPosition()
-//     {
-//         return Math.abs(getRightPosition() - getRightTargetPosition()) < kPositionTolerance;
-//     }
-
-//     public boolean isLeftAtTargetPosition()
-//     {
-//         return Math.abs(getLeftPosition() - getLeftTargetPosition()) < kPositionTolerance;
-//     }
-
-//     public void resetPosition(double position)
-//     {
-//         encoderL.setPosition(position);
-//         encoderR.setPosition(position);
-//     }
-
-//     // Stop Motors Method
-//     public void stopMotors()
-//     {
-//         motorL.stopMotor();
-//         motorR.stopMotor();
-//     }
-
-//     @Override
-//     public void periodic(){
+        // Initialize Current & Target Positions
+        double currentPosition = getEncoderPosition();
+        double targetPosition = getTargetPosition();
         
-//         double r_current_position = getRightPosition();
-//         // double r_target_position = getRightTargetPosition();
-
-//         double l_current_position = getLeftPosition();
-//         //double l_target_position = getLeftTargetPosition();
-
-//         // // Calculates motor speed and puts it within operating range
-//         //double rSpeed = MathUtil.clamp(rPID.calculate(r_current_position), kClimbMotorMinOutput, kClimbMotorMaxOutput);
-//         // motorR.set(rSpeed); 
-
-//         // // Calculates motor speed and puts it within operating range
-//         // double lSpeed = MathUtil.clamp(lPID.calculate(l_current_position), kClimbMotorMinOutput, kClimbMotorMaxOutput);
-//         // motorL.set(lSpeed); 
-
-//         SmartDashboard.putNumber("Right Current Position", r_current_position);
-//         // SmartDashboard.putNumber("Right Target Position", r_target_position);
-//         // SmartDashboard.putBoolean("Right Arm at Setpoint", isRightAtTargetPosition());
-
-//         SmartDashboard.putNumber("Left Current Position", l_current_position);
-//         // SmartDashboard.putNumber("Left Target Position", l_target_position);
-//         // SmartDashboard.putBoolean("Left Arm at Setpoint", isLeftAtTargetPosition());
-
-//         //TODO Uncomment below and add this to elastic dashboard once it's implemented.
-
-//         //SmartDashboard.putBoolean("Elevator At Top", atTop());
-//         //SmartDashboard.putBoolean("Elevator At Bottom", atBottom());
-//     }
-// }
+        // SmartDashboard Current & Target Positions
+        SmartDashboard.putNumber("Current Estimated Position", currentPosition);
+        SmartDashboard.putNumber("Target Position", targetPosition);
+        SmartDashboard.putBoolean("Elevator at Setpoint", isAtTargetPosition());
+    }
+    public void testPeriodic(){}
+    public void testInit(){}
+}

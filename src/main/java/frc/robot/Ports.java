@@ -17,6 +17,9 @@ import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kPigeonID;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.*;
+//import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
+import static frc.robot.utils.SKTrigger.INPUT_TYPE.BUTTON;
+import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.utils.CANPort;
@@ -48,6 +51,9 @@ public class Ports
 
         // Reset gyro
         public static final SKTrigger kResetGyroPos = new SKTrigger(swerveController, kRightStick.value, BUTTON);
+        public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kLeftStick.value, BUTTON);
+
+        // Party mode
         
 
     }
@@ -74,9 +80,24 @@ public class Ports
         // Party mode and Teal Lights
         public static final SKTrigger kPartyModeButton = new SKTrigger(kOperator, kStart.value, BUTTON);
         public static final SKTrigger kLightsToTealButton = new SKTrigger(kOperator, kBack.value, BUTTON);
+        // Elevator
+        public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
+        public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
+        public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
+        public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
+        public static final SKTrigger kZeroPositionOperator  = new SKTrigger(kOperator, kStart.value, BUTTON);
+
+        // Elevator Overrides
+        public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
+        public static final SKTrigger kResetElevatorPos = new SKTrigger(kOperator, kBack.value, BUTTON);
+        public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
+
+        // Party mode
+        public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
+        public static final SKTrigger kLightsOff = new SKTrigger(kOperator, 90, POV);
     }
 
-    /**
+    /*
      * Defines all the ports needed to create sensors and actuators for the drivetrain.
      */
 
@@ -107,9 +128,11 @@ public class Ports
     public static class ElevatorPorts
     {
         private static final String busName = "";
-        //public static final CANPort kRightElevatorMotor = new CANPort(40, busName);
-        //public static final CANPort kLeftElevatorMotor = new CANPort(41, busName);
-        
+        //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
+        public static final CANPort kRightElevatorMotor = new CANPort(40, busName);
+        public static final CANPort kLeftElevatorMotor = new CANPort(41, busName);
+        //public static final CANPort kEncoderL = new CANPort(43, busName);
+        //public static final CANPort kEncoderR = new CANPort(44, busName); 
     }
 
 

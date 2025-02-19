@@ -303,32 +303,63 @@ public final class Konstants
 
     public static final class ElevatorConstants
     {
-        public static final PIDConstants rightElevator = new PIDConstants(0.01, 0.0, 0.0);
-        public static final PIDConstants leftElevator = new PIDConstants(0.01, 0.0, 0.0);
+        /** Heights for the different elevator positions */
+        public static enum ElevatorPosition
+        {
+            //TODO FIX DURING TESTING - Measure Elevator Heights
+
+            /** Set the height to reach the top branch (L4) */
+            kTopPosition(32),
+            /** Set the height to reach the middle branch (L3) */
+            kMidPosition(16),
+            /** Set the height to reach the low branch (L2) */
+            kLowPosition(8),
+            /** Set the height to reach the trough (L1) */
+            kTroughPosition(4),
+            /** Set the height to reach the bottom */
+            kZeroPosition(0.0);
+
+            public final double height;
+
+            ElevatorPosition(double height)
+            {
+                this.height = height;
+            }
+        }
+
+        // PID Constants For Left & Right Elevator Motors (Should Be The Same)
+        public static final PIDConstants leftElevator = new PIDConstants(0.07, 0.00075, 0.001);
+        public static final PIDConstants rightElevator = new PIDConstants(0.07, 0.00075, 0.001);
         public static final PIDConstants balancePID = new PIDConstants(0.0, 0.0, 0.0);
 
-        public static final double kElevatorBalanceTolerance = 5.0;
-        public static final double spoolDiameter = 0.75; //Inches
-        public static final double gearRatio = 1.0; //Shaft rotations / 1 motor rotation
-        public static final double elevatorHeight = 11.0; //Inches
+        // Minimum & Maximum Integration Range For PID
+        public static final double kMinInteg = 0.0;
+        public static final double kMaxInteg = 0.15;
 
-        public static final double elevatorConversion = 1.0 / 87.0; //inches moved per motor rotation
-        public static final double kPositionTolerance = 2.0;
-        public static final double kElevatorMotorMinOutput = -1.0;
-        public static final double kElevatorMotorMaxOutput = 1.0;
+        // Positive & Negative Acceleration Limits (In %/sec)
+        public static final double kPositiveAccelLimit = 2.0;
+        public static final double kNegativeAccelLimit = -1.0; // Previously -5
 
-        public static final double kElevatorUpSpeed = 1.0;
-        public static final double kElevatorDownSpeed = 1.0;
+        // Position Tolerance For The ELevator (+ or - The Target Position)
+        public static final double kPositionTolerance = 0.5;
 
-        //public static final double kElevatorUpSpeedLeft = -1.0;
-        //public static final double kElevatorDownSpeedLeft = 1.0;
+        // Minimum & Maximum Outputs For Elevator
+        public static final double kElevatorMotorMinOutput = -0.5;
+        public static final double kElevatorMotorMaxOutput = 0.8;
 
-        public static final double kMin = 0.0;
-        public static final double kMax = 1.0;
-    
-        public static final double kJoystickChange   = 0.1; // Manual setpoint value for units from 0.0 - 1.0 moved per second
-        public static final double kJoystickDeadband = 0.3;  // Manual arm movement axis deadband
+        // Maximum Current Limit For The ELevator
+        public static final int kElevatorCurrentLimit = 30;
+        
+        /*
+        Minumum & Maximum Heights The Elevator Can Be Within
+        TODO Change the height and see how that works, check SmartDashboard for elevator values first.
+        */
+        public static final double kMaxHeight = 70;
+        public static final double kMinHeight = 0;
 
+        // Important Joystick Settings
+        public static final double kJoystickChange   = 10.0;
+        public static final double kJoystickDeadband = 0.2;  // Manual elevator movement axis deadband
         public static final boolean kJoystickReversed = true;  // Determines if the joystick movement is reversed
     }
 
@@ -356,8 +387,6 @@ public final class Konstants
         public static final double kExampleSpeed = 0.5;  //percentage based where 1.0 is max power and 0.0 is minimum
     }
     
-    
-
     /** The file that is used for system instantiation at runtime */
     public static final String SUBSYSTEMFILE = "Subsystems.json";
 }
