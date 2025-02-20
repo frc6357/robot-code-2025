@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Rotation;
+import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Konstants.SwerveConstants.kCANivoreNameString;
 import static frc.robot.Konstants.SwerveConstants.kChassisLength;
 import static frc.robot.Konstants.SwerveConstants.kChassisWidth;
@@ -12,16 +14,13 @@ import static frc.robot.Konstants.SwerveConstants.kPIDControllerToleranceDegrees
 import static frc.robot.Konstants.SwerveConstants.kWheelCircumferenceMeters;
 
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreCANcoder;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -31,10 +30,8 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
 
 
 public class SK25SwerveModule {
@@ -45,6 +42,17 @@ public class SK25SwerveModule {
     SlewRateLimiter velocityLimiter;
     Double encoderOffset;
     Double inverted;
+
+
+
+    /* Be able to switch which control request to use based on a button press */
+    /* Start at position 0, use slot 0 */
+    private final PositionVoltage m_positionVoltage = new PositionVoltage(0).withSlot(0);
+    /* Start at position 0, use slot 1 */
+    private final PositionTorqueCurrentFOC m_positionTorque = new PositionTorqueCurrentFOC(0).withSlot(1);
+    /* Keep a brake request so we can disable the motor */
+    private final NeutralOut m_brake = new NeutralOut();
+
 
     public SK25SwerveModule(int driveMotorID, int turnMotorID, int encoderID, double encoderOffset, double inverted)
     {
@@ -70,27 +78,23 @@ public class SK25SwerveModule {
         //sets the acceptable error bound to which the controller will stop if reached
         turnPID.setTolerance(kPIDControllerToleranceDegrees);
 
-        TalonFXConfiguration configuration = new TalonFXConfiguration();
 
-        configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        configuration.ClosedLoopGeneral.ContinuousWrap = true;
+        TalonFXConfiguration configs = new TalonFXConfiguration();
+        configs.Slot0.kP = 2.4; // An error of 1 rotation results in 2.4 V output
+        configs.Slot0.kI = 0; // No output for integrated error
+        configs.Slot0.kD = 0.1; // A velocity of 1 rps results in 0.1 V output
+        // Peak output of 8 V
+        configs.Voltage.withPeakForwardVoltage(Volts.of(8))
+            .withPeakReverseVoltage(Volts.of(-8));
 
-        //create P, I, and D configs for the PID Configs object
-        Slot0Configs turnPIDConfigs = configuration.Slot0;
-        turnPIDConfigs.kS = 0.25; // Add 0.25 V output to overcome static friction
-        turnPIDConfigs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
-        turnPIDConfigs.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        turnPIDConfigs.kP = 4.8; // A position error of 2.5 rotations results in 12 V output
-        turnPIDConfigs.kI = 0; // no output for integrated error
-        turnPIDConfigs.kD = 0.1; // A velocity error of 1 rps results in 0.1 V output
-        
-        var motionMagicConfigs = configuration.MotionMagic;
-        motionMagicConfigs.MotionMagicCruiseVelocity = 80; // Target cruise velocity of 80 rps
-        motionMagicConfigs.MotionMagicAcceleration = 160; // Target acceleration of 160 rps/s (0.5 seconds)
-        motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
+        configs.Slot1.kP = 60; // An error of 1 rotation results in 60 A output
+        configs.Slot1.kI = 0; // No output for integrated error
+        configs.Slot1.kD = 6; // A velocity of 1 rps results in 6 A output
+        // Peak output of 120 A
+        configs.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(120))
+            .withPeakReverseTorqueCurrent(Amps.of(-120));
 
-        //apply the PID Configs to the motor
-        turnMotor.getConfigurator().apply(turnPIDConfigs);
+        turnMotor.setPosition(0);
     }
 
     //the method which controls the drive and turn motors, using open loop for drive and closed for turn
@@ -101,9 +105,16 @@ public class SK25SwerveModule {
         //determine the voltage output of the drive motor based on its speed in m/s
         double percentOutput = desiredState.speedMetersPerSecond; // / kMaxVelocityMetersPerSecond;
         //set the drive motor output as a percentage times the number of volts supplied by the battery (12 volts)
-        driveMotor.setVoltage(inverted * getLimitedVelocity(percentOutput * 12));
+        driveMotor.setVoltage(inverted * percentOutput * 12);//getLimitedVelocity(percentOutput * 12));
         //set the PID controller to reach the desired angle
-        applyPID(desiredState.angle.getMeasure()); // Always closed-loop control for turn motor.
+        //applyPID(desiredState.angle.getMeasure()); // Always closed-loop control for turn motor.
+
+        //set the motor to the target rotation value
+        turnMotor.setControl(m_positionVoltage.withPosition(desiredState.angle.getMeasure()));  //TODO: barke mode and is rotatoin2d in rotations??
+
+        //if no output for drive or turn, set motor to brake mode:
+        //driveMotor.setControl(m_brake);
+        //turnMotor.setControl(m_brake);
     }
 
     /** gets the absolute position of the turn motor in rotations */
@@ -248,5 +259,7 @@ public class SK25SwerveModule {
 
         //set position to a rotation distance specified by the request
         turnMotor.setControl(angleVoltageControl.withPosition(setpoint));
+
+        //turnMotor.setPosition(turnPID.calculate(encoder.getAbsolutePosition(), setpoint, encoder.Timestamp.getTimestamp()))
     }
 }
