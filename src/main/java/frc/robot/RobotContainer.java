@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.bindings.CommandBinder;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Lights;
 import frc.robot.utils.SubsystemControls;
@@ -62,7 +62,7 @@ public class RobotContainer {
 
     private final CommandXboxController joystick = new CommandXboxController(0);
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final SKSwerve drivetrain = TunerConstants.createDrivetrain();
 
     private void configurePhoenixBindings() {
         // Note that X is defined as forward according to WPILib convention,
