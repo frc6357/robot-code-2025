@@ -363,6 +363,17 @@ public final class Konstants
         public static final boolean kJoystickReversed = true;  // Determines if the joystick movement is reversed
     }
 
+    public static final class VisionConstants {
+        public static final class limelightAlpha {
+            public static final String kName = "limelight-alpha"; // Hostname? Camera name? TODO: Figure out limelight names
+        }
+        public static final class limelightBeta {
+            public static final String kName = "limelight-beta";
+        }
+
+
+    }
+
         /** Constants that are used when defining filters for controllers */
         public static final class OIConstants
         {
