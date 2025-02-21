@@ -16,7 +16,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
-import au.grapplerobotics.LaserCan;
+//import au.grapplerobotics.LaserCan;
 
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
@@ -49,7 +49,7 @@ public class EndEffectorV2 extends SubsystemBase
 
     double armTargetAngle;
 
-    LaserCan laserCanSensor;
+    //LaserCan laserCanSensor;
 
     public EndEffectorV2()
     {
@@ -64,19 +64,19 @@ public class EndEffectorV2 extends SubsystemBase
         
         armConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .p(1.9)
+            .p(6)
             .i(.0002)
-            .d(2.1)
-            .outputRange(-.1, .1); //TODO: Add a velocityFF in order to provide a feedforwards to counteract gravity and maintain the arm at a set point
+            .d(5)
+            .outputRange(-.1, .1) //TODO: Add a velocityFF in order to provide a feedforwards to counteract gravity and maintain the arm at a set point
             //.p(0, ClosedLoopSlot.kSlot1)
             //.i(0, ClosedLoopSlot.kSlot1)
             //.d(0, ClosedLoopSlot.kSlot1)
-            //.velocityFF(1.0/5767, ClosedLoopSlot.kSlot1)
+            .velocityFF(1.0/5767, ClosedLoopSlot.kSlot1);
             //.outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
             armConfig.closedLoop.maxMotion
             .maxAcceleration(500)
-            .maxVelocity(500)
+            .maxVelocity(550)
             .allowedClosedLoopError(1);
 
         armConfig
@@ -96,7 +96,7 @@ public class EndEffectorV2 extends SubsystemBase
 
         mEncoder.setPosition(0);
 
-        laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
+        //laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
     }
 
     public void initialize()
@@ -139,10 +139,14 @@ public class EndEffectorV2 extends SubsystemBase
 
     public boolean isArmAtTargetPosition()
     {
+        double la =  getTargetArmPosition() -getArmPosition();
+        System.out.println(la);
+        System.out.println(getTargetArmPosition());
+        System.out.println(getArmPosition());
         return Math.abs( getTargetArmPosition() -getArmPosition()) < kArmTolerance;
     }
 
-    public boolean haveCoral()
+    /*public boolean haveCoral()
     {
         LaserCan.Measurement sensorMeasurement = laserCanSensor.getMeasurement();
         if ((sensorMeasurement != null && sensorMeasurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)) {
@@ -154,6 +158,7 @@ public class EndEffectorV2 extends SubsystemBase
         } 
         return false;
     }
+        */
 
 
      public void runRoller(double rollerspeed)

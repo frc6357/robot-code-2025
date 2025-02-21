@@ -113,7 +113,7 @@ public final class Konstants
        public static final double kArmSpeed = 0.1;
        public static final double kRollerSpeed = 0.7;
 
-       public static final double kArmTolerance = 0.01;
+       public static final double kArmTolerance = 1;
 
        public static final double coralToLaserCanDistance = 24;
 
