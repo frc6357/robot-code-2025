@@ -28,6 +28,8 @@ public class EndEffectorJoystickCommand extends Command {
         addRequirements(endEffector);
 
         
+
+        
     }
 
     @Override 
@@ -43,6 +45,7 @@ public class EndEffectorJoystickCommand extends Command {
         double armspeed = -kArmSpeed;
         System.out.println("Position: " + mEncoder.getPosition());
          endEffector.runArm(armspeed);
+         endEffector.isRunning = true;
        }
 
        else if (controller.get() < -kJoystickDeadband)
@@ -50,14 +53,13 @@ public class EndEffectorJoystickCommand extends Command {
         System.out.println("Position: " + mEncoder.getPosition());
         double armspeed = kArmSpeed;
         endEffector.runArm(armspeed);
+        endEffector.isRunning = true;
        }
 
        else
        {
         endEffector.stopArm();
-        double hold = endEffector.getArmPosition();
-        System.out.println("hoding arm: "+hold);
-        new EndEffectorHoldCommand(hold, endEffector);
+        endEffector.hold();
        }
 
     }

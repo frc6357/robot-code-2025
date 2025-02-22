@@ -49,6 +49,8 @@ public class EndEffectorV2 extends SubsystemBase
 
     double armTargetAngle;
 
+    public boolean isRunning;
+
     //LaserCan laserCanSensor;
 
     public EndEffectorV2()
@@ -146,6 +148,16 @@ public class EndEffectorV2 extends SubsystemBase
         return Math.abs( getTargetArmPosition() -getArmPosition()) < kArmTolerance;
     }
 
+    public void hold()
+    { 
+        if(isRunning == true)
+        {
+            mTargetAngle = getArmPosition();
+            isRunning = false;
+        }
+        setTargetAngle(mTargetAngle);   
+    }
+
     /*public boolean haveCoral()
     {
         LaserCan.Measurement sensorMeasurement = laserCanSensor.getMeasurement();
@@ -159,6 +171,25 @@ public class EndEffectorV2 extends SubsystemBase
         return false;
     }
         */
+    /*public void checkPosition()
+     this.mEncoder = endEffector.mEncoder;
+            double encoder = mEncoder.getPosition();
+            double angle = (encoder * endEffector.gear2Rotation * endEffector.degrees) / endEffector.motorRatio / endEffector.gear1Rotation;
+
+            if(angle < 35)
+            {
+                new EndEffectorButtonCommand(35, endEffector);
+                endEffector.stopArm();
+            }
+
+            if(Math.abs(endArm.getFilteredAxis()) > kJoystickDeadband)
+            {
+                new EndEffectorJoystickCommand(
+                        () -> {return endArm.getFilteredAxis();},
+                       endEffector);
+            }
+            */
+     
 
 
      public void runRoller(double rollerspeed)
