@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
@@ -73,10 +75,11 @@ public class EndEffectorV2 extends SubsystemBase
             //.p(0, ClosedLoopSlot.kSlot1)
             //.i(0, ClosedLoopSlot.kSlot1)
             //.d(0, ClosedLoopSlot.kSlot1)
+            
             .velocityFF(1.0/5767, ClosedLoopSlot.kSlot1);
             //.outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
-            armConfig.closedLoop.maxMotion
+        armConfig.closedLoop.maxMotion
             .maxAcceleration(500)
             .maxVelocity(550)
             .allowedClosedLoopError(1);
@@ -86,10 +89,9 @@ public class EndEffectorV2 extends SubsystemBase
             .smartCurrentLimit(30); // TODO: Consider adding a .voltageCompensation(double nominalVoltage) in order to limit maximum volts to the motor
 
         mPID = armMotor.getClosedLoopController();
-
         mEncoder = armMotor.getEncoder();
         
-        armFeedforward = new ArmFeedforward(0.22,0.58, 0.10, 0.01 ); // Is this used anywhere?
+        armFeedforward = new ArmFeedforward(0.22,1.07, 0.49, 0.02 ); // Is this used anywhere?
 
         armMotor.configure(armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
@@ -112,17 +114,21 @@ public class EndEffectorV2 extends SubsystemBase
         mEncoder.setPosition(0);
     }
 
-    public void setTargetAngle(double angle)
+    public void setTargetAngle(double angleDegrees)
     {
-        mTargetAngle = angle;
+        mTargetAngle = angleDegrees;
 
-        double motorRotations = (angle/degrees/gear2Rotation) * gear1Rotation * motorRatio;
+        double motorRotations = (angleDegrees/degrees/gear2Rotation) * gear1Rotation * motorRatio;
 
         //System.out.println("Motor " + motorRotations);
         //System.out.println("Encoder " + mEncoder.getPosition());
         //Come back and change this, need fraction for Encoder Rotations in place of angle
-        mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0 );
-
+        double targetAngleRadians =
+            Degrees.of(angleDegrees)
+                .minus(Degrees.of(90))
+                .in(Radians);
+        double armFF = armFeedforward.calculate(targetAngleRadians, 0);
+        mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0, armFF);
     }
 
     public double getArmPosition()

@@ -96,7 +96,7 @@ public final class Konstants
     {
         /** Angles for the different endeffector positions */
     
-       public static final double kLevel4Angle = 10;     // For the sake of naming consistency, I reccomend renaming constants
+       public static final double kLevel4Angle = -50;     // For the sake of naming consistency, I reccomend renaming constants
                                                         // to have the format of "kVariableNameHere".
                                                         // This helps with understanding which variables are changing and which
                                                         // remain constant. In VSCode, this is super easy to do. Just click on
@@ -105,10 +105,10 @@ public final class Konstants
                                                         // You can also right click a variable name and click "Rename Symbol" to
                                                         // do the same thing.
                                                         // TODO: Consider using constant-specific nomenclature
-       public static final double kLevel23Angle = 20;    
-       public static final double kLevel1Angle = 30;     
-       public static final double kIntakeAngle = 40;          
-       public static final double kHortizontalAngle = 50;     
+       public static final double kLevel23Angle = -60;    
+       public static final double kLevel1Angle = -70;     
+       public static final double kIntakeAngle = -80;          
+       public static final double kHortizontalAngle = -90;     
 
        public static final double kArmSpeed = 0.1;
        public static final double kRollerSpeed = 0.7;
