@@ -75,11 +75,10 @@ public class EndEffectorV2 extends SubsystemBase
             //.p(0, ClosedLoopSlot.kSlot1)
             //.i(0, ClosedLoopSlot.kSlot1)
             //.d(0, ClosedLoopSlot.kSlot1)
-            
             .velocityFF(1.0/5767, ClosedLoopSlot.kSlot1);
             //.outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
-        armConfig.closedLoop.maxMotion
+            armConfig.closedLoop.maxMotion
             .maxAcceleration(500)
             .maxVelocity(550)
             .allowedClosedLoopError(1);
@@ -123,11 +122,11 @@ public class EndEffectorV2 extends SubsystemBase
         //System.out.println("Motor " + motorRotations);
         //System.out.println("Encoder " + mEncoder.getPosition());
         //Come back and change this, need fraction for Encoder Rotations in place of angle
-        double targetAngleRadians =
+        double targetAngleRadians = 
             Degrees.of(angleDegrees)
-                .minus(Degrees.of(90))
-                .in(Radians);
-        double armFF = armFeedforward.calculate(targetAngleRadians, 0);
+            .minus(Degrees.of(90))
+            .in(Radians);
+            double armFF = armFeedforward.calculate(targetAngleRadians, 0);
         mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0, armFF);
     }
 
@@ -177,24 +176,32 @@ public class EndEffectorV2 extends SubsystemBase
         return false;
     }
         */
-    /*public void checkPosition()
-     this.mEncoder = endEffector.mEncoder;
-            double encoder = mEncoder.getPosition();
-            double angle = (encoder * endEffector.gear2Rotation * endEffector.degrees) / endEffector.motorRatio / endEffector.gear1Rotation;
+    public void checkPositionUp()
+     {
+    
+        double encoder = mEncoder.getPosition();
+        double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
 
-            if(angle < 35)
-            {
-                new EndEffectorButtonCommand(35, endEffector);
-                endEffector.stopArm();
-            }
+        if(angle < 10)
+        {
+            setTargetAngle(10);
+            stopArm();
+        }
+     }
+     public void checkPositionDown()
+     {
+        double encoder = mEncoder.getPosition();
+        double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
 
-            if(Math.abs(endArm.getFilteredAxis()) > kJoystickDeadband)
-            {
-                new EndEffectorJoystickCommand(
-                        () -> {return endArm.getFilteredAxis();},
-                       endEffector);
-            }
-            */
+        if(angle > 140)
+        {
+            setTargetAngle(140);
+            stopArm();
+        }
+     }
+
+
+            
      
 
 
