@@ -75,7 +75,7 @@ public class SK25Elevator extends Elevator
         .onChange((newValue) -> {
             motorConfigL.closedLoop.d(newValue);
         });
-    Pref<Double> kFFPref = SKPreferences.attach("elevatorkFF", 0.00196078431) // 1/500
+    Pref<Double> kFFPref = SKPreferences.attach("elevatorkFF", 0.00333333333) // 1/300 // 1/500
         .onChange((newValue) -> {
             motorConfigL.closedLoop.velocityFF(newValue);
         });
@@ -153,6 +153,10 @@ public class SK25Elevator extends Elevator
     {
         this.targetHeight = targetHeight;
         closedLoopController.setReference(this.targetHeight, ControlType.kMAXMotionPositionControl);
+    }
+
+    public void setPositionFromAbove(ElevatorPosition pos) {
+
     }
 
     /**
