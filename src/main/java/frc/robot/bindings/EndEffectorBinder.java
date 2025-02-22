@@ -6,6 +6,7 @@ import frc.robot.commands.EndEffectorRollerIntakeCommand;
 import frc.robot.commands.EndEffectorRollerOutputCommand;
 import frc.robot.commands.EndEffectorRollerStopCommand;
 import frc.robot.commands.EndEffectorEncoderResetCommand;
+import frc.robot.commands.EndEffectorHoldCommand;
 import frc.robot.commands.EndEffectorStop;
 
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickChange;
@@ -15,6 +16,7 @@ import static frc.robot.Konstants.EndEffectorConstants.kLevel1Angle;
 import static frc.robot.Konstants.EndEffectorConstants.kLevel23Angle;
 import static frc.robot.Konstants.EndEffectorConstants.kLevel4Angle;
 import static frc.robot.Konstants.EndEffectorConstants.kIntakeAngle;
+import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Konstants.EndEffectorConstants.kHortizontalAngle;
 import static frc.robot.Ports.OperatorPorts.armHigh;
 import static frc.robot.Ports.OperatorPorts.armMiddleLow;
@@ -96,7 +98,10 @@ public class EndEffectorBinder implements CommandBinder {
 
             // endEffector Up/Down Buttons 
 
-        
+            
+
+            
+
 
             // endEffector Position Buttons
 
@@ -117,10 +122,9 @@ public class EndEffectorBinder implements CommandBinder {
                     
                     // Vertical movement of the arm is controlled by the Y axis of the right stick.
                     // Up on joystick moving arm up and down on stick moving arm down.
-                  new EndEffectorJoystickCommand(
+                    new EndEffectorJoystickCommand(
                         () -> {return endArm.getFilteredAxis();},
                        endEffector));
-                            
                              
         }
     }

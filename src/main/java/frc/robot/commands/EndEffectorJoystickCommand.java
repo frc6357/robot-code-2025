@@ -5,7 +5,9 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffectorV2;
 
+
 import static frc.robot.Konstants.EndEffectorConstants.kArmSpeed;
+import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 
 import com.revrobotics.RelativeEncoder;
 
@@ -53,6 +55,8 @@ public class EndEffectorJoystickCommand extends Command {
        else
        {
         endEffector.stopArm();
+        double hold = endEffector.getArmPosition();
+        endEffector.setTargetAngle(hold);
        }
 
     }

@@ -5,12 +5,16 @@ import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
+import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.EndEffectorButtonCommand;
+import frc.robot.commands.EndEffectorJoystickCommand;
+
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
@@ -30,10 +34,10 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 public class EndEffectorV2 extends SubsystemBase
 {
     //change to 25 when done testing.
-    final int motorRatio = 25;
-    final int gear1Rotation = 1;
-    final int gear2Rotation = 1;
-    final int degrees = 360;
+    public final int motorRatio = 25;
+    public final int gear1Rotation = 1;
+    public final int gear2Rotation = 1;
+    public final int degrees = 360;
 
     SparkMax armMotor;
     SparkMax rollerMotor;
@@ -95,6 +99,24 @@ public class EndEffectorV2 extends SubsystemBase
         mCurrentAngle = 0.0;
 
         mEncoder.setPosition(0);
+
+        /*this.mEncoder = endEffector.mEncoder;
+            double encoder = mEncoder.getPosition();
+            double angle = (encoder * endEffector.gear2Rotation * endEffector.degrees) / endEffector.motorRatio / endEffector.gear1Rotation;
+
+            if(angle < 35)
+            {
+                new EndEffectorButtonCommand(35, endEffector);
+                endEffector.stopArm();
+            }
+
+            if(Math.abs(endArm.getFilteredAxis()) > kJoystickDeadband)
+            {
+                new EndEffectorJoystickCommand(
+                        () -> {return endArm.getFilteredAxis();},
+                       endEffector);
+            }
+            */
 
         //laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
     }

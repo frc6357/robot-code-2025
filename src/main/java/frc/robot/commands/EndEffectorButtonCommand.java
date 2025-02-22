@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffectorV2;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkRelativeEncoder;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -57,7 +56,7 @@ public class EndEffectorButtonCommand extends Command{
             if(endEffector.isArmAtTargetPosition())
             {
                 
-                return false;
+                return true;
             }
             else
             {
