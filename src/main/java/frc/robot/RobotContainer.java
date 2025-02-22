@@ -12,25 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.SKSwerveBinder;
 
 import frc.robot.subsystems.SKSwerve;
+import frc.robot.bindings.SK25ElevatorBinder;
+import frc.robot.bindings.SK25LightsBinder;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Lights;
 
@@ -136,7 +133,8 @@ public class RobotContainer {
     private void configureButtonBindings()
     {
         buttonBinders.add(new SKSwerveBinder(m_swerve));
-
+        buttonBinders.add(new SK25ElevatorBinder(m_elevator));
+        buttonBinders.add(new SK25LightsBinder(m_lights));
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
         {
