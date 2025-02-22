@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.6082991803278692,
+        "y": 5.1698258196721305
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.81247411638634,
+        "y": 5.0255601082729235
+      },
+      "isLocked": false,
+      "linkedName": "DR"
+    },
+    {
+      "anchor": {
+        "x": 3.783,
+        "y": 5.26325
+      },
+      "prevControl": {
+        "x": 3.6062233047033634,
+        "y": 5.440026695296637
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "D"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -63.43494882292197
+  },
+  "reversed": false,
+  "folder": "RemoveAlgae",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -56.84207611532774
+  },
+  "useDefaultConstraints": true
+}

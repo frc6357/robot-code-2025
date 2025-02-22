@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P1_CR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CRR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Remove_Algae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C_N"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Net"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "2GP",
+  "choreoAuto": false
+}
