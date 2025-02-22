@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import static frc.robot.Konstants.SwerveConstants.kJoystickDeadband;
+import static frc.robot.Konstants.SwerveConstants.kMaxDriveSpeedMetersPerSecond;
+import static frc.robot.Konstants.SwerveConstants.kMaxRotationDegreesPerSecond;
 
 import java.util.function.Supplier;
 
@@ -66,12 +68,14 @@ public class SwerveDefaultCommand extends Command{
         //converts Cartesian coordinate system to Polar system by getting the angle between left joystick X and Y components.
         //make the controller deadzones.
         double translationMagnitude = deadZone(Math.hypot(leftX.get(), leftY.get()), kJoystickDeadband);
-        double xVelocity = deadZone(leftX.get(), kJoystickDeadband);
-        double yVelocity = deadZone(leftY.get(), kJoystickDeadband);
+
+        double xVelocity = deadZone(leftX.get(), kJoystickDeadband) * kMaxDriveSpeedMetersPerSecond;
+        double yVelocity = deadZone(leftY.get(), kJoystickDeadband) * kMaxDriveSpeedMetersPerSecond; 
+          //TODO: find max speed
         Translation2d velocity = new Translation2d(xVelocity, yVelocity).times(translationMagnitude);
         
         double rotationMagnitude = deadZone(rightX.get(), kJoystickDeadband);
-        double desiredRadiansPerSecond = rotationMagnitude * 2 * Math.PI;
+        double desiredRadiansPerSecond = rotationMagnitude * kMaxRotationDegreesPerSecond;
 
         //run the doSwerve method which handles all swerve movement possibilites.
         Swerve.doSwerve(desiredRadiansPerSecond, velocity);

@@ -208,12 +208,12 @@ public final class Konstants
         public static final double kMaxModuleAngularSpeedDegreesPerSecond = 360;
 
         /** The max speed (m/s) the drive wheels should be allowed to go */
-        public static final double kMaxDriveSpeedMetersPerSecond = 3.0;  // m/s         //TODO: Update max speed depending on robot performance
+        public static final double kMaxDriveSpeedMetersPerSecond = 4.73;  // m/s         //TODO: Update max speed depending on robot performance
         /** The max rotation speed the turn wheels should be allowed to go */
         public static final double kMaxRotationDegreesPerSecond = 360.0;  // degrees/second
 
         public static final double kMaxAngularRate = 1.5 * Math.PI;
-        public static final double kMaxAngularVelocity = 2 * Math.PI; // rad/s
+        public static final double kMaxAngularVelocity = 2 * Math.PI; // rad/s   //TODO: try Math.PI instead
         public static final double kMaxAngularAcceleration = Math.pow(kMaxAngularVelocity, 2); // rad/s^2
 
         // The inertia expereinced by the robot when attempting to drive or turn.

@@ -30,10 +30,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.SK25LightsBinder;
+import frc.robot.bindings.SK25SwerveBinder;
 //import frc.robot.bindings.TempSwerveBinder;
 //import frc.robot.bindings.TempSwerveBinder;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.SK25Lights;
+import frc.robot.subsystems.SK25SwerveFactory;
 //import frc.robot.subsystems.TempSwerve;
 //import frc.robot.subsystems.TempSwerve;
 //import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
@@ -103,7 +105,7 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private Optional<SK25Lights> m_lights = Optional.empty();
-  //private Optional<TempSwerve> m_swerve = Optional.empty();
+  private Optional<SK25SwerveFactory> m_swerve = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -126,7 +128,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     //configures phoenix swerve bindings
-    configurePhoenixBindings();
+    //configurePhoenixBindings();
   }
 
   /**
@@ -152,10 +154,10 @@ public class RobotContainer {
             {
                 m_lights = Optional.of(new SK25Lights());
             }
-            // if(subsystems.isSwervePresent())
-            // {
-            //     m_swerve = Optional.of(new TempSwerve(config));
-            // }
+            if(subsystems.isSwervePresent())
+            {
+                m_swerve = Optional.of(new SK25SwerveFactory());
+            }
 
         }
         catch (IOException e)
@@ -175,7 +177,7 @@ public class RobotContainer {
 
         // Adding all the binding classes to the list
         buttonBinders.add(new SK25LightsBinder(m_lights));
-        //buttonBinders.add(new TempSwerveBinder(m_swerve));
+        buttonBinders.add(new SK25SwerveBinder(m_swerve));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
@@ -219,20 +221,20 @@ public class RobotContainer {
 
     public void testPeriodic()
     {
-        // if(m_swerve.isPresent())
-        // {
-        //     m_swerve.get().testPeriodic();
-        // }
+        if(m_swerve.isPresent())
+        {
+            m_swerve.get().testPeriodic();
+        }
         if(m_lights.isPresent())
         {
             m_lights.get().testPeriodic();
         }
     }
     public void testInit(){
-        // if(m_swerve.isPresent())
-        // {
-        //     m_swerve.get().testInit();
-        // }
+        if(m_swerve.isPresent())
+        {
+            m_swerve.get().testInit();
+        }
         if(m_lights.isPresent())
         {
             m_lights.get().testInit();

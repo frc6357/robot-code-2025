@@ -103,9 +103,10 @@ public class SK25SwerveModule {
         //decrease the error of the module states using their current rotation
         decreaseError(desiredState);
         //determine the voltage output of the drive motor based on its speed in m/s
-        double percentOutput = desiredState.speedMetersPerSecond; // / kMaxVelocityMetersPerSecond;
+        //double percentOutput = desiredState.speedMetersPerSecond; // / kMaxVelocityMetersPerSecond;
         //set the drive motor output as a percentage times the number of volts supplied by the battery (12 volts)
-        driveMotor.setVoltage(inverted * percentOutput * 12);//getLimitedVelocity(percentOutput * 12));
+        //driveMotor.setVoltage(inverted * percentOutput * 12);//getLimitedVelocity(percentOutput * 12));
+        driveMotor.set(desiredState.speedMetersPerSecond);
         //set the PID controller to reach the desired angle
         //applyPID(desiredState.angle.getMeasure()); // Always closed-loop control for turn motor.
 

@@ -32,7 +32,7 @@ public class SK25SwerveBinder implements CommandBinder{
             );
 
             //make the swerveCommand run when no other command which utilizes the SK25Swerve subsytem runs.
-            //Swerve.setDefaultCommand(swerveCommand);
+            Swerve.setDefaultCommand(swerveCommand);
         }
     }
 
