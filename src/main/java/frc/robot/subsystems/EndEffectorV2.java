@@ -13,6 +13,9 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.preferences.Pref;
+import frc.robot.preferences.SKPreferences;
+
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
@@ -53,6 +56,11 @@ public class EndEffectorV2 extends SubsystemBase
 
     public boolean isRunning;
 
+    Pref<Double> armKg = SKPreferences.attach("armKg", 1.0)
+        .onChange((newValue) -> {
+            armFeedforward = new ArmFeedforward(0, newValue, 0, 0);
+        });
+
     //LaserCan laserCanSensor;
 
     public EndEffectorV2()
@@ -90,7 +98,7 @@ public class EndEffectorV2 extends SubsystemBase
         mPID = armMotor.getClosedLoopController();
         mEncoder = armMotor.getEncoder();
         
-        armFeedforward = new ArmFeedforward(0.22,1.07, 0.49, 0.02 ); // Is this used anywhere?
+        armFeedforward = new ArmFeedforward(0, armKg.get(), 0, 0); // Is this used anywhere?
 
         armMotor.configure(armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
@@ -124,9 +132,10 @@ public class EndEffectorV2 extends SubsystemBase
         //Come back and change this, need fraction for Encoder Rotations in place of angle
         double targetAngleRadians = 
             Degrees.of(angleDegrees)
-            .minus(Degrees.of(90))
+            .plus(Degrees.of(90))
             .in(Radians);
-            double armFF = armFeedforward.calculate(targetAngleRadians, 0);
+        System.out.println(targetAngleRadians);
+        double armFF = armFeedforward.calculate(targetAngleRadians, 0);
         mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0, armFF);
     }
 
@@ -146,10 +155,10 @@ public class EndEffectorV2 extends SubsystemBase
 
     public boolean isArmAtTargetPosition()
     {
-        double la =  getTargetArmPosition() -getArmPosition();
-        System.out.println(la);
-        System.out.println(getTargetArmPosition());
-        System.out.println(getArmPosition());
+        //double la =  getTargetArmPosition() -getArmPosition();
+        //System.out.println(la);
+        //System.out.println(getTargetArmPosition());
+        //System.out.println(getArmPosition());
         return Math.abs( getTargetArmPosition() -getArmPosition()) < kArmTolerance;
     }
 

@@ -26,8 +26,8 @@ public class EndEffectorButtonCommand extends Command{
     @Override
     public void initialize()
     {
-        System.out.println("Position: " + position);
-        System.out.println("Encoder position: " + mEncoder.getPosition());
+        //System.out.println("Position: " + position);
+       // System.out.println("Encoder position: " + mEncoder.getPosition());
         endEffector.setTargetAngle(-position);
         endEffector.isRunning = true;
     }

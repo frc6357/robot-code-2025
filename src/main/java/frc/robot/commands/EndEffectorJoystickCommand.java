@@ -39,14 +39,15 @@ public class EndEffectorJoystickCommand extends Command {
     public void execute()
     {
        
-       System.out.println("Joystick execute:"+controller.get()); 
+        
        if (controller.get() > kJoystickDeadband)
        {
         double armspeed = -kArmSpeed;
         System.out.println("Position: " + mEncoder.getPosition());
          endEffector.runArm(armspeed);
          endEffector.isRunning = true;
-         endEffector.checkPositionUp();
+         //endEffector.checkPositionUp();
+         System.out.println("Joystick execute:"+controller.get());
        }
 
        else if (controller.get() < -kJoystickDeadband)
@@ -55,13 +56,14 @@ public class EndEffectorJoystickCommand extends Command {
         double armspeed = kArmSpeed;
         endEffector.runArm(armspeed);
         endEffector.isRunning = true;
-        endEffector.checkPositionDown();
+        System.out.println("Joystick execute:"+controller.get());
+        //endEffector.checkPositionDown();
        }
 
        else
        {
         endEffector.stopArm();
-        endEffector.hold();
+        //endEffector.hold();
        }
 
     }
