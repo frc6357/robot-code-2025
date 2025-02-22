@@ -317,7 +317,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
         return keepPoseOnField(pose);
     }
 
-    Rotation2d getRotation() {
+    public Rotation2d getRotation() {
         return getRobotPose().getRotation();
     }
 }

@@ -81,7 +81,7 @@ public class Limelight {
 
     /* Debug */
     private final DecimalFormat df = new DecimalFormat();
-    private LimelightConfig config;
+    @Getter private LimelightConfig config;
     @Getter @Setter private String logStatus = "";
     @Getter @Setter private String tagStatus = "";
 

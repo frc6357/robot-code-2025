@@ -403,17 +403,17 @@ public final class Konstants
 
     }
 
-        /** Constants that are used when defining filters for controllers */
-        public static final class OIConstants
-        {
-            // Controller constraints
-            public static final double kDriveCoeff       = 0.95;
-            public static final double kRotationCoeff    = 0.95;
-            public static final double kJoystickDeadband = 0.15;
-            public static final double kSlowModePercent  = 0.2;
-            
-            public static final double kAccelLimit = 2;
-        }
+    /** Constants that are used when defining filters for controllers */
+    public static final class OIConstants
+    {
+        // Controller constraints
+        public static final double kDriveCoeff       = 0.95;
+        public static final double kRotationCoeff    = 0.95;
+        public static final double kJoystickDeadband = 0.1;
+        public static final double kSlowModePercent  = 0.2;
+        
+        public static final double kAccelLimit = 2;
+    }
 
     public static final class LightConstants
     {
