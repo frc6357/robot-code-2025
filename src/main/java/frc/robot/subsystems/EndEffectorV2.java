@@ -4,7 +4,7 @@ import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
-import static frc.robot.Konstants.EndEffectorConstants.coralToLaserCanDistance;
+import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
 import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
 
 import edu.wpi.first.math.MathUtil;
@@ -66,7 +66,7 @@ public class EndEffectorV2 extends SubsystemBase
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .p(6)
             .i(.0002)
-            .d(5)
+            .d(2.1)
             .outputRange(-.1, .1) //TODO: Add a velocityFF in order to provide a feedforwards to counteract gravity and maintain the arm at a set point
             //.p(0, ClosedLoopSlot.kSlot1)
             //.i(0, ClosedLoopSlot.kSlot1)
@@ -151,7 +151,7 @@ public class EndEffectorV2 extends SubsystemBase
         LaserCan.Measurement sensorMeasurement = laserCanSensor.getMeasurement();
         if ((sensorMeasurement != null && sensorMeasurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)) {
             SmartDashboard.putNumber("LaserCan distance", sensorMeasurement.distance_mm);
-          if(sensorMeasurement.distance_mm < (coralToLaserCanDistance+10))//plus 10 so theres room for error
+          if(sensorMeasurement.distance_mm < (kCoralToLaserCanDistance+10))//plus 10 so theres room for error
           {
             return true;
           }

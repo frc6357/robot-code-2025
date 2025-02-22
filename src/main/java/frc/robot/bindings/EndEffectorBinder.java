@@ -11,11 +11,11 @@ import frc.robot.commands.EndEffectorStop;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickChange;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
-import static frc.robot.Konstants.EndEffectorConstants.level1Angle;
-import static frc.robot.Konstants.EndEffectorConstants.level23Angle;
-import static frc.robot.Konstants.EndEffectorConstants.level4Angle;
-import static frc.robot.Konstants.EndEffectorConstants.intake;
-import static frc.robot.Konstants.EndEffectorConstants.hortizontal;
+import static frc.robot.Konstants.EndEffectorConstants.kLevel1Angle;
+import static frc.robot.Konstants.EndEffectorConstants.kLevel23Angle;
+import static frc.robot.Konstants.EndEffectorConstants.kLevel4Angle;
+import static frc.robot.Konstants.EndEffectorConstants.kIntakeAngle;
+import static frc.robot.Konstants.EndEffectorConstants.kHortizontalAngle;
 import static frc.robot.Ports.OperatorPorts.armHigh;
 import static frc.robot.Ports.OperatorPorts.armMiddleLow;
 import static frc.robot.Ports.OperatorPorts.armTrough;
@@ -101,11 +101,11 @@ public class EndEffectorBinder implements CommandBinder {
             // endEffector Position Buttons
 
             
-            zeroPositionButton.onTrue(new EndEffectorButtonCommand(hortizontal, endEffector));
-            TroughButton.onTrue(new EndEffectorButtonCommand(level1Angle, endEffector));
-            LowMidButton.onTrue(new EndEffectorButtonCommand(level23Angle, endEffector));
-            IntakeButton.onTrue(new EndEffectorButtonCommand(intake, endEffector));
-            TopButton.onTrue(new EndEffectorButtonCommand(level4Angle, endEffector));
+            zeroPositionButton.onTrue(new EndEffectorButtonCommand(kHortizontalAngle, endEffector));
+            TroughButton.onTrue(new EndEffectorButtonCommand(kLevel1Angle, endEffector));
+            LowMidButton.onTrue(new EndEffectorButtonCommand(kLevel23Angle, endEffector));
+            IntakeButton.onTrue(new EndEffectorButtonCommand(kIntakeAngle, endEffector));
+            TopButton.onTrue(new EndEffectorButtonCommand(kLevel4Angle, endEffector));
             ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector));
             RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
             RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
