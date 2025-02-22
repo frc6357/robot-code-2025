@@ -1,7 +1,6 @@
 // Essentials
 package frc.robot.subsystems;
 import frc.robot.subsystems.superclasses.Elevator;
-//import edu.wpi.first.math.MathUtil;
 
 // Constants (Muy Importante)
 import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
@@ -11,7 +10,7 @@ import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
 import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
 import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
 
-// Encoder V3
+// Relative Encoder
 import com.revrobotics.RelativeEncoder;
 
 // Closed Loop
@@ -31,6 +30,8 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 // Limit Switches
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
+import com.revrobotics.spark.SparkLimitSwitch;
 
 // SmartDashboard
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -57,6 +58,10 @@ public class SK25Elevator extends Elevator
     double targetHeight;
     double currentHeight;
 
+    // Limit Switch
+    SparkLimitSwitch forwardLimitSwitch;
+    SparkLimitSwitch reverseLimitSwitch;
+
     // SKPreferences for PID
     Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.007)
         .onChange((newValue) -> {
@@ -78,30 +83,36 @@ public class SK25Elevator extends Elevator
     // Constructor For Public Command Access
     public SK25Elevator()
     {
-        // Motor Initialization With REV Sparkflex - Configurations
+        // Motor initialization with REV
         motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
         motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
 
         motorConfigL = new SparkFlexConfig();
         motorConfigR = new SparkFlexConfig();
 
-        // Encoder V3
+        // Closed loop control with REV
         closedLoopController = motorL.getClosedLoopController();
+
+        // Encoder with REV through bore (external encoder attached to the shaft)
         encoder = motorL.getEncoder();
 
-        // Configurations For The Left Motor & Encoder
+        // Limit switches with REV
+        forwardLimitSwitch = motorL.getForwardLimitSwitch();
+        reverseLimitSwitch = motorL.getReverseLimitSwitch();
+
+        // Configurations for the left motor, limit switch, encoder, & closed loop control
         motorConfigL
             .idleMode(IdleMode.kCoast).smartCurrentLimit(50).voltageCompensation(12);
         motorConfigL.encoder
             .positionConversionFactor(1)
             .velocityConversionFactor(1);
         motorConfigL.limitSwitch
-            .reverseLimitSwitchEnabled(true)
-            .reverseLimitSwitchType(Type.kNormallyOpen);
+            .forwardLimitSwitchType(Type.kNormallyOpen)
+            .forwardLimitSwitchEnabled(true)
+            .reverseLimitSwitchType(Type.kNormallyOpen)
+            .reverseLimitSwitchEnabled(true);
         motorConfigL.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            //Set PID values for position control. We don't need to pass a closed loop
-            //slot, as it will default to slot 0.
             .velocityFF(kFFPref.get())
             .p(kPPref.get())
             .i(kIPref.get()) 
@@ -110,20 +121,21 @@ public class SK25Elevator extends Elevator
             .maxMotion
             .maxAcceleration(6000)
             .maxVelocity(4200)
-            .allowedClosedLoopError(.5);
+            .allowedClosedLoopError(.5)
+            .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
         
-        // Apply Motor Configurations
+        // Apply motor configurations on the left motor
         motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
-        // Configurations For The Right Motor
+        // Configurations for the right motor (follower)
         motorConfigR
             .follow(motorL, true)
             .idleMode(IdleMode.kBrake);
 
-        // Apply Motor Configurations
+        // Apply motor configurations on the right motor
         motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
-        // Current, Target, and Reset Positions
+        // Initialize current, target, and reset positions
         targetHeight = 0.0;
         currentHeight = 0.0;
         closedLoopController.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
@@ -136,6 +148,7 @@ public class SK25Elevator extends Elevator
     {
         setTargetHeight(pos.height);
     }
+
     public void setTargetHeight(double targetHeight) 
     {
         this.targetHeight = targetHeight;
@@ -170,11 +183,7 @@ public class SK25Elevator extends Elevator
     @Override
     public void periodic()
     {  
-        // Display encoder position and velocity
-        SmartDashboard.putNumber("Actual Position", encoder.getPosition());
-        SmartDashboard.putNumber("Actual Velocity", encoder.getVelocity());
-
-        // Initialize Current & Target Positions
+        // Current & Target Positions
         double currentPosition = getEncoderPosition();
         double targetPosition = getTargetPosition();
         
@@ -182,6 +191,14 @@ public class SK25Elevator extends Elevator
         SmartDashboard.putNumber("Current Estimated Position", currentPosition);
         SmartDashboard.putNumber("Target Position", targetPosition);
         SmartDashboard.putBoolean("Elevator at Setpoint", isAtTargetPosition());
+
+        // Display encoder position and velocity
+        SmartDashboard.putNumber("Actual Position", encoder.getPosition());
+        SmartDashboard.putNumber("Actual Velocity", encoder.getVelocity());
+
+        // Display if limit switch is "pressed" (in our case, passed)
+        SmartDashboard.putBoolean("Forward Limit Reached", forwardLimitSwitch.isPressed());
+        SmartDashboard.putBoolean("Reverse Limit Reached", reverseLimitSwitch.isPressed());
     }
     public void testPeriodic(){}
     public void testInit(){}
