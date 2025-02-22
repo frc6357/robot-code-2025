@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P3_FR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "F-S"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RS-FL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "2GP",
+  "choreoAuto": false
+}

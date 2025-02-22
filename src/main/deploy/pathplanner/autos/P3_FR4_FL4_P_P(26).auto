@@ -1,0 +1,97 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P3_FR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "F-S"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RS-FL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FLR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Remove_Algae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "F_P"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Processor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P_A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Remove_Algae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A_P"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Processor"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "4GP",
+  "choreoAuto": false
+}

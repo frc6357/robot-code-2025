@@ -1,0 +1,85 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P1_DR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D-S"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LS-DR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D-S"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LS-DL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D-S"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Station"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "4GP",
+  "choreoAuto": false
+}

@@ -1,0 +1,73 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P1_DL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D-S"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LS-DR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DRR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Remove_Algae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D_N"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Net"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "3GP",
+  "choreoAuto": false
+}
