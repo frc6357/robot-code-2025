@@ -58,13 +58,13 @@ public class SK25ElevatorBinder implements CommandBinder{
                 () -> {return kElevatorOverride.button.getAsBoolean();},
                 elevator));
 
-            // elevator.setDefaultCommand(
-            //              // Vertical movement of the elevator is controlled by the Y axis of the left stick.
-            //              // Up on the joystick moves elevator up, and down on stick moves the elevator down.
-            //              new ElevatorJoystickCommand(
-            //                  () -> {return kElevatorAxis.getFilteredAxis();},
-            //                  () -> {return kElevatorOverride.button.getAsBoolean();},
-            //                  elevator));
+            elevator.setDefaultCommand(
+                         // Vertical movement of the elevator is controlled by the Y axis of the left stick.
+                         // Up on the joystick moves elevator up, and down on stick moves the elevator down.
+                         new ElevatorJoystickCommand(
+                             () -> {return kElevatorAxis.getFilteredAxis();},
+                             () -> {return kElevatorOverride.button.getAsBoolean();},
+                             elevator));
         }
     }
 }

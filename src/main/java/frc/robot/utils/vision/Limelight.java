@@ -1,7 +1,7 @@
 package frc.robot.utils.vision;
 
 // A Limelight class provided by FRC 3847 Spectrum that aids with
-// several Limelight configurations and get/set methods
+// several Limelight configurations, measurements, and get/set methods
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -81,7 +81,7 @@ public class Limelight {
 
     /* Debug */
     private final DecimalFormat df = new DecimalFormat();
-    private LimelightConfig config;
+    @Getter private LimelightConfig config;
     @Getter @Setter private String logStatus = "";
     @Getter @Setter private String tagStatus = "";
 
