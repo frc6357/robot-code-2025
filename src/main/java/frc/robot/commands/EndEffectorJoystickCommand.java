@@ -37,7 +37,7 @@ public class EndEffectorJoystickCommand extends Command {
     public void execute()
     {
        
-        
+       System.out.println("Joystick execute:"+controller.get()); 
        if (controller.get() > kJoystickDeadband)
        {
         double armspeed = -kArmSpeed;
@@ -56,7 +56,8 @@ public class EndEffectorJoystickCommand extends Command {
        {
         endEffector.stopArm();
         double hold = endEffector.getArmPosition();
-        endEffector.setTargetAngle(hold);
+        System.out.println("hoding arm: "+hold);
+        new EndEffectorHoldCommand(hold, endEffector);
        }
 
     }

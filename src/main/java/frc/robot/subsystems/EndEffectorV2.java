@@ -5,16 +5,12 @@ import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
-import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.EndEffectorButtonCommand;
-import frc.robot.commands.EndEffectorJoystickCommand;
-
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
@@ -34,10 +30,10 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 public class EndEffectorV2 extends SubsystemBase
 {
     //change to 25 when done testing.
-    public final int motorRatio = 25;
-    public final int gear1Rotation = 1;
-    public final int gear2Rotation = 1;
-    public final int degrees = 360;
+    final int motorRatio = 25;
+    final int gear1Rotation = 1;
+    final int gear2Rotation = 1;
+    final int degrees = 360;
 
     SparkMax armMotor;
     SparkMax rollerMotor;
@@ -68,7 +64,7 @@ public class EndEffectorV2 extends SubsystemBase
         
         armConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .p(6)
+            .p(1.9)
             .i(.0002)
             .d(2.1)
             .outputRange(-.1, .1) //TODO: Add a velocityFF in order to provide a feedforwards to counteract gravity and maintain the arm at a set point
@@ -100,24 +96,6 @@ public class EndEffectorV2 extends SubsystemBase
 
         mEncoder.setPosition(0);
 
-        /*this.mEncoder = endEffector.mEncoder;
-            double encoder = mEncoder.getPosition();
-            double angle = (encoder * endEffector.gear2Rotation * endEffector.degrees) / endEffector.motorRatio / endEffector.gear1Rotation;
-
-            if(angle < 35)
-            {
-                new EndEffectorButtonCommand(35, endEffector);
-                endEffector.stopArm();
-            }
-
-            if(Math.abs(endArm.getFilteredAxis()) > kJoystickDeadband)
-            {
-                new EndEffectorJoystickCommand(
-                        () -> {return endArm.getFilteredAxis();},
-                       endEffector);
-            }
-            */
-
         //laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
     }
 
@@ -138,8 +116,8 @@ public class EndEffectorV2 extends SubsystemBase
 
         double motorRotations = (angle/degrees/gear2Rotation) * gear1Rotation * motorRatio;
 
-        System.out.println("Motor " + motorRotations);
-        System.out.println("Encoder " + mEncoder.getPosition());
+        //System.out.println("Motor " + motorRotations);
+        //System.out.println("Encoder " + mEncoder.getPosition());
         //Come back and change this, need fraction for Encoder Rotations in place of angle
         mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0 );
 

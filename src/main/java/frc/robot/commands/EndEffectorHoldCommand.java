@@ -5,9 +5,11 @@ import frc.robot.subsystems.EndEffectorV2;
 
 public class EndEffectorHoldCommand extends Command{
     private final EndEffectorV2 endeffector;
-    public EndEffectorHoldCommand(EndEffectorV2 endeffector)
+    double position;
+    public EndEffectorHoldCommand(double position, EndEffectorV2 endeffector)
     {
         this.endeffector = endeffector;
+        this.position = position;
     }
 
     @Override
@@ -17,7 +19,7 @@ public class EndEffectorHoldCommand extends Command{
     @Override
     public void execute()
     {
-        double position = endeffector.getArmPosition();
+
         endeffector.setTargetAngle(position);
     }
 
