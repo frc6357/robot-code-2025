@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
 import frc.robot.subsystems.SK25Elevator;
 
@@ -43,5 +44,8 @@ public class ElevatorButtonCommand extends Command
     public boolean isFinished()
     {
         return elevator.isAtTargetPosition();
+    }
+    public void end(boolean interrupted) {
+        System.out.println("Finished " + elevator.encoder.getPosition());
     }
 }
