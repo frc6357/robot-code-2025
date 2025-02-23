@@ -63,22 +63,22 @@ public class SK25Elevator extends Elevator
     SparkLimitSwitch reverseLimitSwitch;
 
     // SKPreferences for PID & FF
-    Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.0)
+    Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.2)
         .onChange((newValue) -> {
             motorConfigL.closedLoop.p(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
-    Pref<Double> kIPref = SKPreferences.attach("elevatorKi", 0.0)
+    Pref<Double> kIPref = SKPreferences.attach("elevatorKi", 0.00001)
         .onChange((newValue) -> {
             motorConfigL.closedLoop.i(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
-    Pref<Double> kDPref = SKPreferences.attach("elevatorkD", 0.0)
+    Pref<Double> kDPref = SKPreferences.attach("elevatorkD", 0.05)
         .onChange((newValue) -> {
             motorConfigL.closedLoop.d(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
-    Pref<Double> kFFPref = SKPreferences.attach("elevatorkFF", 0.0) //1/565 // 1/300 // 1/500
+    Pref<Double> kFFPref = SKPreferences.attach("elevatorkFF", 0.0005) //1/565 // 1/300 // 1/500
         .onChange((newValue) -> {
             motorConfigL.closedLoop.velocityFF(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
