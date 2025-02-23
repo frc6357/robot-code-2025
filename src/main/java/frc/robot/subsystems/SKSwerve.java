@@ -1,19 +1,36 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Volts;
+import static frc.robot.Konstants.AutoConstants.pathConfig;
+import static frc.robot.Konstants.SwerveConstants.kChassisLength;
 
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.controllers.PathFollowingController;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -21,14 +38,13 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
-import static frc.robot.Konstants.SwerveConstants.*;
-import frc.robot.utils.Field;
-import frc.robot.utils.Util;
-
 import frc.robot.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.utils.Field;
+import frc.robot.utils.SK25AutoBuilder;
+import frc.robot.utils.Util;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -187,7 +203,10 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
         if (Utils.isSimulation()) {
             startSimThread();
         }
+
+        setupPathPlanner();
     }
+
 
     /**
      * Returns a command that applies the specified control request to this swerve drivetrain.
@@ -320,4 +339,86 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     public Rotation2d getRotation() {
         return getRobotPose().getRotation();
     }
+
+
+//|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+
+
+    // public void robotRelativeDrive(ChassisSpeeds speeds)
+    // {
+    //     final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric();
+    //     this.applyRequest(() ->
+    //             robotCentricDrive.withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
+    //                 .withVelocityY(speeds.vyMetersPerSecond) // Drive left with negative X (left)
+    //                 .withRotationalRate(speeds.omegaRadiansPerSecond)); // Drive counterclockwise with negative X (left)
+    // }
+
+
+    public void setupPathPlanner()
+    {
+        try
+        {
+            RobotConfig pathPlannerSettings = RobotConfig.fromGUISettings();
+
+            SK25AutoBuilder.configure(
+                this::getRobotPose, // Robot pose supplier
+                this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getRobotSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                pathConfig,
+                pathPlannerSettings,
+                () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+                    var alliance = DriverStation.getAlliance();
+                    return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
+                },
+                this // Reference to this subsystem to set requirements
+            );
+        }
+        catch(Exception e)
+        {
+            DriverStation.reportError("Failed to configure path planner to the swerve subsystem: ", e.getStackTrace());
+        }
+    }
+
+    /**
+   * Set chassis speeds of robot to drive it robot oreintedly.
+   * @param chassisSpeeds Chassis Speeds to set.
+   */
+    public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds, DriveFeedforwards ff)
+    {
+        SwerveRequest chassisSpeed = new SwerveRequest.ApplyRobotSpeeds().withSpeeds(chassisSpeeds);
+        this.setControl(chassisSpeed);
+    }
+
+
+   /** Resets odometry to the given pose.
+   * @param initalHolonomicPose The pose to set the odometry to
+   */
+  public void resetOdometry(Pose2d initalHolonomicPose)
+  {
+    this.seedFieldCentric();      //TODO: is resting pose same as odometry?
+  }
+
+
+
+    public ChassisSpeeds getRobotSpeeds()
+        {
+            SwerveDriveKinematics m_kinematics = this.getKinematics();
+            SwerveModule<TalonFX, TalonFX, CANcoder>[] modules = this.getModules();
+            SwerveModuleState[] currentStates = new SwerveModuleState[4];
+            for (int i = 0; i < 4; i++)
+            {
+                SwerveModuleState phoenixModuleState = modules[i].getCurrentState();
+                currentStates[i] = phoenixModuleState;
+            }
+            return m_kinematics.toChassisSpeeds(currentStates);
+        }
+
+        // public ChassisSpeeds getRobotSpeeds()
+        // {
+        //     return 
+        // }
 }
