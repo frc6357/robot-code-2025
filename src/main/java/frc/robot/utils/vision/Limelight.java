@@ -30,7 +30,7 @@ public class Limelight {
         /** Physical Config : The distances of the limelight from the center of the robot.
          * Uses foward, right, up in meters where the specified directions are positive */
         @Getter private double forward, right, up; // meters
-        /** The angle of the limelight in terms of roll, pitch, and yaw respectivley in degrees*/
+        /** The angle of the limelight in terms of roll, pitch, and yaw respectively in degrees*/
         @Getter private double roll, pitch, yaw; // degrees
 
         /** Creates a new limelight config (configurable limelight)
@@ -226,7 +226,7 @@ public class Limelight {
     /** Gets the limelight pose by using the current robot pose and accounting for the limelight's
      * offset from the center of the robot. This uses getBotPose3d_wpiBlue() from the limelight helpers class.
      * @return the corresponding LL Pose3d (MEGATAG1) for the alliance in DriverStation.java 
-     * If no limelight is attached, return a Pose3d() object with no translatoin or rotation values.*/
+     * If no limelight is attached, return a Pose3d() object with no translation or rotation values.*/
     public Pose3d getRawPose3d() {
         if (!isAttached()) {
             return new Pose3d();
