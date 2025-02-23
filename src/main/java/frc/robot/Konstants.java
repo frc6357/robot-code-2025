@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.spark.SparkClosedLoopController;
 
+@SuppressWarnings("unused")
 public final class Konstants
 {
 
@@ -44,16 +45,17 @@ public final class Konstants
         public static final int kRightClimbMotorId = 0;
         public static final int kLeftClimbMotorId = 9;
         //Keeping P value at 0 will result in motor not spinning
-        public static final double climbkP = 1.0;         //TODO: tune climb PID
-        public static final double climbkI = 0.0;
-        public static final double climbKD = 0.0;
+        public static final double kClimbP = 1.0;         //TODO: tune climb PID
+        public static final double kClimbI = 0.0;
+        public static final double kClimbD = 0.0;
       //  public static final double kClimbSetpoint = 5.0;
-        public static final double kMaxSpeed = 4200;
-        public static final double kMaxAcceleration = 6000;
-        public static final int kCurrentLimit = 50;
-        public static final double kClimbMaxPosition = 15;
+        public static final double kMaxSpeed = 1000;
+        public static final double kTestSpeed = 300;
+        public static final double kClimbMaxAcceleration = 1000;
+        public static final int kClimbCurrentLimit = 50;
+        public static final double kClimbMaxPosition = 65;
         public static final double kClimbMinPosition = 0.0;
-        public static final double kPositionTolerance = 0.2;
+        public static final double kClimbPositionTolerance = 0.2;
 
     }
 

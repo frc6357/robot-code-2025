@@ -64,6 +64,7 @@ public class Ports
         public static final SKTrigger climbRaiseButton = new SKTrigger(kOperator, 0, POV);
         public static final SKTrigger climbLowerButton = new SKTrigger(kOperator, 180, POV);
         public static final SKTrigger climbStopButton = new SKTrigger(kOperator, 90, POV);
+        public static final SKTrigger climbSlowButton = new SKTrigger(kOperator, 270, POV);
     }
 
     /**

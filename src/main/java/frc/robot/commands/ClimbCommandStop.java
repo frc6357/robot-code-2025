@@ -14,11 +14,13 @@ public class ClimbCommandStop extends Command{
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+        climb.stop();
+    }
 
     @Override
     public void execute() {
-        climb.stop();
+       // climb.stop();
     }
 
     @Override
@@ -27,12 +29,7 @@ public class ClimbCommandStop extends Command{
 
     @Override
     public boolean isFinished() {
-        if (climb.isAtTargetPosition()) {
-            return true;
-        } else {
-            return false;
-        }
-       // return true;
+        return true;
     }
 
 

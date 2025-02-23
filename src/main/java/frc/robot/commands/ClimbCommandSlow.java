@@ -1,38 +1,35 @@
 package frc.robot.commands;
 
-import static frc.robot.Konstants.ClimbConstants.*;
-
 import edu.wpi.first.wpilibj2.command.Command;
+import static frc.robot.Konstants.ClimbConstants.*;
 import frc.robot.subsystems.SK25Climb;
 
-public class ClimbCommandReturn extends Command{
+public class ClimbCommandSlow extends Command{
    public final SK25Climb climb; 
     
-    public ClimbCommandReturn(SK25Climb climb) {
+    public ClimbCommandSlow(SK25Climb climb) {
         this.climb = climb;
         addRequirements(climb);
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+       // climb.cambiarVelocidad(kTestSpeed);
+    }
 
     @Override
     public void execute() {
-        climb.setPoint(kClimbMinPosition);
+        climb.cambiarVelocidad(kTestSpeed);
     }
 
     @Override
     public void end(boolean interrupted) {
-        
+       // climb.cambiarVelocidad(kMaxSpeed);
     }
 
     @Override
     public boolean isFinished() {
-        if (climb.isAtTargetPosition()) {
-            return true;
-        } else {
-            return false;
-        }
+       return true;
     }
 
 

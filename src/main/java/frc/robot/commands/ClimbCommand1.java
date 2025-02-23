@@ -34,7 +34,6 @@ public class ClimbCommand1 extends Command{
         } else {
             return false;
         }
-       // return true;
     }
 
 
