@@ -309,13 +309,13 @@ public final class Konstants
             //TODO FIX DURING TESTING - Measure Elevator Heights
 
             /** Set the height to reach the top branch (L4) */
-            kTopPosition(32),
+            kTopPosition(5),
             /** Set the height to reach the middle branch (L3) */
-            kMidPosition(16),
+            kMidPosition(4),
             /** Set the height to reach the low branch (L2) */
-            kLowPosition(8),
+            kLowPosition(3),
             /** Set the height to reach the trough (L1) */
-            kTroughPosition(4),
+            kTroughPosition(2),
             /** Set the height to reach the bottom */
             kZeroPosition(0.0);
 
