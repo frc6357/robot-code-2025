@@ -38,11 +38,11 @@ public final class Konstants
             //TODO FIX DURING TESTING - Measure Elevator Heights
 
             /** Set the height to reach the top branch (L4) */
-            kTopPosition(5),
+            kTopPosition(12),
             /** Set the height to reach the middle branch (L3) */
-            kMidPosition(4),
+            kMidPosition(8),
             /** Set the height to reach the low branch (L2) */
-            kLowPosition(3),
+            kLowPosition(4),
             /** Set the height to reach the trough (L1) */
             kTroughPosition(2),
             /** Set the height to reach the bottom */
@@ -70,7 +70,7 @@ public final class Konstants
         public static final double kNegativeAccelLimit = -1.0; // Previously -5
 
         // Position Tolerance For The ELevator (+ or - The Target Position)
-        public static final double kPositionTolerance = 0.5;
+        public static final double kPositionTolerance = 0.1;
 
         // Minimum & Maximum Outputs For Elevator
         public static final double kElevatorMotorMinOutput = -0.5;
