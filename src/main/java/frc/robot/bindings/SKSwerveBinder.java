@@ -24,7 +24,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-import frc.robot.TunerConstants;
+import frc.robot.subsystems.configs.TunerConstants;
 
 // Adds the Swerve subsystem for construction
 import frc.robot.subsystems.SKSwerve;

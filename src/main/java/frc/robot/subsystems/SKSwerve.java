@@ -14,6 +14,8 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -28,7 +30,7 @@ import static frc.robot.Konstants.SwerveConstants.*;
 import frc.robot.utils.Field;
 import frc.robot.utils.Util;
 
-import frc.robot.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.configs.TunerConstants.TunerSwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -317,7 +319,24 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
         return keepPoseOnField(pose);
     }
 
+    public SwerveModuleState[] getModuleStates() {
+        return getState().ModuleStates;
+    }
+
     public Rotation2d getRotation() {
         return getRobotPose().getRotation();
+    }
+
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return getKinematics().toChassisSpeeds(getModuleStates());
+    }
+
+    public ChassisSpeeds getVelocity(boolean fieldRelative) {
+        if(fieldRelative) {
+            return ChassisSpeeds.fromRobotRelativeSpeeds(getRobotRelativeSpeeds(), getRotation());
+        }
+        else {
+            return getRobotRelativeSpeeds();
+        }
     }
 }

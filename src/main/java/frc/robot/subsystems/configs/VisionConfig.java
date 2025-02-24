@@ -1,4 +1,4 @@
-package frc.robot.subsystems.vision;
+package frc.robot.subsystems.configs;
 
 // Used for standard deviation matrix
 import edu.wpi.first.math.Matrix;
@@ -6,8 +6,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
-// import static frc.robot.Konstants.VisionConstants.limelightAlpha;
-// import static frc.robot.Konstants.VisionConstants.limelightBeta;
 import static frc.robot.Konstants.VisionConstants.*;
 import frc.robot.utils.vision.Limelight.LimelightConfig;
 

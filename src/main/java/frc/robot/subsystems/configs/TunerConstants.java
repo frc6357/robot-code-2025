@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems.configs;
 
 import static edu.wpi.first.units.Units.*;
 

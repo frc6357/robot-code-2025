@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NTSendable;
@@ -15,6 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.vision.Limelight;
 import frc.robot.utils.Trio;
+import frc.robot.utils.Field;
+import frc.robot.subsystems.configs.VisionConfig;
 
 import frc.robot.subsystems.SKSwerve;
 
@@ -57,6 +60,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
                 builder.addStringProperty("BackLLStatus", () -> backLL.getLogStatus(), null);
                 builder.addStringProperty("FrontLLStatus", () -> frontLL.getLogStatus(), null);
+                builder.addStringProperty("ResetPoseToVisionStatus", () -> resetPoseToVisionLog, null);
             }
         });
     }
@@ -120,7 +124,172 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         return bestLimelight;
     }
 
+    public void autonResetPoseToVision() {
+        boolean reject = true;
+        boolean firstSuccess = false;
+        double batchSize = 5;
+        for (int i = autonPoses.size() - 1; i > (autonPoses.size() - batchSize) - 1; i--) {
+            Trio<Pose3d, Pose2d, Double> poseInfo = autonPoses.get(i);
+            boolean success =
+                    resetPoseToVision(
+                            true, poseInfo.getFirst(), poseInfo.getSecond(), poseInfo.getThird());
+            if (success) {
+                if (i == autonPoses.size() - 1) {
+                    firstSuccess = true;
+                }
+                reject = false;
+                // Print somewhere: "AutonResetPoseToVision succeeded on " + (autonPoses.size() - i) + " try");
+                break;
+            }
+        }
+
+        if (reject) {
+            // Print somewhere
+            //         "AutonResetPoseToVision failed after "
+            //                 + batchSize
+            //                 + " of "
+            //                 + autonPoses.size()
+            //                 + " possible tries");
+            
+            // Flash LEDs Red?
+        } else {
+            if (firstSuccess) {
+                // Flash LEDs Green?
+            } else {
+                // Flash LEDs Orange?
+            }
+        }
+    }
+
+    public void resetPoseToVision() { // Calls resetPoseToVision by passing in Limelight measurements
+        Limelight ll = getBestLimelight();
+        resetPoseToVision(
+                ll.targetInView(), ll.getRawPose3d(), ll.getMegaPose2d(), ll.getRawPoseTimestamp());
+    }
+
+    private String resetPoseToVisionLog; // Provides an updatable string for smartdashboard
+    /**
+     * Set robot pose to vision pose only if LL has good tag reading
+     *
+     * @return if the pose was accepted and integrated
+     */
+    public boolean resetPoseToVision(
+            boolean targetInView, Pose3d botpose3D, Pose2d megaPose, double poseTimestamp) {
+        boolean reject = false;
+        if (targetInView) {
+            Pose2d botpose = botpose3D.toPose2d();
+            Pose2d robotPose = m_swerve.getRobotPose(); // TODO: Add telemetry for pose before and after integrating vision
+            if (Field.poseOutOfField(botpose3D)
+                    || Math.abs(botpose3D.getZ()) > 0.25 // Robot pose is floating
+                    || (Math.abs(botpose3D.getRotation().getX()) > 5
+                            || Math.abs(botpose3D.getRotation().getY()) > 5)) {     
+                resetPoseToVisionLog = (
+                        "ResetPoseToVision: FAIL || BAD POSE");
+                reject = true;
+            }
+            if (Field.poseOutOfField(botpose3D)) {
+                resetPoseToVisionLog = (
+                        "ResetPoseToVision: FAIL || OUT OF FIELD");
+                reject = true;
+            } else if (Math.abs(botpose3D.getZ()) > 0.25) {
+                resetPoseToVisionLog = (
+                        "ResetPoseToVision: FAIL || IN AIR");
+                reject = true;
+            } else if ((Math.abs(botpose3D.getRotation().getX()) > 5
+                    || Math.abs(botpose3D.getRotation().getY()) > 5)) {
+                        resetPoseToVisionLog = (
+                        "ResetPoseToVision: FAIL || TILTED");
+                reject = true;
+            }
+
+            // don't continue
+            if (reject) {
+                return !reject; // return the success status
+            }
+
+            // track STDs
+            VisionConfig.VISION_STD_DEV_X = 0.001;
+            VisionConfig.VISION_STD_DEV_Y = 0.001;
+            VisionConfig.VISION_STD_DEV_THETA = 0.001;
+            m_swerve.setVisionMeasurementStdDevs(
+                    VecBuilder.fill(
+                            VisionConfig.VISION_STD_DEV_X,
+                            VisionConfig.VISION_STD_DEV_Y,
+                            VisionConfig.VISION_STD_DEV_THETA));
+
+            Pose2d integratedPose = new Pose2d(megaPose.getTranslation(), botpose.getRotation());
+            m_swerve.addVisionMeasurement(integratedPose, poseTimestamp);
+            robotPose = m_swerve.getRobotPose(); // get updated pose
+            resetPoseToVisionLog = ("ResetPoseToVision: SUCCESS");
+            return true;
+        }
+        return false; // target not in view
+    }
 
 
+    /** If at least one limelight has an accurate pose */
+    public boolean hasAccuratePose() {
+        for (Limelight limelight : poseLimelights) {
+            if (limelight.hasAccuratePose()) return true;
+        }
+        return false;
+    }
 
+    /** Change all LL pipelines to the same pipeline */
+    public void setLimelightPipelines(int pipeline) {
+        for (Limelight limelight : allLimelights) {
+            limelight.setLimelightPipeline(pipeline);
+        }
+    }
+
+    public static class CommandConfig {
+        public double kp;
+        public double tolerance;
+        public double maxOutput;
+        public double error;
+        public int pipelineIndex;
+        public Limelight limelight;
+        /* For Drive-To commands */
+        public CommandConfig alignCommand;
+        public double verticalSetpoint; // numbers get small as the cone gets closer
+        public double verticalMaxView;
+
+        public void configKp(double kp) {
+            this.kp = kp;
+        }
+
+        public void configTolerance(double tolerance) {
+            this.tolerance = tolerance;
+        }
+
+        public void configMaxOutput(double maxOutput) {
+            this.maxOutput = maxOutput;
+        }
+
+        public void configError(double error) {
+            this.error = error;
+        }
+
+        public void configPipelineIndex(int pipelineIndex) {
+            this.pipelineIndex = pipelineIndex;
+        }
+
+        public void configLimelight(Limelight limelight) {
+            this.limelight = limelight;
+        }
+
+        public void configVerticalSetpoint(double verticalSetpoint) {
+            this.verticalSetpoint = verticalSetpoint;
+        }
+
+        public void configVerticalMaxView(double verticalMaxView) {
+            this.verticalMaxView = verticalMaxView;
+        }
+
+        public void configAlignCommand(CommandConfig alignCommand) {
+            this.alignCommand = alignCommand;
+        }
+
+        public CommandConfig() {}
+    }
 }

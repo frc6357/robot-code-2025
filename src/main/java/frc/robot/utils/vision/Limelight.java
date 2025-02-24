@@ -157,7 +157,7 @@ public class Limelight {
     }
 
     /** 
-     * Determines if any valid targets are in veiw of the limelight (specified by pipelines) using getTV() from the limelight helpers class.
+     * Determines if any valid targets are in view of the limelight (specified by pipelines) using getTV() from the limelight helpers class.
      * @return Whether the LL has any valid targets (April tags or other vision targets) 
      * If the limelight is not attached, return false.*/
     public boolean targetInView() {
@@ -168,7 +168,7 @@ public class Limelight {
     }
 
     /** 
-     * Checks if multiple targets are veiwable by the limelight.
+     * Checks if multiple targets are viewable by the limelight.
      * @return whether the LL sees multiple tags or not.
      * If the limelight is not attached, return false.*/
     public boolean multipleTagsInView() {
@@ -179,7 +179,7 @@ public class Limelight {
     }
 
     /** 
-     * Gets the amount of targets veiwable by the limelight using a robot pose estimate with getBotPoseEstimate() from LimelightHelpers.
+     * Gets the amount of targets viewable by the limelight using a robot pose estimate with getBotPoseEstimate() from LimelightHelpers.
      * @return whether the LL sees multiple tags or not.
      * If the limelight is not attached, return false.*/
     public double getTagCountInView() {
@@ -194,7 +194,7 @@ public class Limelight {
     }
 
     /**
-     * Gets the limelight tag at the centermost point of its veiw using getFiducialID() from the limelighthelpers class.
+     * Gets the limelight tag at the centermost point of its view using getFiducialID() from the limelighthelpers class.
      * @return the tag ID of the apriltag most centered in the LL's view (or based on different
      *     criteria set in LL dasbhoard)
      * If the limelight is not attahced, return zero.
@@ -210,11 +210,10 @@ public class Limelight {
      * Gets the target tag area using getTA() from the limelighthelpers class. The target tag area is the 
      * percentage of the window visible by the camera taken up by the tag, where 100% is the full window
      * and 0% means it cannot see a tag.
-     * @return the tag ID of the apriltag most centered in the LL's view (or based on different
-     *     criteria set in LL dasbhoard)
+     * @return the percentage of the limelight's window taken up by a tag
      * If the limelight is not attahced, return zero.
      */
-    public double getTargetSize() {
+    public double getTargetSize() { // 1-100
         if (!isAttached()) {
             return 0;
         }
@@ -250,7 +249,7 @@ public class Limelight {
         //TODO: see if starting blue alliance corrds have changed
     }
 
-    /** Leverages the limelight's veiw of multiple tags and their distance from the robot to check if the
+    /** Leverages the limelight's view of multiple tags and their distance from the robot to check if the
      * robot pose and/or limelight pose are more accurate than a basic pose update from the gyro/accelerometer.
      * @retrun If the position is "accurate".
      * If no limelight is attached, return false.
