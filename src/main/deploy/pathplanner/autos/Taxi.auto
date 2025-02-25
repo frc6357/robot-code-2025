@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Another_Station_To_Diff_Reef"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of Reef_To_Station_Again"
+            "pathName": "LineAuto"
           }
         }
       ]

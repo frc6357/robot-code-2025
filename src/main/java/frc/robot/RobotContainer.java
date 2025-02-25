@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -63,7 +64,8 @@ public class RobotContainer {
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
 
-  SendableChooser<Command> autoCommandSelector = new SendableChooser<Command>();
+  SendableChooser<Command> autoCommandSelector;// = new SendableChooser<Command>();
+
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -81,6 +83,13 @@ public class RobotContainer {
 
     // Configures swerve telemetry
     configurePhoenixTelemetry();
+
+
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    autoCommandSelector = SK25AutoBuilder.buildAutoChooser("Taxi");
+
+    // set deleteOldFiles = true in build.gradle, or deleted autos will load still
+    SmartDashboard.putData("Select An Auto", autoCommandSelector);
   }
   
   /**
@@ -141,9 +150,6 @@ public class RobotContainer {
     public void configurePathPlannerCommands()
     {
         if (m_swerve.isPresent())
-
-            autoCommandSelector = SK25AutoBuilder.buildAutoChooser("Taxi");
-            SmartDashboard.putData("Select An Auto", autoCommandSelector);
         {
             if (m_elevator.isPresent())
             {
@@ -158,11 +164,16 @@ public class RobotContainer {
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
+     * <p>
+     * This method loads the auto when it is called, however, it is recommended
+     * to first load your paths/autos when code starts, then return the
+     * pre-loaded auto/path.
      *
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand()
     {
+        //return new PathPlannerAuto(autoCommandSelector.getSelected());
         return autoCommandSelector.getSelected();
     }
 
