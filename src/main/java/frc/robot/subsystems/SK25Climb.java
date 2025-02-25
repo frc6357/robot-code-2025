@@ -5,6 +5,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Konstants.ClimbConstants.*;
 import static frc.robot.Ports.ClimbPorts.*;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.core.CoreCANcoder;
+import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 //Encoder Import
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
@@ -23,17 +27,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class SK25Climb extends SubsystemBase 
 {
    //Declarations
-   SparkMax motor;
+   TalonFX motor;
 
-   double targetSpeed;
+   PhoenixPIDController climbPID;
 
-   SparkClosedLoopController climbPID;
+   CoreCANcoder encoder;
 
-   RelativeEncoder encoder;
-
-   SparkMaxConfig config;
-   MAXMotionConfig smartConfig;
-
+   TalonFXConfiguration config;
+   
    double motorCurrentPosition;
    double motorTargetPosition;
 
@@ -41,29 +42,22 @@ public class SK25Climb extends SubsystemBase
    public SK25Climb() 
    {
       //Initializations
-       motor = new SparkMax(kClimbMotor.ID, MotorType.kBrushless);
-       climbPID = motor.getClosedLoopController();
-
-         //Configurations for Velocity and Acceleration
-         config = new SparkMaxConfig();
-         smartConfig = new MAXMotionConfig();
-         // config.closedLoop
-         //    .pid(kClimbP, kClimbI, kClimbD);
-         // config.idleMode(IdleMode.kBrake);
-         // config.smartCurrentLimit(kClimbCurrentLimit);
-         // config.closedLoop.maxMotion
-         //    .maxVelocity(kMaxSpeed) //RpM
-         //    .maxAcceleration(kClimbMaxAcceleration) //RpMpS
-         //    .allowedClosedLoopError(kClimbPositionTolerance)
-         //    .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
-         // motor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
-       
-       encoder = motor.getEncoder();
+       motor = new TalonFX(kClimbMotor.ID);
+       climbPID = new PhoenixPIDController(kClimbP, kClimbI, kClimbD);
+       config = new TalonFXConfiguration();
+       encoder = new CoreCANcoder(kClimbEncoderID);
        encoder.setPosition(kClimbMinPosition);
+
        motorCurrentPosition = 0.0;
        motorTargetPosition = 0.0;
 
-      //climbPID.setSetpoint(0.0);
+      climbPID.reset();
+      climbPID.setTolerance(kClimbPositionTolerance);
+
+      var motionMagicConfigs = config.MotionMagic;
+      motionMagicConfigs.MotionMagicCruiseVelocity = 80; // Target cruise velocity of 80 rps
+      motionMagicConfigs.MotionMagicAcceleration = 160; // Target acceleration of 160 rps/s (0.5 seconds)
+      motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
    }
 
    public double getMotorSpeed() {

@@ -42,8 +42,7 @@ public final class Konstants
     public static final class ClimbConstants
     {
         //to be changed
-        public static final int kRightClimbMotorId = 0;
-        public static final int kLeftClimbMotorId = 9;
+        public static final int kClimbEncoderID = 2;
         //Keeping P value at 0 will result in motor not spinning
         public static final double kClimbP = 1.0;         //TODO: tune climb PID
         public static final double kClimbI = 0.0;
