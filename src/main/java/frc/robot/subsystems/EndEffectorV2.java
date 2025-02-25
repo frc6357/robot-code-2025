@@ -136,7 +136,7 @@ public class EndEffectorV2 extends SubsystemBase
             .in(Radians);
         System.out.println(targetAngleRadians);
         double armFF = armFeedforward.calculate(targetAngleRadians, 0);
-        mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0, armFF);
+        mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0);
     }
 
     public double getArmPosition()
