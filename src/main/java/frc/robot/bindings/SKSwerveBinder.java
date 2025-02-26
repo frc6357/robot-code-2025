@@ -68,6 +68,8 @@ public class SKSwerveBinder implements CommandBinder{
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
+    public static SKSwerve drivetrain;
+
 
     public SKSwerveBinder(Optional<SKSwerve> m_drive) {
         this.m_drive = m_drive;
@@ -78,7 +80,7 @@ public class SKSwerveBinder implements CommandBinder{
     public void bindButtons() {
         if (m_drive.isPresent())
         {
-            SKSwerve drivetrain = m_drive.get();
+            drivetrain = m_drive.get();
 
             // Sets filters for driving axes
             // kTranslationXPort.setFilter(new CubicDeadbandFilter(kDriveCoeff,

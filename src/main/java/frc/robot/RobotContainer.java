@@ -18,9 +18,11 @@ import java.util.Optional;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -35,7 +37,6 @@ import frc.robot.commands.ElevatorButtonCommand;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Lights;
 import frc.robot.subsystems.SKSwerve;
-import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
 
@@ -66,6 +67,11 @@ public class RobotContainer {
 
   SendableChooser<Command> autoCommandSelector;// = new SendableChooser<Command>();
 
+   /* Path follower */
+    private final AutoFactory autoFactory;
+    private final AutoRoutines autoRoutines;
+    private final AutoChooser autoChooser = new AutoChooser();
+
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -84,12 +90,12 @@ public class RobotContainer {
     // Configures swerve telemetry
     configurePhoenixTelemetry();
 
+    autoFactory = SKSwerveBinder.drivetrain.createAutoFactory();
+    autoRoutines = new AutoRoutines(autoFactory);
 
-    // Build an auto chooser. This will use Commands.none() as the default option.
-    autoCommandSelector = SK25AutoBuilder.buildAutoChooser("Taxi");
-
-    // set deleteOldFiles = true in build.gradle, or deleted autos will load still
-    SmartDashboard.putData("Select An Auto", autoCommandSelector);
+    autoChooser.addRoutine("SimplePath", autoRoutines::simplePathAuto);
+    //set delete old files = true in build.gradle to prevent sotrage of unused orphans
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
   
   /**
@@ -176,6 +182,8 @@ public class RobotContainer {
         //return new PathPlannerAuto(autoCommandSelector.getSelected());
         return autoCommandSelector.getSelected();
     }
+
+    
 
 
     public void testPeriodic()
