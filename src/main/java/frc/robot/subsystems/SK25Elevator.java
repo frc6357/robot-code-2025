@@ -184,7 +184,8 @@ public class SK25Elevator extends Elevator
             double a = 0.06423;
             double b = 0.461;
 
-            // Determined through graphing well-tuned FF values to find this formula
+            // Determined through graphing well-tuned FF values to find this formula 
+            //TODO Tune the formula again
             double targetFF = (a * (Math.pow(b, targetHeight)) + 0.0025); // y = a(x^b)
             actualFF = Util.limit(targetFF, 0, 0.02); 
         }

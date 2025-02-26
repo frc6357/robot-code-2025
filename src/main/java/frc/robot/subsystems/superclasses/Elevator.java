@@ -32,7 +32,7 @@ public abstract class Elevator extends SubsystemBase
     /**
      * Calculates the remainder of the elevator feedforwards to keep the elevator still at its setpoint
      * @param targetHeight
-     * @return Velocity Feedforwards
+     * @return Velocity Feedforwards (either hardcoded or using the function)
      */
     public abstract double calculateFF(double targetHeight);
 }
