@@ -28,4 +28,11 @@ public abstract class Elevator extends SubsystemBase
      * @return Returns true if the elevator has reached its current set point.
      */
     public abstract boolean isAtTargetPosition();
+
+    /**
+     * Calculates the remainder of the elevator feedforwards to keep the elevator still at its setpoint
+     * @param targetHeight
+     * @return Velocity Feedforwards
+     */
+    public abstract double calculateFF(double targetHeight);
 }

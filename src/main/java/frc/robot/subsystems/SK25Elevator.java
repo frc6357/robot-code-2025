@@ -80,7 +80,7 @@ public class SK25Elevator extends Elevator
             motorConfigL.closedLoop.d(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
-    public Pref<Double> kFFPref = SKPreferences.attach("elevatorkFF", 0.0025) //1/565 // 1/300 // 1/500
+    public Pref<Double> kFFPref = SKPreferences.attach("elevatorkFF", 0.0025) // Formula's asymptote FF value
         .onChange((newValue) -> {
             motorConfigL.closedLoop.velocityFF(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
@@ -118,15 +118,13 @@ public class SK25Elevator extends Elevator
             .forwardLimitSwitchEnabled(true)
             .reverseLimitSwitchType(Type.kNormallyOpen)
             .reverseLimitSwitchEnabled(true);
-
         motorConfigL.closedLoop
             .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
-            //.velocityFF(kFFPref.get())
             .pidf(kPPref.get(), kIPref.get(),kDPref.get(), 0) 
             .outputRange(-1, 1)
-            // .iZone(0.1)
             .dFilter(0.3);
-        
+            // .iZone(0.1)
+            //.velocityFF(kFFPref.get()) (Taken care of in pidf)
         motorConfigL.closedLoop.maxMotion
             .maxAcceleration(2000)
             .maxVelocity(1000)
@@ -166,14 +164,13 @@ public class SK25Elevator extends Elevator
     }
 
     /**
-     * Calculates the remainder of the elevator feedforwards to keep the elevator still at its setpoint
-     * @param targetHeight
-     * @return Velocity Feedforwards
+     * {@inheritDoc}
      */
-    private double calculateFF(double targetHeight) {
+    public double calculateFF(double targetHeight) {
         double a = 0.06423;
         double b = 0.461;
-        
+
+        // Determined through graphing well-tuned FF values to find this formula
         double targetFF = (a * (Math.pow(b, targetHeight)) + 0.0025); // y = a(x^b)
         actualFF = Util.limit(targetFF, 0, 0.02);
         return actualFF;
