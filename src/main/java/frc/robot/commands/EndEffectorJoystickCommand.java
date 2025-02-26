@@ -43,8 +43,8 @@ public class EndEffectorJoystickCommand extends Command {
        if (controller.get() > kJoystickDeadband)
        {
         double armspeed = -kArmSpeed;
-        double armdividend = controller.get();
-        armspeed = armspeed * armdividend;
+        //double armdividend = controller.get();
+       // armspeed = armspeed * armdividend;
         System.out.println("Position: " + mEncoder.getPosition());
          endEffector.runArm(armspeed);
          endEffector.isRunning = true;
@@ -57,7 +57,7 @@ public class EndEffectorJoystickCommand extends Command {
         double armdividend = controller.get();
         System.out.println("Position: " + mEncoder.getPosition());
         double armspeed = kArmSpeed;
-        armspeed = armspeed * armdividend;
+        //armspeed = armspeed * armdividend;
         endEffector.runArm(armspeed);
         endEffector.isRunning = true;
         System.out.println("Joystick execute:"+controller.get());

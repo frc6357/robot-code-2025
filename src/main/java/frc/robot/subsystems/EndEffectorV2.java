@@ -56,7 +56,7 @@ public class EndEffectorV2 extends SubsystemBase
 
     public boolean isRunning;
 
-    Pref<Double> armKg = SKPreferences.attach("armKg", 1.0)
+    Pref<Double> armKg = SKPreferences.attach("armKg", 0.1)
         .onChange((newValue) -> {
             armFeedforward = new ArmFeedforward(0, newValue, 0, 0);
         });
@@ -139,6 +139,9 @@ public class EndEffectorV2 extends SubsystemBase
         mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0);
     }
 
+    /**
+     * Arm position in degrees
+     */
     public double getArmPosition()
     {
         //Set conversion factor
@@ -221,7 +224,14 @@ public class EndEffectorV2 extends SubsystemBase
 
     public void runArm(double armspeed)
     {
-        armMotor.set(armspeed);
+        double angleDegrees = getArmPosition();
+        double targetAngleRadians = 
+            Degrees.of(angleDegrees)
+            .plus(Degrees.of(90))
+            .in(Radians);
+        
+        double offset = armKg.get() * Math.cos(targetAngleRadians);
+        armMotor.set(armspeed + offset);
     }
 
     //stops the motor
