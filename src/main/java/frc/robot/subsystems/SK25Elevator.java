@@ -1,7 +1,7 @@
 // Essentials
 package frc.robot.subsystems;
 import frc.robot.subsystems.superclasses.Elevator;
-
+import frc.robot.utils.Util;
 // Constants (Muy Importante)
 import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
 import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
@@ -62,23 +62,25 @@ public class SK25Elevator extends Elevator
     SparkLimitSwitch forwardLimitSwitch;
     SparkLimitSwitch reverseLimitSwitch;
 
+    double actualFF;
+
     // SKPreferences for PID & FF
-    public Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.2)
+    public Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.01)
         .onChange((newValue) -> {
             motorConfigL.closedLoop.p(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
-    public Pref<Double> kIPref = SKPreferences.attach("elevatorKi", 0.00001)
+    public Pref<Double> kIPref = SKPreferences.attach("elevatorKi", 0.0)
         .onChange((newValue) -> {
             motorConfigL.closedLoop.i(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
-    public Pref<Double> kDPref = SKPreferences.attach("elevatorkD", 0.05)
+    public Pref<Double> kDPref = SKPreferences.attach("elevatorkD", 0.0)
         .onChange((newValue) -> {
             motorConfigL.closedLoop.d(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
-    public Pref<Double> kFFPref = SKPreferences.attach("elevatorkFF", 0.0005) //1/565 // 1/300 // 1/500
+    public Pref<Double> kFFPref = SKPreferences.attach("elevatorkFF", 0.0025) //1/565 // 1/300 // 1/500
         .onChange((newValue) -> {
             motorConfigL.closedLoop.velocityFF(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
@@ -116,18 +118,20 @@ public class SK25Elevator extends Elevator
             .forwardLimitSwitchEnabled(true)
             .reverseLimitSwitchType(Type.kNormallyOpen)
             .reverseLimitSwitchEnabled(true);
+
         motorConfigL.closedLoop
             .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
             //.velocityFF(kFFPref.get())
-            .pidf(kPPref.get(), kIPref.get(),kDPref.get(), kFFPref.get()) 
+            .pidf(kPPref.get(), kIPref.get(),kDPref.get(), 0) 
             .outputRange(-1, 1)
-            .iZone(0.1)
-            .dFilter(0.3)
-            .maxMotion
+            // .iZone(0.1)
+            .dFilter(0.3);
+        
+        motorConfigL.closedLoop.maxMotion
             .maxAcceleration(2000)
             .maxVelocity(1000)
-            .allowedClosedLoopError(0.01);
-            //.positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
+            .allowedClosedLoopError(0.01)
+            .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
         
         // Apply motor configurations on the left motor
         motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
@@ -158,11 +162,21 @@ public class SK25Elevator extends Elevator
     public void setTargetHeight(double targetHeight) 
     {
         this.targetHeight = targetHeight;
-        closedLoopController.setReference(this.targetHeight, ControlType.kMAXMotionPositionControl);
+        closedLoopController.setReference(this.targetHeight, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, calculateFF(targetHeight));
     }
 
-    public void setPositionFromAbove(ElevatorPosition pos) {
-
+    /**
+     * Calculates the remainder of the elevator feedforwards to keep the elevator still at its setpoint
+     * @param targetHeight
+     * @return Velocity Feedforwards
+     */
+    private double calculateFF(double targetHeight) {
+        double a = 0.06423;
+        double b = 0.461;
+        
+        double targetFF = (a * (Math.pow(b, targetHeight)) + 0.0025); // y = a(x^b)
+        actualFF = Util.limit(targetFF, 0, 0.02);
+        return actualFF;
     }
 
     /**
@@ -205,6 +219,7 @@ public class SK25Elevator extends Elevator
         SmartDashboard.putNumber("Current Estimated Position", currentPosition);
         SmartDashboard.putNumber("Target Position", targetPosition);
         SmartDashboard.putBoolean("Elevator at Setpoint", isAtTargetPosition());
+        SmartDashboard.putNumber("Actual FF", actualFF);
 
         // Display encoder position and velocity
         SmartDashboard.putNumber("Actual Position", encoder.getPosition());

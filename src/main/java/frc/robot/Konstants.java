@@ -37,14 +37,14 @@ public final class Konstants
         {
             //TODO FIX DURING TESTING - Measure Elevator Heights
 
-            /** Set the height to reach the top branch (L4) */
-            kTopPosition(12),
+            /** Set the height to reach the top branch (L4) */ // 12.5
+            kTopPosition(13.5), // 13.5 rotations of hex shaft
             /** Set the height to reach the middle branch (L3) */
-            kMidPosition(8),
+            kMidPosition(9.5), // 9.5 rotations of hex shaft
             /** Set the height to reach the low branch (L2) */
-            kLowPosition(4),
+            kLowPosition(7), // 7 rotations of hex shaft
             /** Set the height to reach the trough (L1) */
-            kTroughPosition(2),
+            kTroughPosition(3), // 3 rotations of hex shaft
             /** Set the height to reach the bottom */
             kZeroPosition(0.0);
 
@@ -83,7 +83,7 @@ public final class Konstants
         Minumum & Maximum Heights The Elevator Can Be Within
         TODO Change the height and see how that works, check SmartDashboard for elevator values first.
         */
-        public static final double kMaxHeight = 70;
+        public static final double kMaxHeight = 15;
         public static final double kMinHeight = 0;
 
         // Important Joystick Settings
