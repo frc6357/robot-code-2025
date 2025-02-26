@@ -2,16 +2,21 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 
+import static edu.wpi.first.units.Units.Rotations;
 import static frc.robot.Konstants.ClimbConstants.*;
 import static frc.robot.Ports.ClimbPorts.*;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreCANcoder;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 //Encoder Import
 import com.revrobotics.RelativeEncoder;
@@ -25,6 +30,7 @@ import    com.revrobotics.spark.config.*;
 import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.units.measure.AngularVelocity;
 //SmartDashboard Import
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -34,10 +40,15 @@ public class SK25Climb extends SubsystemBase
    TalonFX motor;
 
    PhoenixPIDController climbPID;
+   Slot0Configs climbPID0;
 
   // CoreCANcoder encoder;
 
    TalonFXConfiguration motorConfig;
+
+   double target;
+   boolean atTarget;
+   double timestamp;
    
    // double motorCurrentPosition;
    // double motorTargetPosition;
@@ -53,9 +64,17 @@ public class SK25Climb extends SubsystemBase
    public SK25Climb() 
    {
       //Initializations
+      timestamp = 0.0;
        motor = new TalonFX(kClimbMotor.ID);
        climbPID = new PhoenixPIDController(kClimbP, kClimbI, kClimbD);
-       motorConfig = new TalonFXConfiguration();
+       climbPID0 = new Slot0Configs()
+         .withKP(climbkPPref.get())
+         .withKI(climbkIPref.get())
+         .withKD(climbkDPref.get())
+         .withGravityType(GravityTypeValue.Arm_Cosine); // Gravity based feedforwards for an arm; bases output on motor position
+       motorConfig = new TalonFXConfiguration()
+         .withSlot0(climbPID0);
+
        //encoder = new CoreCANcoder(kClimbEncoderID);
        //encoder.setPosition(kClimbMinPosition);
 
@@ -72,20 +91,31 @@ public class SK25Climb extends SubsystemBase
       motor.setControl(new VelocityVoltage(speed));
    }
 
-   // public double getMotorSpeed() {
-   //    return encoder.getVelocity();
-   // }
+   public double getMotorSpeed() {
+      return motor.getVelocity().getValueAsDouble(); // Rotations / sec
+   }
 
-   // public double getMotorPosition() {
-   //    return encoder.getPosition();
-   // }
+   public double getMotorPosition() {
+      return motor.getPosition().getValueAsDouble(); // Rotations
+   }
 
-   // public double getTargetPosition() {
-   //    return motorTargetPosition;
-   // }
+   public double getTargetPosition() {
+      return motor.getClosedLoopReference().getValueAsDouble();
+   }
 
    public void stop() {
       motor.stopMotor();
+   }
+
+   public void setPosition(double pos) {
+      target = pos;
+      motor.setControl(new PositionVoltage(target));
+   }
+
+   public boolean isAtTargetPosition() {
+      atTarget = motor.getPosition().getValue().in(Rotations) == target;
+      // boolean slow = motor.getVelocity().getValueAsDouble() < 1;
+      return atTarget;
    }
 
    //Sets setpoint *and* runs motor
@@ -114,6 +144,7 @@ public class SK25Climb extends SubsystemBase
 
    @Override
    public void periodic() {
+      timestamp += Robot.kDefaultPeriod;
     //  motorCurrentPosition = getMotorPosition(); //why is this here?
      // SmartDashboard.putNumber("Velocity (RPMs)", getMotorSpeed());
    }
