@@ -19,7 +19,7 @@ public class ClimbCommand1 extends Command{
 
     @Override
     public void execute() {
-        climb.setPoint(kClimbMaxPosition);
+        climb.runMotor(kKrakenSpeed);
     }
 
     @Override
@@ -29,11 +29,7 @@ public class ClimbCommand1 extends Command{
 
     @Override
     public boolean isFinished() {
-        if (climb.isAtTargetPosition()) {
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
 
 

@@ -18,7 +18,7 @@ public class ClimbCommandReturn extends Command{
 
     @Override
     public void execute() {
-        climb.setPoint(kClimbMinPosition);
+        climb.runMotor(-kKrakenSpeed);
     }
 
     @Override
@@ -28,11 +28,7 @@ public class ClimbCommandReturn extends Command{
 
     @Override
     public boolean isFinished() {
-        if (climb.isAtTargetPosition()) {
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
 
 

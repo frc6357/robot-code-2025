@@ -1,5 +1,6 @@
 package frc.robot.bindings;
 
+import static frc.robot.Konstants.ClimbConstants.kKrakenSpeed;
 import static frc.robot.Konstants.ClimbConstants.kMaxSpeed;
 import static frc.robot.Konstants.ClimbConstants.kTestSpeed;
 import static frc.robot.Ports.OperatorPorts.*;
@@ -36,14 +37,17 @@ public class ClimbBinder implements CommandBinder {
             raise.onTrue(new ClimbCommand1(subsys));
             lower.onTrue(new ClimbCommandReturn(subsys));
             stop.onTrue(new ClimbCommandStop(subsys));
+            slow.onTrue(new ClimbCommandSlow(subsys));
 
-            //Toggle
-           // slow.onTrue(new InstantCommand(() -> subsys.cambiarVelocidad(kTestSpeed)));
+            // //Press to slow
+            // slow.whileTrue(new InstantCommand(() -> subsys.cambiarVelocidad(kTestSpeed)));
+            // slow.onFalse(new InstantCommand(() -> subsys.cambiarVelocidad(kMaxSpeed)));
 
-
-            //Press
-            slow.whileTrue(new InstantCommand(() -> subsys.cambiarVelocidad(kTestSpeed)));
-            slow.onFalse(new InstantCommand(() -> subsys.cambiarVelocidad(kMaxSpeed)));
+            //InstantCommand Bindings
+            // raise.onTrue(new InstantCommand(() -> subsys.runMotor(kKrakenSpeed)));
+            // lower.onTrue(new InstantCommand(() -> subsys.runMotor(-kKrakenSpeed)));
+            // stop.onTrue(new InstantCommand(() -> subsys.runMotor(0.0)));
+            // slow.onTrue(new InstantCommand(() -> subsys.runMotor(kKrakenSpeed/2)));
         }
     }
 }

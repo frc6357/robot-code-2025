@@ -6,6 +6,7 @@ import static frc.robot.Konstants.ClimbConstants.*;
 import static frc.robot.Ports.ClimbPorts.*;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreCANcoder;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
@@ -31,12 +32,12 @@ public class SK25Climb extends SubsystemBase
 
    PhoenixPIDController climbPID;
 
-   CoreCANcoder encoder;
+  // CoreCANcoder encoder;
 
    TalonFXConfiguration config;
    
-   double motorCurrentPosition;
-   double motorTargetPosition;
+   // double motorCurrentPosition;
+   // double motorTargetPosition;
 
    //Constructor
    public SK25Climb() 
@@ -45,66 +46,63 @@ public class SK25Climb extends SubsystemBase
        motor = new TalonFX(kClimbMotor.ID);
        climbPID = new PhoenixPIDController(kClimbP, kClimbI, kClimbD);
        config = new TalonFXConfiguration();
-       encoder = new CoreCANcoder(kClimbEncoderID);
-       encoder.setPosition(kClimbMinPosition);
+       //encoder = new CoreCANcoder(kClimbEncoderID);
+       //encoder.setPosition(kClimbMinPosition);
 
-       motorCurrentPosition = 0.0;
-       motorTargetPosition = 0.0;
+       //motorCurrentPosition = 0.0;
+      // motorTargetPosition = 0.0;
 
       climbPID.reset();
       climbPID.setTolerance(kClimbPositionTolerance);
-
-      var motionMagicConfigs = config.MotionMagic;
-      motionMagicConfigs.MotionMagicCruiseVelocity = 80; // Target cruise velocity of 80 rps
-      motionMagicConfigs.MotionMagicAcceleration = 160; // Target acceleration of 160 rps/s (0.5 seconds)
-      motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
    }
 
-   public double getMotorSpeed() {
-      return encoder.getVelocity();
+   public void runMotor(double speed) {
+      motor.setControl(new VelocityVoltage(speed));
    }
 
-   public double getMotorPosition() {
-      return encoder.getPosition();
-   }
+   // public double getMotorSpeed() {
+   //    return encoder.getVelocity();
+   // }
 
-   public double getTargetPosition() {
-      return motorTargetPosition;
-   }
+   // public double getMotorPosition() {
+   //    return encoder.getPosition();
+   // }
+
+   // public double getTargetPosition() {
+   //    return motorTargetPosition;
+   // }
 
    public void stop() {
       motor.stopMotor();
    }
 
    //Sets setpoint *and* runs motor
-   public void setPoint (double setpoint) {
-      climbPID.setReference(setpoint, SparkBase.ControlType.kMAXMotionPositionControl);
-   }
+   // public void setPoint (double setpoint) {
+   //    climbPID.setReference(setpoint, SparkBase.ControlType.kMAXMotionPositionControl);
+   // }
 
    //Changes Speed to new Value
-   public void cambiarVelocidad(double targetSpeed) {
-     config.closedLoop
-      .pid(kClimbP, kClimbI, kClimbD);
-      config.idleMode(IdleMode.kBrake);
-      config.smartCurrentLimit(kClimbCurrentLimit);
-      config.closedLoop.maxMotion
-     .maxVelocity(targetSpeed) //RpM
-     .maxAcceleration(kClimbMaxAcceleration) //RpMpS
-     .allowedClosedLoopError(kClimbPositionTolerance)
-     .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
-     motor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
-   }
+   // public void cambiarVelocidad(double targetSpeed) {
+   //   config.closedLoop
+   //    .pid(kClimbP, kClimbI, kClimbD);
+   //    config.idleMode(IdleMode.kBrake);
+   //    config.smartCurrentLimit(kClimbCurrentLimit);
+   //    config.closedLoop.maxMotion
+   //   .maxVelocity(targetSpeed) //RpM
+   //   .maxAcceleration(kClimbMaxAcceleration) //RpMpS
+   //   .allowedClosedLoopError(kClimbPositionTolerance)
+   //   .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
+   //   motor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+   // }
 
    //Check if Motor is at Target Position
-   public boolean isAtTargetPosition() {
-      return Math.abs(getMotorPosition() - getTargetPosition()) <= kClimbPositionTolerance;
-   }
+   // public boolean isAtTargetPosition() {
+   //    return Math.abs(getMotorPosition() - getTargetPosition()) <= kClimbPositionTolerance;
+   // }
 
    @Override
    public void periodic() {
-      motorCurrentPosition = getMotorPosition(); //why is this here?
-
-      SmartDashboard.putNumber("Position", getMotorPosition());
-      SmartDashboard.putNumber("Velocity (RPMs)", getMotorSpeed());
+    //  motorCurrentPosition = getMotorPosition(); //why is this here?
+     // SmartDashboard.putNumber("Velocity (RPMs)", getMotorSpeed());
    }
 }

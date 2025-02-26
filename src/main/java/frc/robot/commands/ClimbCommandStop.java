@@ -20,7 +20,6 @@ public class ClimbCommandStop extends Command{
 
     @Override
     public void execute() {
-       // climb.stop();
     }
 
     @Override

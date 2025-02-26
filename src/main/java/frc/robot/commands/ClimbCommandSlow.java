@@ -14,17 +14,15 @@ public class ClimbCommandSlow extends Command{
 
     @Override
     public void initialize() {
-       // climb.cambiarVelocidad(kTestSpeed);
     }
 
     @Override
     public void execute() {
-        climb.cambiarVelocidad(kTestSpeed);
+      climb.runMotor(kKrakenSpeed/2);
     }
 
     @Override
     public void end(boolean interrupted) {
-       // climb.cambiarVelocidad(kMaxSpeed);
     }
 
     @Override
