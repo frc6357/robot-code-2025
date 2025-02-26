@@ -370,9 +370,9 @@ public final class Konstants
             public static final int kAprilTagPipeline = 0; // TODO BEFORE MERGE: check with actual AprilTag Pipeline
 
             // Translation (in meters) from center of robot
-            public static final double kForward = 0; // (z) meters forward of center; negative is backwards
-            public static final double kRight = 0; // (x) meters right of center; negative is left
-            public static final double kUp = 0; // (y) meters up of center; negative is down (how did you get a limelight down there???)
+            public static final double kForward = -0.0889; // (z) meters forward of center; negative is backwards
+            public static final double kRight = 0.00635; // (x) meters right of center; negative is left
+            public static final double kUp = 0.8763; // (y) meters up of center; negative is down (how did you get a limelight down there???)
 
             // Rotation of limelight (in degrees and yaw)
             public static final double kRoll = 0; // (roll) degrees tilted clockwise/ccw from 0° level [think plane wings tilting cw/ccw]

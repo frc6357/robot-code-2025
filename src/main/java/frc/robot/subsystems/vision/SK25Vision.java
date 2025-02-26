@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NTSendable;
 import edu.wpi.first.networktables.NTSendableBuilder;
 import edu.wpi.first.util.sendable.Sendable;
@@ -15,10 +18,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.vision.Limelight;
+import frc.robot.utils.vision.LimelightHelpers.RawFiducial;
 import frc.robot.utils.Trio;
 import frc.robot.utils.Field;
 import frc.robot.subsystems.configs.VisionConfig;
-
 import frc.robot.subsystems.SKSwerve;
 
 public class SK25Vision extends SubsystemBase implements NTSendable {
@@ -91,7 +94,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
                 Limelight bestLL = getBestLimelight();
                 for(Limelight ll : poseLimelights) {
                     if(ll.getName() == bestLL.getName()) {
-                        // Add vision pose input
+                        addFilteredLimelightInput(bestLL);
                     }
                     else {
                         ll.sendInvalidStatus("Rejected: Not best Limelight");
@@ -178,7 +181,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         boolean reject = false;
         if (targetInView) {
             Pose2d botpose = botpose3D.toPose2d();
-            Pose2d robotPose = m_swerve.getRobotPose(); // TODO: Add telemetry for pose before and after integrating vision
+            // Pose2d robotPose = m_swerve.getRobotPose(); // TODO: Add telemetry for pose before and after integrating vision
             if (Field.poseOutOfField(botpose3D)
                     || Math.abs(botpose3D.getZ()) > 0.25 // Robot pose is floating
                     || (Math.abs(botpose3D.getRotation().getX()) > 5
@@ -219,13 +222,163 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
             Pose2d integratedPose = new Pose2d(megaPose.getTranslation(), botpose.getRotation());
             m_swerve.addVisionMeasurement(integratedPose, poseTimestamp);
-            robotPose = m_swerve.getRobotPose(); // get updated pose
+            // robotPose = m_swerve.getRobotPose(); // get updated pose
             resetPoseToVisionLog = ("ResetPoseToVision: SUCCESS");
             return true;
         }
         return false; // target not in view
     }
 
+    private void addFilteredLimelightInput(Limelight LL) {
+        double xyStds = 1000;
+        double degStds = 1000;
+
+        // integrate vision
+        if (LL.targetInView()) {
+            boolean multiTags = LL.multipleTagsInView();
+            double timeStamp = LL.getRawPoseTimestamp();
+            double targetSize = LL.getTargetSize();
+            Pose3d botpose3D = LL.getRawPose3d();
+            Pose2d botpose = botpose3D.toPose2d();
+            Pose2d megaPose2d = LL.getMegaPose2d();
+            RawFiducial[] tags = LL.getRawFiducial();
+            double highestAmbiguity = 2;
+            ChassisSpeeds robotSpeed = m_swerve.getVelocity(true);
+
+            // distance from current pose to vision estimated pose
+            double poseDifference =
+                    m_swerve.getRobotPose().getTranslation().getDistance(botpose.getTranslation());
+
+            /* rejections */
+
+            // reject pose if individual tag ambiguity is too high
+            LL.setTagStatus("");
+            for (RawFiducial tag : tags) {
+                // search for highest ambiguity tag for later checks
+                if (highestAmbiguity == 2) {
+                    highestAmbiguity = tag.ambiguity;
+                } else if (tag.ambiguity > highestAmbiguity) {
+                    highestAmbiguity = tag.ambiguity;
+                }
+                // log ambiguities
+                LL.setTagStatus(LL.getTagStatus() + "Tag " + tag.id + ": " + tag.ambiguity);
+                // ambiguity rejection check
+                if (tag.ambiguity > 0.9) {
+                    LL.sendInvalidStatus("ambiguity rejection");
+                    return;
+                }
+            }
+            if (Field.poseOutOfField(botpose3D)) {
+                // reject if pose is out of the field
+                LL.sendInvalidStatus("bound rejection");
+                return;
+            } else if (Math.abs(robotSpeed.omegaRadiansPerSecond) >= 1.6) {
+                // reject if we are rotating more than 0.5 rad/s
+                LL.sendInvalidStatus("rotation rejection");
+                return;
+            } else if (Math.abs(botpose3D.getZ()) > 0.25) {
+                // reject if pose is .25 meters in the air
+                LL.sendInvalidStatus("height rejection");
+                return;
+            } else if (Math.abs(botpose3D.getRotation().getX()) > 5
+                    || Math.abs(botpose3D.getRotation().getY()) > 5) {
+                // reject if pose is 5 degrees titled in roll or pitch
+                LL.sendInvalidStatus("roll/pitch rejection");
+                return;
+            } else if (targetSize <= 0.025) {
+                LL.sendInvalidStatus("size rejection");
+                return;
+            }
+            /* integrations */
+
+            // if almost stationary and extremely close to tag
+            else if (robotSpeed.vxMetersPerSecond + robotSpeed.vyMetersPerSecond <= 0.2
+                    && targetSize > 0.4) {
+                LL.sendValidStatus("Stationary close integration");
+                xyStds = 0.1;
+                degStds = 0.1;
+            } 
+            // If multiple tags detected
+            else if (multiTags && targetSize > 0.05) {
+                LL.sendValidStatus("Multi integration");
+                xyStds = 0.25;
+                degStds = 8;
+                if (targetSize > 0.09) { // If larger tag size
+                    LL.sendValidStatus("Strong Multi integration");
+                    xyStds = 0.1;
+                    degStds = 0.1;
+                }
+            }
+            // If tag is very close, loosen up pose strictness
+            else if (targetSize > 0.8 && poseDifference < 0.5) {
+                LL.sendValidStatus("Close integration");
+                xyStds = 0.5;
+                degStds = 16;
+            } 
+            // If tag is moderately close but pose difference is small
+            else if (targetSize > 0.1 && poseDifference < 0.3) {
+                LL.sendValidStatus("Proximity integration");
+                xyStds = 2.0;
+                degStds = 999999;
+            } 
+            // If inaccuracy (ambiguity) is low and target size is ok
+            else if (highestAmbiguity < 0.25 && targetSize >= 0.03) {
+                LL.sendValidStatus("Stable integration");
+                xyStds = 0.5;
+                degStds = 999999;
+            } 
+            else {
+                LL.sendInvalidStatus(
+                        "catch rejection: "
+                                + poseDifference
+                                + " poseDiff");
+                return;
+            }
+
+            // strict with degree std and ambiguity and rotation because this is megatag1
+            if (highestAmbiguity > 0.5) {
+                degStds = 15;
+            }
+
+            if (robotSpeed.omegaRadiansPerSecond >= 0.5) {
+                degStds = 15;
+            }
+
+            // track STDs
+            VisionConfig.VISION_STD_DEV_X = xyStds;
+            VisionConfig.VISION_STD_DEV_Y = xyStds;
+            VisionConfig.VISION_STD_DEV_THETA = degStds;
+
+            Pose2d integratedPose = new Pose2d(megaPose2d.getTranslation(), botpose.getRotation());
+
+            addVisionMeasurementWithStdDevs(
+                integratedPose, 
+                timeStamp, 
+                VecBuilder.fill(
+                    VisionConfig.VISION_STD_DEV_X,
+                    VisionConfig.VISION_STD_DEV_Y,
+                    VisionConfig.VISION_STD_DEV_THETA));
+        } 
+        else {
+            LL.setTagStatus("no tags");
+            LL.sendInvalidStatus("no tag found rejection");
+        }
+    }
+
+    private void addVisionMeasurementWithStdDevs(Pose2d integratedPose, double timeStamp, Vector<N3>stdDevs) {
+        m_swerve.setVisionMeasurementStdDevs(stdDevs);
+
+        m_swerve.addVisionMeasurement(integratedPose, timeStamp);
+    }
+    private void addVisionMeasurementWithStdDevs(Pose2d integratedPose, double timeStamp, double stdDevX, double stdDevY, double stdDevTheta) {
+        Vector<N3> stdDevs = VecBuilder.fill(
+            stdDevX,
+            stdDevY,
+            stdDevTheta
+        );
+        m_swerve.setVisionMeasurementStdDevs(stdDevs);
+        m_swerve.addVisionMeasurement(integratedPose, timeStamp);
+    }
 
     /** If at least one limelight has an accurate pose */
     public boolean hasAccuratePose() {

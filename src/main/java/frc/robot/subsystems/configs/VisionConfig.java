@@ -13,7 +13,7 @@ public final class VisionConfig {
     public static final String BACK_LL = limelightAlpha.kName;
     public static final int BACK_TAG_PIPELINE = limelightAlpha.kAprilTagPipeline;
     public static final LimelightConfig BACK_CONFIG = 
-                                        new LimelightConfig(limelightAlpha.kName) // Yes, it's the same as [DIRECTION]_LL. Just left it like this to see constructor layout
+                                        new LimelightConfig(limelightAlpha.kName) // Yes, it's the same value as [NAME]_LL. Just left it like this to see constructor layout
                                         .withTranslation(limelightAlpha.kForward, limelightAlpha.kRight, limelightAlpha.kUp) // Feeds in the position of the limelight on the bot
                                         .withRotation(limelightAlpha.kRoll, limelightAlpha.kPitch, limelightAlpha.kYaw) // Feeds in rotation of limelight
                                         .withAttached(limelightAlpha.kAttached); // Whether or not the limelight is attached to the robot; if false, effectively disables limelight

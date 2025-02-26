@@ -246,7 +246,7 @@ public class Limelight {
         }
         return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name).pose; // 2024: all alliances use blue as 0,0
         
-        //TODO: see if starting blue alliance corrds have changed
+        //TODO: see if starting blue alliance coords have changed
     }
 
     /** Leverages the limelight's view of multiple tags and their distance from the robot to check if the
