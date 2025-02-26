@@ -131,6 +131,9 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         boolean reject = true;
         boolean firstSuccess = false;
         double batchSize = 5;
+        /* Starting at the most recent auton pose estimation, analyze the next [batchSize]
+        poses and see if they can be succesfully added to the robot's pose estimator
+        */ 
         for (int i = autonPoses.size() - 1; i > (autonPoses.size() - batchSize) - 1; i--) {
             Trio<Pose3d, Pose2d, Double> poseInfo = autonPoses.get(i);
             boolean success =

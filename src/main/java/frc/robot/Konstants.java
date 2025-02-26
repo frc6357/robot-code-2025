@@ -30,7 +30,7 @@ public final class Konstants
 
     public static final class SwerveConstants
     {
-
+        //TODO: Merge TunerConstants with this?
 
 
         //Device Settings and Default States
@@ -117,25 +117,26 @@ public final class Konstants
         public static final double kBackRightYPos = -kFrontToBackEncoderDistInches / 2;
 
         //radius of the wheels in inches
-        public static final Double kWheelRadiusInches = 2.0;   //inches   //TODO: value in orignial spectrum code was 4 inches, was it mistaken for diameter?
+        public static final Double kWheelRadiusInches = 2.0;   //inches
+        // Combines a margin of error with the known wheel radius 
+        // to determine an optimized value for odometry
+        public static final double kWheelErrorMargin = 0.0; //inches
+        public static final double kWheelRadius = (kWheelRadiusInches + kWheelErrorMargin); //inches
+
         //radius of the wheels in meters. One meter is equal to 39.37 inches.
-        private static final Double kWheelRadiusMeters = kWheelRadiusInches  / 39.37;   //meters
+        private static final Double kWheelRadiusMeters = kWheelRadius  / 39.37;   //meters
         /**Circumference of the swerve wheels for the drive conversion 
          * (circumfrance of the wheel times rotations yeilds distance travelled) */
         public static final Double kWheelCircumferenceMeters = 2 * Math.PI * kWheelRadiusMeters;   //meters
 
-        // Combines a margin of error with the known wheel radius 
-        // to determine an optimized value for odometry
-        public static final double kWheelErrorMargin = 0.0; //inches
-        public static final double kWheelRadius = ((kWheelRadiusInches + kWheelErrorMargin) / 2); //inches
 
         // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
         // This may need to be tuned to your individual robot
-        //TODO: Tune CoupleRatio
+        //Old
         public static final double kCoupleGearRatio = 3.5714285714285716;
 
         //The gear ratios of the drive and turn motors
-        //TODO: Check these values
+        //Old
         public static final double kDriveGearRatio = 6.746031746031747;
         public static final double kTurnGearRatio = 21.428571428571427;
 
@@ -163,19 +164,6 @@ public final class Konstants
         public static final double kPHoldController = 12.0;
         public static final double kIHoldController = 0.0;
         public static final double kDHoldController = 0.0;
-
-        // The steer motor uses any SwerveModule.SteerRequestType control request with the
-        // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
-        public static final Slot0Configs kSteerGains = new Slot0Configs() //TODO - tune steering gains drive
-        .withKP(100.0).withKI(0).withKD(0.5)
-        .withKS(0.1).withKV(2.66).withKA(0.0);
-
-        // When using closed-loop control, the drive motor uses the control
-        // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
-        //TODO: THIS IS 2024 TUNING!!!! PLEASE UPDATE ME!!!!
-        public static final Slot0Configs kDriveGains = new Slot0Configs() //TODO - tune driving gains drive
-        .withKP(0.1).withKI(0).withKD(0)
-        .withKS(0).withKV(0.124).withKA(0);
 
          // The closed-loop output type to use for the steer motors;
         // This affects the PID/FF gains for the steer motors
@@ -205,16 +193,16 @@ public final class Konstants
 
         // Theoretical free speed (m/s) at 12v applied output;
         // This needs to be tuned to your individual robot
-        //TODO: Tune free speed
-        public static final LinearVelocity kSpeedAt12VoltsMeterPerSecond = MetersPerSecond.of(4.73);  // m/s     //TODO: find max speed in phoenix tuner x
+        //Old
+        public static final LinearVelocity kSpeedAt12VoltsMeterPerSecond = MetersPerSecond.of(4.73);  // m/s
 
         /**The maximum alowed angular speed of the swerve module's motors in degrees per second.*/
         public static final double kMaxModuleAngularSpeedDegreesPerSecond = 360;
 
         /** The max speed (m/s) the drive wheels should be allowed to go */
-        public static final double kMaxDriveSpeedMetersPerSecond = 3.0;  // m/s         //TODO: Update max speed depending on robot performance
+         public static final double kMaxDriveSpeedMetersPerSecond = 3.0;  // m/s
         /** The max rotation speed the turn wheels should be allowed to go */
-        public static final double kMaxRotationDegreesPerSecond = 360.0;  // degrees/second
+         public static final double kMaxRotationDegreesPerSecond = 360.0;  // degrees/second
 
         public static final double kMaxAngularRate = 1.5 * Math.PI;
         public static final double kMaxAngularVelocity = 2 * Math.PI; // rad/s
@@ -407,8 +395,8 @@ public final class Konstants
     public static final class OIConstants
     {
         // Controller constraints
-        public static final double kDriveCoeff       = 0.95;
-        public static final double kRotationCoeff    = 0.95;
+        public static final double kDriveCoeff       = 1;
+        public static final double kRotationCoeff    = 1;
         public static final double kJoystickDeadband = 0.15;
         public static final double kSlowModePercent  = 0.2;
         

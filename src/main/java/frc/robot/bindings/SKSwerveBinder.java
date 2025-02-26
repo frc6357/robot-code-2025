@@ -19,7 +19,6 @@ import frc.robot.utils.filters.DeadbandFilter;
 import frc.robot.utils.filters.Filter;
 import frc.robot.utils.filters.DriveStickFilter;
 import lombok.Getter;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 // Used for binding buttons to drive actions
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
