@@ -16,6 +16,7 @@ import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -437,12 +438,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
                         .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
                         .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
                 ),
-                new PPHolonomicDriveController(
-                    // PID constants for translation
-                    new PIDConstants(10, 0, 0),
-                    // PID constants for rotation
-                    new PIDConstants(7, 0, 0)
-                ),
+                pathConfig,
                 config,
                 // Assume the path needs to be flipped for Red vs Blue, this is normally the case
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
@@ -454,35 +450,10 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
 
-    public void setupPathPlanner()
-    {
-        try
-        {
-            RobotConfig pathPlannerSettings = RobotConfig.fromGUISettings();
-
-            //SK25AutoBuilder
-            AutoBuilder.configure(
-                this::getRobotPose, // Robot pose supplier
-                this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-                this::getRobotSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                pathConfig,
-                pathPlannerSettings,
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-                    var alliance = DriverStation.getAlliance();
-                    return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
-                },
-                this // Reference to this subsystem to set requirements
-            );
-        }
-        catch(Exception e)
-        {
-            DriverStation.reportError("Failed to configure path planner to the swerve subsystem: ", e.getStackTrace());
-        }
-    }
+    // public Command getAutoCommand(String autoName)
+    // {
+    //     return new PathPlannerAuto(autoName);
+    // }
 
     /**
    * Set chassis speeds of robot to drive it robot oreintedly.
@@ -517,9 +488,4 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
             }
             return m_kinematics.toChassisSpeeds(currentStates);
         }
-
-        // public ChassisSpeeds getRobotSpeeds()
-        // {
-        //     return 
-        // }
 }

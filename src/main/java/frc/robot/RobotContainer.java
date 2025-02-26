@@ -68,9 +68,9 @@ public class RobotContainer {
   SendableChooser<Command> autoCommandSelector;// = new SendableChooser<Command>();
 
    /* Path follower */
-    private final AutoFactory autoFactory;
-    private final AutoRoutines autoRoutines;
-    private final AutoChooser autoChooser = new AutoChooser();
+    //private final AutoFactory autoFactory;
+    //private final AutoRoutines autoRoutines;
+    //private final AutoChooser autoChooser = new AutoChooser();
 
 
 
@@ -90,12 +90,13 @@ public class RobotContainer {
     // Configures swerve telemetry
     configurePhoenixTelemetry();
 
-    autoFactory = SKSwerveBinder.drivetrain.createAutoFactory();
-    autoRoutines = new AutoRoutines(autoFactory);
+    //autoFactory = SKSwerveBinder.drivetrain.createAutoFactory();
+    //autoRoutines = new AutoRoutines(autoFactory);
 
-    autoChooser.addRoutine("SimplePath", autoRoutines::simplePathAuto);
+    //autoChooser.addRoutine("Taxi", autoRoutines::Taxi);
+    autoCommandSelector = AutoBuilder.buildAutoChooser("Taxi");
     //set delete old files = true in build.gradle to prevent sotrage of unused orphans
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putData("Select an Auto", autoCommandSelector);
   }
   
   /**
@@ -181,6 +182,7 @@ public class RobotContainer {
     {
         //return new PathPlannerAuto(autoCommandSelector.getSelected());
         return autoCommandSelector.getSelected();
+        //return m_swerve.get().getAutoCommand("Taxi");
     }
 
     
