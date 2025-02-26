@@ -2,6 +2,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.preferences.Pref;
+import frc.robot.preferences.SKPreferences;
+
 import static frc.robot.Konstants.ClimbConstants.*;
 import static frc.robot.Ports.ClimbPorts.*;
 
@@ -34,10 +37,17 @@ public class SK25Climb extends SubsystemBase
 
   // CoreCANcoder encoder;
 
-   TalonFXConfiguration config;
+   TalonFXConfiguration motorConfig;
    
    // double motorCurrentPosition;
    // double motorTargetPosition;
+
+   Pref<Double> climbkPPref = SKPreferences.attach("climbP", 1.0)
+      .onChange((newValue) -> climbPID.setP(newValue));
+   Pref<Double> climbkIPref = SKPreferences.attach("climbI", 0.0)
+      .onChange((newValue) -> climbPID.setI(newValue));
+   Pref<Double> climbkDPref = SKPreferences.attach("climbD", 0.0)
+      .onChange((newValue) -> climbPID.setI(newValue));
 
    //Constructor
    public SK25Climb() 
@@ -45,12 +55,14 @@ public class SK25Climb extends SubsystemBase
       //Initializations
        motor = new TalonFX(kClimbMotor.ID);
        climbPID = new PhoenixPIDController(kClimbP, kClimbI, kClimbD);
-       config = new TalonFXConfiguration();
+       motorConfig = new TalonFXConfiguration();
        //encoder = new CoreCANcoder(kClimbEncoderID);
        //encoder.setPosition(kClimbMinPosition);
 
        //motorCurrentPosition = 0.0;
       // motorTargetPosition = 0.0;
+
+
 
       climbPID.reset();
       climbPID.setTolerance(kClimbPositionTolerance);

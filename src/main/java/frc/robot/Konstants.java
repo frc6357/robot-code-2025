@@ -55,7 +55,7 @@ public final class Konstants
         public static final int kClimbCurrentLimit = 50;
         public static final double kClimbMaxPosition = 65;
         public static final double kClimbMinPosition = 0.0;
-        public static final double kClimbPositionTolerance = 0.2;
+        public static final double kClimbPositionTolerance = 0.1;
 
     }
 
