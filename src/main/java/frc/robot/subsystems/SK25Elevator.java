@@ -2,6 +2,7 @@
 package frc.robot.subsystems;
 import frc.robot.subsystems.superclasses.Elevator;
 import frc.robot.utils.Util;
+
 // Constants (Muy Importante)
 import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
 import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
@@ -123,7 +124,7 @@ public class SK25Elevator extends Elevator
             .pidf(kPPref.get(), kIPref.get(),kDPref.get(), 0) 
             .outputRange(-1, 1)
             .dFilter(0.3);
-            // .iZone(0.1)
+            //.iZone(0.1)
             //.velocityFF(kFFPref.get()) (Taken care of in pidf)
         motorConfigL.closedLoop.maxMotion
             .maxAcceleration(2000)
@@ -167,12 +168,26 @@ public class SK25Elevator extends Elevator
      * {@inheritDoc}
      */
     public double calculateFF(double targetHeight) {
-        double a = 0.06423;
-        double b = 0.461;
+        if (targetHeight >= 11) {
+            actualFF = 0.0025;
+        }
+        else if (targetHeight == 9.5){
+            actualFF = 0.00254;
+        }
+        else if (targetHeight == 7){
+            actualFF = 0.003;
+        }
+        else if (targetHeight == 3){
+            actualFF = 0.0093;
+        }
+        else{
+            double a = 0.06423;
+            double b = 0.461;
 
-        // Determined through graphing well-tuned FF values to find this formula
-        double targetFF = (a * (Math.pow(b, targetHeight)) + 0.0025); // y = a(x^b)
-        actualFF = Util.limit(targetFF, 0, 0.02);
+            // Determined through graphing well-tuned FF values to find this formula
+            double targetFF = (a * (Math.pow(b, targetHeight)) + 0.0025); // y = a(x^b)
+            actualFF = Util.limit(targetFF, 0, 0.02); 
+        }
         return actualFF;
     }
 
