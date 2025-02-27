@@ -44,6 +44,7 @@ public class EndEffectorJoystickCommand extends Command {
        {
         double armspeed = -kArmSpeed;
         double armdividend = controller.get();
+        armspeed /= 3;
         armspeed = armspeed * armdividend;
         System.out.println("Position: " + mEncoder.getPosition());
          endEffector.runArm(armspeed);
