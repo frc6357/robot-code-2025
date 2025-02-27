@@ -34,7 +34,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 
 public class EndEffectorV2 extends SubsystemBase
 {
-    //change to 25 when done testing.
+    // will be 12.5 on final robot
     final int motorRatio = 25;
     final int gear1Rotation = 1;
     final int gear2Rotation = 1;
@@ -125,7 +125,7 @@ public class EndEffectorV2 extends SubsystemBase
     {
         mTargetAngle = angleDegrees;
 
-        double motorRotations = (angleDegrees/degrees/gear2Rotation) * gear1Rotation * motorRatio;
+        double motorRotations = angleDegrees * motorRatio / degrees;
 
         //System.out.println("Motor " + motorRotations);
         //System.out.println("Encoder " + mEncoder.getPosition());
@@ -146,7 +146,7 @@ public class EndEffectorV2 extends SubsystemBase
     {
         //Set conversion factor
         double motorRotations = mEncoder.getPosition();
-        double angle = (motorRotations * gear2Rotation * degrees) / motorRatio / gear1Rotation;
+        double angle = motorRotations / motorRatio * degrees;
         return angle;
     }
 
