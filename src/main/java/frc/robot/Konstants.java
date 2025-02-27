@@ -269,6 +269,10 @@ public final class Konstants
         /** The length of the simulation loop for telemetry/logging. 
          * Affects the steering and driving inertia.*/
         public static final double kSimulationLoopPeriod = 0.005;
+
+        /** The maximum elevator height in motor rotations in which driving the robot at maximum acceleration 
+         *  will not cause the robot to tip over.*/
+        public static final double kElevatorDriveLimiter = 2.0;
     }
 
 

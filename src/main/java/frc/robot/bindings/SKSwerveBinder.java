@@ -6,6 +6,7 @@ import static frc.robot.Konstants.OIConstants.kDriveCoeff;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
 import static frc.robot.Konstants.OIConstants.kRotationCoeff;
 import static frc.robot.Konstants.OIConstants.kSlowModePercent;
+import static frc.robot.Konstants.SwerveConstants.kElevatorDriveLimiter;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
 import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
 import static frc.robot.Ports.DriverPorts.kSlowMode;
@@ -96,6 +97,14 @@ public class SKSwerveBinder implements CommandBinder{
         this.translationYFilter = new DriveStickFilter(MaxSpeed, driverTranslationSlewPref.get(), kJoystickDeadband);
 
         this.rotationFilter = new DriveStickFilter(MaxAngularRate, driverRotationSlewPref.get(), kJoystickDeadband);
+    }
+
+
+    public double elevatorHeightDriveScalar(double slewRate, double scalar, double elevatorHeight)
+    {
+        double scaledSlewRate = slewRate * scalar;
+        double elevatorScalar = (elevatorHeight / 13.5) + kElevatorDriveLimiter;
+        return scaledSlewRate * elevatorScalar;
     }
 
 
