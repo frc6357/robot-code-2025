@@ -414,6 +414,43 @@ public final class Konstants
         
         public static final double kAccelLimit = 2;
     }
+    public static final class EndEffectorConstants
+    {
+        /** Angles for the different endeffector positions */
+    
+       public static final double kLevel4Angle = -20;     // For the sake of naming consistency, I reccomend renaming constants
+                                                        // to have the format of "kVariableNameHere".
+                                                        // This helps with understanding which variables are changing and which
+                                                        // remain constant. In VSCode, this is super easy to do. Just click on
+                                                        // a variable name (like "level1") and press F2 to rename it. It will
+                                                        // automagically rename itself across all places it's referenced.
+                                                        // You can also right click a variable name and click "Rename Symbol" to
+                                                        // do the same thing.
+                                                        // TODO: Consider using constant-specific nomenclature
+       public static final double kLevel23Angle = -30;    
+       public static final double kLevel1Angle = -40;     
+       public static final double kIntakeAngle = -50;          
+       public static final double kHortizontalAngle = -60;     
+
+       public static final double kArmSpeed = 0.1;
+       public static final double kRollerSpeed = 0.7;
+
+       public static final double kArmTolerance = 1;
+
+       public static final double kCoralToLaserCanDistance = 24;
+
+        // Important Joystick Settings
+        public static final double kJoystickChange   = 0.05; // Manual setpoint value for units from 0.0 - 1.0 moved per second
+        public static final double kJoystickDeadband = 0.3;  // Manual arm movement axis deadband
+        public static final boolean kJoystickReversed = true;  // Determines if the joystick movement is reversed
+        
+        public static final double kEndEffetorMotorMinOutput = -0.5;
+        public static final double kEndEffectorMotorMaxOutput = 0.8;
+
+        public static final PIDConstants endEffectorPID = new PIDConstants(3, 0, 1);
+        public static final PIDConstants balancePID = new PIDConstants(0.0, 0.0, 0.0);
+
+    }   
 
     public static final class LightConstants
     {

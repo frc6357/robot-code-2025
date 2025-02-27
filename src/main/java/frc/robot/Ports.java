@@ -91,9 +91,18 @@ public class Ports
         public static final SKTrigger kResetElevatorPos = new SKTrigger(kOperator, kBack.value, BUTTON);
         public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
 
-        // Party mode
-        public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
-        public static final SKTrigger kLightsOff = new SKTrigger(kOperator, 90, POV);
+    
+        public static final SKTrigger armTrough = new SKTrigger(kOperator, kX.value, BUTTON);
+        public static final SKTrigger armMiddleLow = new SKTrigger(kOperator, kY.value, BUTTON);
+        public static final SKTrigger armHigh = new SKTrigger(kOperator, kA.value, BUTTON);
+        public static final SKTrigger intakebut = new SKTrigger(kOperator, kB.value, BUTTON);
+        public static final SKTrigger zeropos = new SKTrigger(kOperator, kStart.value, BUTTON);
+        public static final SKTrigger resetencoder = new SKTrigger(kOperator, kRightStick.value, BUTTON);
+        public static final SKTrigger rollerintake = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
+        public static final SKTrigger rolleroutput = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
+
+        public static final FilteredAxis endArm = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
+
     }
 
     /*
@@ -136,12 +145,34 @@ public class Ports
 
 
     public static class LightsPorts
+        public static final CANPort kRightElevatorMotor = new CANPort(0, busName);
+        public static final CANPort kLeftElevatorMotor = new CANPort(0, busName);
+        public static final CANPort kEncoderL = new CANPort(0, busName);
+        public static final CANPort kEncoderR = new CANPort(0, busName); 
+    }
+    public static class EndEffectorPorts
     {
-        //bus name is null
         private static final String busName = "";
         //assign an ID of 48 to the CANdle
         public static final CANPort kCANdle = new CANPort(48, busName);
     }
 
     //
+}
+        //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
+        public static final CANPort kEndEffectorArmMotor = new CANPort(33, busName);
+        public static final CANPort kEndEffectorRollerMotor = new CANPort(34, busName);
+        public static final CANPort kLaserCanEndEffector = new CANPort(46, busName);
+
+    }
+
+
+    // public static class ExamplePorts
+    // {
+    //     //bus name is null
+    //     private static final String busName = "";
+
+    //     //assign a motor ID of 49 to the example motor
+    //     public static final CANPort kExampleMotor = new CANPort(59, busName); 
+    // }
 }
