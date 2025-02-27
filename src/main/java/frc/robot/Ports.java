@@ -143,22 +143,19 @@ public class Ports
         //public static final CANPort kEncoderR = new CANPort(44, busName); 
     }
 
-
     public static class LightsPorts
-        public static final CANPort kRightElevatorMotor = new CANPort(0, busName);
-        public static final CANPort kLeftElevatorMotor = new CANPort(0, busName);
-        public static final CANPort kEncoderL = new CANPort(0, busName);
-        public static final CANPort kEncoderR = new CANPort(0, busName); 
-    }
-    public static class EndEffectorPorts
     {
         private static final String busName = "";
         //assign an ID of 48 to the CANdle
         public static final CANPort kCANdle = new CANPort(48, busName);
     }
 
-    //
-}
+    public static class EndEffectorPorts
+    {
+        private static final String busName = "";
+        //assign an ID of 48 to the CANdle
+        public static final CANPort kCANdle = new CANPort(48, busName);
+    
         //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
         public static final CANPort kEndEffectorArmMotor = new CANPort(33, busName);
         public static final CANPort kEndEffectorRollerMotor = new CANPort(34, busName);
