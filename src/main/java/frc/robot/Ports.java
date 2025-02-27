@@ -16,8 +16,6 @@ import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kPigeonID;
-import static frc.robot.utils.SKTrigger.INPUT_TYPE.*;
-//import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.BUTTON;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
 
@@ -26,6 +24,11 @@ import frc.robot.utils.CANPort;
 import frc.robot.utils.SKTrigger;
 import frc.robot.utils.filters.FilteredAxis;
 import frc.robot.utils.filters.FilteredXboxController;
+
+// Unused Imports
+
+//import static frc.robot.utils.SKTrigger.INPUT_TYPE.*;
+//import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
 
 public class Ports
 {

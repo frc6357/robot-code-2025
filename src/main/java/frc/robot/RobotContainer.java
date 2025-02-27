@@ -32,7 +32,6 @@ import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Lights;
 
 // import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.SK25Elevator;
 import frc.robot.bindings.EndEffectorBinder;
 import frc.robot.subsystems.EndEffectorV2;
 import frc.robot.utils.SubsystemControls;
@@ -62,9 +61,8 @@ public class RobotContainer {
   private Optional<SK25Elevator> m_elevator = Optional.empty();
   private Optional<SK25Lights> m_lights = Optional.empty();
   private Optional<SKSwerve> m_swerve = Optional.empty();
-//   private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
-  private Optional<SK25Elevator>    elevatorSubsystem    = Optional.empty();
-  private Optional<EndEffectorV2> endEffector = Optional.empty();
+  // private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
+  private Optional<EndEffectorV2> m_endEffector = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -126,7 +124,7 @@ public class RobotContainer {
             }
             if(subsystems.isEndEffectorPresent())
             {
-                endEffector = Optional.of(new EndEffectorV2());
+                m_endEffector = Optional.of(new EndEffectorV2());
             }
         }
         catch (IOException e)
@@ -148,7 +146,7 @@ public class RobotContainer {
         buttonBinders.add(new SK25LightsBinder(m_lights));
 
         // Adding all the binding classes to the list
-        buttonBinders.add(new EndEffectorBinder(endEffector));
+        buttonBinders.add(new EndEffectorBinder(m_endEffector));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
@@ -207,18 +205,12 @@ public class RobotContainer {
             m_lights.get().testPeriodic();
         }
         if(m_elevator.isPresent())
-
-        // if(mySubsystem.isPresent())
-        // {
-        //     mySubsystem.get().testPeriodic();
-        // }
-        if(elevatorSubsystem.isPresent())
         {
             m_elevator.get().testPeriodic();
         }
-        if(endEffector.isPresent())
+        if(m_endEffector.isPresent())
         {
-            endEffector.get().testPeriodic();
+            m_endEffector.get().testPeriodic();
         }
     }
     public void testInit(){
@@ -231,17 +223,12 @@ public class RobotContainer {
             m_lights.get().testInit();
         }
         if(m_elevator.isPresent())
-        // if(mySubsystem.isPresent())
-        // {
-        //     mySubsystem.get().testInit();
-        // }
-        if(elevatorSubsystem.isPresent())
         {
             m_elevator.get().testInit();
         }
-        if(endEffector.isPresent())
+        if(m_endEffector.isPresent())
         {
-            endEffector.get().testInit();
+            m_endEffector.get().testInit();
         }
     }
 
@@ -255,10 +242,9 @@ public class RobotContainer {
             //elevator.setLeftTargetHeight(0.0);
         //}
         
-
-        if(endEffector.isPresent())
+        if(m_endEffector.isPresent())
         {
-            EndEffectorV2 endeffector = endEffector.get();
+            EndEffectorV2 endeffector = m_endEffector.get();
         }
         
     }

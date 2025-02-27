@@ -5,38 +5,29 @@ import static edu.wpi.first.units.Units.Amps;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.LinearVelocity;
-//import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
-
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.Radians;
 
+// Unused Imports
 
+//import static edu.wpi.first.units.Units.Rotations;
+//import static edu.wpi.first.units.Units.Radians;
 //import edu.wpi.first.units.measure.Distance;
+//import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
+//import edu.wpi.first.math.util.Units;
 
 public final class Konstants
 {
-
     public static final class SwerveConstants
     {
-
-
-
         //Device Settings and Default States
-
-
-
         //pigeon ID
         public static final int kPigeonID = 30; //30
 
@@ -87,11 +78,7 @@ public final class Konstants
         //if the turn motors are inverted
         public static final boolean kTurnMotorsReversed = true;
 
-
-
         //Robot Dimension values
-
-
 
         //swerve chassis width and length in inches 
         public static final int kChassisLength = 27;
@@ -99,7 +86,7 @@ public final class Konstants
 
         // "Front-to-back Encoder Distance in inches"
         public static final double kFrontToBackEncoderDistInches = 21.625;
-        //"Left-to-right Encoder Distance in inches"
+        // "Left-to-right Encoder Distance in inches"
         public static final double kLeftToRightEncoderDistInches = 21.625;
 
         // Module positions for kinematics, distances between encoders divided by two
@@ -139,12 +126,6 @@ public final class Konstants
         public static final double kDriveGearRatio = 6.746031746031747;
         public static final double kTurnGearRatio = 21.428571428571427;
 
-
-
-        //PID values
-
-
-
         //PID Constants for wheels from manual tunning
         public static final double kDriveP = 0.5;
         public static final double kDriveI = 0.0;
@@ -152,7 +133,6 @@ public final class Konstants
         public static final double kDriveS = 0.25;
         public static final double kDriveV = 0.12;
         public static final double kDriveA = 0.01;
-
 
         //rotation controller PID values
         public static final double kPRotationController = 8.0;
@@ -194,12 +174,8 @@ public final class Konstants
 
         public static final double kRotationToleranceRadians = (Math.PI / 360); // rads
 
-
-
         //Robot Speed and Position Measurements
-        
-
-
+    
         /**The velocity limit for the swerve drive modules.*/
         public static final double kMaxVelocityMetersPerSecond = 1.0;  // m/s
 
@@ -229,11 +205,7 @@ public final class Konstants
         public static final Rotation2d kBlueAlliancePerspective = Rotation2d.fromDegrees(0);
         public static final Rotation2d kRedAlliancePerspective = Rotation2d.fromDegrees(180);
      
-
-        
         //Current Limits
-
-
 
         /**The current limit of the turning motors. This number should be relativley low in comparison 
         to the drive motor amperage since rotaing dosn't require nearly as much voltage as driving.*/
@@ -250,11 +222,7 @@ public final class Konstants
         public static final double kTurnFrictionVoltage = 0.25;
         public static final double kDriveFrictionVoltage = 0.25;
 
-
-
         //Other Constants
-
-
 
         //Object containing all the neccessary coonstant values for the Swerve subsystem
         //public static final SwerveConstantsConfigurator config = new SwerveConstantsConfigurator();
@@ -270,8 +238,6 @@ public final class Konstants
          * Affects the steering and driving inertia.*/
         public static final double kSimulationLoopPeriod = 0.005;
     }
-
-
 
     public static final class AutoConstants
     {
@@ -363,7 +329,9 @@ public final class Konstants
         public static final boolean kJoystickReversed = true;  // Determines if the joystick movement is reversed
     }
 
-    public static final class VisionConstants { // Each limelight has a greek letter name and an individual class for their own set of constants
+    public static final class VisionConstants 
+    { 
+        // Each limelight has a greek letter name and an individual class for their own set of constants
         public static final class limelightAlpha {
             // Network/pipeline values
             public static final String kName = "limelight-alpha"; // Hostname? Camera name? TODO: Figure out limelight names
@@ -418,7 +386,7 @@ public final class Konstants
     {
         /** Angles for the different endeffector positions */
     
-       public static final double kLevel4Angle = -20;     // For the sake of naming consistency, I reccomend renaming constants
+       public static final double kLevel4Angle = -20;   // For the sake of naming consistency, I reccomend renaming constants
                                                         // to have the format of "kVariableNameHere".
                                                         // This helps with understanding which variables are changing and which
                                                         // remain constant. In VSCode, this is super easy to do. Just click on

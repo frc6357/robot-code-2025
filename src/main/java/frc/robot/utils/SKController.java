@@ -4,7 +4,7 @@ import static edu.wpi.first.wpilibj.XboxController.Axis.*;
 import static edu.wpi.first.wpilibj.XboxController.Button.*;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.*;
 import static frc.robot.utils.SKCommandXboxTrigger.XBOX_INPUT_TYPE.*;
-import edu.wpi.first.wpilibj.GenericHID.HIDType;
+//import edu.wpi.first.wpilibj.GenericHID.HIDType;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.utils.files.Elastic;

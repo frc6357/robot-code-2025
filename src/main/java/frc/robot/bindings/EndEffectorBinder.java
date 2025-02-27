@@ -6,9 +6,9 @@ import frc.robot.commands.EndEffectorRollerIntakeCommand;
 import frc.robot.commands.EndEffectorRollerOutputCommand;
 import frc.robot.commands.EndEffectorRollerStopCommand;
 import frc.robot.commands.EndEffectorEncoderResetCommand;
-import frc.robot.commands.EndEffectorStop;
+//import frc.robot.commands.EndEffectorStop;
 
-import static frc.robot.Konstants.EndEffectorConstants.kJoystickChange;
+//import static frc.robot.Konstants.EndEffectorConstants.kJoystickChange;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
 import static frc.robot.Konstants.EndEffectorConstants.kLevel1Angle;

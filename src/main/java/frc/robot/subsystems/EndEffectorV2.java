@@ -5,13 +5,13 @@ import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
-import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
-import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
-import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
+//import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
+//import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
+///import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
 
-import edu.wpi.first.math.MathUtil;
+//import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
@@ -24,8 +24,8 @@ import com.revrobotics.RelativeEncoder;
 //import au.grapplerobotics.LaserCan;
 
 import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
-import com.revrobotics.spark.SparkRelativeEncoder;
+//import com.revrobotics.spark.SparkAbsoluteEncoder;
+//import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -135,7 +135,7 @@ public class EndEffectorV2 extends SubsystemBase
             .plus(Degrees.of(90))
             .in(Radians);
         System.out.println(targetAngleRadians);
-        double armFF = armFeedforward.calculate(targetAngleRadians, 0);
+        //double armFF = armFeedforward.calculate(targetAngleRadians, 0);
         mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0);
     }
 
