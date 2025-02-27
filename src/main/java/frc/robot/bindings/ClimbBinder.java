@@ -1,14 +1,16 @@
 package frc.robot.bindings;
 
-import static frc.robot.Konstants.ClimbConstants.kKrakenSpeed;
-import static frc.robot.Konstants.ClimbConstants.kMaxSpeed;
-import static frc.robot.Konstants.ClimbConstants.kTestSpeed;
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static frc.robot.Konstants.ClimbConstants.kVolts;
+import static frc.robot.Konstants.ClimbConstants.sigma;
 import static frc.robot.Ports.OperatorPorts.*;
 import frc.robot.subsystems.SK25Climb;
 import frc.robot.commands.*;
 
 import java.util.Optional;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -37,8 +39,12 @@ public class ClimbBinder implements CommandBinder {
             raise.onTrue(new ClimbCommand1(subsys));
             lower.onTrue(new ClimbCommandReturn(subsys));
             stop.onTrue(new ClimbCommandStop(subsys));
-            slow.onTrue(new ClimbCommandSlow(subsys));
+            slow.whileTrue(new ClimbCommandSlow(subsys));
+            slow.onFalse(new InstantCommand(() -> subsys.runMotor(kVolts)));
 
+             //No-Eyeballing
+               //raise.onTrue(new InstantCommand(() -> subsys.setSetpoint(sigma.getMeasure())));
+            //Angle.in(Degrees.of(620));
             // //Press to slow
             // slow.whileTrue(new InstantCommand(() -> subsys.cambiarVelocidad(kTestSpeed)));
             // slow.onFalse(new InstantCommand(() -> subsys.cambiarVelocidad(kMaxSpeed)));

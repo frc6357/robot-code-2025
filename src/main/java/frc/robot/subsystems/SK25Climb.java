@@ -9,6 +9,13 @@ import frc.robot.preferences.SKPreferences;
 import static edu.wpi.first.units.Units.Rotations;
 import static frc.robot.Konstants.ClimbConstants.*;
 import static frc.robot.Ports.ClimbPorts.*;
+import static edu.wpi.first.units.Units.Rotation;
+import static edu.wpi.first.units.Units.Volts;
+import static frc.robot.Konstants.ClimbConstants.kClimbD;
+import static frc.robot.Konstants.ClimbConstants.kClimbI;
+import static frc.robot.Konstants.ClimbConstants.kClimbP;
+import static frc.robot.Konstants.ClimbConstants.kVolts;
+import static frc.robot.Ports.ClimbPorts.kClimbMotor;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -17,22 +24,14 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreCANcoder;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
-//Encoder Import
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkClosedLoopController;
-
-//SparkMax Motor Imports, and Configurations
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
-import    com.revrobotics.spark.config.*;
-import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Angle;
 //SmartDashboard Import
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SK25Climb extends SubsystemBase 
 {
@@ -50,7 +49,9 @@ public class SK25Climb extends SubsystemBase
    boolean atTarget;
    double timestamp;
    
-   // double motorCurrentPosition;
+   double motorCurrentPosition;
+   PositionVoltage why;
+
    // double motorTargetPosition;
 
    Pref<Double> climbkPPref = SKPreferences.attach("climbP", 1.0)
@@ -64,31 +65,48 @@ public class SK25Climb extends SubsystemBase
    public SK25Climb() 
    {
       //Initializations
-      timestamp = 0.0;
-       motor = new TalonFX(kClimbMotor.ID);
-       climbPID = new PhoenixPIDController(kClimbP, kClimbI, kClimbD);
-       climbPID0 = new Slot0Configs()
-         .withKP(climbkPPref.get())
-         .withKI(climbkIPref.get())
-         .withKD(climbkDPref.get())
-         .withGravityType(GravityTypeValue.Arm_Cosine); // Gravity based feedforwards for an arm; bases output on motor position
-       motorConfig = new TalonFXConfiguration()
-         .withSlot0(climbPID0);
+      // timestamp = 0.0;
+      //  motor = new TalonFX(kClimbMotor.ID);
+      //  climbPID = new PhoenixPIDController(kClimbP, kClimbI, kClimbD);
+      //  climbPID0 = new Slot0Configs()
+      //    .withKP(climbkPPref.get())
+      //    .withKI(climbkIPref.get())
+      //    .withKD(climbkDPref.get())
+      //    .withGravityType(GravityTypeValue.Arm_Cosine); // Gravity based feedforwards for an arm; bases output on motor position
+      //  motorConfig = new TalonFXConfiguration()
+      //    .withSlot0(climbPID0);
 
        //encoder = new CoreCANcoder(kClimbEncoderID);
        //encoder.setPosition(kClimbMinPosition);
+       motor = new TalonFX(kClimbMotor.ID, kClimbMotor.bus);
+      // climbPID = new PhoenixPIDController(kClimbP, kClimbI, kClimbD);
+      //  config = new TalonFXConfiguration();
+      //  why = new PositionVoltage(0).withSlot(0);
+      //  TalonFXConfiguration configar = new TalonFXConfiguration();
+      //  Slot0Configs configs = new Slot0Configs();
+      //  configs.kP = kClimbP;
+      //  configs.kI = kClimbI;
+      //  configs.kD = kClimbD;
 
-       //motorCurrentPosition = 0.0;
+      //  configar.Voltage.withPeakForwardVoltage(Volts.of(0))
+      //    .withPeakReverseVoltage(Volts.of(-0));
+
+
+       motorCurrentPosition = 0.0;
       // motorTargetPosition = 0.0;
 
 
 
       climbPID.reset();
       climbPID.setTolerance(kClimbPositionTolerance);
+      motor.setPosition(0.0);
+      //motor.getConfigurator().apply(configs);
    }
 
-   public void runMotor(double speed) {
-      motor.setControl(new VelocityVoltage(speed));
+   //If we Eyeball
+   public void runMotor(double volts) {
+     // motor.setControl(new VelocityVoltage(speed));
+     motor.setVoltage(volts);
    }
 
    public double getMotorSpeed() {
@@ -99,8 +117,16 @@ public class SK25Climb extends SubsystemBase
       return motor.getPosition().getValueAsDouble(); // Rotations
    }
 
+
    public double getTargetPosition() {
       return motor.getClosedLoopReference().getValueAsDouble();
+   }
+
+   //If we don't Eyeball
+   public void setSetpoint(Angle setpoint) {
+      //motor.setControl(why.withPosition(10));
+      // motor.setPosition(setpoint);
+      motor.setVoltage(3);
    }
 
    public void stop() {
@@ -147,5 +173,7 @@ public class SK25Climb extends SubsystemBase
       timestamp += Robot.kDefaultPeriod;
     //  motorCurrentPosition = getMotorPosition(); //why is this here?
      // SmartDashboard.putNumber("Velocity (RPMs)", getMotorSpeed());
+     motorCurrentPosition =  motor.getPosition().getValue().in(Rotation);
+      SmartDashboard.putNumber("Velocity (RpMs)", motorCurrentPosition);
    }
 }

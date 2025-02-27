@@ -19,7 +19,7 @@ public class ClimbCommand1 extends Command{
 
     @Override
     public void execute() {
-        climb.runMotor(kKrakenSpeed);
+        climb.runMotor(kVolts);
     }
 
     @Override

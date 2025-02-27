@@ -99,8 +99,8 @@ public class Ports
 
     public static class ClimbPorts
     {
-        private static final String busName = "SwerveCANivore";
-        public static final CANPort kClimbMotor = new CANPort(69, busName);
+        private static final String busName = "rio";
+        public static final CANPort kClimbMotor = new CANPort(62, busName);
         
     }
 
