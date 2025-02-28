@@ -180,7 +180,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
      * @return if the pose was accepted and integrated
      */
     public boolean resetPoseToVision(
-            boolean targetInView, Pose3d botpose3D, Pose2d megaPose, double poseTimestamp) {
+        boolean targetInView, Pose3d botpose3D, Pose2d megaPose, double poseTimestamp) {
         boolean reject = false;
         if (targetInView) {
             Pose2d botpose = botpose3D.toPose2d();
