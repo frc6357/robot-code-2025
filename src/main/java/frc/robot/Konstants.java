@@ -454,7 +454,7 @@ public final class Konstants
 
     public static final class LightConstants
     {
-        public static final int numLedOnBot = 240;
+        public static final int kNumLedOnBot = 240;
         public static final double kLightsOffBrightness = 0.0;
         public static final double kLightsOnBrightness = 0.5;
     }

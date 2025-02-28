@@ -22,12 +22,15 @@ import static frc.robot.Ports.LightsPorts.*;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 
 public class SK25Lights{
-    Optional<CANdle> candle;
     SimpleWidget colorWidget;
     boolean isFinished;
+
+    private boolean isPresent;
+
+    private CANdle m_candle;
     
-    public SK25Lights(){
-        candle = Optional.empty();
+    public SK25Lights(Optional<CANdle> candle){
+        m_candle = candle.get();
     }
 
     /**
@@ -36,7 +39,6 @@ public class SK25Lights{
      */
     public void init()
     {
-        candle = Optional.of(new CANdle(kCANdle.ID)); // creates a new CANdle with ID kCANdle's ID from ports
         
         CANdleConfiguration config = new CANdleConfiguration();
         
@@ -48,9 +50,9 @@ public class SK25Lights{
         config.brightnessScalar = 0.5; // dim the LEDs to half brightness
         config.v5Enabled = false;
         
-        candle.get().configAllSettings(config);
+        m_candle.configAllSettings(config);
 
-        candle.get().clearAnimation(1);
+        m_candle.clearAnimation(1);
         this.setTeamColor();
 
         
@@ -63,7 +65,7 @@ public class SK25Lights{
      * @param blue The amount of Blue to set, range is [0, 255]
      */
     public void setLight(int red, int green, int blue, int numLed){
-        if(candle.isPresent()){ candle.get().setLEDs(red, green, blue, 0, 8, numLed);} 
+        if(candle.isPresent()){ m_candle.setLEDs(red, green, blue, 0, 8, numLed);} 
     }
 
     /**
@@ -72,16 +74,16 @@ public class SK25Lights{
      */
     public void setBrightness(double bright){
         
-        if(candle.isPresent()){ candle.get().configBrightnessScalar(bright);}
+        if(candle.isPresent()){ m_candle.configBrightnessScalar(bright);}
     }
 
     public void RainbowAnimate(double brightness, double speed, int numLed){
         RainbowAnimation animation = new RainbowAnimation(brightness, speed, numLed, false, 8);
-        if(candle.isPresent()){ candle.get().animate(animation, 1);}
+        if(candle.isPresent()){ m_candle.animate(animation, 1);}
     }
 
     public void clearAnimate(){
-        if(candle.isPresent()){ candle.get().clearAnimation(1);}
+        if(candle.isPresent()){ m_candle.clearAnimation(1);}
     }
 
     public boolean isFinished()
@@ -94,68 +96,74 @@ public class SK25Lights{
     }
 
     public void setOrange(){
-        setLight(255, 24, 0, numLedOnBot);
+        setLight(255, 24, 0, kNumLedOnBot);
     }
 
     public void setGreen(){
-        setLight(0, 255, 0, numLedOnBot);
+        setLight(0, 255, 0, kNumLedOnBot);
     }
 
     public void setRed(){
-        setLight(255,0,0,numLedOnBot);
+        setLight(255,0,0,kNumLedOnBot);
     }
 
     public void setPurple(){
-        setLight( 128, 10, 128, numLedOnBot);
+        setLight( 128, 10, 128, kNumLedOnBot);
     }
 
     public void setTeamColor()
     {
-        setLight(0, 250, 150, numLedOnBot);
+        setLight(0, 250, 150, kNumLedOnBot);
     }
 
     public void setPartyMode()
     {
-        RainbowAnimate(1.0, 1.0, numLedOnBot);
+        RainbowAnimate(1.0, 1.0, kNumLedOnBot);
+    }
+
+    public void strobeLightsGreenWhite(int r, int g, int b, int w)
+    {
+        StrobeAnimation animation = new StrobeAnimation(0, 255,0, 255, 100, kNumLedOnBot);
+        animation.setR(0);
     }
     
     
     public void FlowAnimate(int r, int g, int b, double speed, int numLed, Direction direction, int offset){
 
         ColorFlowAnimation animation = new ColorFlowAnimation( r,  g,  b,  0,  speed,  numLed,  direction, offset);
-        if(candle.isPresent()){ candle.get().animate(animation, 1);}
+        m_candle.animate(animation, 1);
     }
 
     public void FireAnimate(double brightness, double speed, int numLed, double sparking, double cooling){
         FireAnimation animation = new FireAnimation(brightness, speed, numLed, sparking, cooling, false, 8);
-        if(candle.isPresent()){ candle.get().animate(animation, 1);}
+        m_candle.animate(animation, 1);
     }
 
     public void LarsonAnimate(int r, int g, int b, int numLed){
         BounceMode mode = BounceMode.Center;
         LarsonAnimation animation = new LarsonAnimation(r, g, b, 0, 0.1, numLed, mode, numLed / 2, 8 );
-        if(candle.isPresent()){ candle.get().animate(animation, 1);}
+        m_candle.animate(animation, 1);
     }
 
     public void RgbFadeAnimate(double brightness, double speed, int numLed){
         RgbFadeAnimation animation = new RgbFadeAnimation(brightness, speed, numLed, 8);
-        if(candle.isPresent()){ candle.get().animate(animation, 1);}
+        m_candle.animate(animation, 1);
     }
 
     public void SingleFadeAnimate(int r, int g, int b, double speed, int numLed){
         SingleFadeAnimation animation = new SingleFadeAnimation(r, g, b, 0, speed, numLed, 8);
-        if(candle.isPresent()){ candle.get().animate(animation, 1);}
+        m_candle.animate(animation, 1);
     }
 
     public void StrobeAnimate(int r, int g, int b, double speed, int numLed){
         StrobeAnimation animation = new StrobeAnimation(r, g, b, 0, speed, numLed, 8);
-        if(candle.isPresent()){ candle.get().animate(animation, 1);}
+        m_candle.animate(animation, 1);
     }
 
     public void TwinkleAnimate(int r, int g, int b, int numLed){
         TwinklePercent percent = TwinklePercent.Percent100;
         TwinkleAnimation animation = new TwinkleAnimation(r, g, b, 0, 1.0, numLed, percent, 8);
-        if(candle.isPresent()){ candle.get().animate(animation, 1);}
+        m_candle.animate(animation, 1);
     }
 
     //occurs every 20 miliseconds, usually not tied to a command, binder, etc...

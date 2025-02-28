@@ -5,6 +5,7 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static frc.robot.Ports.LightsPorts.kCANdle;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.ctre.phoenix.led.CANdle;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -115,7 +117,10 @@ public class RobotContainer {
             // }
             if(subsystems.isLightsPresent())
             {
-                m_lights = Optional.of(new SK25Lights());
+                Optional<CANdle>candle = Optional.of(new CANdle(kCANdle.ID));
+                if(candle.isPresent()) {
+                    m_lights = Optional.of(new SK25Lights(candle));
+                }   
             }
             if(subsystems.isElevatorPresent())
             {
