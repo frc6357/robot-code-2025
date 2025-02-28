@@ -105,7 +105,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             }
         }
         catch(Exception e) {
-            DriverStation.reportWarning("Vision: Attempted to access nonexistant vision pose!", false);
+            DriverStation.reportWarning("Vision: Attempted to access nonexistent vision pose!", false);
         }
 
     }
