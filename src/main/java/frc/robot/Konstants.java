@@ -384,6 +384,29 @@ public final class Konstants
     }
     public static final class EndEffectorConstants
     {
+        /** Heights for the different elevator positions */
+        public static enum EndEffectorPosition
+        {
+            //TODO FIX DURING TESTING - Measure Elevator Heights
+
+            /** Set the height to reach the top branch (L4) */ // 12.5
+            kTopPositionAngle(-20), // 13.5 rotations of hex shaft
+            /** Set the height to reach the middle branch (L3) */
+            kMidLowPositionAngle(-30), // 9.5 rotations of hex shaft
+            /** Set the height to reach the low branch (L2) */
+            kTroughPositionAngle(-40), // 7 rotations of hex shaft
+            /** Set the height to reach the trough (L1) */
+            kIntakePositionAngle(-50), // 3 rotations of hex shaft
+            /** Set the height to reach the bottom */
+            kZeroPosition(-60);
+
+            public final double angle;
+
+            EndEffectorPosition(double angle)
+            {
+                this.angle = angle;
+            }
+        }
         /** Angles for the different endeffector positions */
     
        public static final double kLevel4Angle = -20;   // For the sake of naming consistency, I reccomend renaming constants

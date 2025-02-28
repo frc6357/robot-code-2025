@@ -7,16 +7,18 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
+import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
+
 public class EndEffectorButtonCommand extends Command{
 
     private final EndEffectorV2 endEffector;
-    private final double position;
+    private final EndEffectorPosition angle;
 
     RelativeEncoder mEncoder;
 
-    public EndEffectorButtonCommand(double position, EndEffectorV2 endEffector)
+    public EndEffectorButtonCommand(EndEffectorPosition angle, EndEffectorV2 endEffector)
     {
-        this.position = position;
+        this.angle = angle;
         this.endEffector = endEffector;
         this.mEncoder = endEffector.mEncoder;
 
@@ -28,7 +30,7 @@ public class EndEffectorButtonCommand extends Command{
     {
         //System.out.println("Position: " + position);
        // System.out.println("Encoder position: " + mEncoder.getPosition());
-        endEffector.setTargetAngle(-position);
+        endEffector.setTargetAngle(angle);
         endEffector.isRunning = true;
     }
 

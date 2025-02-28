@@ -13,6 +13,8 @@ import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 import edu.wpi.first.math.controller.ArmFeedforward;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
+import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 
@@ -119,6 +121,11 @@ public class EndEffectorV2 extends SubsystemBase
     public void resetEncoder()
     {
         mEncoder.setPosition(0);
+    }
+
+    public void setTargetAngle(EndEffectorPosition pos)
+    {
+        setTargetAngle(pos.angle);
     }
 
     public void setTargetAngle(double angleDegrees)
