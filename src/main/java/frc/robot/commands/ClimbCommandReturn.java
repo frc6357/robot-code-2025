@@ -18,18 +18,11 @@ public class ClimbCommandReturn extends Command{
 
     @Override
     public void execute() {
-       climb.runMotor(-kVolts);
+       climb.runMotor(-kKrakenSpeed);
     }
 
     @Override
     public void end(boolean interrupted) {
-        
+        climb.runMotor(0);
     }
-
-    @Override
-    public boolean isFinished() {
-        return true;
-    }
-
-
 }

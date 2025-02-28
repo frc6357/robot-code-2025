@@ -3,7 +3,6 @@ package frc.robot.bindings;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static frc.robot.Konstants.ClimbConstants.kVolts;
-import static frc.robot.Konstants.ClimbConstants.sigma;
 import static frc.robot.Ports.OperatorPorts.*;
 import frc.robot.subsystems.SK25Climb;
 import frc.robot.commands.*;
@@ -36,11 +35,11 @@ public class ClimbBinder implements CommandBinder {
         if (subsystem.isPresent()) 
         {
             SK25Climb subsys = subsystem.get();
-            raise.onTrue(new ClimbCommand1(subsys));
-            lower.onTrue(new ClimbCommandReturn(subsys));
-            stop.onTrue(new ClimbCommandStop(subsys));
-            slow.whileTrue(new ClimbCommandSlow(subsys));
-            slow.onFalse(new InstantCommand(() -> subsys.runMotor(kVolts)));
+            raise.whileTrue(new ClimbCommand1(subsys));
+            lower.whileTrue(new ClimbCommandReturn(subsys));
+           // stop.whileTrue(new ClimbCommandStop(subsys));
+            // slow.whileTrue(new ClimbCommandSlow(subsys));
+            // slow.onFalse(new InstantCommand(() -> subsys.runMotor(kVolts)));
 
              //No-Eyeballing
                //raise.onTrue(new InstantCommand(() -> subsys.setSetpoint(sigma.getMeasure())));

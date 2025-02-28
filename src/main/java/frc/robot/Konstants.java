@@ -60,7 +60,7 @@ public final class Konstants
         public static final double kClimbMaxAcceleration = 1000;
         public static final int kClimbCurrentLimit = 50;
         public static final double kClimbMaxPosition = 30.0;
-        public static final Rotation2d sigma = Rotation2d.fromDegrees(3600);
+     //   public static final Rotation2d sigma = Rotation2d.fromDegrees(3600);
        // public static final Angle kAngleMax = kClimbMaxPosition.in(Units.Angle);
         public static final double kClimbMinPosition = 0.0;
         public static final double kClimbPositionTolerance = 0.1;

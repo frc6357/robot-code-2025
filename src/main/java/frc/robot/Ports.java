@@ -58,7 +58,7 @@ public class Ports
 
         // Party mode
         public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kBack.value, BUTTON);
-        public static final SKTrigger kLightsOff = new SKTrigger(kOperator, 90, POV);
+     //   public static final SKTrigger kLightsOff = new SKTrigger(kOperator, 90, POV);
 
         //Climb
         public static final SKTrigger climbRaiseButton = new SKTrigger(kOperator, 0, POV);
@@ -99,7 +99,7 @@ public class Ports
 
     public static class ClimbPorts
     {
-        private static final String busName = "rio";
+        private static final String busName = "";
         public static final CANPort kClimbMotor = new CANPort(62, busName);
         
     }
