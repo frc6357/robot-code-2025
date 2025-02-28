@@ -1,42 +1,40 @@
 package frc.robot.bindings;
 
-import static edu.wpi.first.units.Units.*;
-
-import static frc.robot.Konstants.OIConstants.kDriveCoeff;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
-import static frc.robot.Konstants.OIConstants.kRotationCoeff;
+import static frc.robot.Konstants.OIConstants.kMaxFullSpeedElevatorHeight;
 import static frc.robot.Konstants.OIConstants.kSlowModePercent;
-import static frc.robot.Konstants.SwerveConstants.kElevatorDriveLimiter;
+import static frc.robot.Ports.DriverPorts.kDriveFn;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
 import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
 import static frc.robot.Ports.DriverPorts.kSlowMode;
 import static frc.robot.Ports.DriverPorts.kTranslationXPort;
 import static frc.robot.Ports.DriverPorts.kTranslationYPort;
 import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;
-import static frc.robot.Ports.DriverPorts.kDriveFn;
-
-// Filters used for input types (specifically Axis inputs)
-import frc.robot.utils.filters.DeadbandFilter;
-import frc.robot.utils.filters.Filter;
-import frc.robot.utils.filters.DriveStickFilter;
-import lombok.Getter;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-// Used for binding buttons to drive actions
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-
-import frc.robot.TunerConstants;
-
-// Adds the Swerve subsystem for construction
-import frc.robot.subsystems.SKSwerve;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+// Used for binding buttons to drive actions
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.RobotContainer;
+import frc.robot.TunerConstants;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
+import frc.robot.subsystems.SK25Elevator;
+// Adds the Swerve subsystem for construction
+import frc.robot.subsystems.SKSwerve;
+// Filters used for input types (specifically Axis inputs)
+import frc.robot.utils.filters.DeadbandFilter;
+import frc.robot.utils.filters.DriveStickFilter;
+import frc.robot.utils.filters.Filter;
+import lombok.Getter;
 
 /* Leftover code from Phoenix's configureBindings():
     joystick.a().whileTrue(m_swerve.get().applyRequest(() -> brake));
@@ -91,20 +89,70 @@ public class SKSwerveBinder implements CommandBinder{
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
 
-    public SKSwerveBinder(Optional<SKSwerve> m_drive) {
+    public SKSwerveBinder(Optional<SKSwerve> m_drive, Optional<SK25Elevator> m_elevator) {
         this.m_drive = m_drive;
-        this.translationXFilter = new DriveStickFilter(MaxSpeed, driverTranslationSlewPref.get(), kJoystickDeadband);
-        this.translationYFilter = new DriveStickFilter(MaxSpeed, driverTranslationSlewPref.get(), kJoystickDeadband);
+        // apply acceleration limits based on the elevator height if the elevator is present
+        if(m_elevator.isPresent())
+        {
+            this.translationXFilter = new DriveStickFilter(
+                MaxSpeed, 
+                elevatorHeightDriveScalar(
+                    driverTranslationSlewPref.get(), 
+                    m_elevator.get().getCurrentHeightMotorRotations()),
+                kJoystickDeadband);
+            this.translationYFilter = new DriveStickFilter(
+                MaxSpeed, 
+                elevatorHeightDriveScalar(
+                    driverTranslationSlewPref.get(), 
+                    m_elevator.get().getCurrentHeightMotorRotations()), 
+                kJoystickDeadband);
 
-        this.rotationFilter = new DriveStickFilter(MaxAngularRate, driverRotationSlewPref.get(), kJoystickDeadband);
+            //rotation filter dosnt need to be scaled by elevator height since it dosn't affect the
+            //magnitude of the robot's velocity vecotr.
+            this.rotationFilter = new DriveStickFilter(
+                MaxAngularRate, 
+                driverRotationSlewPref.get(), 
+                kJoystickDeadband);
+        }
+        //if the elevator is absent, apply the default slew rates
+        else
+        {
+            this.translationXFilter = new DriveStickFilter(
+                MaxSpeed, 
+                driverTranslationSlewPref.get(),
+                kJoystickDeadband);
+            this.translationYFilter = new DriveStickFilter(
+                MaxSpeed, 
+                driverTranslationSlewPref.get(), 
+                kJoystickDeadband);
+
+            this.rotationFilter = new DriveStickFilter(
+                MaxAngularRate, 
+                driverRotationSlewPref.get(), 
+                kJoystickDeadband);
+        }
     }
 
 
-    public double elevatorHeightDriveScalar(double slewRate, double scalar, double elevatorHeight)
+    /** Adds the slew rate required to accelerate at the maximum possible value without tipping over. Uses
+     * the elevator height to add a slew rate to the current rate by increasing or decreasing the added
+     * value as a percentage.
+     * @param slewaRate The default slew rate (limit in the change in input value from the joystick) of
+     * the drive.
+     * @param elevatorHeight The current height of the elevator in motor rotations.
+     * @return The slew rate of the swerve with the elevator height accounted for.
+     */
+    public double elevatorHeightDriveScalar(double slewRate, Supplier<Double> elevatorHeight)
     {
-        double scaledSlewRate = slewRate * scalar;
-        double elevatorScalar = (elevatorHeight / 13.5) + kElevatorDriveLimiter;
-        return scaledSlewRate * elevatorScalar;
+        if (elevatorHeight.get() <= kMaxFullSpeedElevatorHeight)
+        {
+            return slewRate;
+        }
+        else
+        {
+            double scaledElevatorRate = (elevatorHeight.get() / 13.5) - (kMaxFullSpeedElevatorHeight / 13.5);
+            return scaledElevatorRate + slewRate;
+        }
     }
 
 

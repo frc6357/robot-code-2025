@@ -1,44 +1,38 @@
 // Essentials
 package frc.robot.subsystems;
-import frc.robot.subsystems.superclasses.Elevator;
-
-// Constants (Muy Importante)
-import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
 import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
-
 // Ports
 import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
 import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
 
+import java.util.function.Supplier;
+
 // Relative Encoder
 import com.revrobotics.RelativeEncoder;
-
 // Closed Loop
 import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
 // Motors - Sparkflex
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+// Limit Switches
+import com.revrobotics.spark.config.LimitSwitchConfig.Type;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 // Configurations For Motors
 import com.revrobotics.spark.config.SparkFlexConfig;
 
-// Limit Switches
-import com.revrobotics.spark.config.LimitSwitchConfig.Type;
-import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
-import com.revrobotics.spark.SparkLimitSwitch;
-
 // SmartDashboard
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+// Constants (Muy Importante)
+import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
 // Preferences
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
+import frc.robot.subsystems.superclasses.Elevator;
 
 public class SK25Elevator extends Elevator
 {
@@ -188,6 +182,16 @@ public class SK25Elevator extends Elevator
     public boolean isAtTargetPosition()
     {
         return Math.abs(getEncoderPosition() - getTargetPosition()) < kPositionTolerance;
+    }
+
+    /**For use with SwerveBinder acceleration limits on the swerve based on the elevator height.
+     * Uses a supplier to get the most recent value.
+     * @return The current elevator height supplier.
+     */
+    public Supplier<Double> getCurrentHeightMotorRotations()
+    {
+        Supplier<Double> currentHeightSupplier = ()-> currentHeight;
+        return currentHeightSupplier;
     }
 
     @Override
