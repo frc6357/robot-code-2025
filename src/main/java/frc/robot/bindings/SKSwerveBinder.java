@@ -166,44 +166,47 @@ public class SKSwerveBinder implements CommandBinder{
     @Override
     public void bindButtons()
     {
-        if (m_drive.isPresent())
+        if (!m_drive.isPresent())
         {
-            SKSwerve drivetrain = m_drive.get();
+            return;
+        }
+        
+        SKSwerve drivetrain = m_drive.get();
+        
+        // Sets filters for driving axes
+        kTranslationXPort.setFilter(translationXFilter);
+        kTranslationYPort.setFilter(translationYFilter);
+        kVelocityOmegaPort.setFilter(rotationFilter);
 
-            drivetrain.setDefaultCommand(
+        //Apply slow mode if activated
+        slowmode.onTrue(new InstantCommand(() -> setSlowMode(true)));
+        slowmode.onFalse(new InstantCommand(() -> setSlowMode(false)));
+        
+        // Resets gyro angles / robot oreintation
+        resetButton.onTrue(new InstantCommand(() -> {drivetrain.seedFieldCentric();} ));
+
+        //If slowMode is enabled, drive at the slowMode speed.
+        if (slowModeStatus)
+        {
+            this.translationXFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
+            this.translationYFilter.setMaxSpeed(MaxSpeed *kSlowModePercentage);
+            this.rotationFilter.setMaxSpeed(MaxAngularRate * kSlowModePercentage);
+        }
+        //If slow mode is not enabled, drive at the default speed.
+        else
+        {
+            this.translationXFilter.setMaxSpeed(MaxSpeed);
+            this.translationYFilter.setMaxSpeed(MaxSpeed);
+            this.rotationFilter.setMaxSpeed(MaxAngularRate);
+        }
+
+        drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> {
-                return drive.withVelocityX(kTranslationXPort.getFilteredAxis()) // Drive forward with negative Y (forward)
+                return feildCentricDrive.withVelocityX(kTranslationXPort.getFilteredAxis()) // Drive forward with negative Y (forward)
                     .withVelocityY(kTranslationYPort.getFilteredAxis()) // Drive left with negative X (left)
                     .withRotationalRate(kVelocityOmegaPort.getFilteredAxis()); // Drive counterclockwise with negative X (left)
-            }));
-            
-            // Sets filters for driving axes
-            kTranslationXPort.setFilter(translationXFilter);
-            kTranslationYPort.setFilter(translationYFilter);
-            kVelocityOmegaPort.setFilter(rotationFilter);
-
-            //Apply slow mode if activated
-            slowmode.onTrue(new InstantCommand(() -> setSlowMode(true)));
-            slowmode.onFalse(new InstantCommand(() -> setSlowMode(false)));
-            
-            // Resets gyro angles / robot oreintation
-            resetButton.onTrue(new InstantCommand(() -> {drivetrain.seedFieldCentric();} ));
-
-            //If slowMode is enabled, drive at the slowMode speed.
-            if (slowModeStatus)
-            {
-                this.translationXFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
-                this.translationYFilter.setMaxSpeed(MaxSpeed *kSlowModePercentage);
-                this.rotationFilter.setMaxSpeed(MaxAngularRate * kSlowModePercentage);
-            }
-            }
-            //If slow mode is not enabled, drive at the default speed.
-            else
-            {
-                this.translationXFilter.setMaxSpeed(MaxSpeed);
-                this.translationYFilter.setMaxSpeed(MaxSpeed);
-                this.rotationFilter.setMaxSpeed(MaxAngularRate);
-            }
+            })
+        );
     }
 }
