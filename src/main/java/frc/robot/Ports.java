@@ -81,29 +81,23 @@ public class Ports
 
         // Party mode and Teal Lights
         public static final SKTrigger kPartyModeButton = new SKTrigger(kOperator, kStart.value, BUTTON);
-        public static final SKTrigger kLightsToTealButton = new SKTrigger(kOperator, kBack.value, BUTTON);
-        // Elevator
+        // Elevator & End Effector
         public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
         public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
         public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
         public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
         public static final SKTrigger kZeroPositionOperator  = new SKTrigger(kOperator, kStart.value, BUTTON);
+        public static final SKTrigger kIntakePos = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
+        public static final SKTrigger kNetPos = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
         // Elevator Overrides
         public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
+        public static final FilteredAxis endArm = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
+        // Misc.
         public static final SKTrigger kResetElevatorPos = new SKTrigger(kOperator, kBack.value, BUTTON);
         public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
-
-        //public static final SKTrigger armTrough = new SKTrigger(kOperator, kX.value, BUTTON);
-        //public static final SKTrigger armMiddleLow = new SKTrigger(kOperator, kY.value, BUTTON);
-        //public static final SKTrigger armHigh = new SKTrigger(kOperator, kA.value, BUTTON);
-        public static final SKTrigger intakebut = new SKTrigger(kOperator, kB.value, BUTTON);
-        //public static final SKTrigger zeropos = new SKTrigger(kOperator, kStart.value, BUTTON);
         public static final SKTrigger resetencoder = new SKTrigger(kOperator, kRightStick.value, BUTTON);
-        public static final SKTrigger rollerintake = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
-        public static final SKTrigger rolleroutput = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
-
-        public static final FilteredAxis endArm = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
-
+        public static final SKTrigger rollerintake = new SKTrigger(kOperator, kRightTrigger.value, BUTTON);
+        public static final SKTrigger rolleroutput = new SKTrigger(kOperator, kLeftTrigger.value, BUTTON);
     }
 
     /*

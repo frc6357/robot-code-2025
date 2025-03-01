@@ -276,9 +276,13 @@ public final class Konstants
             //TODO FIX DURING TESTING - Measure Elevator Heights
 
             /** Set the height to reach the top branch (L4) */ // 12.5
+            kNetPosition(14), // 13.5 rotations of hex shaft
+            /** Set the height to reach the top branch (L4) */ // 12.5
             kTopPosition(13.5), // 13.5 rotations of hex shaft
             /** Set the height to reach the middle branch (L3) */
             kMidPosition(9.5), // 9.5 rotations of hex shaft
+            /** Set the height to reach the low branch (L2) */
+            kIntakePosition(8.5), // 8.5 rotations of hex shaft
             /** Set the height to reach the low branch (L2) */
             kLowPosition(7), // 7 rotations of hex shaft
             /** Set the height to reach the trough (L1) */
@@ -390,18 +394,14 @@ public final class Konstants
         {
             /** Set the angle to reach the top branch (L4) */ // 12.5
             kTopPositionAngle(-20), // Angle
-
             /** Set the angle to reach the middle & low branch (L3) */
             kMidLowPositionAngle(-30), // Angle
-
             /** Set the angle to reach the trough (L2) */
             kTroughPositionAngle(-40), // Angle
-
             /** Set the height to reach the station (L1) */
             kIntakePositionAngle(-50), // Angle
-
             /** Set the height to reach the bottom */
-            kZeroPositionAngle(-60);
+            kZeroPositionAngle(-60); // Angle
 
             public final double angle;
 

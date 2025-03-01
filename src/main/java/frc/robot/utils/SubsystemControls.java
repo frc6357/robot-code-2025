@@ -17,8 +17,6 @@ public class SubsystemControls
      /**  
      * @param swerve
      *            indicates if the swerve subsystem is present and should be enabled
-     * @param example
-     *            indicates if the example subsystem is present and should be enabled
      * @param lights
      *            indicates if the lights subsystem is present and should be enabled
      */
@@ -26,7 +24,6 @@ public class SubsystemControls
         @JsonProperty(required = true, value = "swerve")      boolean swerve,
         @JsonProperty(required = true, value = "lights")      boolean lights,
         @JsonProperty(required = true, value = "elevator")      boolean elevator,
-        @JsonProperty(required = true, value = "example")      boolean example,
         @JsonProperty(required = true, value = "endeffector") boolean endeffector
     )
     {

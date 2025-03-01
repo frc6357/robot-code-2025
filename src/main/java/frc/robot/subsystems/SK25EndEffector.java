@@ -34,7 +34,6 @@ import com.revrobotics.spark.SparkMax;
 
 public class SK25EndEffector extends SubsystemBase
 {
-    //TODO: Check these ratios
     final int motorRatio = 25;
     final int gear1Rotation = 1;
     final int gear2Rotation = 1;

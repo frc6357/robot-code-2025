@@ -59,14 +59,14 @@ public class RobotContainer {
 
 
   // The robot's subsystems and commands are defined here...
-  private Optional<SK25Elevator> m_elevator = Optional.empty();
-  private Optional<SK25Lights> m_lights = Optional.empty();
-  private Optional<SKSwerve> m_swerve = Optional.empty();
+  public Optional<SK25Elevator> m_elevator = Optional.empty();
+  public Optional<SK25Lights> m_lights = Optional.empty();
+  public Optional<SKSwerve> m_swerve = Optional.empty();
   // private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
-  private Optional<SK25EndEffector> m_endEffector = Optional.empty();
+  public Optional<SK25EndEffector> m_endEffector = Optional.empty();
 
   // The list containing all the command binding classes
-  private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
+  public List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
 
   // The class used to create all PathPlanner Autos
   // private SK23AutoGenerator autoGenerator;
