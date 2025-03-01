@@ -1,6 +1,6 @@
 {
     "elevator": true,
     "swerve": true,
-    "example": false,
-    "endeffector": true
+    "endeffector": true,
+    "lights": false
 }
