@@ -33,7 +33,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import com.revrobotics.spark.SparkMax;
 
-public class EndEffectorV2 extends SubsystemBase
+public class SK25EndEffector extends SubsystemBase
 {
     //TODO: Check these ratios
     final int motorRatio = 25;
@@ -53,7 +53,6 @@ public class EndEffectorV2 extends SubsystemBase
     final MotionMagicVoltage armMotorRequest = new MotionMagicVoltage(0);
 
     double armTargetAngle;
-    double armCurrentAngle;
 
     ArmFeedforward  armFeedforward;
 
@@ -67,7 +66,7 @@ public class EndEffectorV2 extends SubsystemBase
 
     //LaserCan laserCanSensor;
 
-    public EndEffectorV2()
+    public SK25EndEffector()
     {
         //initialize the new motor object with its motor ID and type
         rollerMotor = new SparkMax(kEndEffectorRollerMotor.ID, MotorType.kBrushless);
@@ -99,7 +98,6 @@ public class EndEffectorV2 extends SubsystemBase
         armFeedforward = new ArmFeedforward(0, armKg.get(), 0, 0); // Is this used anywhere?
 
         armTargetAngle = 0.0;
-        armCurrentAngle = 0.0;
 
         //laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
     }

@@ -15,7 +15,7 @@ import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.commands.ElevatorButtonCommand;
 import frc.robot.commands.EndEffectorButtonCommand;
 import frc.robot.subsystems.SK25Elevator;
-import frc.robot.subsystems.EndEffectorV2;
+import frc.robot.subsystems.SK25EndEffector;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ScoreCommandGroup extends ParallelCommandGroup
@@ -30,7 +30,7 @@ public class ScoreCommandGroup extends ParallelCommandGroup
    * @param elevator    Elevator subystem to use
    * @param endEffector Endeffector subsystem to use
    */
-  public ScoreCommandGroup(ElevatorPosition elevatorPos, SK25Elevator elevator, EndEffectorPosition endEffectorPos, EndEffectorV2 endEffector) 
+  public ScoreCommandGroup(ElevatorPosition elevatorPos, SK25Elevator elevator, EndEffectorPosition endEffectorPos, SK25EndEffector endEffector) 
   {
     this.endEffectorPos = endEffectorPos;
     this.elevatorPos = elevatorPos;

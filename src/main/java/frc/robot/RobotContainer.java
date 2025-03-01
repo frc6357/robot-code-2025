@@ -33,7 +33,7 @@ import frc.robot.subsystems.SK25Lights;
 
 // import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.bindings.EndEffectorBinder;
-import frc.robot.subsystems.EndEffectorV2;
+import frc.robot.subsystems.SK25EndEffector;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
 //import static frc.robot.subsystems.TempSwerve.config;
@@ -62,7 +62,7 @@ public class RobotContainer {
   private Optional<SK25Lights> m_lights = Optional.empty();
   private Optional<SKSwerve> m_swerve = Optional.empty();
   // private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
-  private Optional<EndEffectorV2> m_endEffector = Optional.empty();
+  private Optional<SK25EndEffector> m_endEffector = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -124,7 +124,7 @@ public class RobotContainer {
             }
             if(subsystems.isEndEffectorPresent())
             {
-                m_endEffector = Optional.of(new EndEffectorV2());
+                m_endEffector = Optional.of(new SK25EndEffector());
             }
         }
         catch (IOException e)
@@ -244,7 +244,7 @@ public class RobotContainer {
         
         if(m_endEffector.isPresent())
         {
-            EndEffectorV2 endeffector = m_endEffector.get();
+            SK25EndEffector endeffector = m_endEffector.get();
         }
         
     }

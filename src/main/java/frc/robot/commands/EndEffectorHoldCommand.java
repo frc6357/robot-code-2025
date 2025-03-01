@@ -1,12 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.EndEffectorV2;
+import frc.robot.subsystems.SK25EndEffector;
 
 public class EndEffectorHoldCommand extends Command{
-    private final EndEffectorV2 endeffector;
+    private final SK25EndEffector endeffector;
     double position;
-    public EndEffectorHoldCommand(double position, EndEffectorV2 endeffector)
+    public EndEffectorHoldCommand(double position, SK25EndEffector endeffector)
     {
         this.endeffector = endeffector;
         this.position = position;

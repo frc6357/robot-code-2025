@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.EndEffectorV2;
+import frc.robot.subsystems.SK25EndEffector;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -9,11 +9,11 @@ import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 
 public class EndEffectorButtonCommand extends Command{
 
-    private final EndEffectorV2 endEffector;
+    private final SK25EndEffector endEffector;
     private final EndEffectorPosition angle;
 
 
-    public EndEffectorButtonCommand(EndEffectorPosition angle, EndEffectorV2 endEffector)
+    public EndEffectorButtonCommand(EndEffectorPosition angle, SK25EndEffector endEffector)
     {
         this.angle = angle;
         this.endEffector = endEffector;

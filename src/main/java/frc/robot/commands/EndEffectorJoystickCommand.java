@@ -2,17 +2,17 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.EndEffectorV2;
+import frc.robot.subsystems.SK25EndEffector;
 import static frc.robot.Konstants.EndEffectorConstants.kArmSpeed;
 
 // import com.revrobotics.RelativeEncoder;
 
 public class EndEffectorJoystickCommand extends Command {
-    private final EndEffectorV2 endEffector;
+    private final SK25EndEffector endEffector;
     private final Supplier<Double> joystickInput;
 
 
-    public EndEffectorJoystickCommand(Supplier<Double> setpointChange, EndEffectorV2 endEffector)
+    public EndEffectorJoystickCommand(Supplier<Double> setpointChange, SK25EndEffector endEffector)
     {
         this.joystickInput = setpointChange;
         this.endEffector = endEffector;

@@ -32,13 +32,13 @@ import com.revrobotics.RelativeEncoder;
 
 import java.util.Optional;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.EndEffectorV2;
+import frc.robot.subsystems.SK25EndEffector;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.utils.filters.DeadbandFilter;
 
 public class EndEffectorBinder implements CommandBinder {
 
-    Optional<EndEffectorV2> endEffectorSubsystem;
+    Optional<SK25EndEffector> endEffectorSubsystem;
     Optional<SK25Elevator> elevatorSubsystem;
     
 
@@ -68,7 +68,7 @@ public class EndEffectorBinder implements CommandBinder {
     RelativeEncoder mEncoder;
 
 
-    public EndEffectorBinder(Optional<EndEffectorV2> endEffectorSubsystem, Optional<SK25Elevator> elevatorSubsystem)
+    public EndEffectorBinder(Optional<SK25EndEffector> endEffectorSubsystem, Optional<SK25Elevator> elevatorSubsystem)
     {
         this.endEffectorSubsystem = endEffectorSubsystem;
         this.elevatorSubsystem = elevatorSubsystem;
@@ -88,12 +88,11 @@ public class EndEffectorBinder implements CommandBinder {
         // If subsystem is present then this method will bind the buttons
         if (endEffectorSubsystem.isPresent() && elevatorSubsystem.isPresent())
         {
-            EndEffectorV2 endEffector = endEffectorSubsystem.get();
+            SK25EndEffector endEffector = endEffectorSubsystem.get();
             SK25Elevator elevator = elevatorSubsystem.get();
 
             double joystickGain = kJoystickReversed ? -1 : 1;
             endArm.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
-            // System.out.println("Hi");
 
             // endEffector Position Buttons
 

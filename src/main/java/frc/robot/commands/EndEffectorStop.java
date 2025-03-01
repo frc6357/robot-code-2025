@@ -1,11 +1,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.EndEffectorV2;
+import frc.robot.subsystems.SK25EndEffector;
 
 public class EndEffectorStop extends Command{
-    private final EndEffectorV2 Subsystem;
-    public EndEffectorStop(EndEffectorV2 Subsystem)
+    private final SK25EndEffector Subsystem;
+    public EndEffectorStop(SK25EndEffector Subsystem)
     {
         this.Subsystem = Subsystem;
     }
