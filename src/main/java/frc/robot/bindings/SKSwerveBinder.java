@@ -155,6 +155,11 @@ public class SKSwerveBinder implements CommandBinder{
         }
     }
 
+    public double applySlowMode(double filteredAxis, double topSpeedPercentage)
+            {
+                return filteredAxis * topSpeedPercentage;
+            }
+
 
     @Override
     public void bindButtons() {
@@ -169,9 +174,10 @@ public class SKSwerveBinder implements CommandBinder{
             
             kVelocityOmegaPort.setFilter(rotationFilter);
 
-            slowmode.
-                onTrue(new InstantCommand(() -> {setGainCommand(kSlowModePercent);}, drivetrain))
-                .onFalse(new InstantCommand(() -> {setGainCommand(1);}, drivetrain));
+            // slowmode.
+            //     onTrue(new InstantCommand(() -> {setGainCommand(kSlowModePercent);}, drivetrain))
+            //     .onFalse(new InstantCommand(() -> {setGainCommand(1);}, drivetrain));
+            slowmode.onTrue(new InstantCommand() -> this.setSlowMode());
 
             // Resets gyro angles
             resetButton.onTrue(new InstantCommand(() -> {drivetrain.seedFieldCentric();} ));
@@ -185,6 +191,7 @@ public class SKSwerveBinder implements CommandBinder{
         //             () -> {return true;}, 
         //             drive));
 
+        if (slowMode)
             drivetrain.setDefaultCommand(
                 // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> {
