@@ -398,7 +398,7 @@ public final class Konstants
             /** Set the height to reach the trough (L1) */
             kIntakePositionAngle(-50), // 3 rotations of hex shaft
             /** Set the height to reach the bottom */
-            kZeroPosition(-60);
+            kZeroPositionAngle(-60);
 
             public final double angle;
 

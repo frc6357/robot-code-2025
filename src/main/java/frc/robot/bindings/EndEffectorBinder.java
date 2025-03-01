@@ -1,10 +1,12 @@
 package frc.robot.bindings;
 
+import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.commands.EndEffectorButtonCommand;
 import frc.robot.commands.EndEffectorJoystickCommand;
 import frc.robot.commands.EndEffectorRollerIntakeCommand;
 import frc.robot.commands.EndEffectorRollerOutputCommand;
 import frc.robot.commands.EndEffectorRollerStopCommand;
+import frc.robot.commands.commandGroups.ScoreCommandGroup;
 import frc.robot.commands.EndEffectorEncoderResetCommand;
 //import frc.robot.commands.EndEffectorStop;
 
@@ -15,7 +17,12 @@ import static frc.robot.Konstants.EndEffectorConstants.kLevel1Angle;
 import static frc.robot.Konstants.EndEffectorConstants.kLevel23Angle;
 import static frc.robot.Konstants.EndEffectorConstants.kLevel4Angle;
 import static frc.robot.Konstants.EndEffectorConstants.kIntakeAngle;
+import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kLowPosition;
+import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTopPosition;
+import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTroughPosition;
+import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kZeroPosition;
 import static frc.robot.Konstants.EndEffectorConstants.kHortizontalAngle;
+import static frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition.*;
 import static frc.robot.Ports.OperatorPorts.armHigh;
 import static frc.robot.Ports.OperatorPorts.armMiddleLow;
 import static frc.robot.Ports.OperatorPorts.armTrough;
@@ -31,11 +38,13 @@ import com.revrobotics.RelativeEncoder;
 import java.util.Optional;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.EndEffectorV2;
+import frc.robot.subsystems.SK25Elevator;
 import frc.robot.utils.filters.DeadbandFilter;
 
 public class EndEffectorBinder implements CommandBinder {
 
-    Optional<EndEffectorV2> subsystem;
+    Optional<EndEffectorV2> endEffectorSubsystem;
+    Optional<SK25Elevator> elevatorSubsystem;
     
 
     /* 
@@ -64,11 +73,10 @@ public class EndEffectorBinder implements CommandBinder {
     RelativeEncoder mEncoder;
 
 
-    public EndEffectorBinder(Optional<EndEffectorV2> subsystem){
-        
-        this.subsystem = subsystem;
-
-        
+    public EndEffectorBinder(Optional<EndEffectorV2> subsystem)
+    {
+        this.endEffectorSubsystem = endEffectorSubsystem;
+        this.elevatorSubsystem = elevatorSubsystem;
 
         this.zeroPositionButton = zeropos.button;
         this.LowMidButton = armMiddleLow.button;
@@ -78,40 +86,33 @@ public class EndEffectorBinder implements CommandBinder {
         this.ResetEncoderButton = resetencoder.button;
         this.RollerIntake = rollerintake.button;
         this.RollerOutPut = rolleroutput.button;
-        
-
-
     }
 
     public void bindButtons()
     {
         // If subsystem is present then this method will bind the buttons
-        if (subsystem.isPresent())
+        if (endEffectorSubsystem.isPresent() && elevatorSubsystem.isPresent())
         {
-            EndEffectorV2 endEffector = subsystem.get();
+            EndEffectorV2 endEffector = endEffectorSubsystem.get();
+            SK25Elevator elevator = elevatorSubsystem.get();
 
-           double joystickGain = kJoystickReversed ? -1 : 1;
-           endArm.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
+            double joystickGain = kJoystickReversed ? -1 : 1;
+            endArm.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
             System.out.println("Hi");
-
-            // endEffector Up/Down Buttons 
-
-        
 
             // endEffector Position Buttons
 
+            zeroPositionButton.onTrue(new ScoreCommandGroup(kZeroPosition, elevator, kZeroPositionAngle, endEffector));
+            TroughButton.onTrue(new ScoreCommandGroup(kTroughPosition, elevator, kTroughPositionAngle, endEffector));
+            LowMidButton.onTrue(new ScoreCommandGroup(kLowPosition, elevator, kMidLowPositionAngle, endEffector));
+            IntakeButton.onTrue(new EndEffectorButtonCommand(kIntakePositionAngle, endEffector));
+            TopButton.onTrue(new ScoreCommandGroup(kTopPosition, elevator, kTopPositionAngle, endEffector));
             
-            zeroPositionButton.onTrue(new EndEffectorButtonCommand(kHortizontalAngle, endEffector));
-            TroughButton.onTrue(new EndEffectorButtonCommand(kLevel1Angle, endEffector));
-            LowMidButton.onTrue(new EndEffectorButtonCommand(kLevel23Angle, endEffector));
-            IntakeButton.onTrue(new EndEffectorButtonCommand(kIntakeAngle, endEffector));
-            TopButton.onTrue(new EndEffectorButtonCommand(kLevel4Angle, endEffector));
             ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector));
             RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
             RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
             RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
-
 
             endEffector.setDefaultCommand(
                     
@@ -120,8 +121,7 @@ public class EndEffectorBinder implements CommandBinder {
                   new EndEffectorJoystickCommand(
                         () -> {return endArm.getFilteredAxis();},
                        endEffector));
-                            
-                             
+                                      
         }
     }
 }

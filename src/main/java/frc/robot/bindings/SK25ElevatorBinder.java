@@ -22,8 +22,8 @@ public class SK25ElevatorBinder implements CommandBinder{
     Trigger resetPos;
     Trigger elevatorOverride;
 
-    public SK25ElevatorBinder(Optional<SK25Elevator> subsystem){
-        
+    public SK25ElevatorBinder(Optional<SK25Elevator> subsystem)
+    {
         this.subsystem = subsystem;
 
         this.elevatorOverride   = kElevatorOverride.button;

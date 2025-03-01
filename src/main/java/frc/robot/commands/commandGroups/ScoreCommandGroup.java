@@ -34,6 +34,7 @@ public class ScoreCommandGroup extends ParallelCommandGroup
   {
     this.endEffectorPos = endEffectorPos;
     this.elevatorPos = elevatorPos;
+    
     addCommands(
         new ElevatorButtonCommand(elevatorPos, elevator),
         new EndEffectorButtonCommand(endEffectorPos, endEffector)
