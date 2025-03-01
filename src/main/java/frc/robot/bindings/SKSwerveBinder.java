@@ -5,7 +5,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
 import static frc.robot.Konstants.OIConstants.kMaxFullSpeedElevatorHeight;
-import static frc.robot.Konstants.OIConstants.kSlowModePercent;
+import static frc.robot.Konstants.SwerveConstants.kSlowModePercentage;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
 import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
@@ -23,7 +23,6 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 // Used for binding buttons to drive actions
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.RobotContainer;
 import frc.robot.TunerConstants;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
@@ -36,26 +35,14 @@ import frc.robot.utils.filters.DriveStickFilter;
 import frc.robot.utils.filters.Filter;
 import lombok.Getter;
 
-/* Leftover code from Phoenix's configureBindings():
-    joystick.a().whileTrue(m_swerve.get().applyRequest(() -> brake));
-    joystick.b().whileTrue(m_swerve.get().applyRequest(() ->
-        point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-    ));
-    Run SysId routines when holding back/start and X/Y.
-    Note that each routine should be run exactly once in a single log.
-    joystick.back().and(joystick.y()).whileTrue(m_swerve.get().sysIdDynamic(Direction.kForward));
-    joystick.back().and(joystick.x()).whileTrue(m_swerve.get().sysIdDynamic(Direction.kReverse));
-    joystick.start().and(joystick.y()).whileTrue(m_swerve.get().sysIdQuasistatic(Direction.kForward));
-    joystick.start().and(joystick.x()).whileTrue(m_swerve.get().sysIdQuasistatic(Direction.kReverse));
-
- */
-
 public class SKSwerveBinder implements CommandBinder{
     Optional<SKSwerve>  m_drive;
     DriveStickFilter translationXFilter;
     DriveStickFilter translationYFilter;
     DriveStickFilter rotationFilter;
+    boolean slowModeStatus;
 
+    //Allow alterable slew rates from the dashboard.
      Pref<Double> driverTranslationSlewPref = SKPreferences.attach("driverTranslSlew", 1.5)
                  .onChange((newValue) -> {
                      translationXFilter.setSlewRate(newValue);
@@ -63,34 +50,46 @@ public class SKSwerveBinder implements CommandBinder{
                  });
     
 
-    
+    //Allow alterable slew rates from the dashboard.
     Pref<Double> driverRotationSlewPref = SKPreferences.attach("driverRotSlew", 4.0)
                 .onChange((newValue) -> {
                     rotationFilter.setSlewRate(newValue);
                 });
 
-    @Getter private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    @Getter private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    //Define the max speeds of the drivetrain
+    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     // Driver Buttons
+    //The function button enables button combinations which occur only when both the function and the other
+    //specified button are pressed.
     public final Trigger fn = kDriveFn.button;
     public final Trigger noFn = fn.negate();
 
+    //Other driver buttons
     private final Trigger robotCentric = kRobotCentricMode.button.and(fn);
-    
     private final Trigger slowmode = kSlowMode.button.and(fn);
     private final Trigger resetButton = kResetGyroPos.button;
 
-
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+    //Create swerve drive request objects for applicatoin to the drivetrain
+    private final SwerveRequest.FieldCentric feildCentricDrive = new SwerveRequest.FieldCentric()
             .withDeadband(kJoystickDeadband).withRotationalDeadband(kJoystickDeadband)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+    
+    final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric();
+            // this.applyRequest(() ->
+            //     robotCentricDrive.withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
+            //         .withVelocityY(speeds.vyMetersPerSecond) // Drive left with negative X (left)
+            //         .withRotationalRate(speeds.omegaRadiansPerSecond)); // Drive counterclockwise with negative X (left)
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
 
     public SKSwerveBinder(Optional<SKSwerve> m_drive, Optional<SK25Elevator> m_elevator) {
         this.m_drive = m_drive;
+        //slow mode is initialy deactivated
+        this.slowModeStatus = false;
+
         // apply acceleration limits based on the elevator height if the elevator is present
         if(m_elevator.isPresent())
         {
@@ -155,71 +154,56 @@ public class SKSwerveBinder implements CommandBinder{
         }
     }
 
-    public double applySlowMode(double filteredAxis, double topSpeedPercentage)
-            {
-                return filteredAxis * topSpeedPercentage;
-            }
+    /** Sets the slow mode status by changing the slowModeStatus boolean variable.
+     * @param status The status to set the slow mode to.
+     */
+    public void setSlowMode(boolean status)
+    {
+        slowModeStatus = status;
+    }
 
 
     @Override
-    public void bindButtons() {
+    public void bindButtons()
+    {
         if (m_drive.isPresent())
         {
             SKSwerve drivetrain = m_drive.get();
+
+            drivetrain.setDefaultCommand(
+            // Drivetrain will execute this command periodically
+            drivetrain.applyRequest(() -> {
+                return drive.withVelocityX(kTranslationXPort.getFilteredAxis()) // Drive forward with negative Y (forward)
+                    .withVelocityY(kTranslationYPort.getFilteredAxis()) // Drive left with negative X (left)
+                    .withRotationalRate(kVelocityOmegaPort.getFilteredAxis()); // Drive counterclockwise with negative X (left)
+            }));
             
             // Sets filters for driving axes
-             kTranslationXPort.setFilter(translationXFilter);
-
-             kTranslationYPort.setFilter(translationYFilter);
-            
+            kTranslationXPort.setFilter(translationXFilter);
+            kTranslationYPort.setFilter(translationYFilter);
             kVelocityOmegaPort.setFilter(rotationFilter);
 
-            // slowmode.
-            //     onTrue(new InstantCommand(() -> {setGainCommand(kSlowModePercent);}, drivetrain))
-            //     .onFalse(new InstantCommand(() -> {setGainCommand(1);}, drivetrain));
-            slowmode.onTrue(new InstantCommand() -> this.setSlowMode());
-
-            // Resets gyro angles
+            //Apply slow mode if activated
+            slowmode.onTrue(new InstantCommand(() -> setSlowMode(true)));
+            slowmode.onFalse(new InstantCommand(() -> setSlowMode(false)));
+            
+            // Resets gyro angles / robot oreintation
             resetButton.onTrue(new InstantCommand(() -> {drivetrain.seedFieldCentric();} ));
 
-            // Default command for driving
-        //     drive.setDefaultCommand(
-        //         new DefaultSwerveCommand(
-        //             () -> kTranslationXPort.getFilteredAxis(),
-        //             () -> kTranslationYPort.getFilteredAxis(),
-        //             () -> kVelocityOmegaPort.getFilteredAxis(),
-        //             () -> {return true;}, 
-        //             drive));
-
-        if (slowMode)
-            drivetrain.setDefaultCommand(
-                // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> {
-                    return drive.withVelocityX(kTranslationXPort.getFilteredAxis()) // Drive forward with negative Y (forward)
-                        .withVelocityY(kTranslationYPort.getFilteredAxis()) // Drive left with negative X (left)
-                        .withRotationalRate(kVelocityOmegaPort.getFilteredAxis()); // Drive counterclockwise with negative X (left)
-                })
-            );
-        }
+            //If slowMode is enabled, drive at the slowMode speed.
+            if (slowModeStatus)
+            {
+                this.translationXFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
+                this.translationYFilter.setMaxSpeed(MaxSpeed *kSlowModePercentage);
+                this.rotationFilter.setMaxSpeed(MaxAngularRate * kSlowModePercentage);
+            }
+            }
+            //If slow mode is not enabled, drive at the default speed.
+            else
+            {
+                this.translationXFilter.setMaxSpeed(MaxSpeed);
+                this.translationYFilter.setMaxSpeed(MaxSpeed);
+                this.rotationFilter.setMaxSpeed(MaxAngularRate);
+            }
     }
-
-    /**
-     * Sets the gains on the filters for the joysticks
-     * 
-     * @param percent
-     *            The percent value of the full output that should be allowed (value
-     *            should be between 0 and 1)
-     */
-    public void setGainCommand(double percent)
-    {
-        Filter translation = new DeadbandFilter(kJoystickDeadband, percent);
-        kTranslationXPort.setFilter(translation);
-        kTranslationYPort.setFilter(translation);
-
-     
-        Filter rotation = new DeadbandFilter(kJoystickDeadband,percent);
-        kVelocityOmegaPort.setFilter(rotation);
-  
-    }
-
 }

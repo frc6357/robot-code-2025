@@ -269,6 +269,9 @@ public final class Konstants
         /** The length of the simulation loop for telemetry/logging. 
          * Affects the steering and driving inertia.*/
         public static final double kSimulationLoopPeriod = 0.005;
+
+        /** The percentage of speed to drive in slow mode. Currently 30% of defualt speed.*/
+        public static final double kSlowModePercentage = 0.3;
     }
 
 
