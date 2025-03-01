@@ -34,7 +34,7 @@ import frc.robot.utils.filters.DeadbandFilter;
 //import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 //import frc.robot.commands.EndEffectorButtonCommand;
 
-public class EndEffectorBinder implements CommandBinder {
+public class SK25EndEffectorBinder implements CommandBinder {
 
     Optional<SK25EndEffector> endEffectorSubsystem;
 
@@ -52,7 +52,7 @@ public class EndEffectorBinder implements CommandBinder {
 
     RelativeEncoder mEncoder;
 
-    public EndEffectorBinder(Optional<SK25EndEffector> endEffectorSubsystem)
+    public SK25EndEffectorBinder(Optional<SK25EndEffector> endEffectorSubsystem)
     {
         this.endEffectorSubsystem   = endEffectorSubsystem;
         this.ResetEncoderButton     = resetencoder.button;

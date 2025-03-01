@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.SK25EndEffector;
 import frc.robot.subsystems.SK25Elevator;
 
-public class ScoringBinder implements CommandBinder {
+public class SK25ScoringBinder implements CommandBinder {
 
     Optional<SK25EndEffector> endEffectorSubsystem;
     Optional<SK25Elevator> elevatorSubsystem;
@@ -28,7 +28,7 @@ public class ScoringBinder implements CommandBinder {
 
     RelativeEncoder mEncoder;
 
-    public ScoringBinder(Optional<SK25EndEffector> endEffectorSubsystem, Optional<SK25Elevator> elevatorSubsystem)
+    public SK25ScoringBinder(Optional<SK25EndEffector> endEffectorSubsystem, Optional<SK25Elevator> elevatorSubsystem)
     {
         this.endEffectorSubsystem = endEffectorSubsystem;
         this.elevatorSubsystem = elevatorSubsystem;

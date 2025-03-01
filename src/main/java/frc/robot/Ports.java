@@ -137,11 +137,8 @@ public class Ports
     public static class ElevatorPorts
     {
         private static final String busName = "";
-        //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
         public static final CANPort kRightElevatorMotor = new CANPort(41, busName);
         public static final CANPort kLeftElevatorMotor = new CANPort(42, busName);
-        //public static final CANPort kEncoderL = new CANPort(43, busName);
-        //public static final CANPort kEncoderR = new CANPort(44, busName); 
     }
 
     public static class LightsPorts
@@ -157,7 +154,6 @@ public class Ports
         //assign an ID of 48 to the CANdle
         public static final CANPort kCANdle = new CANPort(48, busName);
     
-        //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
         public static final CANPort kEndEffectorArmMotor = new CANPort(33, busName);
         public static final CANPort kEndEffectorRollerMotor = new CANPort(34, busName);
         public static final CANPort kLaserCanEndEffector = new CANPort(46, busName);

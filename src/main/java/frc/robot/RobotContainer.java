@@ -28,12 +28,12 @@ import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.bindings.SK25ElevatorBinder;
 import frc.robot.bindings.SK25LightsBinder;
-import frc.robot.bindings.ScoringBinder;
+import frc.robot.bindings.SK25ScoringBinder;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Lights;
 
 // import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.bindings.EndEffectorBinder;
+import frc.robot.bindings.SK25EndEffectorBinder;
 import frc.robot.subsystems.SK25EndEffector;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
@@ -145,8 +145,8 @@ public class RobotContainer {
         buttonBinders.add(new SKSwerveBinder(m_swerve));
         buttonBinders.add(new SK25ElevatorBinder(m_elevator));
         buttonBinders.add(new SK25LightsBinder(m_lights));
-        buttonBinders.add(new EndEffectorBinder(m_endEffector));
-        buttonBinders.add(new ScoringBinder(m_endEffector, m_elevator));
+        buttonBinders.add(new SK25EndEffectorBinder(m_endEffector));
+        buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
