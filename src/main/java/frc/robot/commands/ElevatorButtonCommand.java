@@ -31,10 +31,12 @@ public class ElevatorButtonCommand extends Command
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(elevator);
     }
+    
 
     @Override
     public void initialize()
     {
+
         elevator.setTargetHeight(pos);
     }
 
@@ -43,5 +45,11 @@ public class ElevatorButtonCommand extends Command
     public boolean isFinished()
     {
         return elevator.isAtTargetPosition();
+    }
+    public void end(boolean interrupted) {
+        if(interrupted) {
+            System.out.println("SetHeight " + pos.height + " interrupted");
+        }
+        System.out.println("Finished " + elevator.encoder.getPosition());
     }
 }

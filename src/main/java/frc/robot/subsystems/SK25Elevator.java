@@ -1,7 +1,7 @@
 // Essentials
 package frc.robot.subsystems;
 import frc.robot.subsystems.superclasses.Elevator;
-//import edu.wpi.first.math.MathUtil;
+import frc.robot.utils.Util;
 
 // Constants (Muy Importante)
 import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
@@ -11,7 +11,7 @@ import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
 import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
 import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
 
-// Encoder V3
+// Relative Encoder
 import com.revrobotics.RelativeEncoder;
 
 // Closed Loop
@@ -31,6 +31,8 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 // Limit Switches
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
+import com.revrobotics.spark.SparkLimitSwitch;
 
 // SmartDashboard
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -47,7 +49,7 @@ public class SK25Elevator extends Elevator
 
     // Encoder & ClosedLoop
     SparkClosedLoopController closedLoopController;
-    RelativeEncoder encoder;
+    public RelativeEncoder encoder;
 
     // Creating Config Object
     SparkFlexConfig motorConfigL;
@@ -55,78 +57,97 @@ public class SK25Elevator extends Elevator
 
     // Target & Current Position
     double targetHeight;
-    double currentHeight;
+    public double currentHeight;
 
-    // SKPreferences for PID
-    Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.007)
+    // Limit Switch
+    SparkLimitSwitch forwardLimitSwitch;
+    SparkLimitSwitch reverseLimitSwitch;
+
+    double actualFF;
+
+    // SKPreferences for PID & FF
+    public Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.01)
         .onChange((newValue) -> {
             motorConfigL.closedLoop.p(newValue);
+            motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
-    Pref<Double> kIPref = SKPreferences.attach("elevatorKi", 0.0)
+    public Pref<Double> kIPref = SKPreferences.attach("elevatorKi", 0.0)
         .onChange((newValue) -> {
             motorConfigL.closedLoop.i(newValue);
+            motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
-    Pref<Double> kDPref = SKPreferences.attach("elevatorkD", 0.0)
+    public Pref<Double> kDPref = SKPreferences.attach("elevatorkD", 0.0)
         .onChange((newValue) -> {
             motorConfigL.closedLoop.d(newValue);
+            motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
-    Pref<Double> kFFPref = SKPreferences.attach("elevatorkFF", 0.00196078431) // 1/500
+    public Pref<Double> kFFPref = SKPreferences.attach("elevatorkFF", 0.0025) // Formula's asymptote FF value
         .onChange((newValue) -> {
             motorConfigL.closedLoop.velocityFF(newValue);
+            motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
 
     // Constructor For Public Command Access
     public SK25Elevator()
     {
-        // Motor Initialization With REV Sparkflex - Configurations
+        // Motor initialization with REV
         motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
         motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
 
         motorConfigL = new SparkFlexConfig();
         motorConfigR = new SparkFlexConfig();
 
-        // Encoder V3
+        // Closed loop control with REV
         closedLoopController = motorL.getClosedLoopController();
-        encoder = motorL.getEncoder();
 
-        // Configurations For The Left Motor & Encoder
+        // Encoder with REV through bore (external encoder attached to the shaft)
+        encoder = motorL.getExternalEncoder();
+
+        // Limit switches with REV
+        forwardLimitSwitch = motorL.getForwardLimitSwitch();
+        reverseLimitSwitch = motorL.getReverseLimitSwitch();
+
+        // Configurations for the left motor, limit switch, encoder, & closed loop control
         motorConfigL
-            .idleMode(IdleMode.kCoast).smartCurrentLimit(50).voltageCompensation(12);
-        motorConfigL.encoder
+            .idleMode(IdleMode.kBrake).smartCurrentLimit(50).voltageCompensation(12);
+        motorConfigL.externalEncoder
+            .inverted(true)
             .positionConversionFactor(1)
-            .velocityConversionFactor(1);
+            .velocityConversionFactor(0.01666667); // RPM -> RPS (Divide by 60)
         motorConfigL.limitSwitch
-            .reverseLimitSwitchEnabled(true)
-            .reverseLimitSwitchType(Type.kNormallyOpen);
+            .forwardLimitSwitchType(Type.kNormallyOpen)
+            .forwardLimitSwitchEnabled(true)
+            .reverseLimitSwitchType(Type.kNormallyOpen)
+            .reverseLimitSwitchEnabled(true);
         motorConfigL.closedLoop
-            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            //Set PID values for position control. We don't need to pass a closed loop
-            //slot, as it will default to slot 0.
-            .velocityFF(kFFPref.get())
-            .p(kPPref.get())
-            .i(kIPref.get()) 
-            .d(kDPref.get()) 
+            .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
+            .pidf(kPPref.get(), kIPref.get(),kDPref.get(), 0) 
             .outputRange(-1, 1)
-            .maxMotion
-            .maxAcceleration(6000)
-            .maxVelocity(4200)
-            .allowedClosedLoopError(.5);
+            .dFilter(0.3);
+            //.iZone(0.1)
+            //.velocityFF(kFFPref.get()) (Taken care of in pidf)
+        motorConfigL.closedLoop.maxMotion
+            .maxAcceleration(2000)
+            .maxVelocity(1000)
+            .allowedClosedLoopError(0.01)
+            .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
         
-        // Apply Motor Configurations
+        // Apply motor configurations on the left motor
         motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
-        // Configurations For The Right Motor
+        // Configurations for the right motor (follower)
         motorConfigR
             .follow(motorL, true)
             .idleMode(IdleMode.kBrake);
 
-        // Apply Motor Configurations
+        // Apply motor configurations on the right motor
         motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
-        // Current, Target, and Reset Positions
+        // Initialize current, target, and reset positions
         targetHeight = 0.0;
         currentHeight = 0.0;
-        closedLoopController.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        encoder.setPosition(0);
+        closedLoopController.setReference(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }
     
     /**
@@ -136,10 +157,39 @@ public class SK25Elevator extends Elevator
     {
         setTargetHeight(pos.height);
     }
+
     public void setTargetHeight(double targetHeight) 
     {
         this.targetHeight = targetHeight;
-        closedLoopController.setReference(this.targetHeight, ControlType.kMAXMotionPositionControl);
+        closedLoopController.setReference(this.targetHeight, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, calculateFF(targetHeight));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public double calculateFF(double targetHeight) {
+        if (targetHeight >= 11) {
+            actualFF = 0.0025;
+        }
+        else if (targetHeight == 9.5){
+            actualFF = 0.00254;
+        }
+        else if (targetHeight == 7){
+            actualFF = 0.003;
+        }
+        else if (targetHeight == 3){
+            actualFF = 0.0093;
+        }
+        else{
+            double a = 0.06423;
+            double b = 0.461;
+
+            // Determined through graphing well-tuned FF values to find this formula 
+            //TODO Tune the formula again
+            double targetFF = (a * (Math.pow(b, targetHeight)) + 0.0025); // y = a(x^b)
+            actualFF = Util.limit(targetFF, 0, 0.02); 
+        }
+        return actualFF;
     }
 
     /**
@@ -164,17 +214,17 @@ public class SK25Elevator extends Elevator
      */
     public boolean isAtTargetPosition()
     {
-        return Math.abs(getEncoderPosition() - getTargetPosition()) < kPositionTolerance;
+        double vel = Math.abs(encoder.getVelocity()); // Revolutions / sec
+        boolean atGoal = (Math.abs(getEncoderPosition() - getTargetPosition()) < kPositionTolerance);
+        boolean lowVelocity = vel < 0.2;
+
+        return atGoal && lowVelocity;
     }
 
     @Override
     public void periodic()
     {  
-        // Display encoder position and velocity
-        SmartDashboard.putNumber("Actual Position", encoder.getPosition());
-        SmartDashboard.putNumber("Actual Velocity", encoder.getVelocity());
-
-        // Initialize Current & Target Positions
+        // Current & Target Positions
         double currentPosition = getEncoderPosition();
         double targetPosition = getTargetPosition();
         
@@ -182,6 +232,15 @@ public class SK25Elevator extends Elevator
         SmartDashboard.putNumber("Current Estimated Position", currentPosition);
         SmartDashboard.putNumber("Target Position", targetPosition);
         SmartDashboard.putBoolean("Elevator at Setpoint", isAtTargetPosition());
+        SmartDashboard.putNumber("Actual FF", actualFF);
+
+        // Display encoder position and velocity
+        SmartDashboard.putNumber("Actual Position", encoder.getPosition());
+        SmartDashboard.putNumber("Actual Velocity", encoder.getVelocity());
+
+        // Display if limit switch is "pressed" (in our case, passed)
+        SmartDashboard.putBoolean("Forward Limit Reached", forwardLimitSwitch.isPressed());
+        SmartDashboard.putBoolean("Reverse Limit Reached", reverseLimitSwitch.isPressed());
     }
     public void testPeriodic(){}
     public void testInit(){}

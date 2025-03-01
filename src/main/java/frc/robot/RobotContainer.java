@@ -31,6 +31,9 @@ import frc.robot.bindings.SK25LightsBinder;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Lights;
 
+// import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.bindings.EndEffectorBinder;
+import frc.robot.subsystems.EndEffectorV2;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
 //import static frc.robot.subsystems.TempSwerve.config;
@@ -58,6 +61,8 @@ public class RobotContainer {
   private Optional<SK25Elevator> m_elevator = Optional.empty();
   private Optional<SK25Lights> m_lights = Optional.empty();
   private Optional<SKSwerve> m_swerve = Optional.empty();
+  // private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
+  private Optional<EndEffectorV2> m_endEffector = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -117,6 +122,10 @@ public class RobotContainer {
             if(subsystems.isSwervePresent()) {
                 m_swerve = Optional.of(TunerConstants.createDrivetrain()); // Returns new SKSwerve
             }
+            if(subsystems.isEndEffectorPresent())
+            {
+                m_endEffector = Optional.of(new EndEffectorV2());
+            }
         }
         catch (IOException e)
         {
@@ -135,6 +144,10 @@ public class RobotContainer {
         buttonBinders.add(new SKSwerveBinder(m_swerve));
         buttonBinders.add(new SK25ElevatorBinder(m_elevator));
         buttonBinders.add(new SK25LightsBinder(m_lights));
+
+        // Adding all the binding classes to the list
+        buttonBinders.add(new EndEffectorBinder(m_endEffector));
+
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
         {
@@ -195,6 +208,10 @@ public class RobotContainer {
         {
             m_elevator.get().testPeriodic();
         }
+        if(m_endEffector.isPresent())
+        {
+            m_endEffector.get().testPeriodic();
+        }
     }
     public void testInit(){
         // if(m_swerve.isPresent())
@@ -209,6 +226,10 @@ public class RobotContainer {
         {
             m_elevator.get().testInit();
         }
+        if(m_endEffector.isPresent())
+        {
+            m_endEffector.get().testInit();
+        }
     }
 
     public void matchInit()
@@ -220,6 +241,12 @@ public class RobotContainer {
             //elevator.setRightTargetHeight(0.0);
             //elevator.setLeftTargetHeight(0.0);
         //}
+        
+        if(m_endEffector.isPresent())
+        {
+            EndEffectorV2 endeffector = m_endEffector.get();
+        }
+        
     }
 
     public void teleopInit()

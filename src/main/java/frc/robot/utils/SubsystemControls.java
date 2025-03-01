@@ -12,24 +12,25 @@ public class SubsystemControls
     private final boolean swerve;
     private final boolean lights;
     private final boolean elevator;
+    private final boolean endEffector;
 
      /**  
      * @param swerve
      *            indicates if the swerve subsystem is present and should be enabled
-     * @param example
-     *            indicates if the example subsystem is present and should be enabled
      * @param lights
      *            indicates if the lights subsystem is present and should be enabled
      */
     public SubsystemControls(
         @JsonProperty(required = true, value = "swerve")      boolean swerve,
         @JsonProperty(required = true, value = "lights")      boolean lights,
-        @JsonProperty(required = true, value = "elevator")      boolean elevator
+        @JsonProperty(required = true, value = "elevator")    boolean elevator,
+        @JsonProperty(required = true, value = "endeffector") boolean endeffector
     )
     {
         this.swerve = swerve;
         this.lights = lights;
         this.elevator = elevator;
+        this.endEffector = endeffector;
     }
 
 
@@ -50,5 +51,9 @@ public class SubsystemControls
     public boolean isElevatorPresent()
     {
         return elevator;
+    }
+    public boolean isEndEffectorPresent()
+    {
+        return endEffector;
     }
 }
