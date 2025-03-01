@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import com.ctre.phoenix.led.CANdle;
@@ -16,20 +17,30 @@ import com.ctre.phoenix.led.SingleFadeAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.led.TwinkleAnimation;
 import com.ctre.phoenix.led.TwinkleAnimation.TwinklePercent;
+import com.ctre.phoenix.led.Animation;
 import static frc.robot.Konstants.LightConstants.*;
 import static frc.robot.Ports.LightsPorts.*;
 
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.Duo;
+import frc.robot.utils.ledAnimations.StaticColorAnimation;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj.Timer;
 
-public class SK25Lights{
+public class SK25Lights implements Subsystem{
     SimpleWidget colorWidget;
     boolean isFinished;
+    double time;
+
+    ArrayList<Duo<Animation, Double>> animationQueue = new ArrayList<Duo<Animation, Double>>();
+    ArrayList<Duo< Duo<Animation, Double>, Double>> effectQueue = new ArrayList<Duo< Duo<Animation, Double>, Double>>();
 
     private boolean isPresent;
 
     private CANdle m_candle;
-    
-    public SK25Lights(Optional<CANdle> candle){
+    private double partyStartTime = -1;
+    public SK25Lights(Optional<CANdle> candle){ // candle is assumed to be present because of subsystem init logic in RobotContainer
         m_candle = candle.get();
     }
 
@@ -41,7 +52,6 @@ public class SK25Lights{
     {
         
         CANdleConfiguration config = new CANdleConfiguration();
-        
         
         config.stripType = LEDStripType.RGB; // set the strip type to RGB
         config.disableWhenLOS = true;
@@ -65,7 +75,7 @@ public class SK25Lights{
      * @param blue The amount of Blue to set, range is [0, 255]
      */
     public void setLight(int red, int green, int blue, int numLed){
-        if(candle.isPresent()){ m_candle.setLEDs(red, green, blue, 0, 8, numLed);} 
+         m_candle.setLEDs(red, green, blue, 0, 8, numLed);
     }
 
     /**
@@ -74,16 +84,54 @@ public class SK25Lights{
      */
     public void setBrightness(double bright){
         
-        if(candle.isPresent()){ m_candle.configBrightnessScalar(bright);}
+        m_candle.configBrightnessScalar(bright);
     }
 
-    public void RainbowAnimate(double brightness, double speed, int numLed){
+    public void RainbowAnimate(double brightness, double speed, int numLed, double duration){
         RainbowAnimation animation = new RainbowAnimation(brightness, speed, numLed, false, 8);
-        if(candle.isPresent()){ m_candle.animate(animation, 1);}
+        addToQueue(animation, duration);
+    }
+
+    public void addToQueue(Animation anim, double duration) {
+        animationQueue.add(Duo.of(anim, duration));
     }
 
     public void clearAnimate(){
-        if(candle.isPresent()){ m_candle.clearAnimation(1);}
+        m_candle.clearAnimation(1);
+    }
+
+    public void clearQueue() {
+        animationQueue.clear();
+    }
+
+    private boolean queueEmpty() {
+        return animationQueue.isEmpty();
+    }
+
+    public Duo<Animation, Double> getActiveAnimation() {
+        if(queueEmpty()) {
+            return null;
+        }
+        else{
+            return animationQueue.get(0);
+        }
+    }
+
+    public Duo< Duo<Animation, Double>, Double> getActiveAnimationWithTimestamp() {
+        if(queueEmpty()) {
+            return null;
+        }
+        else {
+            return effectQueue.get(0);
+        }
+    }
+
+    public Animation geAnimationFromQueue() { // Index 0 is considered the first animation in line
+        return animationQueue.get(0).getFirst(); // getFirst references the Animation object in the Duo
+    }
+
+    public double getAnimationDurationFromQueue() {
+        return animationQueue.get(0).getSecond(); // getSecond references the timestamp (double) object in the Duo
     }
 
     public boolean isFinished()
@@ -119,14 +167,14 @@ public class SK25Lights{
     public void setPartyMode()
     {
         RainbowAnimate(1.0, 1.0, kNumLedOnBot);
+        partyStartTime = Timer.getFPGATimestamp();
     }
 
     public void strobeLightsGreenWhite(int r, int g, int b, int w)
     {
         StrobeAnimation animation = new StrobeAnimation(0, 255,0, 255, 100, kNumLedOnBot);
-        animation.setR(0);
+        m_candle.animate(animation, 1);
     }
-    
     
     public void FlowAnimate(int r, int g, int b, double speed, int numLed, Direction direction, int offset){
 
@@ -166,9 +214,33 @@ public class SK25Lights{
         m_candle.animate(animation, 1);
     }
 
+    public void StaticAnimate(int r, int g, int b, int numLed, double duration) {
+        StaticColorAnimation staticAnimation = new StaticColorAnimation(r, g, b, numLed);
+        SingleFadeAnimation animation = staticAnimation.getAnimation();
+
+        addToQueue(animation, duration);
+    }
+
     //occurs every 20 miliseconds, usually not tied to a command, binder, etc...
+    @Override
     public void periodic()
     {
+        time = Timer.getTimestamp();
+
+        Duo< Duo<Animation, Double>, Double > currentAnimWithTimestamp = effectQueue.get(0);
+
+
+
+        if(currentAnim == null) {}
+        
+            //awant to be able to set current anim with whatever timestamp it was whenever it wad first initialized
+            //
+
+
+        // if (partyStartTime > 0 && (Timer.getFPGATimestamp() - partyStartTime) >= PARTY_DURATION) {
+        //     clearAnimate(); 
+        //     partyStartTime = -1;
+        // }
     } 
 
     public void testInit()
