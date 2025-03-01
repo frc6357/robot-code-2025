@@ -67,11 +67,6 @@ public class RobotContainer {
 
   SendableChooser<Command> autoCommandSelector;// = new SendableChooser<Command>();
 
-   /* Path follower */
-    //private final AutoFactory autoFactory;
-    //private final AutoRoutines autoRoutines;
-    //private final AutoChooser autoChooser = new AutoChooser();
-
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -90,8 +85,6 @@ public class RobotContainer {
     // Configures swerve telemetry
     configurePhoenixTelemetry();
 
-    //autoFactory = SKSwerveBinder.drivetrain.createAutoFactory();
-    //autoRoutines = new AutoRoutines(autoFactory);
 
     //autoChooser.addRoutine("Taxi", autoRoutines::Taxi);
     autoCommandSelector = AutoBuilder.buildAutoChooser("Taxi");
