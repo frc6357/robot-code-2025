@@ -15,7 +15,7 @@ public class ClimbCommand1 extends Command{
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {} 
 
     @Override
     public void execute() {
@@ -25,5 +25,15 @@ public class ClimbCommand1 extends Command{
     @Override
     public void end(boolean interrupted) {
         climb.stop();
+       // climb.setBrake();
+    }
+
+    @Override
+    public boolean isFinished() {
+        if (climb.isAtTargetPosition()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

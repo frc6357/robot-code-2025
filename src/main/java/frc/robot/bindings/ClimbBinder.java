@@ -2,7 +2,6 @@ package frc.robot.bindings;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static frc.robot.Konstants.ClimbConstants.kVolts;
 import static frc.robot.Ports.OperatorPorts.*;
 import frc.robot.subsystems.SK25Climb;
 import frc.robot.commands.*;

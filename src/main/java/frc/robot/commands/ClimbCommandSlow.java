@@ -18,7 +18,7 @@ public class ClimbCommandSlow extends Command{
 
     @Override
     public void execute() {
-      climb.runMotor(kVolts/2);
+      climb.runMotor(kKrakenSpeed/2);
     }
 
     @Override

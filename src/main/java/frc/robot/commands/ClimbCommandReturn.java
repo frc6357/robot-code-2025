@@ -23,6 +23,7 @@ public class ClimbCommandReturn extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        climb.runMotor(0);
+        climb.stop();
+       // climb.setBrake();
     }
 }

@@ -50,20 +50,11 @@ public final class Konstants
         public static final double kClimbI = 0.0;
         public static final double kClimbD = 0.0;
       //  public static final double kClimbSetpoint = 5.0;
-        public static final double kClimbStartPos = 0.0;
         public static final double kKrakenSpeed = .1;
-        public static final double kMaxSpeed = 1000;
-        public static final double kTestSpeed = 300;
-        public static final double kVolts = 3;
-      //  public static final double kMaxSpeed = 1000;
-      //  public static final double kTestSpeed = 300;
-        public static final double kClimbMaxAcceleration = 1000;
         public static final int kClimbCurrentLimit = 50;
         public static final double kClimbMaxPosition = 30.0;
-     //   public static final Rotation2d sigma = Rotation2d.fromDegrees(3600);
-       // public static final Angle kAngleMax = kClimbMaxPosition.in(Units.Angle);
         public static final double kClimbMinPosition = 0.0;
-        public static final double kClimbPositionTolerance = 0.1;
+        public static final double kClimbPositionTolerance = 0.2;
 
     }
 
