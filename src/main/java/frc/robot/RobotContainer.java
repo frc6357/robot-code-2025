@@ -85,8 +85,10 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configures swerve telemetry
-    configurePhoenixTelemetry();
+    //eats memory super fast, not good
+    // configurePhoenixTelemetry();
   }
+  
 
   /**
      * Will create all the optional subsystems using the json file in the deploy directory
@@ -141,7 +143,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings()
     {
-        buttonBinders.add(new SKSwerveBinder(m_swerve));
+        buttonBinders.add(new SKSwerveBinder(m_swerve, m_elevator));
         buttonBinders.add(new SK25ElevatorBinder(m_elevator));
         buttonBinders.add(new SK25LightsBinder(m_lights));
 

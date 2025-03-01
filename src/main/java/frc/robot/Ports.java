@@ -16,6 +16,7 @@ import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kPigeonID;
+//import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.BUTTON;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
 
@@ -50,7 +51,7 @@ public class Ports
 
         // Switch modes
         public static final SKTrigger kRobotCentricMode = new SKTrigger(swerveController, 180, POV); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
-        public static final SKTrigger kSlowMode = new SKTrigger(swerveController, kRightTrigger.value, BUTTON); // Function Controlscheme
+        public static final SKTrigger kSlowMode = new SKTrigger(swerveController, kRightBumper.value, BUTTON); // Function Controlscheme
 
         // Reset gyro
         public static final SKTrigger kResetGyroPos = new SKTrigger(swerveController, kRightStick.value, BUTTON);

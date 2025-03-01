@@ -237,6 +237,9 @@ public final class Konstants
         /** The length of the simulation loop for telemetry/logging. 
          * Affects the steering and driving inertia.*/
         public static final double kSimulationLoopPeriod = 0.005;
+
+        /** The percentage of speed to drive in slow mode. Currently 20% of defualt speed.*/
+        public static final double kSlowModePercentage = 0.2;
     }
 
     public static final class AutoConstants
@@ -381,6 +384,10 @@ public final class Konstants
         public static final double kSlowModePercent  = 0.2;
         
         public static final double kAccelLimit = 2;
+
+        /** The maximum elevator height in motor rotations, in which driving the robot at maximum 
+         * acceleration will not cause the robot to tip over.*/
+        public static final double kMaxFullSpeedElevatorHeight = 2.0;
     }
     public static final class EndEffectorConstants
     {
