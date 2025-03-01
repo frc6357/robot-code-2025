@@ -91,10 +91,7 @@ public class RobotContainer {
     // Configures swerve telemetry
     //eats memory super fast, not good
     // configurePhoenixTelemetry();
-  }
   
-
-
     //autoChooser.addRoutine("Taxi", autoRoutines::Taxi);
     autoCommandSelector = AutoBuilder.buildAutoChooser("Taxi");
     //set delete old files = true in build.gradle to prevent sotrage of unused orphans
