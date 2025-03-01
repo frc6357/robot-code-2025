@@ -13,14 +13,10 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.LinearVelocity;
-//import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.Radians;
 
 
 //import edu.wpi.first.units.measure.Distance;
@@ -270,8 +266,8 @@ public final class Konstants
          * Affects the steering and driving inertia.*/
         public static final double kSimulationLoopPeriod = 0.005;
 
-        /** The percentage of speed to drive in slow mode. Currently 30% of defualt speed.*/
-        public static final double kSlowModePercentage = 0.3;
+        /** The percentage of speed to drive in slow mode. Currently 20% of defualt speed.*/
+        public static final double kSlowModePercentage = 0.2;
     }
 
 

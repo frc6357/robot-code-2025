@@ -8,7 +8,7 @@ import static frc.robot.Konstants.OIConstants.kMaxFullSpeedElevatorHeight;
 import static frc.robot.Konstants.SwerveConstants.kSlowModePercentage;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
-import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
+//import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
 import static frc.robot.Ports.DriverPorts.kSlowMode;
 import static frc.robot.Ports.DriverPorts.kTranslationXPort;
 import static frc.robot.Ports.DriverPorts.kTranslationYPort;
@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // Used for binding buttons to drive actions
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -29,11 +30,8 @@ import frc.robot.preferences.SKPreferences;
 import frc.robot.subsystems.SK25Elevator;
 // Adds the Swerve subsystem for construction
 import frc.robot.subsystems.SKSwerve;
-// Filters used for input types (specifically Axis inputs)
-import frc.robot.utils.filters.DeadbandFilter;
+// Filter used for input types (specifically Axis inputs)
 import frc.robot.utils.filters.DriveStickFilter;
-import frc.robot.utils.filters.Filter;
-import lombok.Getter;
 
 public class SKSwerveBinder implements CommandBinder{
     Optional<SKSwerve>  m_drive;
@@ -67,7 +65,7 @@ public class SKSwerveBinder implements CommandBinder{
     public final Trigger noFn = fn.negate();
 
     //Other driver buttons
-    private final Trigger robotCentric = kRobotCentricMode.button.and(fn);
+    //private final Trigger robotCentric = kRobotCentricMode.button.and(fn);
     private final Trigger slowmode = kSlowMode.button.and(fn);
     private final Trigger resetButton = kResetGyroPos.button;
 
@@ -81,8 +79,9 @@ public class SKSwerveBinder implements CommandBinder{
             //     robotCentricDrive.withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
             //         .withVelocityY(speeds.vyMetersPerSecond) // Drive left with negative X (left)
             //         .withRotationalRate(speeds.omegaRadiansPerSecond)); // Drive counterclockwise with negative X (left)
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+   
+    //private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+    //private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
 
     public SKSwerveBinder(Optional<SKSwerve> m_drive, Optional<SK25Elevator> m_elevator) {
@@ -159,7 +158,23 @@ public class SKSwerveBinder implements CommandBinder{
      */
     public void setSlowMode(boolean status)
     {
+        SmartDashboard.putBoolean("slowModeStatus", status);
         slowModeStatus = status;
+
+        //If slowMode is enabled, drive at the slowMode speed.
+        if (slowModeStatus)
+        {
+            this.translationXFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
+            this.translationYFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
+            this.rotationFilter.setMaxSpeed(MaxAngularRate * kSlowModePercentage);
+        }
+        //If slow mode is not enabled, drive at the default speed.
+        else
+        {
+            this.translationXFilter.setMaxSpeed(MaxSpeed);
+            this.translationYFilter.setMaxSpeed(MaxSpeed);
+            this.rotationFilter.setMaxSpeed(MaxAngularRate);
+        }
     }
 
 
@@ -171,6 +186,9 @@ public class SKSwerveBinder implements CommandBinder{
             return;
         }
         
+        //set to false by defualt
+        setSlowMode(slowModeStatus);
+
         SKSwerve drivetrain = m_drive.get();
         
         // Sets filters for driving axes
@@ -184,21 +202,6 @@ public class SKSwerveBinder implements CommandBinder{
         
         // Resets gyro angles / robot oreintation
         resetButton.onTrue(new InstantCommand(() -> {drivetrain.seedFieldCentric();} ));
-
-        //If slowMode is enabled, drive at the slowMode speed.
-        if (slowModeStatus)
-        {
-            this.translationXFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
-            this.translationYFilter.setMaxSpeed(MaxSpeed *kSlowModePercentage);
-            this.rotationFilter.setMaxSpeed(MaxAngularRate * kSlowModePercentage);
-        }
-        //If slow mode is not enabled, drive at the default speed.
-        else
-        {
-            this.translationXFilter.setMaxSpeed(MaxSpeed);
-            this.translationYFilter.setMaxSpeed(MaxSpeed);
-            this.rotationFilter.setMaxSpeed(MaxAngularRate);
-        }
 
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically

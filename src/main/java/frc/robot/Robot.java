@@ -43,20 +43,20 @@ public class Robot extends LoggedRobot
     @Override
     public void robotInit()
     {
-        Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
-        Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
-        if (isReal()) {
-            Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
-            Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-            new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
-        } else {
-            setUseTiming(false); // Run as fast as possible
-            String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
-            Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
-            Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
-        }
+        // Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+        // Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);    //TODO: add this back, caused memory issue
+        // if (isReal()) {
+        //     Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+        //     Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+        //     new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+        // } else {
+        //     setUseTiming(false); // Run as fast as possible
+        //     String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
+        //     Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+        //     Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+        // }
 
-        Logger.start();
+        // Logger.start();
         //DataLogManager.start(); TODO - look at data logs to see if they work with advantage scope
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
@@ -77,14 +77,17 @@ public class Robot extends LoggedRobot
     @Override
     public void robotPeriodic()
     {
-        Logger.recordOutput("RobotPose", new Pose2d());
+        // Logger.recordOutput("RobotPose", new Pose2d());
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        
+        //display preferences periodicaly
         SKPreferences.refreshIfNeeded();
 
+        //display real time memory consumption
         SmartDashboard.putNumber("Memory", Runtime.getRuntime().freeMemory());
     }
 

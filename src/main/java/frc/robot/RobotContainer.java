@@ -80,7 +80,8 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configures swerve telemetry
-    configurePhoenixTelemetry();
+    //eats memory super fast, not good
+    // configurePhoenixTelemetry();
   }
   
 
