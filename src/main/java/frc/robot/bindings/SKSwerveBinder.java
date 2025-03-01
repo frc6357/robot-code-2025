@@ -17,6 +17,7 @@ import static frc.robot.Ports.DriverPorts.kDriveFn;
 // Filters used for input types (specifically Axis inputs)
 import frc.robot.utils.filters.DeadbandFilter;
 import frc.robot.utils.filters.Filter;
+import frc.robot.utils.filters.DriveStickFilter;
 import lombok.Getter;
 // Used for binding buttons to drive actions
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -31,6 +32,9 @@ import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import frc.robot.preferences.Pref;
+import frc.robot.preferences.SKPreferences;
 
 /* Leftover code from Phoenix's configureBindings():
     joystick.a().whileTrue(m_swerve.get().applyRequest(() -> brake));
@@ -48,9 +52,25 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 public class SKSwerveBinder implements CommandBinder{
     Optional<SKSwerve>  m_drive;
+    DriveStickFilter translationXFilter;
+    DriveStickFilter translationYFilter;
+    DriveStickFilter rotationFilter;
+
+     Pref<Double> driverTranslationSlewPref = SKPreferences.attach("driverTranslSlew", 1.5)
+                 .onChange((newValue) -> {
+                     translationXFilter.setSlewRate(newValue);
+                     translationYFilter.setSlewRate(newValue);
+                 });
+    
+
+    
+    Pref<Double> driverRotationSlewPref = SKPreferences.attach("driverRotSlew", 4.0)
+                .onChange((newValue) -> {
+                    rotationFilter.setSlewRate(newValue);
+                });
 
     @Getter private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    @Getter private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     // Driver Buttons
     public final Trigger fn = kDriveFn.button;
@@ -63,16 +83,18 @@ public class SKSwerveBinder implements CommandBinder{
 
 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(0).withRotationalDeadband(0)
+            .withDeadband(kJoystickDeadband).withRotationalDeadband(kJoystickDeadband)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-    public static SKSwerve drivetrain;
-
 
     public SKSwerveBinder(Optional<SKSwerve> m_drive) {
         this.m_drive = m_drive;
+        this.translationXFilter = new DriveStickFilter(MaxSpeed, driverTranslationSlewPref.get(), kJoystickDeadband);
+        this.translationYFilter = new DriveStickFilter(MaxSpeed, driverTranslationSlewPref.get(), kJoystickDeadband);
+
+        this.rotationFilter = new DriveStickFilter(MaxAngularRate, driverRotationSlewPref.get(), kJoystickDeadband);
     }
 
 
@@ -80,17 +102,14 @@ public class SKSwerveBinder implements CommandBinder{
     public void bindButtons() {
         if (m_drive.isPresent())
         {
-            drivetrain = m_drive.get();
-
-            // Sets filters for driving axes
-            // kTranslationXPort.setFilter(new CubicDeadbandFilter(kDriveCoeff,
-            //     kJoystickDeadband, SwerveConstants.kMaxDriveSpeedMetersPerSecond, true));
-
-            // kTranslationYPort.setFilter(new CubicDeadbandFilter(kDriveCoeff,
-            //     kJoystickDeadband, SwerveConstants.kMaxDriveSpeedMetersPerSecond, true));
+            SKSwerve drivetrain = m_drive.get();
             
-            // kVelocityOmegaPort.setFilter(new CubicDeadbandFilter(kRotationCoeff, kJoystickDeadband,
-            //     Math.toRadians(SwerveConstants.kMaxModuleAngularSpeedDegreesPerSecond), true));
+            // Sets filters for driving axes
+             kTranslationXPort.setFilter(translationXFilter);
+
+             kTranslationYPort.setFilter(translationYFilter);
+            
+            kVelocityOmegaPort.setFilter(rotationFilter);
 
             slowmode.
                 onTrue(new InstantCommand(() -> {setGainCommand(kSlowModePercent);}, drivetrain))
@@ -108,14 +127,14 @@ public class SKSwerveBinder implements CommandBinder{
         //             () -> {return true;}, 
         //             drive));
 
-        drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(kTranslationXPort.getFilteredAxis() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(kTranslationYPort.getFilteredAxis() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(kVelocityOmegaPort.getFilteredAxis() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
-        );
+            drivetrain.setDefaultCommand(
+                // Drivetrain will execute this command periodically
+                drivetrain.applyRequest(() -> {
+                    return drive.withVelocityX(kTranslationXPort.getFilteredAxis()) // Drive forward with negative Y (forward)
+                        .withVelocityY(kTranslationYPort.getFilteredAxis()) // Drive left with negative X (left)
+                        .withRotationalRate(kVelocityOmegaPort.getFilteredAxis()); // Drive counterclockwise with negative X (left)
+                })
+            );
         }
     }
 
