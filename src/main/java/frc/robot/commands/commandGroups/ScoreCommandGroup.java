@@ -31,8 +31,8 @@ public class ScoreCommandGroup extends ParallelCommandGroup
     this.elevatorPos = elevatorPos;
     
     addCommands(
-        new ElevatorButtonCommand(elevatorPos, elevator),
-        new EndEffectorButtonCommand(endEffectorPos, endEffector)
+        new EndEffectorButtonCommand(endEffectorPos, endEffector),
+        new ElevatorButtonCommand(elevatorPos, elevator)
         );
   }
 }
