@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
-import static frc.robot.Konstants.OIConstants.kMaxFullSpeedElevatorHeight;
 import static frc.robot.Konstants.SwerveConstants.kSlowModePercentage;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
@@ -15,7 +14,6 @@ import static frc.robot.Ports.DriverPorts.kTranslationYPort;
 import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -89,32 +87,32 @@ public class SKSwerveBinder implements CommandBinder{
         //slow mode is initialy deactivated
         this.slowModeStatus = false;
 
-        // apply acceleration limits based on the elevator height if the elevator is present
-        if(m_elevator.isPresent())
-        {
-            this.translationXFilter = new DriveStickFilter(
-                MaxSpeed, 
-                elevatorHeightDriveScalar(
-                    driverTranslationSlewPref.get(), 
-                    m_elevator.get().getCurrentHeightMotorRotations()),
-                kJoystickDeadband);
-            this.translationYFilter = new DriveStickFilter(
-                MaxSpeed, 
-                elevatorHeightDriveScalar(
-                    driverTranslationSlewPref.get(), 
-                    m_elevator.get().getCurrentHeightMotorRotations()), 
-                kJoystickDeadband);
+        // // apply acceleration limits based on the elevator height if the elevator is present
+        // if(m_elevator.isPresent())
+        // {
+        //     this.translationXFilter = new DriveStickFilter(
+        //         MaxSpeed, 
+        //         elevatorHeightDriveScalar(
+        //             driverTranslationSlewPref.get(), 
+        //             m_elevator.get().getCurrentHeightMotorRotations()),
+        //         kJoystickDeadband);
+        //     this.translationYFilter = new DriveStickFilter(
+        //         MaxSpeed, 
+        //         elevatorHeightDriveScalar(
+        //             driverTranslationSlewPref.get(), 
+        //             m_elevator.get().getCurrentHeightMotorRotations()), 
+        //         kJoystickDeadband);
 
-            //rotation filter dosnt need to be scaled by elevator height since it dosn't affect the
-            //magnitude of the robot's velocity vecotr.
-            this.rotationFilter = new DriveStickFilter(
-                MaxAngularRate, 
-                driverRotationSlewPref.get(), 
-                kJoystickDeadband);
-        }
+        //     //rotation filter dosnt need to be scaled by elevator height since it dosn't affect the
+        //     //magnitude of the robot's velocity vecotr.
+        //     this.rotationFilter = new DriveStickFilter(
+        //         MaxAngularRate, 
+        //         driverRotationSlewPref.get(), 
+        //         kJoystickDeadband);
+        // }
         //if the elevator is absent, apply the default slew rates
-        else
-        {
+        // else
+        // {
             this.translationXFilter = new DriveStickFilter(
                 MaxSpeed, 
                 driverTranslationSlewPref.get(),
@@ -128,7 +126,7 @@ public class SKSwerveBinder implements CommandBinder{
                 MaxAngularRate, 
                 driverRotationSlewPref.get(), 
                 kJoystickDeadband);
-        }
+        // }
     }
 
 
@@ -140,18 +138,18 @@ public class SKSwerveBinder implements CommandBinder{
      * @param elevatorHeight The current height of the elevator in motor rotations.
      * @return The slew rate of the swerve with the elevator height accounted for.
      */
-    public double elevatorHeightDriveScalar(double slewRate, Supplier<Double> elevatorHeight)
-    {
-        if (elevatorHeight.get() <= kMaxFullSpeedElevatorHeight)
-        {
-            return slewRate;
-        }
-        else
-        {
-            double scaledElevatorRate = (elevatorHeight.get() / 13.5) - (kMaxFullSpeedElevatorHeight / 13.5);
-            return scaledElevatorRate + slewRate;
-        }
-    }
+    // public double elevatorHeightDriveScalar(double slewRate, Supplier<Double> elevatorHeight)
+    // {
+    //     if (elevatorHeight.get() <= kMaxFullSpeedElevatorHeight)
+    //     {
+    //         return slewRate;
+    //     }
+    //     else
+    //     {
+    //         double scaledElevatorRate = (elevatorHeight.get() / 13.5) - (kMaxFullSpeedElevatorHeight / 13.5);
+    //         return scaledElevatorRate + slewRate;
+    //     }
+    // }
 
     /** Sets the slow mode status by changing the slowModeStatus boolean variable.
      * @param status The status to set the slow mode to.
