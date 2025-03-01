@@ -9,13 +9,15 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.controllers.PathFollowingController;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.LinearVelocity;
-import static edu.wpi.first.units.Units.MetersPerSecond;
+//import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
 
-// Unused Imports
 
 //import static edu.wpi.first.units.Units.Rotations;
 //import static edu.wpi.first.units.Units.Radians;
@@ -242,32 +244,15 @@ public final class Konstants
         public static final double kSlowModePercentage = 0.2;
     }
 
+    /** Defines constraints and information for autonomous development */
     public static final class AutoConstants
     {
-        public static List<String> autoList = new ArrayList<String>(Arrays.asList("P4_Taxi"));
-
-        // Autonomous translation constraints
-        public static final double          kMaxSpeedMetersPerSecond               = 3;
-        public static final double          kMaxAccelerationMetersPerSecondSquared = 2;
-        // public static final PathConstraints kPathConstraints                       =
-        //         new PathConstraints(kMaxSpeedMetersPerSecond,
-        //             kMaxAccelerationMetersPerSecondSquared);
-
-        // public static final PathConstraints kFastConstraints =
-        //     new PathConstraints(4.5, 3.5);
 
         // PID Constants
         public static final PIDConstants kTranslationPIDConstants = new PIDConstants(6, 0, 0);
         public static final PIDConstants kRotationPIDConstants    = new PIDConstants(6, 0.4, 0);
-        public static final PPHolonomicDriveController kAutoPathConfig = new PPHolonomicDriveController(
-            kTranslationPIDConstants,
-            kRotationPIDConstants,
-            Robot.kDefaultPeriod
-            //kMaxSpeedMetersPerSecond,
-            //Math.hypot(SwerveConstants.kFTBEncoderDistInches / 2, SwerveConstants.kLTREncoderDistInches / 2), 
-            //new ReplanningConfig()
-        );
 
+        public static final PPHolonomicDriveController pathConfig = new PPHolonomicDriveController(kTranslationPIDConstants, kRotationPIDConstants);
     }
 
     public static final class ElevatorConstants

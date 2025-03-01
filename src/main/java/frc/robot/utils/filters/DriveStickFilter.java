@@ -20,7 +20,8 @@ public class DriveStickFilter implements Filter {
             double processedAxis = deadbandFilter.filter(rawAxis);
             return slewRateFilter.calculate(processedAxis) * MaxSpeed;
         }
-
+    
+    
         public void setDeadband(double deadband) {
             this.deadbandFilter = new DeadbandFilter(deadband);
         }
