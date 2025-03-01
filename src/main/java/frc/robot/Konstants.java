@@ -388,19 +388,17 @@ public final class Konstants
         /** Heights for the different elevator positions */
         public static enum EndEffectorPosition
         {
-            //TODO FIX DURING TESTING - Measure Elevator Heights
+            /** Set the angle to reach the top branch (L4) */ // 12.5
+            kTopPositionAngle(-20), // Angle
 
-            /** Set the height to reach the top branch (L4) */ // 12.5
-            kTopPositionAngle(-20), // 13.5 rotations of hex shaft
+            /** Set the angle to reach the middle & low branch (L3) */
+            kMidLowPositionAngle(-30), // Angle
 
-            /** Set the height to reach the middle branch (L3) */
-            kMidLowPositionAngle(-30), // 9.5 rotations of hex shaft
+            /** Set the angle to reach the trough (L2) */
+            kTroughPositionAngle(-40), // Angle
 
-            /** Set the height to reach the low branch (L2) */
-            kTroughPositionAngle(-40), // 7 rotations of hex shaft
-
-            /** Set the height to reach the trough (L1) */
-            kIntakePositionAngle(-50), // 3 rotations of hex shaft
+            /** Set the height to reach the station (L1) */
+            kIntakePositionAngle(-50), // Angle
 
             /** Set the height to reach the bottom */
             kZeroPositionAngle(-60);
