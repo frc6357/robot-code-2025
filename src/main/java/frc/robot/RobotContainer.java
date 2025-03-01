@@ -146,7 +146,7 @@ public class RobotContainer {
         buttonBinders.add(new SK25LightsBinder(m_lights));
 
         // Adding all the binding classes to the list
-        buttonBinders.add(new EndEffectorBinder(m_endEffector));
+        buttonBinders.add(new EndEffectorBinder(m_endEffector, m_elevator));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)

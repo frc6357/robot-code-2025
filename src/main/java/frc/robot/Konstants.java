@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.pathplanner.lib.config.PIDConstants;
@@ -391,12 +392,16 @@ public final class Konstants
 
             /** Set the height to reach the top branch (L4) */ // 12.5
             kTopPositionAngle(-20), // 13.5 rotations of hex shaft
+
             /** Set the height to reach the middle branch (L3) */
             kMidLowPositionAngle(-30), // 9.5 rotations of hex shaft
+
             /** Set the height to reach the low branch (L2) */
             kTroughPositionAngle(-40), // 7 rotations of hex shaft
+
             /** Set the height to reach the trough (L1) */
             kIntakePositionAngle(-50), // 3 rotations of hex shaft
+
             /** Set the height to reach the bottom */
             kZeroPositionAngle(-60);
 
@@ -407,24 +412,39 @@ public final class Konstants
                 this.angle = angle;
             }
         }
-        /** Angles for the different endeffector positions */
-    
-       public static final double kLevel4Angle = -20;   // For the sake of naming consistency, I reccomend renaming constants
-                                                        // to have the format of "kVariableNameHere".
-                                                        // This helps with understanding which variables are changing and which
-                                                        // remain constant. In VSCode, this is super easy to do. Just click on
-                                                        // a variable name (like "level1") and press F2 to rename it. It will
-                                                        // automagically rename itself across all places it's referenced.
-                                                        // You can also right click a variable name and click "Rename Symbol" to
-                                                        // do the same thing.
-                                                        // TODO: Consider using constant-specific nomenclature
-       public static final double kLevel23Angle = -30;    
-       public static final double kLevel1Angle = -40;     
-       public static final double kIntakeAngle = -50;          
-       public static final double kHortizontalAngle = -60;     
 
-       public static final double kArmSpeed = 0.1;
+    //    /** Angles for the different endeffector positions */
+    //    public static final double kLevel4Angle = -20;
+    //    public static final double kLevel23Angle = -30;    
+    //    public static final double kLevel1Angle = -40;     
+    //    public static final double kIntakeAngle = -50;          
+    //    public static final double kHortizontalAngle = -60;     
+
+       /* PID values for arm motion control */
+       public static final double kArmP = 1.9;
+       public static final double kArmI = .0002;
+       public static final double kArmD = 2.1;
+       public static final double kArmV = 0.000173400381; // 1/5767
+
+       /* Maximum motion limits for motion control */
+       public static final double kArmCruiseVel = .15; // rot/sec
+       public static final double kArmTargetAccel = .45; // rot/sec^2
+       public static final double kArmTargetJerk = 4.5; // rot/sec^3
+
+       /* Values for default motor speed*/
+       public static final double kArmSpeed = 0.1; // rot/sec; often only used in Joystick control; Button control uses PID
        public static final double kRollerSpeed = 0.7;
+
+       /* Current Limits */
+       public static final CurrentLimitsConfigs kArmCurrentLimitsConfigs = 
+        new CurrentLimitsConfigs() // Limits in Amps; time in seconds
+            .withStatorCurrentLimitEnable(true)
+            .withStatorCurrentLimit(100)
+
+            .withSupplyCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(80)
+            .withSupplyCurrentLowerLimit(50)
+            .withSupplyCurrentLowerTime(0.3);
 
        public static final double kArmTolerance = 1;
 
@@ -437,10 +457,6 @@ public final class Konstants
         
         public static final double kEndEffetorMotorMinOutput = -0.5;
         public static final double kEndEffectorMotorMaxOutput = 0.8;
-
-        public static final PIDConstants endEffectorPID = new PIDConstants(3, 0, 1);
-        public static final PIDConstants balancePID = new PIDConstants(0.0, 0.0, 0.0);
-
     }   
 
     public static final class LightConstants

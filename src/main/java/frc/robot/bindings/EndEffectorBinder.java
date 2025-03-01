@@ -7,21 +7,16 @@ import frc.robot.commands.EndEffectorRollerIntakeCommand;
 import frc.robot.commands.EndEffectorRollerOutputCommand;
 import frc.robot.commands.EndEffectorRollerStopCommand;
 import frc.robot.commands.commandGroups.ScoreCommandGroup;
-import frc.robot.commands.EndEffectorEncoderResetCommand;
+// import frc.robot.commands.EndEffectorEncoderResetCommand;
 //import frc.robot.commands.EndEffectorStop;
 
 //import static frc.robot.Konstants.EndEffectorConstants.kJoystickChange;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
-import static frc.robot.Konstants.EndEffectorConstants.kLevel1Angle;
-import static frc.robot.Konstants.EndEffectorConstants.kLevel23Angle;
-import static frc.robot.Konstants.EndEffectorConstants.kLevel4Angle;
-import static frc.robot.Konstants.EndEffectorConstants.kIntakeAngle;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kLowPosition;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTopPosition;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTroughPosition;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kZeroPosition;
-import static frc.robot.Konstants.EndEffectorConstants.kHortizontalAngle;
 import static frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition.*;
 import static frc.robot.Ports.OperatorPorts.armHigh;
 import static frc.robot.Ports.OperatorPorts.armMiddleLow;
@@ -73,7 +68,7 @@ public class EndEffectorBinder implements CommandBinder {
     RelativeEncoder mEncoder;
 
 
-    public EndEffectorBinder(Optional<EndEffectorV2> subsystem)
+    public EndEffectorBinder(Optional<EndEffectorV2> endEffectorSubsystem, Optional<SK25Elevator> elevatorSubsystem)
     {
         this.endEffectorSubsystem = endEffectorSubsystem;
         this.elevatorSubsystem = elevatorSubsystem;
@@ -98,7 +93,7 @@ public class EndEffectorBinder implements CommandBinder {
 
             double joystickGain = kJoystickReversed ? -1 : 1;
             endArm.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
-            System.out.println("Hi");
+            // System.out.println("Hi");
 
             // endEffector Position Buttons
 
@@ -108,7 +103,7 @@ public class EndEffectorBinder implements CommandBinder {
             IntakeButton.onTrue(new EndEffectorButtonCommand(kIntakePositionAngle, endEffector));
             TopButton.onTrue(new ScoreCommandGroup(kTopPosition, elevator, kTopPositionAngle, endEffector));
             
-            ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector));
+            // ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector)); // TODO: Add back reset encoder command? This was originally for use with NEO Vortex pivot motor
             RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
             RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));

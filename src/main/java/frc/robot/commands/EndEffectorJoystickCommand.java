@@ -5,23 +5,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffectorV2;
 import static frc.robot.Konstants.EndEffectorConstants.kArmSpeed;
 
-//import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
-
-import com.revrobotics.RelativeEncoder;
-
-import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
+// import com.revrobotics.RelativeEncoder;
 
 public class EndEffectorJoystickCommand extends Command {
     private final EndEffectorV2 endEffector;
-    private final Supplier<Double> controller;
-    RelativeEncoder mEncoder;
+    private final Supplier<Double> joystickInput;
 
 
     public EndEffectorJoystickCommand(Supplier<Double> setpointChange, EndEffectorV2 endEffector)
     {
-        this.controller = setpointChange;
+        this.joystickInput = setpointChange;
         this.endEffector = endEffector;
-        this.mEncoder = endEffector.mEncoder;
 
         addRequirements(endEffector);
 
@@ -36,38 +30,19 @@ public class EndEffectorJoystickCommand extends Command {
     @Override
     public void execute()
     {
-       
-        
-       if (controller.get() > kJoystickDeadband)
-       {
-        double armspeed = -kArmSpeed;
-        double armdividend = controller.get();
-        armspeed /= 3;
-        armspeed = armspeed * armdividend;
-        System.out.println("Position: " + mEncoder.getPosition());
-         endEffector.runArm(armspeed);
-         endEffector.isRunning = true;
-         //endEffector.checkPositionUp();
-         System.out.println("Joystick execute:"+controller.get());
-       }
+        double joystickFilteredInput = joystickInput.get();
 
-       else if (controller.get() < -kJoystickDeadband)
-       {
-        double armdividend = controller.get();
-        System.out.println("Position: " + mEncoder.getPosition());
-        double armspeed = kArmSpeed / 3;
-        armspeed = armspeed * armdividend;
-        endEffector.runArm(-armspeed);
-        endEffector.isRunning = true;
-        System.out.println("Joystick execute:"+controller.get());
-        //endEffector.checkPositionDown();
-       }
+        if(Math.abs(joystickFilteredInput) > 0) { // If it's greater than 0, it's already overcome the deadband set in the command Binder
+            double armspeed = Math.signum(joystickFilteredInput) * kArmSpeed;
+            double armdividend = joystickFilteredInput;
+            armspeed *= (armdividend/3);
 
-       else
-       {
-        endEffector.hold();
-       }
-
+            endEffector.runArm(armspeed);
+            endEffector.isRunning = true;
+        }
+        else {
+            endEffector.hold();
+        }
     }
 
     @Override
