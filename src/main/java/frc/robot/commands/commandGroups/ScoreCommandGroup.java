@@ -1,28 +1,23 @@
 package frc.robot.commands.commandGroups;
-
-//import static frc.robot.Constants.LauncherConstants.kAmpDefaultLeftSpeed;
-//import static frc.robot.Constants.LauncherConstants.kAmpDefaultRightSpeed;
-
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
+// Subsystem constants (elevator & end effector)
 import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 
-//import frc.robot.commands.LaunchCommandAuto;
+// Individual subsystem commands (elevator & end effector)
 import frc.robot.commands.ElevatorButtonCommand;
 import frc.robot.commands.EndEffectorButtonCommand;
+
+// Individual subsystems (elevator & end effector)
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25EndEffector;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ScoreCommandGroup extends ParallelCommandGroup
 {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-    private final ElevatorPosition  elevatorPos;
+    private final ElevatorPosition     elevatorPos;
     private final EndEffectorPosition  endEffectorPos;
 
   /**
@@ -40,5 +35,4 @@ public class ScoreCommandGroup extends ParallelCommandGroup
         new EndEffectorButtonCommand(endEffectorPos, endEffector)
         );
   }
-
 }

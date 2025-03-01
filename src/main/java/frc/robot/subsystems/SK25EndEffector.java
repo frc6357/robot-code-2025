@@ -15,7 +15,6 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.units.measure.Angle;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;

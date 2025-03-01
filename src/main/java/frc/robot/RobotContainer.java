@@ -28,6 +28,7 @@ import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.bindings.SK25ElevatorBinder;
 import frc.robot.bindings.SK25LightsBinder;
+import frc.robot.bindings.ScoringBinder;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Lights;
 
@@ -144,9 +145,8 @@ public class RobotContainer {
         buttonBinders.add(new SKSwerveBinder(m_swerve));
         buttonBinders.add(new SK25ElevatorBinder(m_elevator));
         buttonBinders.add(new SK25LightsBinder(m_lights));
-
-        // Adding all the binding classes to the list
-        buttonBinders.add(new EndEffectorBinder(m_endEffector, m_elevator));
+        buttonBinders.add(new EndEffectorBinder(m_endEffector));
+        buttonBinders.add(new ScoringBinder(m_endEffector, m_elevator));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
@@ -234,19 +234,18 @@ public class RobotContainer {
 
     public void matchInit()
     {
-        //if (elevatorSubsystem.isPresent())
-        //{
+        /*
+        if (m_elevator.isPresent())
+        {
             //SK25Elevator elevator = elevatorSubsystem.get();
-            //TODO Add this back :)
             //elevator.setRightTargetHeight(0.0);
             //elevator.setLeftTargetHeight(0.0);
-        //}
-        
+        }
         if(m_endEffector.isPresent())
         {
             SK25EndEffector endeffector = m_endEffector.get();
         }
-        
+        */
     }
 
     public void teleopInit()
