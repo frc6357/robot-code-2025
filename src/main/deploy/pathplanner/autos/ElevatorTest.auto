@@ -9,6 +9,12 @@
           "data": {
             "pathName": "ForwardMarch"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorLowPositionCommand"
+          }
         }
       ]
     }

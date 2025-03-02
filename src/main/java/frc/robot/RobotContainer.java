@@ -71,7 +71,7 @@ public class RobotContainer {
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
 
-  SendableChooser<Command> autoCommandSelector;// = new SendableChooser<Command>();
+  SendableChooser<Command> autoCommandSelector;
 
 
 

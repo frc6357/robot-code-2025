@@ -48,7 +48,7 @@
   "folder": "CollectCoral",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.6585431775635685
+    "rotation": 0.6965258611821065
   },
   "useDefaultConstraints": true
 }

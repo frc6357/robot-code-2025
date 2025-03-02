@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5977499999999996,
-        "y": 2.9232499999999995
+        "x": 3.3910169491525433,
+        "y": 2.9898474576271186
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.797749999999999,
-        "y": 2.7732499999999987
+        "x": 3.5910169491525425,
+        "y": 2.8398474576271178
       },
       "isLocked": false,
       "linkedName": "FL"
@@ -48,7 +48,7 @@
   "folder": "RemoveAlgae",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 60.461217740442045
+    "rotation": 53.972057423723825
   },
   "useDefaultConstraints": true
 }
