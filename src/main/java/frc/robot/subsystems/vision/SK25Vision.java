@@ -147,6 +147,12 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         return bestLimelight;
     }
 
+    public void forcePoseToVision() {
+        Limelight ll = backLL;
+
+        m_swerve.resetPose(ll.getMegaPose2d());
+    }
+
     public void autonResetPoseToVision() {
         boolean reject = true;
         boolean firstSuccess = false;

@@ -19,7 +19,7 @@ public class DriveToPoseTranslation extends Command {
     private CommandConfig config;
 
     private static Limelight limelight;
-    Command driveCommand;
+    DriveCommand driveCommand;
 
     private Pose2d targetPose;
     private double targetPoseX;
@@ -38,7 +38,7 @@ public class DriveToPoseTranslation extends Command {
     private Supplier<Double> rotRateSupplier; // Supplies drivetrain's current rotation rate in order to 
                                               // move the robot's translation while maintaining rotational input
 
-    public DriveToPoseTranslation(CommandConfig config, Pose2d targetPose, Supplier<Double>rotRateSupplier) {
+    public DriveToPoseTranslation(CommandConfig config, Pose2d targetPose, Supplier<Double>rotRateSupplier, SKSwerve m_swerve) {
         xPID = new PIDController(config.kp, 0, 0);
         xPID.setTolerance(config.tolerance);
         yPID = new PIDController(config.kp, 0, 0);
@@ -60,7 +60,7 @@ public class DriveToPoseTranslation extends Command {
         addRequirements(m_swerve);
 
         driveCommand = 
-                DriveCommand.Drive(
+                new DriveCommand(
                     () -> (getOutputX()), 
                     () -> (getOutputY()), 
                     this.rotRateSupplier, 
@@ -113,7 +113,7 @@ public class DriveToPoseTranslation extends Command {
         xPID.reset();
         resetOutputs();
 
-        driveCommand.initialize();
+        // driveCommand.initialize();
         limelight.setLimelightPipeline(config.pipelineIndex);
     }
 
@@ -132,7 +132,7 @@ public class DriveToPoseTranslation extends Command {
             setOutputY(0);
         }
 
-        driveCommand.execute();
+        driveCommand.run();
     }
 
     @Override

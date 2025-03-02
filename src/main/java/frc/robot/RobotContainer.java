@@ -94,6 +94,7 @@ public class RobotContainer {
 
     // Configures swerve telemetry
     configurePhoenixTelemetry();
+
   }
 
   /**
@@ -243,7 +244,7 @@ public class RobotContainer {
 
     public void teleopInit()
     {
-       
+       m_vision.forcePoseToVision();
     }
     public void autonomousInit()
     {

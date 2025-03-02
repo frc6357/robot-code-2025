@@ -11,7 +11,7 @@ import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
 import frc.robot.utils.Field;
 
-public class SK25VisionBinder {
+public class SK25VisionBinder implements CommandBinder {
     Optional<SK25Vision> m_visionContainer;
     Optional<SKSwerve> m_swerveContainer;
 
@@ -32,7 +32,8 @@ public class SK25VisionBinder {
             reefAlignButton.onTrue(new DriveToPoseTranslation(
                     SK25Vision.AlignWithPose.getConfig(),
                     Field.CoralStation.leftCenterFace,
-                    () -> (m_swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond)));
+                    () -> (m_swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond),
+                    m_swerve));
         }
     }
 }
