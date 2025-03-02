@@ -384,7 +384,7 @@ public final class Konstants
             public static final double kPitch = 0; // (pitch) degrees tilted up/down from 0° level [think plane nose tilting up/down]
             public static final double kYaw = 0; // (yaw) yaw rotated clockwise/ccw from 0° North [think of a compass facing cw/ccw]
             
-            public static final boolean kAttached = true; // TODO: UPDATE LL ATTACHED TO TRUE WHEN CONNECTED
+            public static final boolean kAttached = true;
         }
 
         public static final double kVisionRejectDist = 1.8;
