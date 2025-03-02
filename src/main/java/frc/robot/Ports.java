@@ -92,7 +92,9 @@ public class Ports
         public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
 
         // Vision Commands
-        public static final SKTrigger kReefAlignCommand = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
+        public static final SKTrigger kMoveToSourceCommand = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
+        public static final SKTrigger kAlignToLeftReefCommand = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
+        public static final SKTrigger kAlignToRightReefCommand = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
 
         // Party mode
         public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kRightBumper.value, BUTTON);

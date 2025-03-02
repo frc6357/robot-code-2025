@@ -2,9 +2,7 @@ package frc.robot.bindings;
 
 import static edu.wpi.first.units.Units.*;
 
-import static frc.robot.Konstants.OIConstants.kDriveCoeff;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
-import static frc.robot.Konstants.OIConstants.kRotationCoeff;
 import static frc.robot.Konstants.OIConstants.kSlowModePercent;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
 import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
@@ -15,8 +13,8 @@ import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
 
 // Filters used for input types (specifically Axis inputs)
-import frc.robot.utils.filters.DeadbandFilter;
-import frc.robot.utils.filters.Filter;
+// import frc.robot.utils.filters.DeadbandFilter;
+// import frc.robot.utils.filters.Filter;
 import frc.robot.utils.filters.DriveStickFilter;
 import lombok.Getter;
 // Used for binding buttons to drive actions
@@ -69,8 +67,8 @@ public class SKSwerveBinder implements CommandBinder{
                     rotationFilter.setSlewRate(newValue);
                 });
 
-    @Getter private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    @Getter private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    @Getter private double MaxSpeed = TunerConstants.MaxSpeed; // kSpeedAt12Volts desired top speed
+    @Getter private double MaxAngularRate = TunerConstants.MaxAngularRate;
 
     // Driver Buttons
     public final Trigger fn = kDriveFn.button;
@@ -104,9 +102,9 @@ public class SKSwerveBinder implements CommandBinder{
             SKSwerve drivetrain = m_drive.get();
             
             // Sets filters for driving axes
-             kTranslationXPort.setFilter(translationXFilter);
+            kTranslationXPort.setFilter(translationXFilter);
 
-             kTranslationYPort.setFilter(translationYFilter);
+            kTranslationYPort.setFilter(translationYFilter);
             
             kVelocityOmegaPort.setFilter(rotationFilter);
 

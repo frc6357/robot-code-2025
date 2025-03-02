@@ -8,8 +8,13 @@ import frc.robot.subsystems.SKSwerve;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
-import edu.wpi.first.wpilibj2.command.Command;
-
+/**
+ * This isn't actually considered a command. Rather, it's a simplified method of feeding raw 
+ * velocities into the swerve drive.
+ * USE THIS WITH CAUTION! It has no filter applied and if sudden and large velocity changes
+ * are used, brownouts will likely occur. Try using a slew filter on the velocities passed into
+ * this DriveCommand in order to limit their maximum rate of change. (Limiting acceleration)
+ */
 public class DriveCommand {
     private SKSwerve m_swerve = RobotContainer.m_swerve;
 
@@ -31,7 +36,7 @@ public class DriveCommand {
          * @param velY The translational Y velocity of the swerve drive
          * @param rotRate The rotational velocity of the swerve drive
          * @param fieldOriented Whether or not the drive type should be field centric
-         * @return Drive command that runs the swerve chassis
+         * @return An object to call run() on that applies raw velocities to the swerve chassis
          */
         public DriveCommand(
                 Supplier<Double> velX,

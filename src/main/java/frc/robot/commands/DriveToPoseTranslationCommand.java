@@ -6,14 +6,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision.CommandConfig;
 import frc.robot.utils.vision.Limelight;
 import frc.robot.commands.DriveCommand;
 
-public class DriveToPoseTranslation extends Command {
+public class DriveToPoseTranslationCommand extends Command {
     private static SKSwerve m_swerve = RobotContainer.m_swerve;
 
     private CommandConfig config;
@@ -38,7 +37,7 @@ public class DriveToPoseTranslation extends Command {
     private Supplier<Double> rotRateSupplier; // Supplies drivetrain's current rotation rate in order to 
                                               // move the robot's translation while maintaining rotational input
 
-    public DriveToPoseTranslation(CommandConfig config, Pose2d targetPose, Supplier<Double>rotRateSupplier, SKSwerve m_swerve) {
+    public DriveToPoseTranslationCommand(CommandConfig config, Pose2d targetPose, Supplier<Double>rotRateSupplier, SKSwerve m_swerve) {
         xPID = new PIDController(config.kp, 0, 0);
         xPID.setTolerance(config.tolerance);
         yPID = new PIDController(config.kp, 0, 0);
@@ -73,7 +72,7 @@ public class DriveToPoseTranslation extends Command {
             outputX = 1 * Math.signum(outputX);
         }
 
-        outputX *= config.maxOutput;
+        outputX *= config.maxOutput; // maxOutput is the maximum allowed drivetrain speed for the specific command
     }
 
     private void setOutputY(double out) {

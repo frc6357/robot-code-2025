@@ -73,8 +73,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         });
     }
 
-    public static final class AlignWithPose extends CommandConfig {
-        private AlignWithPose() {
+    public static final class AlignTranslationWithPose extends CommandConfig {
+        private AlignTranslationWithPose() {
             configKp(0.2);
             configTolerance(0.01);
             configMaxOutput(TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() * 0.5);
@@ -83,8 +83,35 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             configLimelight(RobotContainer.m_vision.frontLL);
         }
 
-        public static AlignWithPose getConfig() {
-            return new AlignWithPose();
+        public static AlignTranslationWithPose getConfig() {
+            return new AlignTranslationWithPose();
+        }
+    }
+
+    public static final class AlignRotationWithPose extends CommandConfig {
+        private AlignRotationWithPose() {
+            configKp(0.);
+        }
+    }
+
+    public static final class AlignToReefTag extends CommandConfig {
+        private AlignToReefTag() {
+            configKp(0.02);
+            configTolerance(0.01);
+            configMaxOutput(TunerConstants.MaxSpeed * 0.5);
+            configError(0.3);
+            configPipelineIndex(kAprilTagPipeline);
+            configLimelight(RobotContainer.m_vision.frontLL);
+        }
+
+        public static AlignToReefTag getConfig() {
+            return new AlignToReefTag();
+        }
+    }
+
+    public static final class DriveToPose extends CommandConfig {
+        private DriveToPose() {
+            
         }
     }
 
@@ -425,7 +452,9 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     }
 
     public static class CommandConfig {
-        public double kp;
+        public double kp = 0;
+        public double ki = 0;
+        public double kd = 0;
         public double tolerance;
         public double maxOutput;
         public double error;
@@ -438,6 +467,14 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
         public void configKp(double kp) {
             this.kp = kp;
+        }
+
+        public void configKi(double ki) {
+            this.ki = ki;
+        }
+
+        public void configKd(double kd) {
+            this.kd = kd;
         }
 
         public void configTolerance(double tolerance) {
