@@ -32,6 +32,7 @@ import frc.robot.bindings.SKSwerveBinder;
 
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.configs.TunerConstants;
+import frc.robot.subsystems.vision.SK25Vision;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Lights;
 
@@ -53,15 +54,23 @@ public class RobotContainer {
 
     private void configurePhoenixTelemetry() {
 
-        m_swerve.get().registerTelemetry(logger::telemeterize);
+        m_swerveContainer.get().registerTelemetry(logger::telemeterize);
     }
 
 
 
   // The robot's subsystems and commands are defined here...
-  private Optional<SK25Elevator> m_elevator = Optional.empty();
-  private Optional<SK25Lights> m_lights = Optional.empty();
-  private Optional<SKSwerve> m_swerve = Optional.empty();
+
+  private Optional<SK25Elevator> m_elevatorContainer = Optional.empty();
+  private Optional<SK25Lights> m_lightsContainer = Optional.empty();
+  private Optional<SKSwerve> m_swerveContainer = Optional.empty();
+  private Optional<SK25Vision> m_visionContainer = Optional.empty();
+
+  public static SK25Elevator m_elevator;
+  public static SK25Lights m_lights;
+  public static SK25Vision m_vision;
+  public static SKSwerve m_swerve;
+
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -112,14 +121,21 @@ public class RobotContainer {
             // }
             if(subsystems.isLightsPresent())
             {
-                m_lights = Optional.of(new SK25Lights());
+                m_lightsContainer = Optional.of(new SK25Lights());
+                m_lights = m_lightsContainer.get();
             }
-            if(subsystems.isElevatorPresent())
-            {
-                m_elevator = Optional.of(new SK25Elevator());
+            if(subsystems.isElevatorPresent()) {
+                m_elevatorContainer = Optional.of(new SK25Elevator());
+                m_elevator = m_elevatorContainer.get();
             }
+            
             if(subsystems.isSwervePresent()) {
-                m_swerve = Optional.of(TunerConstants.createDrivetrain()); // Returns new SKSwerve
+                m_swerveContainer = Optional.of(TunerConstants.createDrivetrain());
+                m_swerve = m_swerveContainer.get(); // Returns new SKSwerve
+            }
+            if(subsystems.isVisionPresent() && subsystems.isSwervePresent()) {
+                m_visionContainer = Optional.of(new SK25Vision(m_swerve));
+                m_vision = m_visionContainer.get();
             }
         }
         catch (IOException e)
@@ -136,7 +152,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings()
     {
-        buttonBinders.add(new SKSwerveBinder(m_swerve));
+        buttonBinders.add(new SKSwerveBinder(m_swerveContainer));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
@@ -190,13 +206,13 @@ public class RobotContainer {
         // {
         //     m_swerve.get().testPeriodic();
         // }
-        if(m_lights.isPresent())
+        if(m_lightsContainer.isPresent())
         {
-            m_lights.get().testPeriodic();
+            m_lightsContainer.get().testPeriodic();
         }
-        if(m_elevator.isPresent())
+        if(m_elevatorContainer.isPresent())
         {
-            m_elevator.get().testPeriodic();
+            m_elevatorContainer.get().testPeriodic();
         }
     }
     public void testInit(){
@@ -204,13 +220,13 @@ public class RobotContainer {
         // {
         //     m_swerve.get().testInit();
         // }
-        if(m_lights.isPresent())
+        if(m_lightsContainer.isPresent())
         {
-            m_lights.get().testInit();
+            m_lightsContainer.get().testInit();
         }
-        if(m_elevator.isPresent())
+        if(m_elevatorContainer.isPresent())
         {
-            m_elevator.get().testInit();
+            m_elevatorContainer.get().testInit();
         }
     }
 

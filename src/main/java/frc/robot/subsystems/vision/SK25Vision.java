@@ -1,5 +1,8 @@
 package frc.robot.subsystems.vision;
 
+import static frc.robot.Konstants.VisionConstants.kAprilTagPipeline;
+import static frc.robot.RobotContainer.m_swerve;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -21,7 +24,9 @@ import frc.robot.utils.vision.Limelight;
 import frc.robot.utils.vision.LimelightHelpers.RawFiducial;
 import frc.robot.utils.Trio;
 import frc.robot.utils.Field;
+import frc.robot.subsystems.configs.TunerConstants;
 import frc.robot.subsystems.configs.VisionConfig;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.SKSwerve;
 
 public class SK25Vision extends SubsystemBase implements NTSendable {
@@ -43,8 +48,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     public ArrayList<Trio<Pose3d, Pose2d, Double>> autonPoses = new ArrayList<Trio<Pose3d, Pose2d, Double>>();
 
 
-    public SK25Vision(Optional<SKSwerve> m_swerve) {
-        this.m_swerve = m_swerve.get();
+    public SK25Vision(SKSwerve m_swerve) {
+        this.m_swerve = m_swerve;
         df.setMaximumFractionDigits(2);
 
         /* Limelight startup configurator*/
@@ -66,6 +71,21 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
                 builder.addStringProperty("ResetPoseToVisionStatus", () -> resetPoseToVisionLog, null);
             }
         });
+    }
+
+    public static final class AlignWithPose extends CommandConfig {
+        private AlignWithPose() {
+            configKp(0.2);
+            configTolerance(0.01);
+            configMaxOutput(TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() * 0.5);
+            configError(0.3);
+            configPipelineIndex(kAprilTagPipeline);
+            configLimelight(RobotContainer.m_vision.frontLL);
+        }
+
+        public static AlignWithPose getConfig() {
+            return new AlignWithPose();
+        }
     }
 
     @Override

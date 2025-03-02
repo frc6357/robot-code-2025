@@ -352,39 +352,39 @@ public final class Konstants
     }
 
     public static final class VisionConstants { // Each limelight has a greek letter name and an individual class for their own set of constants
+        public static final int kAprilTagPipeline = 0; // Default Apriltag pipeline value for all Limelights
+
         public static final class limelightAlpha {
             // Network/pipeline values
             public static final String kName = "limelight-alpha"; // Hostname? Camera name? TODO: Figure out limelight names
-            public static final int kAprilTagPipeline = 0; // TODO BEFORE MERGE: check with actual AprilTag Pipeline
 
             // Translation (in meters) from center of robot
-            public static final double kForward = -0.0889; // (z) meters forward of center; negative is backwards
-            public static final double kRight = 0.00635; // (x) meters right of center; negative is left
-            public static final double kUp = 0.8763; // (y) meters up of center; negative is down (how did you get a limelight down there???)
+            public static final double kForward = 0.0; // (z) meters forward of center; negative is backwards
+            public static final double kRight = 0.0; // (x) meters right of center; negative is left
+            public static final double kUp = 0.0; // (y) meters up of center; negative is down (how did you get a limelight down there???)
 
             // Rotation of limelight (in degrees and yaw)
             public static final double kRoll = 0; // (roll) degrees tilted clockwise/ccw from 0° level [think plane wings tilting cw/ccw]
             public static final double kPitch = 0; // (pitch) degrees tilted up/down from 0° level [think plane nose tilting up/down]
-            public static final double kYaw = 0; // (yaw) yaw rotated clockwise/ccw from 0° North [think of a compass facing cw/ccw]
+            public static final double kYaw = 20; // (yaw) yaw rotated clockwise/ccw from 0° North [think of a compass facing cw/ccw]
 
             public static final boolean kAttached = false; // TODO: UPDATE LL ATTACHED TO TRUE WHEN CONNECTED
         }
         public static final class limelightBeta {
             // Network/pipeline values
             public static final String kName = "limelight-beta";
-            public static final int kAprilTagPipeline = 0; // TODO BEFORE MERGE: Check with actual AprilTag Pipeline
 
             // Translation (in meters) from center of robot
-            public static final double kForward = 0; // (z) meters forward of center; negative is backwards
-            public static final double kRight = 0; // (x) meters right of center; negative is left
-            public static final double kUp = 0; // (y) meters up of center; negative is down
+            public static final double kForward = -0.0889; // (z) meters forward of center; negative is backwards
+            public static final double kRight = 0.00635; // (x) meters right of center; negative is left
+            public static final double kUp = 0.8763; // (y) meters up of center; negative is down
 
             // Rotation of limelight (in degrees and yaw)
             public static final double kRoll = 0; // (roll) degrees tilted clockwise/ccw from 0° level [think plane wings tilting cw/ccw]
             public static final double kPitch = 0; // (pitch) degrees tilted up/down from 0° level [think plane nose tilting up/down]
             public static final double kYaw = 0; // (yaw) yaw rotated clockwise/ccw from 0° North [think of a compass facing cw/ccw]
             
-            public static final boolean kAttached = false; // TODO: UPDATE LL ATTACHED TO TRUE WHEN CONNECTED
+            public static final boolean kAttached = true; // TODO: UPDATE LL ATTACHED TO TRUE WHEN CONNECTED
         }
 
         public static final double kVisionRejectDist = 1.8;

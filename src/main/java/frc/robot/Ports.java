@@ -91,6 +91,9 @@ public class Ports
         public static final SKTrigger kResetElevatorPos = new SKTrigger(kOperator, kBack.value, BUTTON);
         public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
 
+        // Vision Commands
+        public static final SKTrigger kReefAlignCommand = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
+
         // Party mode
         public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
         public static final SKTrigger kLightsOff = new SKTrigger(kOperator, 90, POV);

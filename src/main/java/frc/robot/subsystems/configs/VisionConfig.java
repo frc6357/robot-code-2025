@@ -11,7 +11,7 @@ import frc.robot.utils.vision.Limelight.LimelightConfig;
 
 public final class VisionConfig {
     public static final String BACK_LL = limelightAlpha.kName;
-    public static final int BACK_TAG_PIPELINE = limelightAlpha.kAprilTagPipeline;
+    public static final int BACK_TAG_PIPELINE = kAprilTagPipeline;
     public static final LimelightConfig BACK_CONFIG = 
                                         new LimelightConfig(limelightAlpha.kName) // Yes, it's the same value as [NAME]_LL. Just left it like this to see constructor layout
                                         .withTranslation(limelightAlpha.kForward, limelightAlpha.kRight, limelightAlpha.kUp) // Feeds in the position of the limelight on the bot
@@ -20,7 +20,7 @@ public final class VisionConfig {
 
 
     public static final String FRONT_LL = limelightBeta.kName;
-    public static final int FRONT_TAG_PIPELINE = limelightBeta.kAprilTagPipeline;
+    public static final int FRONT_TAG_PIPELINE = kAprilTagPipeline;
     public static final LimelightConfig FRONT_CONFIG = 
                                         new LimelightConfig(limelightBeta.kName)
                                         .withTranslation(limelightBeta.kForward, limelightBeta.kRight, limelightBeta.kUp)

@@ -78,7 +78,6 @@ public class SKSwerveBinder implements CommandBinder{
 
     private final Trigger robotCentric = kRobotCentricMode.button.and(fn);
     
-    private final Trigger slowmode = kSlowMode.button.and(fn);
     private final Trigger resetButton = kResetGyroPos.button;
 
 
@@ -111,10 +110,6 @@ public class SKSwerveBinder implements CommandBinder{
             
             kVelocityOmegaPort.setFilter(rotationFilter);
 
-            slowmode.
-                onTrue(new InstantCommand(() -> {setGainCommand(kSlowModePercent);}, drivetrain))
-                .onFalse(new InstantCommand(() -> {setGainCommand(1);}, drivetrain));
-
             // Resets gyro angles
             resetButton.onTrue(new InstantCommand(() -> {drivetrain.seedFieldCentric();} ));
 
@@ -137,24 +132,4 @@ public class SKSwerveBinder implements CommandBinder{
             );
         }
     }
-
-    /**
-     * Sets the gains on the filters for the joysticks
-     * 
-     * @param percent
-     *            The percent value of the full output that should be allowed (value
-     *            should be between 0 and 1)
-     */
-    public void setGainCommand(double percent)
-    {
-        Filter translation = new DeadbandFilter(kJoystickDeadband, percent);
-        kTranslationXPort.setFilter(translation);
-        kTranslationYPort.setFilter(translation);
-
-     
-        Filter rotation = new DeadbandFilter(kJoystickDeadband,percent);
-        kVelocityOmegaPort.setFilter(rotation);
-  
-    }
-
 }
