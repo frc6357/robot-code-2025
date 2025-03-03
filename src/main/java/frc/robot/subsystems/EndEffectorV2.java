@@ -11,6 +11,7 @@ import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 
 //import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.preferences.Pref;
@@ -276,6 +277,10 @@ public class EndEffectorV2 extends SubsystemBase
 
         SmartDashboard.putNumber("Arm Target Position", armTargetPosition);
         SmartDashboard.putBoolean("Arm at Setpoint", isArmAtTargetPosition());*/
+
+        SmartDashboard.putNumber("EndEffector Current Angle", mCurrentAngle);
+        SmartDashboard.putNumber("EndEffector Target Angle", mTargetAngle);
+        SmartDashboard.putBoolean("Is EndEffector at Target", isArmAtTargetPosition());
         
     }
 

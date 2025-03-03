@@ -201,6 +201,7 @@ public class SKSwerveBinder implements CommandBinder{
         // Resets gyro angles / robot oreintation
         resetButton.onTrue(new InstantCommand(() -> {drivetrain.seedFieldCentric();} ));
 
+        //when no other command it being run with the swerve subsystem, run this one (defualt drive command)
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> {

@@ -157,9 +157,7 @@ public class Ports
     public static class EndEffectorPorts
     {
         private static final String busName = "";
-        //assign an ID of 48 to the CANdle
-        public static final CANPort kCANdle = new CANPort(48, busName);
-    
+        
         //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
         public static final CANPort kEndEffectorArmMotor = new CANPort(33, busName);
         public static final CANPort kEndEffectorRollerMotor = new CANPort(34, busName);

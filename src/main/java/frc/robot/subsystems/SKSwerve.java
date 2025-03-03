@@ -42,6 +42,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.TunerConstants.TunerSwerveDrivetrain;
 import frc.robot.utils.Field;
 import frc.robot.utils.Util;
+import frc.robot.utils.files.Elastic;
+import frc.robot.utils.files.Elastic.Notification.NotificationLevel;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -336,6 +338,12 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
 
         if (x != newX || y != newY) {
             pose = new Pose2d(new Translation2d(newX, newY), pose.getRotation());
+
+            Elastic.Notification poseOutOfBoundsNotification = new Elastic.Notification(NotificationLevel.WARNING, 
+            "Robot Pose Out of Bounds!",
+            "Current Faulty Pose = " + String.valueOf(x) + ", " + String.valueOf(y));
+            Elastic.sendNotification(poseOutOfBoundsNotification.withDisplaySeconds(6.0));
+
             resetPose(pose);
         }
         return pose;
