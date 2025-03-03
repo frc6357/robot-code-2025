@@ -1,5 +1,6 @@
 package frc.robot.bindings;
 
+import frc.robot.commands.commandGroups.L4ScoreCommandGroup;
 import frc.robot.commands.commandGroups.ScoreCommandGroup;
 
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.*;
@@ -52,7 +53,7 @@ public class SK25ScoringBinder implements CommandBinder {
 
             // endEffector Position Buttons
             netPositionButton.onTrue(new ScoreCommandGroup(kNetPosition, elevator, kTopPositionAngle, endEffector));
-            topPositionButton.onTrue(new ScoreCommandGroup(kTopPosition, elevator, kTopPositionAngle, endEffector));    
+            topPositionButton.onTrue(new L4ScoreCommandGroup(kTopPosition, elevator, kTopPositionAngle, endEffector));    
             midPositionButton.onTrue(new ScoreCommandGroup(kMidPosition, elevator, kMidLowPositionAngle, endEffector));
             intakePositionButton.onTrue(new ScoreCommandGroup(kIntakePosition, elevator, kIntakePositionAngle, endEffector));
             lowPositionButton.onTrue(new ScoreCommandGroup(kLowPosition, elevator, kMidLowPositionAngle, endEffector));
