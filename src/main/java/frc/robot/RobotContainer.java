@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kLowPosition;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kMidPosition;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTopPosition;
+import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTroughPosition;
 
 import java.io.File;
 import java.io.IOException;
@@ -169,6 +170,8 @@ public class RobotContainer {
             {
                 SK25Elevator elevator = m_elevator.get();
 
+
+                NamedCommands.registerCommand("ElevatorTroughPositionCommand", new ElevatorButtonCommand(kTroughPosition, elevator));
                 NamedCommands.registerCommand("ElevatorLowPositionCommand", new ElevatorButtonCommand(kLowPosition, elevator));
                 NamedCommands.registerCommand("ElevatorMidPositionCommand", new ElevatorButtonCommand(kMidPosition, elevator));
                 NamedCommands.registerCommand("ElevatorHighPositionCommand", new ElevatorButtonCommand(kTopPosition, elevator));
