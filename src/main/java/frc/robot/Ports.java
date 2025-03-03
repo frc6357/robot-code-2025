@@ -93,7 +93,7 @@ public class Ports
 
         // Vision Commands
         public static final SKTrigger kMoveToSourceCommand = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
-        public static final SKTrigger kAlignToLeftReefCommand = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
+        // public static final SKTrigger kAlignToLeftReefCommand = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
         public static final SKTrigger kAlignToRightReefCommand = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
 
         // Party mode
