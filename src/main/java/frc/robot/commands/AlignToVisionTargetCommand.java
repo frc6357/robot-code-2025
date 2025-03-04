@@ -1,9 +1,11 @@
 package frc.robot.commands;
 
+import static frc.robot.Konstants.VisionConstants.kAprilTagPipeline;
 import static frc.robot.RobotContainer.m_swerve;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.vision.SK25Vision.CommandConfig;
@@ -18,6 +20,9 @@ public class AlignToVisionTargetCommand extends Command {
     private double out = 0;
     private double heading = Integer.MIN_VALUE; // Heading of the robot's rotation when driving; often unused
     private double horizontalSetpoint; // Goal tx of vision target
+    private boolean outputting;
+
+    private SlewRateLimiter slewFilter;
 
     private PIDController xPID; // PID Controller for the robot to move on its x-axis (Robot centric driving)
 
@@ -33,6 +38,8 @@ public class AlignToVisionTargetCommand extends Command {
         this.fwdPositiveSupplier = fwdPositiveSupplier;
 
         this.horizontalSetpoint = horizontalSetpoint; // Sets the horizontal goal offset (tx) of the target to the limelight (in degrees)
+
+        slewFilter = new SlewRateLimiter(1.5);
 
         addRequirements(m_swerve);
 
@@ -54,7 +61,7 @@ public class AlignToVisionTargetCommand extends Command {
 
     @Override
     public void execute() {
-        if(!atTarget()) {
+        if(!atTarget() && outputting) {
             setOutput(xPID.calculate(limelight.getHorizontalOffset(), horizontalSetpoint));
         }
         else {
@@ -79,6 +86,15 @@ public class AlignToVisionTargetCommand extends Command {
     }
 
     public boolean atTarget() {
+        if(xPID.atSetpoint() == true) {
+            outputting = false;
+        }
         return xPID.atSetpoint();
+    }
+
+    @Override
+    public void end(boolean isInterrupted) {
+        outputting = false;
+        limelight.setLimelightPipeline(kAprilTagPipeline);
     }
 }

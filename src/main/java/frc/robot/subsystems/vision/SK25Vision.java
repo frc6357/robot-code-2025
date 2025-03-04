@@ -78,7 +78,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         private AlignTranslationWithPose() {
             configKp(0.2);
             configTolerance(0.01);
-            configMaxOutput(TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() * 0.5);
+            configMaxOutput(TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() * 0.6);
             configError(0.3);
             configPipelineIndex(kAprilTagPipeline);
             configLimelight(RobotContainer.m_vision.frontLL);
@@ -99,7 +99,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         private AlignToReefTag() {
             configKp(0.02);
             configTolerance(0.01);
-            configMaxOutput(TunerConstants.MaxSpeed * 0.5);
+            configMaxOutput(TunerConstants.MaxSpeed * 0.6);
             configError(0.3);
             configPipelineIndex(kAprilTagPipeline);
             configLimelight(RobotContainer.m_vision.frontLL);
