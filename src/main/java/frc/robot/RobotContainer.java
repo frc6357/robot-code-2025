@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.bindings.ClimbBinder;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.SK25ElevatorBinder;
 import frc.robot.bindings.SK25LightsBinder;
@@ -41,6 +42,8 @@ import frc.robot.subsystems.SK25Lights;
 import frc.robot.bindings.EndEffectorBinder;
 import frc.robot.subsystems.EndEffectorV2;
 import frc.robot.subsystems.SKSwerve;
+import frc.robot.subsystems.SK25Climb;
+import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
 
@@ -67,6 +70,7 @@ public class RobotContainer {
   private Optional<SKSwerve> m_swerve = Optional.empty();
   // private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
   private Optional<EndEffectorV2> m_endEffector = Optional.empty();
+  private Optional<SK25Climb> m_Climb = Optional.empty();
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -130,6 +134,9 @@ public class RobotContainer {
             {
                 m_endEffector = Optional.of(new EndEffectorV2());
             }
+            if(subsystems.isClimbPresent()) {
+                m_Climb = Optional.of(new SK25Climb());
+            }
         }
         catch (IOException e)
         {
@@ -151,6 +158,8 @@ public class RobotContainer {
 
         // Adding all the binding classes to the list
         buttonBinders.add(new EndEffectorBinder(m_endEffector));
+        buttonBinders.add(new ClimbBinder(m_Climb));
+
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)

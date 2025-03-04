@@ -1,4 +1,4 @@
-package frc.robot;
+    package frc.robot;
 
 import static edu.wpi.first.wpilibj.XboxController.Axis.*;
 import static edu.wpi.first.wpilibj.XboxController.Button.*;
@@ -107,6 +107,11 @@ public class Ports
 
         public static final FilteredAxis endArm = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
 
+        //Climb
+        public static final SKTrigger climbRaiseButton = new SKTrigger(kOperator, 0, POV);
+        public static final SKTrigger climbLowerButton = new SKTrigger(kOperator, 180, POV);
+        public static final SKTrigger climbStopButton = new SKTrigger(kOperator, 90, POV);
+        public static final SKTrigger climbSlowButton = new SKTrigger(kOperator, 270, POV);
     }
 
     /*
@@ -135,6 +140,13 @@ public class Ports
         
         // CAN ID for IMU
         public static final CANPort kPigeonPort = new CANPort(kPigeonID, kCANivoreNameString);
+    }
+
+    public static class ClimbPorts
+    {
+        private static final String busName = "";
+        public static final CANPort kClimbMotor = new CANPort(62, busName);
+        
     }
 
     public static class ElevatorPorts
