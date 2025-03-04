@@ -21,8 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import choreo.auto.AutoChooser;
-import choreo.auto.AutoFactory;
+//import choreo.auto.AutoChooser;
+//import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -43,7 +43,7 @@ import frc.robot.bindings.EndEffectorBinder;
 import frc.robot.subsystems.EndEffectorV2;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.SK25Climb;
-import frc.robot.utils.SK25AutoBuilder;
+//import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
 

@@ -24,10 +24,6 @@ public class EndEffectorJoystickCommand extends Command {
         this.mEncoder = endEffector.mEncoder;
 
         addRequirements(endEffector);
-
-        
-
-        
     }
 
     @Override 
@@ -36,8 +32,6 @@ public class EndEffectorJoystickCommand extends Command {
     @Override
     public void execute()
     {
-       
-        
        if (controller.get() > kJoystickDeadband)
        {
         double armspeed = -kArmSpeed;
@@ -80,4 +74,3 @@ public class EndEffectorJoystickCommand extends Command {
     }
     
 }
-
