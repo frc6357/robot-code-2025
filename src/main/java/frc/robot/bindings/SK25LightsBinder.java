@@ -34,10 +34,12 @@ public class SK25LightsBinder implements CommandBinder
         {
             SK25Lights lights = m_lights.get();
 
+            lights.init();
+
             //set lights to teal (team color)
-            LightsToTeal.onTrue(new InstantCommand(() -> lights.setTeamColor()));
-            //set lights to party mode (rainbow animate)
-            PartyMode.onTrue(new InstantCommand(() -> lights.setPartyMode()));
+            // LightsToTeal.onTrue(new InstantCommand(() -> lights.setTeamColor()));
+            // //set lights to party mode (rainbow animate)
+            // PartyMode.onTrue(new InstantCommand(() -> lights.setPartyMode()));
         }
     }
 

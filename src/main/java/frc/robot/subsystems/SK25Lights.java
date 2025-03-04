@@ -37,8 +37,7 @@ public class SK25Lights implements Subsystem{
     ArrayList<Duo<Animation, Double>> animationQueue = new ArrayList<Duo<Animation, Double>>();
     ArrayList<Duo< Duo<Animation, Double>, Double>> effectQueue = new ArrayList<Duo< Duo<Animation, Double>, Double>>();
 
-    private boolean isPresent;
-
+    private double lastChangeTime = 0;
     private CANdle m_candle;
     public SK25Lights(Optional<CANdle> candle){ // candle is assumed to be present because of subsystem init logic in RobotContainer
         m_candle = candle.get();
@@ -63,8 +62,9 @@ public class SK25Lights implements Subsystem{
         m_candle.configAllSettings(config);
 
         m_candle.clearAnimation(1);
-        this.setTeamColor();
-
+        this.setTeamColor(5.0);
+        
+        testLEDs();
         
     }
     
@@ -110,19 +110,20 @@ public class SK25Lights implements Subsystem{
     
     public void processQueue() {
         if (!queueEmpty()) {
-            Duo<Animation, Double> currentAnim = getActiveAnimation();
-            double elapsedTime = Timer.getFPGATimestamp() - time;  
-    
+            Duo<Animation, Double> currentAnim = animationQueue.get(0);  // Get the first color in the queue
+            double elapsedTime = Timer.getFPGATimestamp() - lastChangeTime;
+
+            // If the duration for the current color has passed, move to the next color
             if (elapsedTime >= currentAnim.getSecond()) {
-                m_candle.clearAnimation(1);  
-                animationQueue.remove(0);  
+                animationQueue.remove(0);
+                lastChangeTime = Timer.getFPGATimestamp();
             } else {
                 m_candle.animate(currentAnim.getFirst(), 1);
             }
+        } else {
+            m_candle.clearAnimation(1);
         }
     }
-   
-
 
     public Duo<Animation, Double> getActiveAnimation() {
         if(queueEmpty()) {
@@ -159,7 +160,7 @@ public class SK25Lights implements Subsystem{
         isFinished = finished;
     }
 
-    public void setOrange(){
+   /*  public void setOrange(){
         StaticAnimate(255, 24, 0, kNumLedOnBot, Double.POSITIVE_INFINITY);
     }
 
@@ -173,11 +174,11 @@ public class SK25Lights implements Subsystem{
 
     public void setPurple(){
         StaticAnimate(128, 10, 128, kNumLedOnBot, Double.POSITIVE_INFINITY);
-    }
+    } */
 
-    public void setTeamColor()
+    public void setTeamColor(double duration)
     {
-        StaticAnimate(29, 168, 168, kNumLedOnBot, Double.POSITIVE_INFINITY);
+        StaticAnimate(29, 168, 168, kNumLedOnBot, duration);
     }
 
     public void setPartyMode(double duration)
@@ -185,7 +186,7 @@ public class SK25Lights implements Subsystem{
         RainbowAnimate(1.0, 1.0, kNumLedOnBot, duration);
     }
 
-    public void strobeLightsGreenWhite(int r, int g, int b, int w)
+/* public void strobeLightsGreenWhite(int r, int g, int b, int w)
     {
         StrobeAnimation animation = new StrobeAnimation(0, 255,0, 255, 100, kNumLedOnBot);
         m_candle.animate(animation, 1);
@@ -234,47 +235,31 @@ public class SK25Lights implements Subsystem{
         TwinklePercent percent = TwinklePercent.Percent100;
         TwinkleAnimation animation = new TwinkleAnimation(r, g, b, 0, 1.0, numLed, percent, 8);
         m_candle.animate(animation, 1);
-    }
+    } */
 
     public void StaticAnimate(int r, int g, int b, int numLed, double duration) 
     {
         StaticColorAnimation staticAnimation = new StaticColorAnimation(r, g, b, numLed);
         SingleFadeAnimation animation = staticAnimation.getAnimation();
         addToQueue(animation, duration);
-    }
+    } 
 
     //occurs every 20 miliseconds, usually not tied to a command, binder, etc...
     @Override
     public void periodic()
-    {
-        time = Timer.getTimestamp();
-
-        Duo<Duo<Animation, Double>, Double > currentAnimWithTimestamp = getActiveAnimationWithTimestamp(); 
-
-            //awant to be able to set current anim with whatever timestamp it was whenever it wad first initialized
-            if (currentAnimWithTimestamp != null) {
-                double animationEndTime = currentAnimWithTimestamp.getSecond();
-                if (time >= animationEndTime) {
-                    // The current animation has finished, remove it from the queue
-                    animationQueue.remove(0);
-                }
-            }
-
+    {       
+        processQueue();
     } 
 
     public void testLEDs() {
-        setLight(255, 0, 0, kNumLedOnBot);  
-        Timer.delay(1);
-        setLight(0, 255, 0, kNumLedOnBot);  
-        Timer.delay(1);
-        setLight(0, 0, 255, kNumLedOnBot);  
-        Timer.delay(1);
-        setLight(255, 255, 255, kNumLedOnBot); 
-        Timer.delay(1) 
-        clearAnimate();
+        // Test with party mode for 3 seconds
+        setPartyMode(3.0);
+    
+        // Switch to team color for 2 seconds
+        setTeamColor(2.0);
     }
     
-    testLEDs();
+
 
     }
 

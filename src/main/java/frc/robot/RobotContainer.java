@@ -209,7 +209,7 @@ public class RobotContainer {
         // }
         if(m_lights.isPresent())
         {
-            m_lights.get().testPeriodic();
+            //m_lights.get().testPeriodic();
         }
         if(m_elevator.isPresent())
 
@@ -233,7 +233,7 @@ public class RobotContainer {
         // }
         if(m_lights.isPresent())
         {
-            m_lights.get().testInit();
+            //m_lights.get().testInit();
         }
         if(m_elevator.isPresent())
         // if(mySubsystem.isPresent())
