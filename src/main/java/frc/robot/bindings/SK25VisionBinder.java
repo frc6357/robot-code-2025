@@ -1,12 +1,14 @@
 package frc.robot.bindings;
 
-import static frc.robot.Konstants.VisionConstants.kLeftSideReefOffset;
+import static frc.robot.Konstants.VisionConstants.kLeftSideReefAlignOffset;
+import static frc.robot.Konstants.VisionConstants.kRightSideReefAlignOffset;
 // import static frc.robot.Ports.OperatorPorts.kAlignToLeftReefCommand;
 import static frc.robot.Ports.OperatorPorts.kAlignToRightReefCommand;
 import static frc.robot.Ports.OperatorPorts.kMoveToSourceCommand;
 
 import java.util.Optional;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlignToVisionTargetCommand;
 import frc.robot.commands.DriveToPoseTranslationCommand;
@@ -47,10 +49,23 @@ public class SK25VisionBinder implements CommandBinder {
                     () -> (kVelocityOmegaPort.getFilteredAxis()),
                     m_swerve));
 
-            alignToLeftReefButton.whileTrue(new AlignToVisionTargetCommand(
-                    SK25Vision.AlignToReefTag.getConfig(), // AlignToTarget type config
-                    () -> (kTranslationYPort.getFilteredAxis()),
-                    kLeftSideReefOffset));
+            alignToLeftReefButton.whileTrue(visionAlignToLeftReef());
+
+            alignToRightReefButton.whileTrue(visionAlignToRightReef());
         }
+    }
+
+    public static Command visionAlignToLeftReef() {
+        return new AlignToVisionTargetCommand(
+                SK25Vision.AlignToReefTag.getConfig(), // AlignToTarget type config
+                () -> (kTranslationYPort.getFilteredAxis()),
+                kLeftSideReefAlignOffset);
+    }
+
+    public static Command visionAlignToRightReef() {
+        return new AlignToVisionTargetCommand(
+                SK25Vision.AlignToReefTag.getConfig(),
+                () -> (kTranslationYPort.getFilteredAxis()),
+                kRightSideReefAlignOffset);
     }
 }

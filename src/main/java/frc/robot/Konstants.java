@@ -354,8 +354,8 @@ public final class Konstants
     public static final class VisionConstants { // Each limelight has a greek letter name and an individual class for their own set of constants
         public static final int kAprilTagPipeline = 0; // Default Apriltag pipeline value for all Limelights
 
-        public static final double kLeftSideReefOffset = 0.0; // Degrees of tx to align to a reef apriltag to score on its left side
-        public static final double kRightSideReefOffset = 0.0; // Degrees of tx to align to a reef april to score on its right side
+        public static final double kLeftSideReefAlignOffset = 0.0; // Degrees of tx to align to a reef apriltag to score on its left side
+        public static final double kRightSideReefAlignOffset = 0.0; // Degrees of tx to align to a reef april to score on its right side
 
         public static final class limelightAlpha {
             // Network/pipeline values

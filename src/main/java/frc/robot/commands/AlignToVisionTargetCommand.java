@@ -64,6 +64,7 @@ public class AlignToVisionTargetCommand extends Command {
         driveCommand.run();
     }
 
+
     public void setOutput(double output) {
         this.out = output;
         if(Math.abs(out) > 1) {

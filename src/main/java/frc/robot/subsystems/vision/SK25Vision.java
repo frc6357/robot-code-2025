@@ -5,7 +5,6 @@ import static frc.robot.RobotContainer.m_swerve;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Optional;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
@@ -34,6 +33,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     public final Limelight frontLL = new Limelight(VisionConfig.FRONT_CONFIG);
     private SKSwerve m_swerve;
 
+    private static final int[] blueReefTagIDs = {17, 18, 19, 20, 21, 22};
+    private static final int[] redReefTagIDs = {6, 7, 8, 9, 10, 11};
 
     //TODO: Add logging/telemetry for both limelights
 
@@ -90,7 +91,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public static final class AlignRotationWithPose extends CommandConfig {
         private AlignRotationWithPose() {
-            configKp(0.);
+            configKp(0);
         }
     }
 
@@ -155,6 +156,85 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             DriverStation.reportWarning("Vision: Attempted to access nonexistent vision pose!", false);
         }
 
+        
+
+    }
+
+    public static boolean reefTargetSeen(Limelight ll) { 
+        RawFiducial[] tags = ll.getRawFiducial(); // Assuming we're on blue alliance
+        int[] targetIDs = blueReefTagIDs;
+
+        if(Field.isRed()) { // Check to make sure if Red Alliance
+            targetIDs = redReefTagIDs;
+        }
+
+        /*Since all reef tags are sequential, just check upper
+        and lower bound of reef tag sequence. If seen tag's id
+        is part of the targeted reef tags, return true. */ 
+        for(RawFiducial tag : tags) {
+            if((tag.id >= targetIDs[0]) && (tag.id <= targetIDs[5])) { 
+                return true;
+            }
+        }
+
+        // If none of the iterated tags on this limelight match our alliance's reef tags:
+        return false;
+    }
+
+    public enum FIELD_ELEMENT { // We don't really care how close the other tags are (processor, barge)
+        REEF
+    }
+
+    /**
+     * Finds the closest AprilTag for a specific field element for your alliance.
+     * SURROUND THIS IN TRY/CATCH! It will return null if no AprilTags of specific target are seen!
+     * @param ll The limelight to reed tags from
+     * @param element The field element's tag(s) to target
+     * @return The closest matching tag found.
+     */
+    public static RawFiducial getClosestTargetFiducial(Limelight ll, FIELD_ELEMENT element) {
+        RawFiducial[] tags = ll.getRawFiducial();
+        ArrayList<RawFiducial> goodTags = new ArrayList<RawFiducial>();
+        int[] targetIDs = {};
+
+        if(tags.length == 0) {
+            //TODO: make this report somewhere else
+            DriverStation.reportWarning("Vision: Cannot find target tag; no tags seen!", false);
+        }
+
+        switch(element) {
+            case REEF:
+                targetIDs = blueReefTagIDs;
+                if(Field.isRed()) {
+                    targetIDs = redReefTagIDs;
+                }
+
+                // This specific logic of sequential id checking is only applicable
+                // for the reef since the tags are in order and there are exactly 6
+                for(RawFiducial tag : tags) {
+                    if((tag.id >= targetIDs[0]) && (tag.id <= targetIDs[5])) { 
+                        goodTags.add(tag);
+                    }
+                }
+                break;
+        }
+
+        if(goodTags.isEmpty()) {
+            //TODO: Make this report somewhere else
+            DriverStation.reportWarning("Vision: No target tags found for " + element, false);
+            return null;
+        }
+
+        RawFiducial closestTag = null;
+        double closestTagDistance = 9999999; // Add a couple 9s for good measure
+        for(RawFiducial tag : goodTags) {
+            if(tag.distToRobot < closestTagDistance) {
+                closestTagDistance = tag.distToRobot;
+                closestTag = tag;
+            }
+        }
+
+        return closestTag;
     }
 
     public Limelight getBestLimelight() {
