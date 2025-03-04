@@ -1,10 +1,10 @@
-package frc.robot.utils;
+package frc.robot.utils.konstantLib.wrappers;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.utils.filters.FilteredXboxController;
+import frc.robot.utils.konstantLib.filters.FilteredXboxController;
 
 public class SKCommandXboxTrigger extends SKTrigger{
     

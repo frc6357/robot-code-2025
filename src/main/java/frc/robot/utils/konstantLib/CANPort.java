@@ -1,4 +1,4 @@
-package frc.robot.utils;
+package frc.robot.utils.konstantLib;
 
 /**
  * A class that contains the CAN ID and which CAN bus a device is on.

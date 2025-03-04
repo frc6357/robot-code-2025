@@ -31,7 +31,7 @@ import com.revrobotics.RelativeEncoder;
 import java.util.Optional;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.EndEffectorV2;
-import frc.robot.utils.filters.DeadbandFilter;
+import frc.robot.utils.konstantLib.filters.DeadbandFilter;
 
 public class EndEffectorBinder implements CommandBinder {
 

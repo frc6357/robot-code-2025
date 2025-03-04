@@ -1,4 +1,4 @@
-package frc.robot.utils;
+package frc.robot.utils.konstantLib.wrappers;
 
 import edu.wpi.first.wpilibj.Encoder;
 

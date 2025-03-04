@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.utils.files;
 
 /**
  * Automatically generated file containing build version information.

@@ -1,4 +1,4 @@
-package frc.robot.utils.filters;
+package frc.robot.utils.konstantLib.filters;
 
 /**
  * Creates a cubic curve on the filter 0.0 correlates to 0.0, and 1.0 correlates to

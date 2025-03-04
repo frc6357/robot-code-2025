@@ -1,4 +1,4 @@
-package frc.robot.utils.filters;
+package frc.robot.utils.konstantLib.filters;
 
 /**
  * This class creates a filter which has active dampening. The function essentially works

@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
+// import static edu.wpi.first.units.Units.MetersPerSecond;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kLowPosition;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kMidPosition;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTopPosition;
@@ -21,8 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import choreo.auto.AutoChooser;
-import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -41,8 +39,7 @@ import frc.robot.subsystems.SK25Lights;
 import frc.robot.bindings.EndEffectorBinder;
 import frc.robot.subsystems.EndEffectorV2;
 import frc.robot.subsystems.SKSwerve;
-import frc.robot.utils.SubsystemControls;
-import frc.robot.utils.filters.FilteredJoystick;
+import frc.robot.utils.konstantLib.filters.FilteredJoystick;
 
 
 /**
@@ -53,13 +50,13 @@ import frc.robot.utils.filters.FilteredJoystick;
  */
 public class RobotContainer {
 
-    private final Telemetry logger = new Telemetry(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond)); // "MaxSpeed"
+    //private final Telemetry logger = new Telemetry(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond)); // "MaxSpeed"
 
 
-    private void configurePhoenixTelemetry() {
+    // private void configurePhoenixTelemetry() {
 
-        m_swerve.get().registerTelemetry(logger::telemeterize);
-    }
+    //     m_swerve.get().registerTelemetry(logger::telemeterize);
+    // }
 
   // The robot's subsystems and commands are defined here...
   private Optional<SK25Elevator> m_elevator = Optional.empty();
@@ -124,7 +121,7 @@ public class RobotContainer {
                 m_elevator = Optional.of(new SK25Elevator());
             }
             if(subsystems.isSwervePresent()) {
-                m_swerve = Optional.of(TunerConstants.createDrivetrain()); // Returns new SKSwerve
+                m_swerve = Optional.of(Konstants.TunerConstants.createDrivetrain()); // Returns new SKSwerve
             }
             if(subsystems.isEndEffectorPresent())
             {
@@ -237,7 +234,7 @@ public class RobotContainer {
         
         if(m_endEffector.isPresent())
         {
-            EndEffectorV2 endeffector = m_endEffector.get();
+            //EndEffectorV2 endeffector = m_endEffector.get();
         }
         
     }

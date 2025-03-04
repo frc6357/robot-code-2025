@@ -1,17 +1,19 @@
-package frc.robot.utils;
+package frc.robot.utils.konstantLib;
 
 import static edu.wpi.first.wpilibj.XboxController.Axis.*;
 import static edu.wpi.first.wpilibj.XboxController.Button.*;
-import static frc.robot.utils.SKTrigger.INPUT_TYPE.*;
-import static frc.robot.utils.SKCommandXboxTrigger.XBOX_INPUT_TYPE.*;
-//import edu.wpi.first.wpilibj.GenericHID.HIDType;
+import static frc.robot.utils.konstantLib.wrappers.SKCommandXboxTrigger.XBOX_INPUT_TYPE.*;
+import static frc.robot.utils.konstantLib.wrappers.SKTrigger.INPUT_TYPE.*;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.utils.files.Elastic;
 import frc.robot.utils.files.Elastic.Notification.NotificationLevel;
-import frc.robot.utils.filters.FilteredXboxController;
+import frc.robot.utils.konstantLib.filters.FilteredAxis;
+import frc.robot.utils.konstantLib.filters.FilteredXboxController;
+import frc.robot.utils.konstantLib.wrappers.SKCommandXboxTrigger;
+import frc.robot.utils.konstantLib.wrappers.SKTrigger;
 
-
+ 
 public class SKController 
 {
     private int port;
@@ -26,6 +28,23 @@ public class SKController
         GUITAR_HERO,
         KEYBOARD,
         GCN;
+    }
+
+    public enum AXIS_TYPE
+    {
+        LEFT_Y(kLeftY.value),
+        LEFT_X(kLeftX.value),
+        RIGHT_Y(kRightY.value),
+        RIGHT_X(kRightX.value),
+        LEFT_TRIGGER(kLeftTrigger.value),
+        RIGHT_TRIGGER(kRightTrigger.value);
+
+        public int axisPort;
+
+        AXIS_TYPE(int axisPort)
+        {
+            this.axisPort = axisPort;
+        }
     }
 
     public SKController(ControllerType type, int port)
@@ -141,6 +160,23 @@ public class SKController
         } 
     }
 
+    /** Returns the specified filtered axis of the SKController using the AXIS_TYPE enum types.
+     * If that balue is a joystick input, the value will be between -1.0 and 1.0. If it is a trigger,
+     * the value will be between 0.0 and 1.0.
+     * @param axisType The axis value to return, enum types are listed at the top of the SKControlle class
+     * in the AXIS_TYPE enum class (ex:LEFT_Y).
+     * @return The FilteredAxis value of the controller port.*/
+    public FilteredAxis getRawSKContorllerAxis(AXIS_TYPE axisType)
+    {
+        switch(type)
+        {
+            case XBOX:
+                return new FilteredAxis(() -> xboxController.getRawAxis(axisType.axisPort));
+            default:
+                return new FilteredAxis(() -> hIDController.getRawAxis(axisType.axisPort));
+        }
+    }
+
     public SKTrigger mapA()
     {
         switch(type)
@@ -230,7 +266,7 @@ public class SKController
             case KEYBOARD:
                 return new SKTrigger(hIDController, kLeftBumper.value, BUTTON);
             case GCN:
-                return null;
+                return null;   //GCN dosn't have a left shoulder button
             default:
                 return new SKTrigger(hIDController, kLeftBumper.value, BUTTON);
         }
@@ -264,7 +300,7 @@ public class SKController
             case HID:
                 return new SKTrigger(hIDController, kStart.value, BUTTON);
             case GUITAR_HERO:
-                return null;
+                return null;  //Guitar Hero dosn't have a start button equivelant
             case KEYBOARD:
                 return new SKTrigger(hIDController, kStart.value, BUTTON);
             case GCN:
@@ -283,11 +319,11 @@ public class SKController
             case HID:
                 return new SKTrigger(hIDController, kBack.value, BUTTON);
             case GUITAR_HERO:
-                return null;
+                return null; //Guitar Hero dosn't have a select button equivelant
             case KEYBOARD:
                 return new SKTrigger(hIDController, kBack.value, BUTTON);
             case GCN:
-                return null;
+                return null; //GCN dosn't have a select button
             default:
                 return new SKTrigger(hIDController, kBack.value, BUTTON);
         }
@@ -369,6 +405,8 @@ public class SKController
         }
     }
 
+    /**AXIS returns a boolean, not a numerical value!
+    *For a number, use controller.getRawAxis(port) instead.*/
     public SKTrigger mapRightTrigger()
     {
         switch(type)
@@ -378,7 +416,7 @@ public class SKController
             case HID:
                 return new SKTrigger(hIDController, kRightTrigger.value, AXIS);
             case GUITAR_HERO:
-                return null;
+                return null; //Guitar Hero dosn't have a right trigger axis equivelant
             case KEYBOARD:
                 return new SKTrigger(hIDController, kRightTrigger.value, AXIS);
             case GCN:
@@ -388,6 +426,8 @@ public class SKController
         }
     }
 
+    /**AXIS returns a boolean, not a numerical value!
+    *For a number, use controller.getRawAxis(port) instead.*/
     public SKTrigger mapLeftTrigger()
     {
         switch(type)
@@ -397,7 +437,7 @@ public class SKController
             case HID:
                 return new SKTrigger(hIDController, kLeftTrigger.value, AXIS);
             case GUITAR_HERO:
-                return null;
+                return null; //Guitar Hero dosn't have a left trigger axis equivelant
             case KEYBOARD:
                 return new SKTrigger(hIDController, kLeftTrigger.value, AXIS);
             case GCN:
@@ -407,6 +447,8 @@ public class SKController
         }
     }
 
+    /**AXIS returns a boolean, not a numerical value!
+    *For a number, use controller.getRawAxis(port) instead.*/
     public SKTrigger mapLeftJoystickX()
     {
         switch(type)
@@ -416,7 +458,7 @@ public class SKController
             case HID:
                 return new SKTrigger(hIDController, kLeftX.value, AXIS);
             case GUITAR_HERO:
-                return null;
+                return null; //Guitar Hero dosn't have a left joystick axis equivelant
             case KEYBOARD:
                 return new SKTrigger(hIDController, kLeftX.value, AXIS);
             case GCN:
@@ -426,6 +468,8 @@ public class SKController
         }
     }
 
+    /**AXIS returns a boolean, not a numerical value!
+    *For a number, use controller.getRawAxis(port) instead.*/
     public SKTrigger mapLeftJoystickY()
     {
         switch(type)
@@ -445,6 +489,8 @@ public class SKController
         }
     }
 
+    /**AXIS returns a boolean, not a numerical value!
+    *For a number, use controller.getRawAxis(port) instead.*/
     public SKTrigger mapRightJoystickX()
     {
         switch(type)
@@ -454,7 +500,7 @@ public class SKController
             case HID:
                 return new SKTrigger(hIDController, kRightX.value, AXIS);
             case GUITAR_HERO:
-                return null;
+                return null; //Guitar Hero dosn't have a right joystick axis equivelant
             case KEYBOARD:
                 return new SKTrigger(hIDController, kRightX.value, AXIS);
             case GCN:
@@ -464,6 +510,8 @@ public class SKController
         }
     }
 
+    /**AXIS returns a boolean, not a numerical value!
+    *For a number, use controller.getRawAxis(port) instead.*/
     public SKTrigger mapRightJoystickY()
     {
         switch(type)
@@ -473,7 +521,7 @@ public class SKController
             case HID:
                 return new SKTrigger(hIDController, kRightY.value, AXIS);
             case GUITAR_HERO:
-                return null;
+                return null; //Guitar Hero dosn't have a right joystick axis equivelant
             case KEYBOARD:
                 return new SKTrigger(hIDController, kRightY.value, AXIS);
             case GCN:

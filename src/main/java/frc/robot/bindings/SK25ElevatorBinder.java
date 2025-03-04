@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ElevatorButtonCommand;
 import frc.robot.commands.ElevatorJoystickCommand;
 import frc.robot.subsystems.SK25Elevator;
-import frc.robot.utils.filters.DeadbandFilter;
+import frc.robot.utils.konstantLib.filters.DeadbandFilter;
 
 public class SK25ElevatorBinder implements CommandBinder{
     Optional<SK25Elevator> subsystem;

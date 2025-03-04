@@ -1,4 +1,4 @@
-package frc.robot.utils;
+package frc.robot.utils.konstantLib;
 
 /**
  * Represents a trio of three objects.

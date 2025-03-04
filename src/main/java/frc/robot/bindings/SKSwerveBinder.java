@@ -22,14 +22,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // Used for binding buttons to drive actions
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.TunerConstants;
+import frc.robot.Konstants.TunerConstants;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 import frc.robot.subsystems.SK25Elevator;
 // Adds the Swerve subsystem for construction
 import frc.robot.subsystems.SKSwerve;
-// Filter used for input types (specifically Axis inputs)
-import frc.robot.utils.filters.DriveStickFilter;
+import frc.robot.utils.konstantLib.filters.DriveStickFilter;
 
 public class SKSwerveBinder implements CommandBinder{
     Optional<SKSwerve>  m_drive;
