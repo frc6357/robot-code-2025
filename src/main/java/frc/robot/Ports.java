@@ -1,4 +1,4 @@
-    package frc.robot;
+package frc.robot;
 
 import static edu.wpi.first.wpilibj.XboxController.Axis.*;
 import static edu.wpi.first.wpilibj.XboxController.Button.*;
@@ -16,6 +16,7 @@ import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kPigeonID;
+import static frc.robot.utils.SKTrigger.INPUT_TYPE.*;
 //import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.BUTTON;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
@@ -141,7 +142,7 @@ public class Ports
         // CAN ID for IMU
         public static final CANPort kPigeonPort = new CANPort(kPigeonID, kCANivoreNameString);
     }
-
+    
     public static class ClimbPorts
     {
         private static final String busName = "";
@@ -161,9 +162,9 @@ public class Ports
 
     public static class LightsPorts
     {
-        private static final String busName = "";
-        //assign an ID of 48 to the CANdle
-        public static final CANPort kCANdle = new CANPort(48, busName);
+    private static final String busName = "";
+    //assign an ID of 48 to the CANdle
+    public static final CANPort kCANdle = new CANPort(48, busName);
     }
 
     public static class EndEffectorPorts
@@ -171,11 +172,11 @@ public class Ports
         private static final String busName = "";
         //assign an ID of 48 to the CANdle
         public static final CANPort kCANdle = new CANPort(48, busName);
-    
-        //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
-        public static final CANPort kEndEffectorArmMotor = new CANPort(33, busName);
-        public static final CANPort kEndEffectorRollerMotor = new CANPort(34, busName);
-        public static final CANPort kLaserCanEndEffector = new CANPort(46, busName);
+           
+         //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
+         public static final CANPort kEndEffectorArmMotor = new CANPort(33, busName);
+         public static final CANPort kEndEffectorRollerMotor = new CANPort(34, busName);
+         public static final CANPort kLaserCanEndEffector = new CANPort(46, busName);
 
     }
 

@@ -34,8 +34,8 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 
 public class EndEffectorV2 extends SubsystemBase
 {
-    //change to 25 when done testing.
-    final int motorRatio = 25;
+    //12.5 on final Robot
+    final double motorRatio = 12.5;
     final int gear1Rotation = 1;
     final int gear2Rotation = 1;
     final int degrees = 360;
