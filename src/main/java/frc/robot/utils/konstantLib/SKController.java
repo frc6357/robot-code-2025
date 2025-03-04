@@ -122,21 +122,23 @@ public class SKController
         }
     }
 
+    /**Gets the controller port.*/
     public int getPort()
     {
         return port;
     }
 
-    //if port is not at least one or at most five, no new port is assigned
+    /**If port is not at least zero or at most five, no new port is assigned. */
     public void setPort(int newPort)
     {
-        if (newPort >= 1 && newPort <= 5)
+        //The controller port must be a value of or between 0 and 5.
+        if (newPort >= 0 && newPort <= 5)
         {
             port = newPort;
         }
     }
     
-    //gets the underlying hid controller
+    /*Gets the underlying GenericHID object of the SKController*/
     public GenericHID getUnderlyingHIDController()
     {
         switch(type)
@@ -148,7 +150,8 @@ public class SKController
         }
     }
 
-    //only works for xbox
+    /*Gets the underlying FilteredXboxController (extends CommandXboxController) object of 
+    the SKController*/
     public FilteredXboxController getUnderlyingXboxController() throws Exception
     {
         switch(type)
@@ -165,7 +168,8 @@ public class SKController
      * the value will be between 0.0 and 1.0.
      * @param axisType The axis value to return, enum types are listed at the top of the SKControlle class
      * in the AXIS_TYPE enum class (ex:LEFT_Y).
-     * @return The FilteredAxis value of the controller port.*/
+     * @return The FilteredAxis value of the controller port, which contains a Supplier<Double> type
+     * value.*/
     public FilteredAxis getRawSKContorllerAxis(AXIS_TYPE axisType)
     {
         switch(type)
@@ -177,6 +181,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the A button value of the controller. */
     public SKTrigger mapA()
     {
         switch(type)
@@ -196,6 +201,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the B button value of the controller. */
     public SKTrigger mapB()
     {
         switch(type)
@@ -215,6 +221,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the X button value of the controller. */
     public SKTrigger mapX()
     {
         switch(type)
@@ -234,6 +241,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the Y button value of the controller. */
     public SKTrigger mapY()
     {
         switch(type)
@@ -253,6 +261,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the left shoulder button value of the controller. */
     public SKTrigger mapLeftShoulderButton()
     {
         switch(type)
@@ -272,6 +281,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the right shoulder button value of the controller. */
     public SKTrigger mapRightShoulderButton()
     {
         switch(type)
@@ -291,6 +301,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the start/menu button value of the controller. */
     public SKTrigger mapStart()
     {
         switch(type)
@@ -310,6 +321,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the select/back button value of the controller. */
     public SKTrigger mapSelect()
     {
         switch(type)
@@ -329,6 +341,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the DPad's up button value of the controller. */
     public SKTrigger mapUpDPad()
     {
         switch(type)
@@ -348,6 +361,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the DPad's down button value of the controller. */
     public SKTrigger mapDownDPad()
     {
         switch(type)
@@ -367,6 +381,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the DPad's left button value of the controller. */
     public SKTrigger mapLeftDPad()
     {
         switch(type)
@@ -386,6 +401,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the DPad's right button value of the controller. */
     public SKTrigger mapRightDPad()
     {
         switch(type)
@@ -405,8 +421,13 @@ public class SKController
         }
     }
 
-    /**AXIS returns a boolean, not a numerical value!
-    *For a number, use controller.getRawAxis(port) instead.*/
+    /**Maps the SKTrigger object to the right trigger axis value of the controller.
+    * <p>
+    * AXIS returns a boolean, not a numerical value!
+    *For a number, use controller.getRawSKControllerAxis(AXIS_TYPE axisPort) instead.
+    <p>
+    To Set the value which determines if the Trigger returns true or false, use 
+    setAxisReturnThreshold(double newThreshold) on the SKTrigger object.*/
     public SKTrigger mapRightTrigger()
     {
         switch(type)
@@ -426,8 +447,13 @@ public class SKController
         }
     }
 
-    /**AXIS returns a boolean, not a numerical value!
-    *For a number, use controller.getRawAxis(port) instead.*/
+    /**Maps the SKTrigger object to the left trigger axis value of the controller.
+    * <p>
+    * AXIS returns a boolean, not a numerical value!
+    *For a number, use controller.getRawSKControllerAxis(AXIS_TYPE axisPort) instead.
+    <p>
+    To Set the value which determines if the Trigger returns true or false, use 
+    setAxisReturnThreshold(double newThreshold) on the SKTrigger object.*/
     public SKTrigger mapLeftTrigger()
     {
         switch(type)
@@ -447,8 +473,13 @@ public class SKController
         }
     }
 
-    /**AXIS returns a boolean, not a numerical value!
-    *For a number, use controller.getRawAxis(port) instead.*/
+    /**Maps the SKTrigger object to the left joystick X axis value of the controller.
+    * <p>
+    * AXIS returns a boolean, not a numerical value!
+    *For a number, use controller.getRawSKControllerAxis(AXIS_TYPE axisPort) instead.
+    <p>
+    To Set the value which determines if the Trigger returns true or false, use 
+    setAxisReturnThreshold(double newThreshold) on the SKTrigger object.*/
     public SKTrigger mapLeftJoystickX()
     {
         switch(type)
@@ -468,8 +499,13 @@ public class SKController
         }
     }
 
-    /**AXIS returns a boolean, not a numerical value!
-    *For a number, use controller.getRawAxis(port) instead.*/
+    /**Maps the SKTrigger object to the left joystick Y axis value of the controller.
+    * <p>
+    * AXIS returns a boolean, not a numerical value!
+    *For a number, use controller.getRawSKControllerAxis(AXIS_TYPE axisPort) instead.
+    <p>
+    To Set the value which determines if the Trigger returns true or false, use 
+    setAxisReturnThreshold(double newThreshold) on the SKTrigger object.*/
     public SKTrigger mapLeftJoystickY()
     {
         switch(type)
@@ -489,8 +525,13 @@ public class SKController
         }
     }
 
-    /**AXIS returns a boolean, not a numerical value!
-    *For a number, use controller.getRawAxis(port) instead.*/
+    /**Maps the SKTrigger object to the right joystick X axis value of the controller.
+    * <p>
+    * AXIS returns a boolean, not a numerical value!
+    *For a number, use controller.getRawSKControllerAxis(AXIS_TYPE axisPort) instead.
+    <p>
+    To Set the value which determines if the Trigger returns true or false, use 
+    setAxisReturnThreshold(double newThreshold) on the SKTrigger object.*/
     public SKTrigger mapRightJoystickX()
     {
         switch(type)
@@ -510,8 +551,13 @@ public class SKController
         }
     }
 
-    /**AXIS returns a boolean, not a numerical value!
-    *For a number, use controller.getRawAxis(port) instead.*/
+    /**Maps the SKTrigger object to the right joystick Y axis value of the controller.
+    * <p>
+    * AXIS returns a boolean, not a numerical value!
+    *For a number, use controller.getRawSKControllerAxis(AXIS_TYPE axisPort) instead.
+    <p>
+    To Set the value which determines if the Trigger returns true or false, use 
+    setAxisReturnThreshold(double newThreshold) on the SKTrigger object.*/
     public SKTrigger mapRightJoystickY()
     {
         switch(type)
@@ -531,6 +577,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the left joystick press button value of the controller. */
     public SKTrigger mapLeftJoystickPress()
     {
         switch(type)
@@ -550,6 +597,7 @@ public class SKController
         }
     }
 
+    /**Maps the SKTrigger object to the right joystick press button value of the controller. */
     public SKTrigger mapRightJoystickPress()
     {
         switch(type)

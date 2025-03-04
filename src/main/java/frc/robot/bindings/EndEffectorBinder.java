@@ -16,15 +16,15 @@ import static frc.robot.Konstants.EndEffectorConstants.kLevel23Angle;
 import static frc.robot.Konstants.EndEffectorConstants.kLevel4Angle;
 import static frc.robot.Konstants.EndEffectorConstants.kIntakeAngle;
 import static frc.robot.Konstants.EndEffectorConstants.kHortizontalAngle;
-import static frc.robot.Ports.OperatorPorts.armHigh;
-import static frc.robot.Ports.OperatorPorts.armMiddleLow;
-import static frc.robot.Ports.OperatorPorts.armTrough;
-import static frc.robot.Ports.OperatorPorts.intakebut;
-import static frc.robot.Ports.OperatorPorts.zeropos;
-import static frc.robot.Ports.OperatorPorts.endArm;
-import static frc.robot.Ports.OperatorPorts.resetencoder;
-import static frc.robot.Ports.OperatorPorts.rollerintake;
-import static frc.robot.Ports.OperatorPorts.rolleroutput;
+import static frc.robot.Ports.OperatorPorts.kArmHigh;
+import static frc.robot.Ports.OperatorPorts.kArmMiddleLow;
+import static frc.robot.Ports.OperatorPorts.kArmTrough;
+import static frc.robot.Ports.OperatorPorts.kIntakeBut;
+import static frc.robot.Ports.OperatorPorts.kZeroPos;
+import static frc.robot.Ports.OperatorPorts.kEndArm;
+import static frc.robot.Ports.OperatorPorts.kResetEncoder;
+import static frc.robot.Ports.OperatorPorts.kRollerIntake;
+import static frc.robot.Ports.OperatorPorts.kRollerOutput;
 
 import com.revrobotics.RelativeEncoder;
 
@@ -70,14 +70,14 @@ public class EndEffectorBinder implements CommandBinder {
 
         
 
-        this.zeroPositionButton = zeropos.button;
-        this.LowMidButton = armMiddleLow.button;
-        this.IntakeButton = intakebut.button;
-        this.TopButton = armHigh.button;
-        this.TroughButton = armTrough.button;
-        this.ResetEncoderButton = resetencoder.button;
-        this.RollerIntake = rollerintake.button;
-        this.RollerOutPut = rolleroutput.button;
+        this.zeroPositionButton = kZeroPos.button;
+        this.LowMidButton = kArmMiddleLow.button;
+        this.IntakeButton = kIntakeBut.button;
+        this.TopButton = kArmHigh.button;
+        this.TroughButton = kArmTrough.button;
+        this.ResetEncoderButton = kResetEncoder.button;
+        this.RollerIntake = kRollerIntake.button;
+        this.RollerOutPut = kRollerOutput.button;
         
 
 
@@ -91,7 +91,7 @@ public class EndEffectorBinder implements CommandBinder {
             EndEffectorV2 endEffector = subsystem.get();
 
            double joystickGain = kJoystickReversed ? -1 : 1;
-           endArm.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
+           kEndArm.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
             System.out.println("Hi");
 
             // endEffector Up/Down Buttons 
@@ -118,7 +118,7 @@ public class EndEffectorBinder implements CommandBinder {
                     // Vertical movement of the arm is controlled by the Y axis of the right stick.
                     // Up on joystick moving arm up and down on stick moving arm down.
                   new EndEffectorJoystickCommand(
-                        () -> {return endArm.getFilteredAxis();},
+                        () -> {return kEndArm.getFilteredAxis();},
                        endEffector));
                             
                              

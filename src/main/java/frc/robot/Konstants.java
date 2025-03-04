@@ -370,6 +370,9 @@ public final class Konstants
 
     public static final class ElevatorConstants
     {
+        public static final int kRightElevatorMotorID = 41;
+        public static final int kLeftElevatorMotorID = 42;
+        
         /** Heights for the different elevator positions */
         public static enum ElevatorPosition
         {
@@ -489,6 +492,10 @@ public final class Konstants
     }
     public static final class EndEffectorConstants
     {
+        public static final int kEndEffectorArmMotorID = 33;
+        public static final int kEndEffectorRollerMotorID = 34;
+        public static final int kEndEffectorLaserCanID = 46;
+
         /** Angles for the different endeffector positions */
     
        public static final double kLevel4Angle = -20;   
@@ -519,6 +526,8 @@ public final class Konstants
 
     public static final class LightConstants
     {
+        public static final int kCandleID = 48;
+
         public static final int numLedOnBot = 240;
         public static final double kLightsOffBrightness = 0.0;
         public static final double kLightsOnBrightness = 0.5;
@@ -526,7 +535,10 @@ public final class Konstants
 
       
     /**CANivore name in Phoneix Tuner X for assigning CANbus names*/
-    public static final String kCANivoreNameString = "SwerveCANivore";
+    public static final String kCANivoreName = "SwerveCANivore";
+
+    /** The name of the CANbus when using the rio. <""> and <"rio"> are the two working rio  bus names. */
+    public static final String kDefualtRioBusName = ""; 
     
     /** The file that is used for system instantiation at runtime */
     public static final String SUBSYSTEMFILE = "Subsystems.json";
