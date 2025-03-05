@@ -31,7 +31,6 @@ import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.SKSwerveBinder;
 
 import frc.robot.subsystems.SKSwerve;
-import frc.robot.subsystems.configs.TunerConstants;
 import frc.robot.subsystems.vision.SK25Vision;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Lights;
@@ -93,7 +92,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configures swerve telemetry
-    configurePhoenixTelemetry();
+    // configurePhoenixTelemetry();
 
   }
 
@@ -116,10 +115,7 @@ public class RobotContainer {
 
             // Instantiating subsystems if they are present
             // This is decided by looking at Subsystems.json
-            // if(subsystems.isSwervePresent())
-            // {
-            //     m_swerve = Optional.of(new SK25Swerve());
-            // }
+
             if(subsystems.isLightsPresent())
             {
                 m_lightsContainer = Optional.of(new SK25Lights());
@@ -129,13 +125,12 @@ public class RobotContainer {
                 m_elevatorContainer = Optional.of(new SK25Elevator());
                 m_elevator = m_elevatorContainer.get();
             }
-            
             if(subsystems.isSwervePresent()) {
                 m_swerveContainer = Optional.of(TunerConstants.createDrivetrain());
                 m_swerve = m_swerveContainer.get(); // Returns new SKSwerve
             }
             if(subsystems.isVisionPresent() && subsystems.isSwervePresent()) {
-                m_visionContainer = Optional.of(new SK25Vision(m_swerve));
+                m_visionContainer = Optional.of(new SK25Vision(m_swerveContainer));
                 m_vision = m_visionContainer.get();
             }
         }

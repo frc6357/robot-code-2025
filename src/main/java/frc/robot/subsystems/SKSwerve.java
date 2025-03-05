@@ -27,10 +27,10 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import static frc.robot.Konstants.SwerveConstants.*;
+
+import frc.robot.TunerConstants.TunerSwerveDrivetrain;
 import frc.robot.utils.Field;
 import frc.robot.utils.Util;
-
-import frc.robot.subsystems.configs.TunerConstants.TunerSwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements

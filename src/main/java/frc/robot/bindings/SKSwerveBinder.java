@@ -20,9 +20,6 @@ import lombok.Getter;
 // Used for binding buttons to drive actions
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
-import frc.robot.subsystems.configs.TunerConstants;
-
 // Adds the Swerve subsystem for construction
 import frc.robot.subsystems.SKSwerve;
 
@@ -31,6 +28,7 @@ import java.util.Optional;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import frc.robot.TunerConstants;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 

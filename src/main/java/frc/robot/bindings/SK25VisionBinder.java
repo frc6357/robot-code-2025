@@ -5,13 +5,13 @@ import static frc.robot.Konstants.VisionConstants.kRightSideReefAlignOffset;
 // import static frc.robot.Ports.OperatorPorts.kAlignToLeftReefCommand;
 import static frc.robot.Ports.OperatorPorts.kAlignToRightReefCommand;
 import static frc.robot.Ports.OperatorPorts.kMoveToSourceCommand;
+// import frc.robot.RobotContainer.m_vision;
 
 import java.util.Optional;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AlignToVisionTargetCommand;
 import frc.robot.commands.DriveToPoseTranslationCommand;
+import frc.robot.commands.VisionAlignCommands;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
 import frc.robot.utils.Field;
@@ -38,7 +38,10 @@ public class SK25VisionBinder implements CommandBinder {
 
     public void bindButtons() {
         if(m_visionContainer.isPresent() && m_swerveContainer.isPresent()) {
-            SK25Vision m_vision = m_visionContainer.get();
+            // The specific swerve instance is needed in order to control the robot
+            // while the vision commands are all static since vision doesn't need one specific
+            // instance to be controlled. Vision should be able to run multiple commands
+            // either in sequence or parallel with itself.
             SKSwerve m_swerve = m_swerveContainer.get();
 
 
@@ -49,23 +52,27 @@ public class SK25VisionBinder implements CommandBinder {
                     () -> (kVelocityOmegaPort.getFilteredAxis()),
                     m_swerve));
 
-            alignToLeftReefButton.whileTrue(visionAlignToLeftReef());
+            alignToLeftReefButton.whileTrue(VisionAlignCommands.visionAlignToLeftReef());
 
-            alignToRightReefButton.whileTrue(visionAlignToRightReef());
+            alignToRightReefButton.whileTrue(VisionAlignCommands.visionAlignToRightReef());
         }
     }
 
-    public static Command visionAlignToLeftReef() {
-        return new AlignToVisionTargetCommand(
-                SK25Vision.AlignToReefTag.getConfig(), // AlignToTarget type config
-                () -> (kTranslationYPort.getFilteredAxis()),
-                kLeftSideReefAlignOffset);
-    }
+    // public static Command autonResetPoseToVision() {
+    //     return m_vision.runOnce(m_vision::autonResetPoseToVision);
+    // }
 
-    public static Command visionAlignToRightReef() {
-        return new AlignToVisionTargetCommand(
-                SK25Vision.AlignToReefTag.getConfig(),
-                () -> (kTranslationYPort.getFilteredAxis()),
-                kRightSideReefAlignOffset);
-    }
+    // public static Command visionAlignToLeftReef() {
+    //     return new AlignToVisionTargetCommand(
+    //             SK25Vision.AlignToReefTag.getConfig(), // AlignToTarget type config
+    //             () -> (kTranslationYPort.getFilteredAxis()),
+    //             kLeftSideReefAlignOffset);
+    // }
+
+    // public static Command visionAlignToRightReef() {
+    //     return new AlignToVisionTargetCommand(
+    //             SK25Vision.AlignToReefTag.getConfig(),
+    //             () -> (kTranslationYPort.getFilteredAxis()),
+    //             kRightSideReefAlignOffset);
+    // }
 }

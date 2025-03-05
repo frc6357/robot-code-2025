@@ -1,10 +1,10 @@
 package frc.robot.subsystems.vision;
 
 import static frc.robot.Konstants.VisionConstants.kAprilTagPipeline;
-import static frc.robot.RobotContainer.m_swerve;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
@@ -23,9 +23,8 @@ import frc.robot.utils.vision.Limelight;
 import frc.robot.utils.vision.LimelightHelpers.RawFiducial;
 import frc.robot.utils.Trio;
 import frc.robot.utils.Field;
-import frc.robot.subsystems.configs.TunerConstants;
-import frc.robot.subsystems.configs.VisionConfig;
 import frc.robot.RobotContainer;
+import frc.robot.TunerConstants;
 import frc.robot.subsystems.SKSwerve;
 
 public class SK25Vision extends SubsystemBase implements NTSendable {
@@ -49,8 +48,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     public ArrayList<Trio<Pose3d, Pose2d, Double>> autonPoses = new ArrayList<Trio<Pose3d, Pose2d, Double>>();
 
 
-    public SK25Vision(SKSwerve m_swerve) {
-        this.m_swerve = m_swerve;
+    public SK25Vision(Optional<SKSwerve> m_swerveContainer) {
+        this.m_swerve = m_swerveContainer.get();
         df.setMaximumFractionDigits(2);
 
         /* Limelight startup configurator*/
@@ -95,6 +94,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         }
     }
 
+    // TODO: Make new pipelines for both limelights that only detects each alliance's reef tags
     public static final class AlignToReefTag extends CommandConfig {
         private AlignToReefTag() {
             configKp(0.02);
@@ -121,7 +121,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         double yaw = m_swerve.getRotation().getDegrees();
 
         for(Limelight ll : poseLimelights) {
-            ll.setRobotOrientation(yaw); // Periodically updates limelight orientation based on robot facing
+        // Used for MEGATAG 2
+        ll.setRobotOrientation(yaw); // Periodically updates limelight orientation based on robot facing
 
         /* Autonomous pose updater */
         if(DriverStation.isAutonomousEnabled() && ll.targetInView()) {

@@ -13,6 +13,10 @@ import frc.robot.subsystems.vision.SK25Vision.CommandConfig;
 import frc.robot.utils.vision.Limelight;
 import frc.robot.commands.DriveCommand;
 
+/**
+ * This Command currently does nothing as it has no internal logic. Disregard it
+ * for now.
+ */
 public class DriveToPoseCommand extends Command {
     private static SKSwerve m_swerve = RobotContainer.m_swerve;
 

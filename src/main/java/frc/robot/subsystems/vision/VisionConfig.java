@@ -1,4 +1,4 @@
-package frc.robot.subsystems.configs;
+package frc.robot.subsystems.vision;
 
 // Used for standard deviation matrix
 import edu.wpi.first.math.Matrix;

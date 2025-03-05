@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import static frc.robot.Konstants.VisionConstants.kAprilTagPipeline;
-import static frc.robot.RobotContainer.m_swerve;
 
 import java.util.function.Supplier;
 
@@ -41,7 +40,7 @@ public class AlignToVisionTargetCommand extends Command {
 
         slewFilter = new SlewRateLimiter(1.5);
 
-        addRequirements(m_swerve);
+        addRequirements();
 
         driveCommand =
                 new DriveCommand(
@@ -78,6 +77,9 @@ public class AlignToVisionTargetCommand extends Command {
             out = 1 * Math.signum(out);
         }
 
+        out = slewFilter.calculate(out); // Applies the slew filter to the output magnitude
+        
+        // Multiply the output magnitude by the allowed speed
         this.out *= config.maxOutput; // maxOutput is the maximum allowed drivetrain speed for the specific command
     }
 
