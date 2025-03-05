@@ -1,24 +1,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.EndEffectorV2;
-
-import com.revrobotics.RelativeEncoder;
+import frc.robot.subsystems.SK25EndEffector;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
+import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
+
 public class EndEffectorButtonCommand extends Command{
 
-    private final EndEffectorV2 endEffector;
-    private final double position;
+    private final SK25EndEffector endEffector;
+    private final EndEffectorPosition angle;
 
-    RelativeEncoder mEncoder;
 
-    public EndEffectorButtonCommand(double position, EndEffectorV2 endEffector)
+    public EndEffectorButtonCommand(EndEffectorPosition angle, SK25EndEffector endEffector)
     {
-        this.position = position;
+        this.angle = angle;
         this.endEffector = endEffector;
-        this.mEncoder = endEffector.mEncoder;
 
         addRequirements(endEffector);
     }
@@ -28,7 +26,7 @@ public class EndEffectorButtonCommand extends Command{
     {
         //System.out.println("Position: " + position);
        // System.out.println("Encoder position: " + mEncoder.getPosition());
-        endEffector.setTargetAngle(-position);
+        endEffector.setTargetAngle(angle);
         endEffector.isRunning = true;
     }
 
@@ -49,7 +47,7 @@ public class EndEffectorButtonCommand extends Command{
         }
         else
         {
-            System.out.println(endEffector.isArmAtTargetPosition());
+            // System.out.println(endEffector.isArmAtTargetPosition());
             //System.out.println(Math.abs( endEffector.getTargetArmPosition() - endEffector.getArmPosition()));
             //System.out.println(endEffector.getTargetArmPosition());
             //System.out.println(endEffector.getArmPosition());

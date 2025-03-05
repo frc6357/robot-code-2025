@@ -35,6 +35,7 @@ import frc.robot.bindings.SK25ElevatorBinder;
 import frc.robot.bindings.SK25LightsBinder;
 import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.commands.ElevatorButtonCommand;
+import frc.robot.bindings.SK25ScoringBinder;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Lights;
 
@@ -44,6 +45,8 @@ import frc.robot.subsystems.EndEffectorV2;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.SK25Climb;
 //import frc.robot.utils.SK25AutoBuilder;
+import frc.robot.bindings.SK25EndEffectorBinder;
+import frc.robot.subsystems.SK25EndEffector;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
 
@@ -65,15 +68,15 @@ public class RobotContainer {
     }
 
   // The robot's subsystems and commands are defined here...
-  private Optional<SK25Elevator> m_elevator = Optional.empty();
-  private Optional<SK25Lights> m_lights = Optional.empty();
-  private Optional<SKSwerve> m_swerve = Optional.empty();
+  public Optional<SK25Elevator> m_elevator = Optional.empty();
+  public Optional<SK25Lights> m_lights = Optional.empty();
+  public Optional<SKSwerve> m_swerve = Optional.empty();
   // private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
-  private Optional<EndEffectorV2> m_endEffector = Optional.empty();
-  private Optional<SK25Climb> m_Climb = Optional.empty();
+  public Optional <SK25Climb> m_Climb = Optional.empty();
+  public Optional<SK25EndEffector> m_endEffector = Optional.empty();
 
   // The list containing all the command binding classes
-  private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
+  public List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
 
   SendableChooser<Command> autoCommandSelector;// = new SendableChooser<Command>();
 
@@ -132,7 +135,7 @@ public class RobotContainer {
             }
             if(subsystems.isEndEffectorPresent())
             {
-                m_endEffector = Optional.of(new EndEffectorV2());
+                m_endEffector = Optional.of(new SK25EndEffector());
             }
             if(subsystems.isClimbPresent()) {
                 m_Climb = Optional.of(new SK25Climb());
@@ -157,9 +160,9 @@ public class RobotContainer {
         buttonBinders.add(new SK25LightsBinder(m_lights));
 
         // Adding all the binding classes to the list
-        buttonBinders.add(new EndEffectorBinder(m_endEffector));
         buttonBinders.add(new ClimbBinder(m_Climb));
-
+        buttonBinders.add(new SK25EndEffectorBinder(m_endEffector));
+        buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
@@ -236,19 +239,18 @@ public class RobotContainer {
 
     public void matchInit()
     {
-        //if (elevatorSubsystem.isPresent())
-        //{
+        /*
+        if (m_elevator.isPresent())
+        {
             //SK25Elevator elevator = elevatorSubsystem.get();
-            //TODO Add this back :)
             //elevator.setRightTargetHeight(0.0);
             //elevator.setLeftTargetHeight(0.0);
-        //}
-        
+        }
         if(m_endEffector.isPresent())
         {
-            EndEffectorV2 endeffector = m_endEffector.get();
+            SK25EndEffector endeffector = m_endEffector.get();
         }
-        
+        */
     }
 
     public void teleopInit()

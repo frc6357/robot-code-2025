@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.pathplanner.lib.config.PIDConstants;
@@ -271,9 +272,13 @@ public final class Konstants
             //TODO FIX DURING TESTING - Measure Elevator Heights
 
             /** Set the height to reach the top branch (L4) */ // 12.5
+            kNetPosition(14), // 13.5 rotations of hex shaft
+            /** Set the height to reach the top branch (L4) */ // 12.5
             kTopPosition(13.5), // 13.5 rotations of hex shaft
             /** Set the height to reach the middle branch (L3) */
             kMidPosition(9.5), // 9.5 rotations of hex shaft
+            /** Set the height to reach the low branch (L2) */
+            kIntakePosition(8.5), // 8.5 rotations of hex shaft
             /** Set the height to reach the low branch (L2) */
             kLowPosition(7), // 7 rotations of hex shaft
             /** Set the height to reach the trough (L1) */
@@ -384,24 +389,61 @@ public final class Konstants
     }
     public static final class EndEffectorConstants
     {
-        /** Angles for the different endeffector positions */
-    
-       public static final double kLevel4Angle = -20;   // For the sake of naming consistency, I reccomend renaming constants
-                                                        // to have the format of "kVariableNameHere".
-                                                        // This helps with understanding which variables are changing and which
-                                                        // remain constant. In VSCode, this is super easy to do. Just click on
-                                                        // a variable name (like "level1") and press F2 to rename it. It will
-                                                        // automagically rename itself across all places it's referenced.
-                                                        // You can also right click a variable name and click "Rename Symbol" to
-                                                        // do the same thing.
-                                                        // TODO: Consider using constant-specific nomenclature
-       public static final double kLevel23Angle = -30;    
-       public static final double kLevel1Angle = -40;     
-       public static final double kIntakeAngle = -50;          
-       public static final double kHortizontalAngle = -60;     
+        /** Heights for the different elevator positions */
+        public static enum EndEffectorPosition
+        {
+            /** Set the angle to reach the top branch (L4) */ // 12.5
+            kTopPositionAngle(-20), // Angle
+            /** Set the angle to reach the middle & low branch (L3) */
+            kMidLowPositionAngle(-30), // Angle
+            /** Set the angle to reach the trough (L2) */
+            kTroughPositionAngle(-40), // Angle
+            /** Set the height to reach the station (L1) */
+            kIntakePositionAngle(-50), // Angle
+            /** Set the height to reach the bottom */
+            kZeroPositionAngle(-60); // Angle
 
-       public static final double kArmSpeed = 0.1;
+            public final double angle;
+
+            EndEffectorPosition(double angle)
+            {
+                this.angle = angle;
+            }
+        }
+
+    //    /** Angles for the different endeffector positions */
+    //    public static final double kLevel4Angle = -20;
+    //    public static final double kLevel23Angle = -30;    
+    //    public static final double kLevel1Angle = -40;     
+    //    public static final double kIntakeAngle = -50;          
+    //    public static final double kHortizontalAngle = -60;     
+
+       /* PID values for arm motion control */
+       public static final double kArmP = 1.9;
+       public static final double kArmI = .0002;
+       public static final double kArmD = 2.1;
+       public static final double kArmV = 0.000173400381; // 1/5767
+
+       /* Maximum motion limits for motion control */
+       public static final double kArmCruiseVel = .15; // rot/sec
+       public static final double kArmTargetAccel = .45; // rot/sec^2
+       public static final double kArmTargetJerk = 4.5; // rot/sec^3
+
+       /* Values for default motor speed*/
+       public static final double kArmSpeed = 0.1; // rot/sec; often only used in Joystick control; Button control uses PID
        public static final double kRollerSpeed = 0.7;
+       public static final double kRollerStop = 0;
+
+       /* Current Limits */
+       public static final CurrentLimitsConfigs kArmCurrentLimitsConfigs = 
+        new CurrentLimitsConfigs() // Limits in Amps; time in seconds
+            .withStatorCurrentLimitEnable(true)
+            .withStatorCurrentLimit(100)
+
+            .withSupplyCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(80)
+            .withSupplyCurrentLowerLimit(50)
+            .withSupplyCurrentLowerTime(0.3);
 
        public static final double kArmTolerance = 1;
 
@@ -414,10 +456,6 @@ public final class Konstants
         
         public static final double kEndEffetorMotorMinOutput = -0.5;
         public static final double kEndEffectorMotorMaxOutput = 0.8;
-
-        public static final PIDConstants endEffectorPID = new PIDConstants(3, 0, 1);
-        public static final PIDConstants balancePID = new PIDConstants(0.0, 0.0, 0.0);
-
     }   
 
     public static final class LightConstants

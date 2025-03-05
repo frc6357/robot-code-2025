@@ -1,6 +1,5 @@
 package frc.robot.bindings;
 
-import static frc.robot.Ports.OperatorPorts.kLightsToTealButton;
 import static frc.robot.Ports.OperatorPorts.kPartyModeButton;
 
 import java.util.Optional;
@@ -23,7 +22,6 @@ public class SK25LightsBinder implements CommandBinder
         this.m_lights = lights;
 
         //tie the triggers to their respective buttons
-        this.LightsToTeal = kLightsToTealButton.button;
         this.PartyMode = kPartyModeButton.button;
     }
 
@@ -35,7 +33,7 @@ public class SK25LightsBinder implements CommandBinder
             SK25Lights lights = m_lights.get();
 
             //set lights to teal (team color)
-            LightsToTeal.onTrue(new InstantCommand(() -> lights.setTeamColor()));
+            //LightsToTeal.onTrue(new InstantCommand(() -> lights.setTeamColor()));
             //set lights to party mode (rainbow animate)
             PartyMode.onTrue(new InstantCommand(() -> lights.setPartyMode()));
         }
