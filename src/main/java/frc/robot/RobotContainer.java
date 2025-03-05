@@ -40,8 +40,6 @@ import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Lights;
 
 // import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.bindings.EndEffectorBinder;
-import frc.robot.subsystems.EndEffectorV2;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.SK25Climb;
 //import frc.robot.utils.SK25AutoBuilder;
