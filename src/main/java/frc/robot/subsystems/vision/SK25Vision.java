@@ -76,6 +76,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     public static final class AlignTranslationWithPose extends CommandConfig {
         private AlignTranslationWithPose() {
             configKp(0.2);
+            configKi(0.0);
+            configKd(0.0);
             configTolerance(0.01);
             configMaxOutput(TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() * 0.6);
             configError(0.3);
@@ -88,16 +90,18 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         }
     }
 
-    public static final class AlignRotationWithPose extends CommandConfig {
-        private AlignRotationWithPose() {
-            configKp(0);
-        }
-    }
+    // public static final class AlignRotationWithPose extends CommandConfig {
+    //     private AlignRotationWithPose() {
+    //         configKp(0);
+    //     }
+    // }
 
     // TODO: Make new pipelines for both limelights that only detects each alliance's reef tags
     public static final class AlignToReefTag extends CommandConfig {
         private AlignToReefTag() {
             configKp(0.02);
+            configKi(0.0);
+            configKd(0.0);
             configTolerance(0.01);
             configMaxOutput(TunerConstants.MaxSpeed * 0.6);
             configError(0.3);
