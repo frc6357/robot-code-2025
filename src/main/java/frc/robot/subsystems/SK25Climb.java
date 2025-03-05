@@ -20,8 +20,11 @@ import static frc.robot.Ports.ClimbPorts.kClimbMotor;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.compound.Diff_DutyCycleOut_Velocity;
 //import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 //import com.ctre.phoenix6.hardware.core.CoreCANcoder;
@@ -30,6 +33,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 //import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
+import edu.wpi.first.units.Units;
 //import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Angle;
 //SmartDashboard Import
@@ -108,8 +112,8 @@ public class SK25Climb extends SubsystemBase
        motorCurrentPosition = kClimbMinPosition;
        motorTargetPosition = kClimbMaxPosition;
 
-       motor.setPosition(kClimbMinPosition);
-       motor.getConfigurator().apply(motorConfig);
+      //  motor.setPosition(kClimbMinPosition);
+      //  motor.getConfigurator().apply(motorConfig);
    }
 
    public void setBrake() {
@@ -117,7 +121,8 @@ public class SK25Climb extends SubsystemBase
    }
    //If we Eyeball
    public void runMotor(double speed) {
-     motor.set(speed);
+      // Sets a velocity to target via pid and supplies an average duty cycle in volts
+     motor.setControl(new VelocityDutyCycle(speed).withFeedForward(3.0)); // FF in volts
    }
 
    public double getMotorSpeed() {
@@ -160,6 +165,6 @@ public class SK25Climb extends SubsystemBase
       timestamp += Robot.kDefaultPeriod;
       motorCurrentPosition = getMotorPosition(); 
      //motorCurrentPosition =  motor.getPosition().getValue().in(Rotation);
-     SmartDashboard.putNumber("Velocity (RpMs)", motorCurrentPosition);
+     SmartDashboard.putNumber("Velocity (RpMs)", getMotorSpeed());
    }
 }

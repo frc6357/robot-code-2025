@@ -18,7 +18,7 @@ public class ClimbCommandReturn extends Command{
 
     @Override
     public void execute() {
-       climb.runMotor(-kKrakenSpeed);
+       climb.runMotor(kKrakenSpeed);
     }
 
     @Override
