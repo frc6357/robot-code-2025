@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Volts;
+import static frc.robot.Konstants.SwerveConstants.kPigeonID;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -108,7 +109,7 @@ public class TunerConstants {
     private static final boolean kInvertLeftSide = true;
     private static final boolean kInvertRightSide = false;
 
-    private static final int kPigeonId = 25;
+    private static final int kPigeonId = kPigeonID;
 
     // These are only used for simulation
     private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.01);
