@@ -326,7 +326,7 @@ public final class Konstants
 
         // Important Joystick Settings
         public static final double kJoystickChange   = 10.0;
-        public static final double kJoystickDeadband = 0.2;  // Manual elevator movement axis deadband
+        public static final double kJoystickDeadband = 0.1;  // Manual elevator movement axis deadband
         public static final boolean kJoystickReversed = true;  // Determines if the joystick movement is reversed
     }
 

@@ -2,6 +2,6 @@
     "swerve": true,
     "endeffector": true,
     "lights": false,
-    "elevator": true,
+    "elevator": false,
     "climb": true
 }

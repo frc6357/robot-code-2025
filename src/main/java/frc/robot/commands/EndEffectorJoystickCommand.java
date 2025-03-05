@@ -31,7 +31,7 @@ public class EndEffectorJoystickCommand extends Command {
         if(Math.abs(joystickFilteredInput) > 0) { // If it's greater than 0, it's already overcome the deadband set in the command Binder
             double armspeed = Math.signum(joystickFilteredInput) * kArmSpeed;
             double armdividend = joystickFilteredInput;
-            armspeed *= (armdividend/3);
+            armspeed *= (armdividend);
 
             endEffector.runArm(armspeed);
             endEffector.isRunning = true;

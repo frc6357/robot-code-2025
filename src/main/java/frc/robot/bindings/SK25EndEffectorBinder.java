@@ -10,7 +10,10 @@ import frc.robot.commands.EndEffectorRollerStopCommand;
 import static frc.robot.Konstants.EndEffectorConstants.*;
 
 // Operator ports
-import static frc.robot.Ports.OperatorPorts.*;
+import static frc.robot.Ports.OperatorPorts.rollerintake;
+import static frc.robot.Ports.OperatorPorts.rolleroutput;
+import static frc.robot.Ports.OperatorPorts.resetencoder;
+import static frc.robot.Ports.OperatorPorts.endArm;
 
 // Relative encoder (REV)
 import com.revrobotics.RelativeEncoder;

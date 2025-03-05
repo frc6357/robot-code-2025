@@ -34,7 +34,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 
 public class SK25EndEffector extends SubsystemBase
 {
-    //12.5 on final Robot
+    //may not need anymore, external encoder now in use, keep just in case.
     final double motorRatio = 12.5;
     final int gear1Rotation = 1;
     final int gear2Rotation = 1;
