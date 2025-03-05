@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "F-S"
+            "pathName": "ToRightPoint2"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RS-FL"
+            "pathName": "ToRightPoint3"
           }
         },
         {

@@ -7,25 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P1_EL"
+            "pathName": "P1_ToLeftPoint1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "EL-LS"
+            "pathName": "ToLeftPoint2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "LS-EL"
+            "pathName": "ToLeftPoint3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "EL-LS"
+            "pathName": "ToLeftPoint2"
           }
         }
       ]

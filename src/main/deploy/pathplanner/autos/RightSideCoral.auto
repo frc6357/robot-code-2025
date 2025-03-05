@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "P3_ToRightPoint1"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ElevatorTroughPositionCommand"
+            "pathName": "ToRightPoint2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToRightPoint3"
           }
         }
       ]
