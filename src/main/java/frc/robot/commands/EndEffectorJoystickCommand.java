@@ -18,6 +18,10 @@ public class EndEffectorJoystickCommand extends Command {
         this.endEffector = endEffector;
 
         addRequirements(endEffector);
+
+        
+
+        
     }
 
     @Override 
@@ -26,19 +30,34 @@ public class EndEffectorJoystickCommand extends Command {
     @Override
     public void execute()
     {
-        double joystickFilteredInput = joystickInput.get();
+         
+        
+       if (joystickInput.get() > 0)
+       {
+        double armspeed = -kArmSpeed;
+        double armdividend = joystickInput.get();
+        armspeed /= 3;
+        armspeed = armspeed * armdividend;
+         endEffector.runArm(armspeed);
+         endEffector.isRunning = true;
+         //endEffector.checkPositionUp();
+         
+       }
 
-        if(Math.abs(joystickFilteredInput) > 0) { // If it's greater than 0, it's already overcome the deadband set in the command Binder
-            double armspeed = Math.signum(joystickFilteredInput) * kArmSpeed;
-            double armdividend = joystickFilteredInput;
-            armspeed *= (armdividend);
+       else if (joystickInput.get() < 0)
+       {
+        double armdividend = joystickInput.get();
+        double armspeed = kArmSpeed / 3;
+        armspeed = armspeed * armdividend;
+        endEffector.runArm(-armspeed);
+        endEffector.isRunning = true;
+        //endEffector.checkPositionDown();
+       }
 
-            endEffector.runArm(armspeed);
-            endEffector.isRunning = true;
-        }
-        else {
-            endEffector.hold();
-        }
+       else
+       {
+        endEffector.hold();
+       }
     }
 
     @Override
@@ -51,3 +70,4 @@ public class EndEffectorJoystickCommand extends Command {
     }
     
 }
+
