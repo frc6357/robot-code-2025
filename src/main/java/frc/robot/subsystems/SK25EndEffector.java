@@ -17,7 +17,7 @@ import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
@@ -27,7 +27,7 @@ import com.revrobotics.spark.ClosedLoopSlot;
 //import com.revrobotics.spark.SparkAbsoluteEncoder;
 //import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -40,9 +40,9 @@ public class SK25EndEffector extends SubsystemBase
     final int gear2Rotation = 1;
     final int degrees = 360;
 
-    SparkMax armMotor;
-    SparkMax rollerMotor;
-    SparkMaxConfig armConfig;
+    SparkFlex armMotor;
+    SparkFlex rollerMotor;
+    SparkFlexConfig armConfig;
 
     SparkClosedLoopController mPID;
     double mTargetAngle;
@@ -69,10 +69,10 @@ public class SK25EndEffector extends SubsystemBase
 
         
         //initialize the new motor object with its motor ID and type
-        rollerMotor = new SparkMax(kEndEffectorRollerMotor.ID, MotorType.kBrushless);
-        armMotor = new SparkMax(kEndEffectorArmMotor.ID, MotorType.kBrushless);
+        rollerMotor = new SparkFlex(kEndEffectorRollerMotor.ID, MotorType.kBrushless);
+        armMotor = new SparkFlex(kEndEffectorArmMotor.ID, MotorType.kBrushless);
 
-        armConfig = new SparkMaxConfig();
+        armConfig = new SparkFlexConfig();
         
         armConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -134,7 +134,7 @@ public class SK25EndEffector extends SubsystemBase
             Degrees.of(angleDegrees)
             .plus(Degrees.of(90))
             .in(Radians);
-        System.out.println(targetAngleRadians);
+        //System.out.println(targetAngleRadians);
         //double armFF = armFeedforward.calculate(targetAngleRadians, 0);
         mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0);
     }
