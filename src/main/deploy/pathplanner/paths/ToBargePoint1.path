@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.960382911570097,
-        "y": 7.335142456650849
+        "x": 5.770643693107933,
+        "y": 6.563524057217165
       },
       "isLocked": false,
       "linkedName": "P1"
     },
     {
       "anchor": {
-        "x": 5.82340909090909,
-        "y": 4.039957386363636
+        "x": 3.656079323797138,
+        "y": 5.003771131339402
       },
       "prevControl": {
-        "x": 6.0436171456529,
-        "y": 4.158314526519806
+        "x": 4.21089076723017,
+        "y": 5.401560468140441
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BR"
+      "linkedName": "BargePoint1"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 179.92598978551425
+    "rotation": -60.124007308310546
   },
   "reversed": false,
   "folder": "P1",

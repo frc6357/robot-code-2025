@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ToRightPoint2"
+            "pathName": "ToProcessorPoint2"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ToRightPoint2"
+            "pathName": "ToProcessorPoint2"
           }
         },
         {
@@ -55,7 +55,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ToRightPoint3"
+            "pathName": "ToProcessorPoint3"
           }
         },
         {
@@ -67,7 +67,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ToRightPoint2"
+            "pathName": "ToProcessorPoint2"
           }
         },
         {

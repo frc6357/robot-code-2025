@@ -7,43 +7,49 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P3_FR"
+            "pathName": "ToBargePoint1"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ToProcessorPoint2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Station"
+            "waitTime": 1.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ToProcessorPoint3"
+            "pathName": "ToBargePoint2"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "L4"
+            "waitTime": 1.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToBargePoint3"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToBargePoint4Coral"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "2GP",
+  "folder": null,
   "choreoAuto": false
 }

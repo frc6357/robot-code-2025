@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ToRightPoint3"
+            "pathName": "ToProcessorPoint3"
           }
         },
         {

@@ -7,31 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P1_ToLeftPoint1"
+            "pathName": "P3_ToProcessorPoint1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ToLeftPoint2"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.5
+            "pathName": "ToProcessorPoint2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ToLeftPoint3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ToLeftPoint2"
+            "pathName": "ToProcessorPoint3"
           }
         }
       ]
