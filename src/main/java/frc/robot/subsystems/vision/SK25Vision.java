@@ -380,7 +380,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             Pose2d megaPose2d = LL.getMegaPose2d();
             RawFiducial[] tags = LL.getRawFiducial();
             double highestAmbiguity = 2;
-            ChassisSpeeds robotSpeed = m_swerve.getVelocity(true);
+            ChassisSpeeds robotSpeed = m_swerve.getRobotRelativeSpeeds();
 
             // distance from current pose to vision estimated pose
             double poseDifference =
@@ -409,7 +409,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
                 // reject if pose is out of the field
                 LL.sendInvalidStatus("bound rejection");
                 return;
-            } else if (Math.abs(robotSpeed.omegaRadiansPerSecond) >= 1.6) {
+            } else if (Math.abs(robotSpeed.omegaRadiansPerSecond) >= 0.5) {
                 // reject if we are rotating more than 0.5 rad/s
                 LL.sendInvalidStatus("rotation rejection");
                 return;
