@@ -55,13 +55,13 @@ public class SK25Elevator extends Elevator
     public double currentHeight;
 
     // Limit Switch
-    SparkLimitSwitch forwardLimitSwitch;
-    SparkLimitSwitch reverseLimitSwitch;
+    //SparkLimitSwitch forwardLimitSwitch;
+    //SparkLimitSwitch reverseLimitSwitch;
 
     double actualFF;
 
     // SKPreferences for PID & FF
-    public Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.01)
+    public Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.5)
         .onChange((newValue) -> {
             motorConfigL.closedLoop.p(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
@@ -71,17 +71,17 @@ public class SK25Elevator extends Elevator
             motorConfigL.closedLoop.i(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
-    public Pref<Double> kDPref = SKPreferences.attach("elevatorkD", 0.0)
+    public Pref<Double> kDPref = SKPreferences.attach("elevatorkD", 0.01)
         .onChange((newValue) -> {
             motorConfigL.closedLoop.d(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
-    public Pref<Double> kFFPref = SKPreferences.attach("elevatorkVFF", 0.0025) // Formula's asymptote FF value
+    public Pref<Double> kFFPref = SKPreferences.attach("elevatorkVFF", 0.0) // Formula's asymptote FF value
         .onChange((newValue) -> {
             motorConfigL.closedLoop.velocityFF(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
-        public Pref<Double> kFFpPref = SKPreferences.attach("elevatorkpFF", 0.0) // Formula's asymptote FF value
+        public Pref<Double> kFFpPref = SKPreferences.attach("elevatorkpFF", 0.008) // Formula's asymptote FF value
         .onChange((newValue) -> {
             motorConfigL.closedLoop.velocityFF(newValue);
             motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
@@ -92,7 +92,7 @@ public class SK25Elevator extends Elevator
     {
         // Motor initialization with REV
         motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
-        // motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
+        motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
 
         motorConfigL = new SparkFlexConfig();
         motorConfigR = new SparkFlexConfig();
@@ -104,31 +104,33 @@ public class SK25Elevator extends Elevator
         encoder = motorL.getExternalEncoder();
 
         // Limit switches with REV
-        forwardLimitSwitch = motorL.getForwardLimitSwitch();
-        reverseLimitSwitch = motorL.getReverseLimitSwitch();
+        //forwardLimitSwitch = motorL.getForwardLimitSwitch();
+        //reverseLimitSwitch = motorL.getReverseLimitSwitch();
 
         // Configurations for the left motor, limit switch, encoder, & closed loop control
         motorConfigL
             .idleMode(IdleMode.kCoast).smartCurrentLimit(50);
+        motorConfigL.softLimit
+            .reverseSoftLimitEnabled(false);
         motorConfigL.externalEncoder
             .inverted(true)
             .positionConversionFactor(1)
             .velocityConversionFactor(0.01666667); // RPM -> RPS (Divide by 60)
-        motorConfigL.limitSwitch
-            .forwardLimitSwitchType(Type.kNormallyOpen)
-            .forwardLimitSwitchEnabled(true)
-            .reverseLimitSwitchType(Type.kNormallyOpen)
-            .reverseLimitSwitchEnabled(true);
+        //motorConfigL.limitSwitch
+            //.forwardLimitSwitchType(Type.kNormallyOpen)
+            //.forwardLimitSwitchEnabled(true)
+            //.reverseLimitSwitchType(Type.kNormallyOpen)
+            //.reverseLimitSwitchEnabled(true);
         motorConfigL.closedLoop
             .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
             .pidf(kPPref.get(), kIPref.get(),kDPref.get(), kFFpPref.get()) 
-            .outputRange(-1, 1);
-            //.dFilter(0.3);
-            //.iZone(0.1)
+            .outputRange(-1, 1)
+            .dFilter(0.3)
+            .iZone(0.1);
             //.velocityFF(kFFPref.get()) (Taken care of in pidf)
         motorConfigL.closedLoop.maxMotion
             .maxAcceleration(1500)
-            .maxVelocity(600)
+            .maxVelocity(1000)
             .allowedClosedLoopError(0.01)
             .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
         
@@ -141,13 +143,18 @@ public class SK25Elevator extends Elevator
             .idleMode(IdleMode.kCoast);
 
         // Apply motor configurations on the right motor
-        // motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
         // Initialize current, target, and reset positions
         targetHeight = 0.0;
         currentHeight = 0.0;
         encoder.setPosition(0);
         closedLoopController.setReference(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+
+        if(motorL.hasStickyFault() || motorL.hasStickyWarning())
+        {
+            motorL.clearFaults();
+        }
     }
     
     /**
@@ -249,8 +256,8 @@ public class SK25Elevator extends Elevator
         SmartDashboard.putNumber("Actual Velocity", encoder.getVelocity());
 
         // Display if limit switch is "pressed" (in our case, passed)
-        SmartDashboard.putBoolean("Forward Limit Reached", forwardLimitSwitch.isPressed());
-        SmartDashboard.putBoolean("Reverse Limit Reached", reverseLimitSwitch.isPressed());
+        //SmartDashboard.putBoolean("Forward Limit Reached", forwardLimitSwitch.isPressed());
+        //SmartDashboard.putBoolean("Reverse Limit Reached", reverseLimitSwitch.isPressed());
     }
     public void testPeriodic(){}
     public void testInit(){}

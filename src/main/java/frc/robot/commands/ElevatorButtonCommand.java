@@ -36,7 +36,6 @@ public class ElevatorButtonCommand extends Command
     @Override
     public void initialize()
     {
-
         elevator.setTargetHeight(pos);
     }
 
