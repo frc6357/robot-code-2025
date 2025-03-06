@@ -395,7 +395,7 @@ public final class Konstants
             /** Set the angle to reach the top branch (L4) */ // 12.5
             kTopPositionAngle(-20), // Angle
             /** Set the angle to reach the middle & low branch (L3) */
-            kMidLowPositionAngle(-30), // Angle
+            kMidLowPositionAngle(-173), // Angle
             /** Set the angle to reach the trough (L2) */
             kTroughPositionAngle(-40), // Angle
             /** Set the height to reach the station (L1) */

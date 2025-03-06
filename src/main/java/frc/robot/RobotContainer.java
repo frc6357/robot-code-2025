@@ -253,8 +253,15 @@ public class RobotContainer {
 
     public void teleopInit()
     {
+        if(m_endEffector.isPresent()) {
+            m_endEffector.get().leave();
+        }
     }
     public void autonomousInit()
     {
+        if(m_endEffector.isPresent()) {
+            m_endEffector.get().leave();
+        }
+
     } 
 }

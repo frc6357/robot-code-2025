@@ -56,9 +56,13 @@ public class SK25EndEffector extends SubsystemBase
 
     public boolean isRunning;
 
-    Pref<Double> armKg = SKPreferences.attach("armKg", 0.1)
+    Pref<Double> armKg = SKPreferences.attach("armKg", 0.05)
         .onChange((newValue) -> {
             armFeedforward = new ArmFeedforward(0, newValue, 0, 0);
+        });
+        Pref<Double> armAngleDeg = SKPreferences.attach("armAngleDeg", 0.0)
+        .onChange((newValue) -> {
+            setTargetAngle(newValue);
         });
 
     //LaserCan laserCanSensor;
@@ -175,6 +179,10 @@ public class SK25EndEffector extends SubsystemBase
         setTargetAngle(mTargetAngle);   
     }
 
+    public void leave() {
+        setTargetAngle(-130);
+    }
+
     /*public boolean haveCoral()
     {
         LaserCan.Measurement sensorMeasurement = laserCanSensor.getMeasurement();
@@ -194,9 +202,9 @@ public class SK25EndEffector extends SubsystemBase
         double encoder = mEncoder.getPosition();
         double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
 
-        if(angle < 10)
+        if(angle > -10)
         {
-            setTargetAngle(10);
+            setTargetAngle(-10);
             stopArm();
         }
      }
@@ -205,7 +213,7 @@ public class SK25EndEffector extends SubsystemBase
         double encoder = mEncoder.getPosition();
         double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
 
-        if(angle > 140)
+        if(angle < -180)
         {
             setTargetAngle(140);
             stopArm();

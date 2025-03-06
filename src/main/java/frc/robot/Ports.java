@@ -106,8 +106,8 @@ public class Ports
         
         //Climb
         
-        public static final SKTrigger rollerintake = new SKTrigger(kOperator, kRightTrigger.value, BUTTON);
-        public static final SKTrigger rolleroutput = new SKTrigger(kOperator, kLeftTrigger.value, BUTTON);
+        public static final SKTrigger rollerintake = new SKTrigger(kOperator, 0, POV);
+        public static final SKTrigger rolleroutput = new SKTrigger(kOperator, 180, POV);
     }
 
     /*

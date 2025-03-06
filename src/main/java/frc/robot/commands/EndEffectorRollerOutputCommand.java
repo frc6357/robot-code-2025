@@ -19,6 +19,7 @@ public class EndEffectorRollerOutputCommand extends Command {
         Subsystem.runRoller(kRollerSpeed);
     }
 
+
     public boolean isFinished()
     {
         return true;

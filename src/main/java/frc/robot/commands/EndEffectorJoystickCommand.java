@@ -34,24 +34,23 @@ public class EndEffectorJoystickCommand extends Command {
         
        if (joystickInput.get() > 0)
        {
-        double armspeed = -kArmSpeed;
+        double armspeed = kArmSpeed;
         double armdividend = joystickInput.get();
-        armspeed /= 3;
         armspeed = armspeed * armdividend;
          endEffector.runArm(armspeed);
          endEffector.isRunning = true;
-         //endEffector.checkPositionUp();
+         endEffector.checkPositionUp();
          
        }
 
        else if (joystickInput.get() < 0)
        {
         double armdividend = joystickInput.get();
-        double armspeed = kArmSpeed / 3;
+        double armspeed = -kArmSpeed;
         armspeed = armspeed * armdividend;
         endEffector.runArm(-armspeed);
         endEffector.isRunning = true;
-        //endEffector.checkPositionDown();
+        endEffector.checkPositionDown();
        }
 
        else

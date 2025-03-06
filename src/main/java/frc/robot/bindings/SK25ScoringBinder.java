@@ -52,13 +52,14 @@ public class SK25ScoringBinder implements CommandBinder {
             SK25Elevator elevator = elevatorSubsystem.get();
 
             // endEffector Position Buttons
-            netPositionButton.onTrue(new ScoreCommandGroup(kNetPosition, elevator, kTopPositionAngle, endEffector));
+            /*netPositionButton.onTrue(new ScoreCommandGroup(kNetPosition, elevator, kTopPositionAngle, endEffector));
             topPositionButton.onTrue(new L4ScoreCommandGroup(kTopPosition, elevator, kTopPositionAngle, endEffector));    
             midPositionButton.onTrue(new ScoreCommandGroup(kMidPosition, elevator, kMidLowPositionAngle, endEffector));
             intakePositionButton.onTrue(new ScoreCommandGroup(kIntakePosition, elevator, kIntakePositionAngle, endEffector));
             lowPositionButton.onTrue(new ScoreCommandGroup(kLowPosition, elevator, kMidLowPositionAngle, endEffector));
             troughPositionButton.onTrue(new ScoreCommandGroup(kTroughPosition, elevator, kTroughPositionAngle, endEffector));
             zeroPositionButton.onTrue(new ScoreCommandGroup(kZeroPosition, elevator, kZeroPositionAngle, endEffector));          
-        }
+            */
+            }
     }
 }

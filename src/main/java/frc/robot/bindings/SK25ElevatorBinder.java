@@ -18,8 +18,8 @@ import frc.robot.commands.ElevatorJoystickCommand;
 import frc.robot.utils.filters.DeadbandFilter;
 
 // Unused imports
-//import frc.robot.commands.ElevatorButtonCommand;
-//import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.*;
+import frc.robot.commands.ElevatorButtonCommand;
+import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.*;
 
 public class SK25ElevatorBinder implements CommandBinder
 {
@@ -68,11 +68,11 @@ public class SK25ElevatorBinder implements CommandBinder
                              elevator));
             
             // Elevator Position Buttons
-            //zeroPositionButton.onTrue(new ElevatorButtonCommand(kZeroPosition, elevator));
-            //TroughButton.onTrue(new ElevatorButtonCommand(kTroughPosition, elevator));
-            //LowButton.onTrue(new ElevatorButtonCommand(kLowPosition, elevator));
-            //MidButton.onTrue(new ElevatorButtonCommand(kMidPosition, elevator));
-            //TopButton.onTrue(new ElevatorButtonCommand(kTopPosition, elevator));
+            zeroPositionButton.onTrue(new ElevatorButtonCommand(kZeroPosition, elevator));
+            TroughButton.onTrue(new ElevatorButtonCommand(kTroughPosition, elevator));
+            LowButton.onTrue(new ElevatorButtonCommand(kLowPosition, elevator));
+            MidButton.onTrue(new ElevatorButtonCommand(kMidPosition, elevator));
+            TopButton.onTrue(new ElevatorButtonCommand(kTopPosition, elevator));
         }
     }
 }

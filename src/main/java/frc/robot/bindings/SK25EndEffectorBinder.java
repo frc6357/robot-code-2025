@@ -14,6 +14,12 @@ import static frc.robot.Ports.OperatorPorts.rollerintake;
 import static frc.robot.Ports.OperatorPorts.rolleroutput;
 import static frc.robot.Ports.OperatorPorts.resetencoder;
 import static frc.robot.Ports.OperatorPorts.endArm;
+import static frc.robot.Ports.OperatorPorts.kIntakePos;
+import static frc.robot.Ports.OperatorPorts.kLowBranch;
+import static frc.robot.Ports.OperatorPorts.kMiddleBranch;
+import static frc.robot.Ports.OperatorPorts.kTopBranch;
+import static frc.robot.Ports.OperatorPorts.kTrough;
+import static frc.robot.Ports.OperatorPorts.kZeroPositionOperator;
 
 // Relative encoder (REV)
 import com.revrobotics.RelativeEncoder;
@@ -35,7 +41,7 @@ import frc.robot.utils.filters.DeadbandFilter;
 //import frc.robot.commands.EndEffectorStop;
 //import static frc.robot.Konstants.EndEffectorConstants.kJoystickChange;
 //import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
-//import frc.robot.commands.EndEffectorButtonCommand;
+import frc.robot.commands.EndEffectorButtonCommand;
 
 public class SK25EndEffectorBinder implements CommandBinder {
 
@@ -61,11 +67,11 @@ public class SK25EndEffectorBinder implements CommandBinder {
         this.ResetEncoderButton     = resetencoder.button;
         this.RollerIntake           = rollerintake.button;
         this.RollerOutPut           = rolleroutput.button;
-        //this.zeroPositionButton = zeropos.button;
-        //this.LowMidButton = armMiddleLow.button;
-        //this.IntakeButton = intakebut.button;
-        //this.TopButton = armHigh.button;
-        //this.TroughButton = armTrough.button;
+        this.zeroPositionButton = kZeroPositionOperator.button;
+        this.LowMidButton = kLowBranch.button.or(kMiddleBranch.button);
+        this.IntakeButton = kIntakePos.button;
+        this.TopButton = kTopBranch.button;
+        this.TroughButton = kTrough.button;
     }
 
     public void bindButtons()
@@ -79,6 +85,12 @@ public class SK25EndEffectorBinder implements CommandBinder {
             endArm.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
             
             // ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector)); // TODO: Add back reset encoder command? This was originally for use with NEO Vortex pivot motor
+            /*zeroPositionButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kZeroPositionAngle, endEffector));
+            TroughButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, endEffector));
+            LowMidButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kMidLowPositionAngle, endEffector));
+            IntakeButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, endEffector));
+            TopButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, endEffector));                   
+            */
             RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
             RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
@@ -91,11 +103,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
                         () -> {return endArm.getFilteredAxis();},
                        endEffector));
 
-            //zeroPositionButton.onTrue(new EndEffectorButtonCommand(kZeroPositionAngle, endEffector));
-            //TroughButton.onTrue(new EndEffectorButtonCommand(kTroughPositionAngle, endEffector));
-            //LowMidButton.onTrue(new EndEffectorButtonCommand(kMidLowPositionAngle, endEffector));
-            //IntakeButton.onTrue(new EndEffectorButtonCommand(kIntakePositionAngle, endEffector));
-            //TopButton.onTrue(new EndEffectorButtonCommand(kTopPositionAngle, endEffector));                   
+           
         }
     }
 }
