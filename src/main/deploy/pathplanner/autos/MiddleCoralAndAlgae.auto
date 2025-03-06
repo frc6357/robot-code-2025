@@ -7,67 +7,61 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P3_FR"
+            "pathName": "P2_ToMiddlePoint1"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ToProcessorPoint2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Station"
+            "waitTime": 1.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ToProcessorPoint3"
+            "pathName": "ToMiddlePoint2"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "FLR"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Remove_Algae"
+            "waitTime": 1.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "F_P"
+            "pathName": "ToMiddlePoint3"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Processor"
+            "waitTime": 1.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToMiddlePoint4"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToMiddlePoint5"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "3GP",
+  "folder": null,
   "choreoAuto": false
 }

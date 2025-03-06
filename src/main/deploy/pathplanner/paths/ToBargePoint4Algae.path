@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.074090909090909,
-        "y": 6.0
+        "x": 3.1809375,
+        "y": 4.658196022727272
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.074090909090909,
-        "y": 6.0
+        "x": 3.400411393228596,
+        "y": 4.777909055397416
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BargePoint3"
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 6.0
+        "x": 3.4003124999999996,
+        "y": 4.837684659090908
       },
       "prevControl": {
-        "x": 3.0,
-        "y": 6.0
+        "x": 3.2017230417557,
+        "y": 4.68582213219821
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BargePoint4Algae"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -58.90566451746863
   },
   "reversed": false,
-  "folder": null,
+  "folder": "RemoveAlgae",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -57.26477372789243
   },
   "useDefaultConstraints": true
 }

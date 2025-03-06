@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P3_FR"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
+            "pathName": "P3_ToProcessorPoint1"
           }
         },
         {
@@ -23,27 +17,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Station"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "ToProcessorPoint3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "2GP",
+  "folder": null,
   "choreoAuto": false
 }

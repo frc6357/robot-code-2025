@@ -4,11 +4,12 @@
   "holonomicMode": true,
   "pathFolders": [
     "CollectCoral",
-    "RemoveAlgae",
+    "Nothing But Net",
     "P1",
     "P2",
     "P3",
     "Processor",
+    "RemoveAlgae",
     "ScoreFromStation"
   ],
   "autoFolders": [

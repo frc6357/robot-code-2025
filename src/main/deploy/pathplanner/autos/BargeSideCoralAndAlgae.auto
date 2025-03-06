@@ -7,67 +7,61 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P3_FR"
+            "pathName": "ToBargePoint1"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ToProcessorPoint2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Station"
+            "waitTime": 1.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ToProcessorPoint3"
+            "pathName": "ToBargePoint2"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "FLR"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Remove_Algae"
+            "waitTime": 1.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "F_P"
+            "pathName": "ToBargePoint3"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Processor"
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToBargePoint4Algae"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToBargePoint5Algae"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "3GP",
+  "folder": null,
   "choreoAuto": false
 }

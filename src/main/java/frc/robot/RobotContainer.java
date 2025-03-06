@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kLowPosition;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kMidPosition;
 import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTopPosition;
+import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTroughPosition;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,13 +58,13 @@ import frc.robot.utils.filters.FilteredJoystick;
  */
 public class RobotContainer {
 
-    private final Telemetry logger = new Telemetry(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond)); // "MaxSpeed"
+    // private final Telemetry logger = new Telemetry(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond)); // "MaxSpeed"
 
 
-    private void configurePhoenixTelemetry() {
+    // private void configurePhoenixTelemetry() {
 
-        m_swerve.get().registerTelemetry(logger::telemeterize);
-    }
+    //     m_swerve.get().registerTelemetry(logger::telemeterize);
+    // }
 
   // The robot's subsystems and commands are defined here...
   public Optional<SK25Elevator> m_elevator = Optional.empty();
@@ -76,7 +77,7 @@ public class RobotContainer {
   // The list containing all the command binding classes
   public List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
 
-  SendableChooser<Command> autoCommandSelector;// = new SendableChooser<Command>();
+  SendableChooser<Command> autoCommandSelector;
 
 
 
@@ -88,7 +89,7 @@ public class RobotContainer {
     configureSubsystems();
 
     // sets up autos needed for pathplanner
-    configurePathPlannerCommands();
+    // configurePathPlannerCommands();
 
     // Configure the trigger bindings
     configureButtonBindings();
@@ -97,7 +98,6 @@ public class RobotContainer {
     //eats memory super fast, not good
     // configurePhoenixTelemetry();
   
-    //autoChooser.addRoutine("Taxi", autoRoutines::Taxi);
     autoCommandSelector = AutoBuilder.buildAutoChooser("Taxi");
     //set delete old files = true in build.gradle to prevent sotrage of unused orphans
     SmartDashboard.putData("Select an Auto", autoCommandSelector);
@@ -171,20 +171,22 @@ public class RobotContainer {
     }
 
 
-    public void configurePathPlannerCommands()
-    {
-        if (m_swerve.isPresent())
-        {
-            if (m_elevator.isPresent())
-            {
-                SK25Elevator elevator = m_elevator.get();
+    // public void configurePathPlannerCommands()
+    // {
+    //     if (m_swerve.isPresent())
+    //     {
+    //         if (m_elevator.isPresent())
+    //         {
+    //             SK25Elevator elevator = m_elevator.get();
 
-                NamedCommands.registerCommand("ElevatorLowPositionCommand", new ElevatorButtonCommand(kLowPosition, elevator));
-                NamedCommands.registerCommand("ElevatorMidPositionCommand", new ElevatorButtonCommand(kMidPosition, elevator));
-                NamedCommands.registerCommand("ElevatorHighPositionCommand", new ElevatorButtonCommand(kTopPosition, elevator));
-            }
-        }
-    }
+
+    //             NamedCommands.registerCommand("ElevatorTroughPositionCommand", new ElevatorButtonCommand(kTroughPosition, elevator));
+    //             NamedCommands.registerCommand("ElevatorLowPositionCommand", new ElevatorButtonCommand(kLowPosition, elevator));
+    //             NamedCommands.registerCommand("ElevatorMidPositionCommand", new ElevatorButtonCommand(kMidPosition, elevator));
+    //             NamedCommands.registerCommand("ElevatorHighPositionCommand", new ElevatorButtonCommand(kTopPosition, elevator));
+    //         }
+    //     }
+    // }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -197,9 +199,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand()
     {
-        //return new PathPlannerAuto(autoCommandSelector.getSelected());
         return autoCommandSelector.getSelected();
-        //return m_swerve.get().getAutoCommand("Taxi");
     }
 
     
