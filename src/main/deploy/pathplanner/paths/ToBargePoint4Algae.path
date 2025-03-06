@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.656079323797138,
-        "y": 5.003771131339402
+        "x": 3.1809375,
+        "y": 4.658196022727272
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4627113133940166,
-        "y": 6.1866710013003905
+        "x": 3.400411393228596,
+        "y": 4.777909055397416
       },
       "isLocked": false,
-      "linkedName": "BargePoint1"
+      "linkedName": "BargePoint3"
     },
     {
       "anchor": {
-        "x": 1.31625,
-        "y": 7.0114914772727275
+        "x": 3.4003124999999996,
+        "y": 4.837684659090908
       },
       "prevControl": {
-        "x": 1.6380000000000003,
-        "y": 6.670241477272727
+        "x": 3.2017230417557,
+        "y": 4.68582213219821
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BargePoint2"
+      "linkedName": "BargePoint4Algae"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 130.13743544495597
+    "rotation": -58.90566451746863
   },
   "reversed": false,
-  "folder": "CollectCoral",
+  "folder": "RemoveAlgae",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -60.124007308310546
+    "rotation": -57.26477372789243
   },
   "useDefaultConstraints": true
 }

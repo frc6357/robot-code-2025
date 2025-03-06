@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8450910273081917,
-        "y": 6.3750975292587775
+        "x": 1.874659090909091,
+        "y": 6.403224431818181
       },
       "isLocked": false,
       "linkedName": "BargePoint2"
     },
     {
       "anchor": {
-        "x": 3.247821846553965,
-        "y": 4.585045513654095
+        "x": 3.1809375,
+        "y": 4.658196022727272
       },
       "prevControl": {
-        "x": 2.7034785435630684,
-        "y": 5.265474642392717
+        "x": 2.6723863636363645,
+        "y": 5.286406249999999
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -51.340191745909834
+    "rotation": -57.26477372789243
   },
   "reversed": false,
   "folder": "ScoreFromStation",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 126.86989764584406
+    "rotation": 130.13743544495597
   },
   "useDefaultConstraints": true
 }

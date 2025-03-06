@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.656079323797138,
-        "y": 5.003771131339402
+        "x": 3.4003124999999996,
+        "y": 4.837684659090908
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4627113133940166,
-        "y": 6.1866710013003905
+        "x": 3.4701136363636356,
+        "y": 5.94453125
       },
       "isLocked": false,
-      "linkedName": "BargePoint1"
+      "linkedName": "BargePoint4Algae"
     },
     {
       "anchor": {
-        "x": 1.31625,
-        "y": 7.0114914772727275
+        "x": 7.209460227272728,
+        "y": 6.104076704545455
       },
       "prevControl": {
-        "x": 1.6380000000000003,
-        "y": 6.670241477272727
+        "x": 6.571278409090909,
+        "y": 6.074161931818181
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BargePoint2"
+      "linkedName": "BargePoint5Algae"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 130.13743544495597
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "CollectCoral",
+  "folder": "Nothing But Net",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -60.124007308310546
+    "rotation": -58.90566451746863
   },
   "useDefaultConstraints": true
 }
