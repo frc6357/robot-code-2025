@@ -17,6 +17,7 @@ import static frc.robot.Ports.DriverPorts.kDriveFn;
 // Filters used for input types (specifically Axis inputs)
 import frc.robot.utils.filters.DeadbandFilter;
 import frc.robot.utils.filters.Filter;
+import frc.robot.utils.filters.FilteredAxis;
 import frc.robot.utils.filters.DriveStickFilter;
 import lombok.Getter;
 //import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -175,20 +176,30 @@ public class SKSwerveBinder implements CommandBinder{
         SmartDashboard.putBoolean("slowModeStatus", status);
         slowModeStatus = status;
 
-        //If slowMode is enabled, drive at the slowMode speed.
+        // //If slowMode is enabled, drive at the slowMode speed.
+        // if (slowModeStatus)
+        // {
+        //     this.translationXFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
+        //     this.translationYFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
+        //     this.rotationFilter.setMaxSpeed(MaxAngularRate * kSlowModePercentage);
+        // }
+        // //If slow mode is not enabled, drive at the default speed.
+        // else
+        // {
+        //     this.translationXFilter.setMaxSpeed(MaxSpeed);
+        //     this.translationYFilter.setMaxSpeed(MaxSpeed);
+        //     this.rotationFilter.setMaxSpeed(MaxAngularRate);
+        // }
+    }
+
+    public double applyGains(double axis, double slowPercent)
+    {
         if (slowModeStatus)
         {
-            this.translationXFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
-            this.translationYFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
-            this.rotationFilter.setMaxSpeed(MaxAngularRate * kSlowModePercentage);
+            return axis * slowPercent;
         }
-        //If slow mode is not enabled, drive at the default speed.
         else
-        {
-            this.translationXFilter.setMaxSpeed(MaxSpeed);
-            this.translationYFilter.setMaxSpeed(MaxSpeed);
-            this.rotationFilter.setMaxSpeed(MaxAngularRate);
-        }
+            return axis;
     }
 
 
@@ -220,9 +231,9 @@ public class SKSwerveBinder implements CommandBinder{
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> {
-                return feildCentricDrive.withVelocityX(kTranslationXPort.getFilteredAxis()) // Drive forward with negative Y (forward)
-                    .withVelocityY(kTranslationYPort.getFilteredAxis()) // Drive left with negative X (left)
-                    .withRotationalRate(-1.0 * kVelocityOmegaPort.getFilteredAxis()); // Drive counterclockwise with negative X (left)
+                return feildCentricDrive.withVelocityX(applyGains(MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercentage)) // Drive forward with negative Y (forward)
+                    .withVelocityY(applyGains(MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercentage)) // Drive left with negative X (left)
+                    .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercentage)); // Drive counterclockwise with negative X (left)
             })
         );
     }

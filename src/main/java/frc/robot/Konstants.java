@@ -253,8 +253,8 @@ public final class Konstants
          * Affects the steering and driving inertia.*/
         public static final double kSimulationLoopPeriod = 0.005;
 
-        /** The percentage of speed to drive in slow mode. Currently 20% of defualt speed.*/
-        public static final double kSlowModePercentage = 0.2;
+        /** The percentage of speed to drive in slow mode. Currently 30% of defualt speed.*/
+        public static final double kSlowModePercentage = 0.3;
     }
 
     /** Defines constraints and information for autonomous development */
@@ -539,7 +539,7 @@ public final class Konstants
       //  public static final double kClimbSetpoint = 5.0;
         public static final double kKrakenSpeed = .2;
         public static final int kClimbCurrentLimit = 50;
-        public static final double kClimbMaxPosition = 30.0;
+        public static final double kClimbMaxPosition = 100.0;
         public static final double kClimbMinPosition = 0.0;
         public static final double kClimbPositionTolerance = 0.2;
 

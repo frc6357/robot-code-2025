@@ -121,7 +121,8 @@ public class SK25Climb extends SubsystemBase
    }
    //If we Eyeball
    public void runMotor(double speed) {
-      if(getMotorPosition() > (kClimbMaxPosition - kClimbPositionTolerance)) {
+      if((getMotorPosition() > (kClimbMaxPosition - kClimbPositionTolerance)) && Math.signum(speed) > 0) {
+         stop();
          return;
       }
       else{ 
