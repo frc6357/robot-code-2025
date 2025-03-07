@@ -304,12 +304,15 @@ public final class Konstants
             public static final class ElevatorSetpoints {
               public static final double kZero = 0;
               public static final double kLevel1 = 5;
-              public static final double kLevel2 = 10;
-              public static final double kLevel3 = 24;
-              public static final double kLevel4 = 32;
+              public static final double kLevel2 = 40;
+              public static final double kLevel3 = 58; //-215
+              public static final double kLevel4 = 79.5; //-190
               public static final double kLowAlgae = 22;  //-173
               public static final double kHighAlgae = 40;  //-173
               public static final double kNet = 75; //angle -90
+              public static final double kIntake = 5;
+
+             
 
               
             }
@@ -455,18 +458,20 @@ public final class Konstants
         public static enum EndEffectorPosition
         {
             /** Set the angle to reach the top branch (L4) */ // 12.5
-            kTopPositionAngle(-20), // Angle
+            kTopPositionAngle(-190), // Angle
             /** Set the angle to reach the middle & low branch (L3) */
-            kMidLowPositionAngle(-173), // Angle
+            kLowPositionAngle(-215), // Angle
             /** Set the angle to reach the trough (L2) */
             kTroughPositionAngle(-40), // Angle
             /** Set the height to reach the station (L1) */
-            kIntakePositionAngle(-50), // Angle
+            kIntakePositionAngle(-100), // Angle
             /** Set the height to reach the bottom */
             kZeroPositionAngle(-60), // Angle
             kNetAngle(-90),
             kHighAlgae(-173),
-            kLowAlgae(-173);
+            kMiddleAngle(-215),
+            kLowAlgae(-173),
+            kIntake(-100);
 
             public final double angle;
 
@@ -539,7 +544,7 @@ public final class Konstants
       //  public static final double kClimbSetpoint = 5.0;
         public static final double kKrakenSpeed = .2;
         public static final int kClimbCurrentLimit = 50;
-        public static final double kClimbMaxPosition = 100.0;
+        public static final double kClimbMaxPosition = 100;
         public static final double kClimbMinPosition = 0.0;
         public static final double kClimbPositionTolerance = 0.2;
 

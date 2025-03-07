@@ -110,6 +110,8 @@ public class Ports
         public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
         public static final SKTrigger resetencoder = new SKTrigger(kOperator, kRightStick.value, BUTTON);
 
+        //public static final SKTrigger kProcessor = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
+
         public static final SKTrigger kTopBranchEffector = new SKTrigger(kOperator, 0, POV);
         public static final SKTrigger kLowBranchEffector = new SKTrigger(kOperator, 180, POV);
         public static final SKTrigger kMiddleBranchEffector = new SKTrigger(kOperator, 90, POV);

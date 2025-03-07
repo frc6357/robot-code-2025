@@ -61,7 +61,7 @@ public class SK25Elevator extends Elevator
     double actualFF;
 
     // SKPreferences for PID & FF
-    public Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.5)
+    public Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.05)
         .onChange((newValue) -> {
             motorConfigR.closedLoop.p(newValue);
             motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);

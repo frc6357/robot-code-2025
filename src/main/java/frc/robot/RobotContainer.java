@@ -248,14 +248,16 @@ public class RobotContainer {
         }
         if(m_endEffector.isPresent())
         {
-            SK25EndEffector endeffector = m_endEffector.get();
+            SK25lendEffector endeffector = m_endEffector.get();
         }
         */
     }
 
     public void teleopInit()
     {
+        m_swerve.ifPresent((swerve) -> swerve.seedFieldCentric());
     }
+
     public void autonomousInit()
     {
         if(m_endEffector.isPresent()) {

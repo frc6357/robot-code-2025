@@ -29,7 +29,9 @@ public class CoralSubsystem extends SubsystemBase {
     kLevel4,
     kLowAlgae,
     kHighAlgae,
-    kNet;
+    kNet,
+    kIntake;
+    //kProcessor;
   }
 
 
@@ -51,13 +53,27 @@ public class CoralSubsystem extends SubsystemBase {
 
   final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.05)
     .onChange((newValue) -> {
-        elevatorConfig.closedLoop.p(newValue);
-  // final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.05)
-  //   .onChange((newValue) -> {
-  //       elevatorConfig.closedLoop.p(newValue);
+        elevatorConfig.closedLoop.p(newValue);      
+        elevatorMotor.configure(
+          elevatorConfig,
+          ResetMode.kResetSafeParameters,
+          PersistMode.kPersistParameters
+        );
+    });
 
-  
-        
+    final Pref<Double> elevatorKi = SKPreferences.attach("elevatorKi", 0.0)
+    .onChange((newValue) -> {
+        elevatorConfig.closedLoop.i(newValue);      
+        elevatorMotor.configure(
+          elevatorConfig,
+          ResetMode.kResetSafeParameters,
+          PersistMode.kPersistParameters
+        );
+    });
+
+    final Pref<Double> elevatorKd = SKPreferences.attach("elevatorKd", 0.0)
+    .onChange((newValue) -> {
+        elevatorConfig.closedLoop.d(newValue);      
         elevatorMotor.configure(
           elevatorConfig,
           ResetMode.kResetSafeParameters,
@@ -151,11 +167,18 @@ public class CoralSubsystem extends SubsystemBase {
               break;
             case kLowAlgae:
               elevatorCurrentTarget = ElevatorSetpoints.kLowAlgae;
+              break;
             case kHighAlgae:
               elevatorCurrentTarget = ElevatorSetpoints.kHighAlgae;
+              break;
             case kNet:
               elevatorCurrentTarget = ElevatorSetpoints.kNet;
               break;
+            case kIntake:
+              elevatorCurrentTarget = ElevatorSetpoints.kIntake;
+            // case kProcessor:
+            //   elevatorCurrentTarget = ElevatorSetpoints.kProcessor;
+            //   break;
           }
         });
   }
