@@ -305,12 +305,12 @@ public final class Konstants
               public static final double kZero = 0;
               public static final double kLevel1 = 5;
               public static final double kLevel2 = 40;
-              public static final double kLevel3 = 58; //-215
+              public static final double kLevel3 = 56; //-215
               public static final double kLevel4 = 79.5; //-190
               public static final double kLowAlgae = 22;  //-173
               public static final double kHighAlgae = 40;  //-173
               public static final double kNet = 75; //angle -90
-              public static final double kIntake = 5;
+              public static final double kIntake = 29;
 
              
 
@@ -462,7 +462,7 @@ public final class Konstants
             /** Set the angle to reach the middle & low branch (L3) */
             kLowPositionAngle(-215), // Angle
             /** Set the angle to reach the trough (L2) */
-            kTroughPositionAngle(-40), // Angle
+            kTroughPositionAngle(-195), // Angle -195
             /** Set the height to reach the station (L1) */
             kIntakePositionAngle(-100), // Angle
             /** Set the height to reach the bottom */
@@ -471,7 +471,7 @@ public final class Konstants
             kHighAlgae(-173),
             kMiddleAngle(-215),
             kLowAlgae(-173),
-            kIntake(-100);
+            kIntake(-70);
 
             public final double angle;
 
