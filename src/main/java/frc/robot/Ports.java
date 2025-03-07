@@ -88,7 +88,7 @@ public class Ports
 
         // Party mode and Teal Lights
         public static final SKTrigger kPartyModeButton = new SKTrigger(kOperator, kStart.value, BUTTON);
-        // Elevator & End Effector
+        // Elevator
         public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
         public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
         public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
@@ -96,6 +96,15 @@ public class Ports
         public static final SKTrigger kZeroPositionOperator  = new SKTrigger(kOperator, kStart.value, BUTTON);
         public static final SKTrigger kIntakePos = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
         public static final SKTrigger kNetPos = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
+
+        // End Effector
+        public static final SKTrigger kTroughEffector = new SKTrigger(kOperator, 270, POV);
+        public static final SKTrigger kTopBranchEffector = new SKTrigger(kOperator, 0, POV);
+        public static final SKTrigger kLowMidBranchEffector = new SKTrigger(kOperator, 90, POV);
+        public static final SKTrigger kZeroPositionOperatorEffector  = new SKTrigger(kOperator, kStart.value, BUTTON);
+        public static final SKTrigger kIntakePosEffector = new SKTrigger(kOperator, 270, POV);
+        public static final SKTrigger kNetEffector = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
+
         // Elevator Overrides
         public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
         public static final FilteredAxis endArm = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
@@ -106,8 +115,8 @@ public class Ports
         
         //Climb
         
-        public static final SKTrigger rollerintake = new SKTrigger(kOperator, 0, POV);
-        public static final SKTrigger rolleroutput = new SKTrigger(kOperator, 180, POV);
+        public static final SKTrigger rollerintake = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
+        public static final SKTrigger rolleroutput = new SKTrigger(kOperator, kLeftTrigger.value, AXIS);
     }
 
     /*

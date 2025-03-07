@@ -31,6 +31,8 @@ public class SK25ElevatorBinder implements CommandBinder
     Trigger zeroPositionButton;
     Trigger resetPos;
     Trigger elevatorOverride;
+    Trigger NetButton;
+    Trigger IntakeButton;
 
     public SK25ElevatorBinder(Optional<SK25Elevator> elevatorSubsystem)
     {
@@ -42,6 +44,8 @@ public class SK25ElevatorBinder implements CommandBinder
         this.TopButton          = kTopBranch.button;
         this.TroughButton       = kTrough.button;
         this.resetPos           = kResetElevatorPos.button;
+        this.NetButton          = kNetPos.button;
+        this.IntakeButton       = kIntakePos.button;
     }
 
     public void bindButtons()
@@ -73,6 +77,8 @@ public class SK25ElevatorBinder implements CommandBinder
             LowButton.onTrue(new ElevatorButtonCommand(kLowPosition, elevator));
             MidButton.onTrue(new ElevatorButtonCommand(kMidPosition, elevator));
             TopButton.onTrue(new ElevatorButtonCommand(kTopPosition, elevator));
+            NetButton.onTrue(new ElevatorButtonCommand(kNetPosition, elevator));
+            IntakeButton.onTrue(new ElevatorButtonCommand(kIntakePosition, elevator));
         }
     }
 }

@@ -401,7 +401,9 @@ public final class Konstants
             /** Set the height to reach the station (L1) */
             kIntakePositionAngle(-50), // Angle
             /** Set the height to reach the bottom */
-            kZeroPositionAngle(-60); // Angle
+            kZeroPositionAngle(-60), // Angle
+            /** Set the height to reach the bottom */
+            kNetPositionAngle(-60); // Angle
 
             public final double angle;
 
@@ -473,6 +475,7 @@ public final class Konstants
         public static final double kClimbD = 0.0;
       //  public static final double kClimbSetpoint = 5.0;
         public static final double kKrakenSpeed = .1;
+        public static final double kReverseKrakenSpeed = -.1;
         public static final int kClimbCurrentLimit = 50;
         public static final double kClimbMaxPosition = 30.0;
         public static final double kClimbMinPosition = 0.0;

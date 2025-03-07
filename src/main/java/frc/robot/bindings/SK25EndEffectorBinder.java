@@ -49,6 +49,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
     Trigger zeroPositionButtonDriver;
     Trigger resetPos;
     Trigger endEffectorAxis;
+    Trigger NetButton;
 
     RelativeEncoder mEncoder;
 
@@ -63,6 +64,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
         this.IntakeButton           = kIntakePosEffector.button;
         this.TopButton              = kTopBranchEffector.button;
         this.TroughButton           = kTroughEffector.button;
+        this.NetButton              = kNetEffector.button;
     }
 
     public void bindButtons()
@@ -80,7 +82,9 @@ public class SK25EndEffectorBinder implements CommandBinder {
             TroughButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, endEffector));
             LowMidButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kMidLowPositionAngle, endEffector));
             IntakeButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, endEffector));
-            TopButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, endEffector));                   
+            TopButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, endEffector));  
+            NetButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kNetPositionAngle, endEffector));      
+
             
             RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
             RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
