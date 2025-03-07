@@ -294,6 +294,20 @@ public final class Konstants
             }
         }
 
+        public static final class CoralSubsystemConstants {
+            public static final int kElevatorMotorCanId = 4;
+            public static final int kArmMotorCanId = 3;
+            public static final int kIntakeMotorCanId = 2;
+        
+            public static final class ElevatorSetpoints {
+              public static final int kZero = 0;
+              public static final int kLevel1 = 0;
+              public static final int kLevel2 = 0;
+              public static final int kLevel3 = 25;
+              public static final int kLevel4 = 50;
+            }
+        }
+
         // PID Constants For Left & Right Elevator Motors (Should Be The Same)
         public static final PIDConstants leftElevator = new PIDConstants(0.07, 0.00075, 0.001);
         public static final PIDConstants rightElevator = new PIDConstants(0.07, 0.00075, 0.001);

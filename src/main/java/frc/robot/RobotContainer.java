@@ -4,12 +4,6 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kLowPosition;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kMidPosition;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTopPosition;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTroughPosition;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +14,6 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 
 //import choreo.auto.AutoChooser;
 //import choreo.auto.AutoFactory;
@@ -33,19 +26,19 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.bindings.ClimbBinder;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.SK25ElevatorBinder;
-import frc.robot.bindings.SK25LightsBinder;
-import frc.robot.bindings.SKSwerveBinder;
-import frc.robot.commands.ElevatorButtonCommand;
-import frc.robot.bindings.SK25ScoringBinder;
-import frc.robot.subsystems.SK25Elevator;
-import frc.robot.subsystems.SK25Lights;
-
-// import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.SKSwerve;
-import frc.robot.subsystems.SK25Climb;
+import frc.robot.bindings.RevBindings;
 //import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.bindings.SK25EndEffectorBinder;
+import frc.robot.bindings.SK25LightsBinder;
+import frc.robot.bindings.SK25ScoringBinder;
+import frc.robot.bindings.SKSwerveBinder;
+import frc.robot.subsystems.CoralSubsystem;
+//import frc.robot.subsystems.Configs.CoralSubsystem;
+import frc.robot.subsystems.SK25Climb;
+import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25EndEffector;
+import frc.robot.subsystems.SK25Lights;
+import frc.robot.subsystems.SKSwerve;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
 
@@ -68,6 +61,7 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   public Optional<SK25Elevator> m_elevator = Optional.empty();
+  public Optional<CoralSubsystem> m_coral = Optional.empty();
   public Optional<SK25Lights> m_lights = Optional.empty();
   public Optional<SKSwerve> m_swerve = Optional.empty();
   // private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
@@ -138,6 +132,9 @@ public class RobotContainer {
             if(subsystems.isClimbPresent()) {
                 m_Climb = Optional.of(new SK25Climb());
             }
+            if(subsystems.isCoralSubsystemPresent()) {
+                m_coral = Optional.of(new CoralSubsystem());
+            }
         }
         catch (IOException e)
         {
@@ -156,6 +153,7 @@ public class RobotContainer {
         buttonBinders.add(new SKSwerveBinder(m_swerve, m_elevator));
         buttonBinders.add(new SK25ElevatorBinder(m_elevator));
         buttonBinders.add(new SK25LightsBinder(m_lights));
+        buttonBinders.add(new RevBindings(m_coral));
 
         // Adding all the binding classes to the list
         buttonBinders.add(new ClimbBinder(m_Climb));
@@ -219,6 +217,10 @@ public class RobotContainer {
         {
             m_endEffector.get().testPeriodic();
         }
+        // if(m_coral.isPresent())
+        // {
+        //     m_coral.get().testPeriodic();
+        // }
     }
     public void testInit(){
         if(m_lights.isPresent())
