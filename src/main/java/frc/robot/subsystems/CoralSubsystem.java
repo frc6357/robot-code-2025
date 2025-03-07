@@ -1,8 +1,6 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.sim.SparkFlexSim;
-import com.revrobotics.sim.SparkLimitSwitchSim;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -10,11 +8,12 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.math.system.plant.DCMotor;
+import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants;
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.ElevatorSetpoints;
 
@@ -56,7 +55,7 @@ public class CoralSubsystem extends SubsystemBase {
      * mid-operation.
      */
     elevatorMotor.configure(
-        Configs.CoralSubsystem.elevatorConfig,
+        elevatorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 

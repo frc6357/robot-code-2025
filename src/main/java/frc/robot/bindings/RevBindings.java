@@ -1,24 +1,17 @@
 package frc.robot.bindings;
+import static frc.robot.Ports.OperatorPorts.kElevatorOverride;
+import static frc.robot.Ports.OperatorPorts.kLowBranch;
+import static frc.robot.Ports.OperatorPorts.kMiddleBranch;
+import static frc.robot.Ports.OperatorPorts.kResetElevatorPos;
+import static frc.robot.Ports.OperatorPorts.kTopBranch;
+import static frc.robot.Ports.OperatorPorts.kTrough;
+import static frc.robot.Ports.OperatorPorts.kZeroPositionOperator;
+
 import java.util.Optional;
 
-
-// Constants for the elevator
-import static frc.robot.Konstants.ElevatorConstants.*;
-
-// Ports
-import static frc.robot.Ports.OperatorPorts.*;
-
-// Misc.
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
-// Commands
-import frc.robot.commands.ElevatorJoystickCommand;
 import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.utils.filters.DeadbandFilter;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
-
-// Unused imports
-import frc.robot.commands.ElevatorButtonCommand;
 
 public class RevBindings implements CommandBinder
 {
