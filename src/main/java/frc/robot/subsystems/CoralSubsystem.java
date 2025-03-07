@@ -52,9 +52,9 @@ public class CoralSubsystem extends SubsystemBase {
   final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.05)
     .onChange((newValue) -> {
         elevatorConfig.closedLoop.p(newValue);
-  final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.05)
-    .onChange((newValue) -> {
-        elevatorConfig.closedLoop.p(newValue);
+  // final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.05)
+  //   .onChange((newValue) -> {
+  //       elevatorConfig.closedLoop.p(newValue);
 
   
         
