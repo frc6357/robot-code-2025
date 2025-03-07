@@ -2,7 +2,7 @@
 package frc.robot.subsystems;
 import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
 // Ports
-import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
+//import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
 import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
 
 import java.util.function.Supplier;
@@ -126,6 +126,7 @@ public class SK25Elevator extends Elevator
             .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
             .pidf(kPPref.get(), kIPref.get(),kDPref.get(), kFFpPref.get()) 
             .outputRange(-.3, .3);
+            //.position(ControlType.kPosition);
             // .dFilter(0.3)
             // .iZone(0.1);
             //.velocityFF(kFFPref.get()) (Taken care of in pidf)
@@ -133,8 +134,8 @@ public class SK25Elevator extends Elevator
             .maxAcceleration(200)
             .maxVelocity(100)
             .allowedClosedLoopError(0.005);
-            // .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
-        
+            //.positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
+        //robot.work(please!);
         // Apply motor configurations on the left motor
         motorR.configure(motorConfigR, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
 
@@ -150,7 +151,7 @@ public class SK25Elevator extends Elevator
         targetHeight = 0.0;
         currentHeight = 0.0;
         encoder.setPosition(0);
-        closedLoopController.setReference(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        closedLoopController.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
 
         if(motorR.hasStickyFault() || motorR.hasStickyWarning())
         {
