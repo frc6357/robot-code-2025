@@ -125,7 +125,7 @@ public class SK25Elevator extends Elevator
         motorConfigR.closedLoop
             .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
             .pidf(kPPref.get(), kIPref.get(),kDPref.get(), kFFpPref.get()) 
-            .outputRange(-1, 1);
+            .outputRange(-.3, .3);
             // .dFilter(0.3)
             // .iZone(0.1);
             //.velocityFF(kFFPref.get()) (Taken care of in pidf)

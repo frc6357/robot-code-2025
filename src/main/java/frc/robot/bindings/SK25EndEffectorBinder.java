@@ -15,10 +15,10 @@ import static frc.robot.Ports.OperatorPorts.rolleroutput;
 import static frc.robot.Ports.OperatorPorts.resetencoder;
 import static frc.robot.Ports.OperatorPorts.endArm;
 import static frc.robot.Ports.OperatorPorts.kIntakePos;
-import static frc.robot.Ports.OperatorPorts.kLowBranch;
-import static frc.robot.Ports.OperatorPorts.kMiddleBranch;
-import static frc.robot.Ports.OperatorPorts.kTopBranch;
-import static frc.robot.Ports.OperatorPorts.kTrough;
+import static frc.robot.Ports.OperatorPorts.kLowBranchEffector;
+import static frc.robot.Ports.OperatorPorts.kMiddleBranchEffector;
+import static frc.robot.Ports.OperatorPorts.kTopBranchEffector;
+import static frc.robot.Ports.OperatorPorts.kTroughEffector;
 import static frc.robot.Ports.OperatorPorts.kZeroPositionOperator;
 
 // Relative encoder (REV)
@@ -68,10 +68,10 @@ public class SK25EndEffectorBinder implements CommandBinder {
         this.RollerIntake           = rollerintake.button;
         this.RollerOutPut           = rolleroutput.button;
         this.zeroPositionButton = kZeroPositionOperator.button;
-        this.LowMidButton = kLowBranch.button.or(kMiddleBranch.button);
+        this.LowMidButton = kLowBranchEffector.button.or(kMiddleBranchEffector.button);
         this.IntakeButton = kIntakePos.button;
-        this.TopButton = kTopBranch.button;
-        this.TroughButton = kTrough.button;
+        this.TopButton = kTopBranchEffector.button;
+        this.TroughButton = kTroughEffector.button;
     }
 
     public void bindButtons()
@@ -85,12 +85,12 @@ public class SK25EndEffectorBinder implements CommandBinder {
             endArm.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
             
             // ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector)); // TODO: Add back reset encoder command? This was originally for use with NEO Vortex pivot motor
-            /*zeroPositionButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kZeroPositionAngle, endEffector));
+            zeroPositionButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kZeroPositionAngle, endEffector));
             TroughButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, endEffector));
             LowMidButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kMidLowPositionAngle, endEffector));
             IntakeButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, endEffector));
             TopButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, endEffector));                   
-            */
+            
             RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
             RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));

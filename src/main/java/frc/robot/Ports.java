@@ -17,7 +17,7 @@ import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kPigeonID;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.*;
-//import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
+import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.BUTTON;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
 
@@ -103,11 +103,16 @@ public class Ports
         public static final SKTrigger kResetElevatorPos = new SKTrigger(kOperator, kBack.value, BUTTON);
         public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
         public static final SKTrigger resetencoder = new SKTrigger(kOperator, kRightStick.value, BUTTON);
+
+        public static final SKTrigger kTopBranchEffector = new SKTrigger(kOperator, 0, POV);
+        public static final SKTrigger kLowBranchEffector = new SKTrigger(kOperator, 180, POV);
+        public static final SKTrigger kMiddleBranchEffector = new SKTrigger(kOperator, 90, POV);
+        public static final SKTrigger kTroughEffector = new SKTrigger(kOperator, 270, POV);
         
         //Climb
         
-        public static final SKTrigger rollerintake = new SKTrigger(kOperator, 0, POV);
-        public static final SKTrigger rolleroutput = new SKTrigger(kOperator, 180, POV);
+        public static final SKTrigger rollerintake = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
+        public static final SKTrigger rolleroutput = new SKTrigger(kOperator, kLeftTrigger.value, AXIS);
     }
 
     /*
