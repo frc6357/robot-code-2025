@@ -121,8 +121,14 @@ public class SK25Climb extends SubsystemBase
    }
    //If we Eyeball
    public void runMotor(double speed) {
-      // Sets a velocity to target via pid and supplies an average duty cycle in volts
-     motor.setControl(new VelocityDutyCycle(speed).withFeedForward(3.0)); // FF in volts
+      if(getMotorPosition() > (kClimbMaxPosition - kClimbPositionTolerance)) {
+         return;
+      }
+      else{ 
+         // Sets a velocity to target via pid and supplies an average duty cycle in volts
+         motor.setControl(new DutyCycleOut(speed));//.withFeedForward(3.0)); // FF in volts
+      }
+
    }
 
    public double getMotorSpeed() {
@@ -166,5 +172,6 @@ public class SK25Climb extends SubsystemBase
       motorCurrentPosition = getMotorPosition(); 
      //motorCurrentPosition =  motor.getPosition().getValue().in(Rotation);
      SmartDashboard.putNumber("Velocity (RpMs)", getMotorSpeed());
+     SmartDashboard.putNumber("ClimbPos", getMotorPosition());
    }
 }

@@ -19,7 +19,7 @@ import static frc.robot.Ports.OperatorPorts.kLowBranchEffector;
 import static frc.robot.Ports.OperatorPorts.kMiddleBranchEffector;
 import static frc.robot.Ports.OperatorPorts.kTopBranchEffector;
 import static frc.robot.Ports.OperatorPorts.kTroughEffector;
-import static frc.robot.Ports.OperatorPorts.kZeroPositionOperator;
+import static frc.robot.Ports.OperatorPorts.*;
 
 // Relative encoder (REV)
 import com.revrobotics.RelativeEncoder;
@@ -58,6 +58,9 @@ public class SK25EndEffectorBinder implements CommandBinder {
     Trigger zeroPositionButtonDriver;
     Trigger resetPos;
     Trigger endEffectorAxis;
+    Trigger Net;
+    Trigger HighAlgae;
+    Trigger LowAlgae;
 
     RelativeEncoder mEncoder;
 
@@ -72,6 +75,9 @@ public class SK25EndEffectorBinder implements CommandBinder {
         this.IntakeButton = kIntakePos.button;
         this.TopButton = kTopBranchEffector.button;
         this.TroughButton = kTroughEffector.button;
+        this.LowAlgae = kLowAlgae.button;
+        this.HighAlgae = kHighAlgae.button;
+        this.Net = kNetPos.button;
     }
 
     public void bindButtons()
@@ -89,7 +95,11 @@ public class SK25EndEffectorBinder implements CommandBinder {
             TroughButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, endEffector));
             LowMidButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kMidLowPositionAngle, endEffector));
             IntakeButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, endEffector));
-            TopButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, endEffector));                   
+            TopButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, endEffector));   
+            
+            Net.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kNetAngle, endEffector));
+            HighAlgae.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kHighAlgae, endEffector));
+            LowAlgae.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kLowAlgae, endEffector));
             
             RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
             RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));

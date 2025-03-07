@@ -36,9 +36,9 @@ public class SK25ScoringBinder implements CommandBinder {
 
         this.zeroPositionButton = kZeroPositionOperator.button;
         this.lowPositionButton = kLowBranch.button;
-        this.midPositionButton = kMiddleBranch.button;
+        //this.midPositionButton = kMiddleBranch.button;
         this.intakePositionButton = kIntakePos.button;
-        this.topPositionButton = kTopBranch.button;
+        //this.topPositionButton = kTopBranch.button;
         this.troughPositionButton = kTrough.button;
         this.netPositionButton = kNetPos.button;
     }

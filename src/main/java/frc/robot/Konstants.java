@@ -19,7 +19,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.LinearVelocity;
 //import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
-
+import frc.robot.preferences.SKPreferences;
 
 //import static edu.wpi.first.units.Units.Rotations;
 //import static edu.wpi.first.units.Units.Radians;
@@ -302,11 +302,16 @@ public final class Konstants
             public static final int kElevatorMotorCanId = 41;
         
             public static final class ElevatorSetpoints {
-              public static final int kZero = 0;
-              public static final int kLevel1 = 0;
-              public static final int kLevel2 = 0;
-              public static final int kLevel3 = 500;
-              public static final int kLevel4 = 50;
+              public static final double kZero = 0;
+              public static final double kLevel1 = 5;
+              public static final double kLevel2 = 10;
+              public static final double kLevel3 = 24;
+              public static final double kLevel4 = 32;
+              public static final double kLowAlgae = 22;  //-173
+              public static final double kHighAlgae = 40;  //-173
+              public static final double kNet = 75; //angle -90
+
+              
             }
 
             public static final class CoralSubsystem {
@@ -322,26 +327,31 @@ public final class Konstants
                     * will prevent any actuation of the elevator in the reverse direction if the limit switch is
                     * pressed.
                     */
-                    elevatorConfig
-                        .limitSwitch
-                        .reverseLimitSwitchEnabled(true)
-                        .reverseLimitSwitchType(Type.kNormallyOpen);
+                    // elevatorConfig
+                    //     .limitSwitch
+                    //     .reverseLimitSwitchEnabled(true)
+                    //     .reverseLimitSwitchType(Type.kNormallyOpen);
 
                     /*
                      * Configure the closed loop controller. We want to make sure we set the
                      * feedback sensor as the primary encoder.
                     */
                     elevatorConfig
+                    .inverted(true)
                     .closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // Set PID values for position control
-                    .p(0.5)
-                     .outputRange(-1, 1)
+                    .p(0.05)
+                    .i(0.0)
+                    .d(0.0)
+                     .outputRange(-0.4, 0.4)
                     .maxMotion
                     // Set MAXMotion parameters for position control
                     .maxVelocity(4200)
                     .maxAcceleration(6000)
-                    .allowedClosedLoopError(0.5);
+                    .allowedClosedLoopError(0.05);
+
+
                 }
             }
         }
@@ -453,7 +463,10 @@ public final class Konstants
             /** Set the height to reach the station (L1) */
             kIntakePositionAngle(-50), // Angle
             /** Set the height to reach the bottom */
-            kZeroPositionAngle(-60); // Angle
+            kZeroPositionAngle(-60), // Angle
+            kNetAngle(-90),
+            kHighAlgae(-173),
+            kLowAlgae(-173);
 
             public final double angle;
 
@@ -524,7 +537,7 @@ public final class Konstants
         public static final double kClimbI = 0.0;
         public static final double kClimbD = 0.0;
       //  public static final double kClimbSetpoint = 5.0;
-        public static final double kKrakenSpeed = .1;
+        public static final double kKrakenSpeed = .2;
         public static final int kClimbCurrentLimit = 50;
         public static final double kClimbMaxPosition = 30.0;
         public static final double kClimbMinPosition = 0.0;

@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -8,14 +10,14 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants;
-import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.ElevatorSetpoints;
+import frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants;
+import frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.ElevatorSetpoints;
+import frc.robot.preferences.Pref;
+import frc.robot.preferences.SKPreferences;
 
 public class CoralSubsystem extends SubsystemBase {
   /** Subsystem-wide setpoints */
@@ -24,7 +26,10 @@ public class CoralSubsystem extends SubsystemBase {
     kLevel1,
     kLevel2,
     kLevel3,
-    kLevel4;
+    kLevel4,
+    kLowAlgae,
+    kHighAlgae,
+    kNet;
   }
 
 
@@ -41,6 +46,24 @@ public class CoralSubsystem extends SubsystemBase {
   private boolean wasResetByButton = false;
   private boolean wasResetByLimit = false;
   private double elevatorCurrentTarget = ElevatorSetpoints.kZero;
+
+  
+
+  final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.05)
+    .onChange((newValue) -> {
+        elevatorConfig.closedLoop.p(newValue);
+  final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.05)
+    .onChange((newValue) -> {
+        elevatorConfig.closedLoop.p(newValue);
+
+  
+        
+        elevatorMotor.configure(
+          elevatorConfig,
+          ResetMode.kResetSafeParameters,
+          PersistMode.kPersistParameters
+        );
+    });
 
 
   public CoralSubsystem() {
@@ -98,6 +121,11 @@ public class CoralSubsystem extends SubsystemBase {
     }
   }
 
+
+  final Pref<Double> elevatortargetHeight = SKPreferences.attach("elevatorTargetHeight", 0.0)
+  .onChange((newValue) -> {
+      elevatorCurrentTarget = newValue;
+  });
   /**
    * Command to set the subsystem setpoint. This will set the arm and elevator to their predefined
    * positions for the given setpoint.
@@ -121,6 +149,13 @@ public class CoralSubsystem extends SubsystemBase {
             case kLevel4:
               elevatorCurrentTarget = ElevatorSetpoints.kLevel4;
               break;
+            case kLowAlgae:
+              elevatorCurrentTarget = ElevatorSetpoints.kLowAlgae;
+            case kHighAlgae:
+              elevatorCurrentTarget = ElevatorSetpoints.kHighAlgae;
+            case kNet:
+              elevatorCurrentTarget = ElevatorSetpoints.kNet;
+              break;
           }
         });
   }
@@ -128,7 +163,7 @@ public class CoralSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     moveToSetpoint();
-    zeroElevatorOnLimitSwitch();
+    //zeroElevatorOnLimitSwitch();
     zeroOnUserButton();
 
     // Display subsystem values

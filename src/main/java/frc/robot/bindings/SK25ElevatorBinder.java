@@ -38,8 +38,8 @@ public class SK25ElevatorBinder implements CommandBinder
         this.elevatorOverride   = kElevatorOverride.button;
         this.zeroPositionButton = kZeroPositionOperator.button;
         this.LowButton          = kLowBranch.button;
-        this.MidButton          = kMiddleBranch.button;
-        this.TopButton          = kTopBranch.button;
+        //this.MidButton          = kMiddleBranch.button;
+        //this.TopButton          = kTopBranch.button;
         this.TroughButton       = kTrough.button;
         this.resetPos           = kResetElevatorPos.button;
     }
@@ -71,8 +71,8 @@ public class SK25ElevatorBinder implements CommandBinder
             zeroPositionButton.onTrue(new ElevatorButtonCommand(kZeroPosition, elevator));
             TroughButton.onTrue(new ElevatorButtonCommand(kTroughPosition, elevator));
             LowButton.onTrue(new ElevatorButtonCommand(kLowPosition, elevator));
-            MidButton.onTrue(new ElevatorButtonCommand(kMidPosition, elevator));
-            TopButton.onTrue(new ElevatorButtonCommand(kTopPosition, elevator));
+            //MidButton.onTrue(new ElevatorButtonCommand(kMidPosition, elevator));
+            //TopButton.onTrue(new ElevatorButtonCommand(kTopPosition, elevator));
         }
     }
 }
