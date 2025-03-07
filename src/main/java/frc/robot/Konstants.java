@@ -542,9 +542,9 @@ public final class Konstants
         public static final double kClimbI = 0.0;
         public static final double kClimbD = 0.0;
       //  public static final double kClimbSetpoint = 5.0;
-        public static final double kKrakenSpeed = .2;
+        public static final double kKrakenSpeed = .3;
         public static final int kClimbCurrentLimit = 50;
-        public static final double kClimbMaxPosition = 100;
+        public static final double kClimbMaxPosition = 110;
         public static final double kClimbMinPosition = 0.0;
         public static final double kClimbPositionTolerance = 0.2;
 
