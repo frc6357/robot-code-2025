@@ -64,7 +64,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         new Sendable() {
             @Override
             public void initSendable(SendableBuilder builder) {
-                builder.setSmartDashboardType("Vision");
+                builder.setSmartDashboardType("Limelights");
 
                 builder.addStringProperty("BackLLStatus", () -> backLL.getLogStatus(), null);
                 builder.addStringProperty("FrontLLStatus", () -> frontLL.getLogStatus(), null);
@@ -122,6 +122,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     @Override
     public void periodic() {
+        SmartDashboard.putData("Vision", this);
+
         double yaw = m_swerve.getRotation().getDegrees();
 
         for(Limelight ll : poseLimelights) {
@@ -311,7 +313,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
                 ll.targetInView(), ll.getRawPose3d(), ll.getMegaPose2d(), ll.getRawPoseTimestamp());
     }
 
-    private String resetPoseToVisionLog; // Provides an updatable string for smartdashboard
+    private String resetPoseToVisionLog = "Not executed yet..."; // Provides an updatable string for smartdashboard
     /**
      * Set robot pose to vision pose only if LL has good tag reading
      *
