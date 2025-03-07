@@ -167,21 +167,21 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     }
 
-    public static boolean reefTargetSeen(Limelight ll) { 
-        RawFiducial[] tags = ll.getRawFiducial(); // Assuming we're on blue alliance
+    public static boolean reefTargetClose(Limelight ll) { 
+        // RawFiducial[] tags = ll.getRawFiducial(); // Assuming we're on blue alliance
         int[] targetIDs = blueReefTagIDs;
 
         if(Field.isRed()) { // Check to make sure if Red Alliance
             targetIDs = redReefTagIDs;
         }
 
+        double closestTagID = ll.getClosestTagID();
+
         /*Since all reef tags are sequential, just check upper
         and lower bound of reef tag sequence. If seen tag's id
         is part of the targeted reef tags, return true. */ 
-        for(RawFiducial tag : tags) {
-            if((tag.id >= targetIDs[0]) && (tag.id <= targetIDs[5])) { 
-                return true;
-            }
+        if(closestTagID <= targetIDs[5] && closestTagID >= targetIDs[0]) {
+            return true;
         }
 
         // If none of the iterated tags on this limelight match our alliance's reef tags:
