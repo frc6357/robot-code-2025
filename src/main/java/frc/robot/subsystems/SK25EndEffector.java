@@ -6,22 +6,26 @@ import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 //import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
-//import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
-///import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
+import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
+import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
+
+import java.util.function.Supplier;
 
 //import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
+
+import au.grapplerobotics.LaserCan;
+
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
-//import au.grapplerobotics.LaserCan;
 
 import com.revrobotics.spark.ClosedLoopSlot;
 //import com.revrobotics.spark.SparkAbsoluteEncoder;
@@ -60,12 +64,13 @@ public class SK25EndEffector extends SubsystemBase
         .onChange((newValue) -> {
             armFeedforward = new ArmFeedforward(0, newValue, 0, 0);
         });
-        Pref<Double> armAngleDeg = SKPreferences.attach("armAngleDeg", 0.0)
+
+    Pref<Double> armAngleDeg = SKPreferences.attach("armAngleDeg", 0.0)
         .onChange((newValue) -> {
             setTargetAngle(newValue);
         });
 
-    //LaserCan laserCanSensor;
+    LaserCan laserCanSensor;
 
     public SK25EndEffector()
     {
@@ -83,7 +88,7 @@ public class SK25EndEffector extends SubsystemBase
             .p(1.9)
             .i(.0002)
             .d(2.1)
-            .outputRange(-.1, .1) //TODO: Add a velocityFF in order to provide a feedforwards to counteract gravity and maintain the arm at a set point
+            .outputRange(-.1, .1)
             //.p(0, ClosedLoopSlot.kSlot1)
             //.i(0, ClosedLoopSlot.kSlot1)
             //.d(0, ClosedLoopSlot.kSlot1)
@@ -111,7 +116,7 @@ public class SK25EndEffector extends SubsystemBase
 
         mEncoder.setPosition(0);
 
-        //laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
+        laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
     }
 
     public void initialize()
@@ -163,9 +168,7 @@ public class SK25EndEffector extends SubsystemBase
     public boolean isArmAtTargetPosition()
     {
         //double la =  getTargetArmPosition() -getArmPosition();
-        //System.out.println(la);
-        //System.out.println(getTargetArmPosition());
-        //System.out.println(getArmPosition());
+
         return Math.abs( getTargetArmPosition() -getArmPosition()) < kArmTolerance;
     }
 
@@ -183,10 +186,10 @@ public class SK25EndEffector extends SubsystemBase
         setTargetAngle(-130);
     }
 
-    /*public boolean haveCoral()
+    public boolean haveCoral()
     {
         LaserCan.Measurement sensorMeasurement = laserCanSensor.getMeasurement();
-        if ((sensorMeasurement != null && sensorMeasurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)) {
+        if ((sensorMeasurement != null) && (sensorMeasurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)) {
             SmartDashboard.putNumber("LaserCan distance", sensorMeasurement.distance_mm);
           if(sensorMeasurement.distance_mm < (kCoralToLaserCanDistance+10))//plus 10 so theres room for error
           {
@@ -195,7 +198,7 @@ public class SK25EndEffector extends SubsystemBase
         } 
         return false;
     }
-        */
+        
     public void checkPositionUp()
      {
     
@@ -238,8 +241,8 @@ public class SK25EndEffector extends SubsystemBase
             .plus(Degrees.of(90))
             .in(Radians);
         
-        double offset = armKg.get() * Math.cos(targetAngleRadians);
-        armMotor.set(armspeed + offset);
+        double offset = armKg.get() * Math.cos(targetAngleRadians); //kG * cos(target) is the formula for an arm feedforwards
+        armMotor.set(armspeed + offset); // Adds the feedforwards to the desired arm speed in order to truly reach requested speed
     }
 
     //stops the motor
@@ -255,7 +258,8 @@ public class SK25EndEffector extends SubsystemBase
 
     public void periodic()
     {
-
+        SmartDashboard.putNumber("EndEffector/ActualAngle", getArmPosition());
+        SmartDashboard.putNumber("EndEffector/TargetAngle", getTargetArmPosition());
         
         /*if (SmartDashboard.getBoolean("Control Mode", false)) 
         {

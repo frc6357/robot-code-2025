@@ -319,9 +319,9 @@ public final class Konstants
 
             public static final class CoralSubsystem {
                 public static final SparkFlexConfig elevatorConfig = new SparkFlexConfig();
+                public static final double kErrorTolerance = 0.05;
 
                 static {
-
                     // Configure basic settings of the elevator motor
                     elevatorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(50).voltageCompensation(12);
 
@@ -352,9 +352,9 @@ public final class Konstants
                     // Set MAXMotion parameters for position control
                     .maxVelocity(4200)
                     .maxAcceleration(6000)
-                    .allowedClosedLoopError(0.05);
+                    .allowedClosedLoopError(kErrorTolerance);
 
-
+                    
                 }
             }
         }

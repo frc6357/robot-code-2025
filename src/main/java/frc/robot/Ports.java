@@ -90,6 +90,7 @@ public class Ports
 
         // Party mode and Teal Lights
         public static final SKTrigger kPartyModeButton = new SKTrigger(kOperator, kStart.value, BUTTON);
+
         // Elevator & End Effector
         public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
         // public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
@@ -99,9 +100,12 @@ public class Ports
         public static final SKTrigger kHighAlgae = new SKTrigger(kOperator, kY.value, BUTTON);
 
         public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
+
         public static final SKTrigger kZeroPositionOperator  = new SKTrigger(kOperator, kStart.value, BUTTON);
+
         public static final SKTrigger kIntakePos = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
         public static final SKTrigger kNetPos = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
+
         // Elevator Overrides
         public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
         public static final FilteredAxis endArm = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
@@ -112,12 +116,10 @@ public class Ports
 
         //public static final SKTrigger kProcessor = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
 
-        public static final SKTrigger kTopBranchEffector = new SKTrigger(kOperator, 0, POV);
-        public static final SKTrigger kLowBranchEffector = new SKTrigger(kOperator, 180, POV);
-        public static final SKTrigger kMiddleBranchEffector = new SKTrigger(kOperator, 90, POV);
-        public static final SKTrigger kTroughEffector = new SKTrigger(kOperator, 270, POV);
-        
-        //Climb
+        public static final SKTrigger kTopBranchEffector = new SKTrigger(kOperator, 0, POV); // Up
+        public static final SKTrigger kLowBranchEffector = new SKTrigger(kOperator, 180, POV); // Down
+        public static final SKTrigger kMiddleBranchEffector = new SKTrigger(kOperator, 90, POV); // Right
+        public static final SKTrigger kTroughEffector = new SKTrigger(kOperator, 270, POV); // Left
         
         public static final SKTrigger rollerintake = new SKTrigger(kOperator, kLeftTrigger.value, AXIS);
         public static final SKTrigger rolleroutput = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
@@ -178,7 +180,6 @@ public class Ports
     {
         private static final String busName = "";
         //assign an ID of 48 to the CANdle
-        public static final CANPort kCANdle = new CANPort(48, busName);
     
         public static final CANPort kEndEffectorArmMotor = new CANPort(33, busName);
         public static final CANPort kEndEffectorRollerMotor = new CANPort(34, busName);
