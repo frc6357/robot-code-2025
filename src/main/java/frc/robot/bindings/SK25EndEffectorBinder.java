@@ -3,7 +3,7 @@ package frc.robot.bindings;
 // Joystick constants
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
-import static frc.robot.Ports.OperatorPorts.endArm;
+import static frc.robot.Ports.OperatorPorts.kEndEffectorAxis;
 import static frc.robot.Ports.OperatorPorts.kHighAlgae;
 import static frc.robot.Ports.OperatorPorts.kIntakePos;
 import static frc.robot.Ports.OperatorPorts.kLowAlgae;
@@ -16,8 +16,8 @@ import static frc.robot.Ports.OperatorPorts.kZeroPositionOperator;
 import static frc.robot.Ports.OperatorPorts.resetencoder;
 import static frc.robot.Ports.OperatorPorts.kMiddleBranchEffector;
 // Operator ports
-import static frc.robot.Ports.OperatorPorts.rollerintake;
-import static frc.robot.Ports.OperatorPorts.rolleroutput;
+import static frc.robot.Ports.OperatorPorts.kIntake;
+import static frc.robot.Ports.OperatorPorts.kShoot;
 
 // Misc.
 import java.util.Optional;
@@ -75,8 +75,8 @@ public class SK25EndEffectorBinder implements CommandBinder {
     {
         this.endEffectorSubsystem   = endEffectorSubsystem;
         this.ResetEncoderButton     = resetencoder.button;
-        this.RollerIntake           = rollerintake.button;
-        this.RollerOutPut           = rolleroutput.button;
+        this.RollerIntake           = kIntake.button;
+        this.RollerOutPut           = kShoot.button;
         this.zeroPositionButton = kZeroPositionOperator.button;
         this.LowButton = kLowBranchEffector.button.or(kMiddleBranchEffector.button);
         this.MiddleButton = kMiddleBranchEffector.button;
@@ -97,7 +97,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
             SK25EndEffector endEffector = endEffectorSubsystem.get();
 
             double joystickGain = kJoystickReversed ? -1 : 1;
-            endArm.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
+            kEndEffectorAxis.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
             
             // ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector)); // TODO: Add back reset encoder command? This was originally for use with NEO Vortex pivot motor
             zeroPositionButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kZeroPositionAngle, endEffector));
@@ -122,7 +122,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
                     // Vertical movement of the arm is controlled by the Y axis of the right stick.
                     // Up on joystick moving arm up and down on stick moving arm down.
                   new EndEffectorJoystickCommand(
-                        () -> {return endArm.getFilteredAxis();},
+                        () -> {return kEndEffectorAxis.getFilteredAxis();},
                        endEffector));
 
            

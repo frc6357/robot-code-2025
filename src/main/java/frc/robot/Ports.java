@@ -78,51 +78,58 @@ public class Ports
         // Operator Controller set to Xbox Controller
         public static final GenericHID kOperator = new FilteredXboxController(1).getHID();
 
-        // Example of how to use POV buttons (D-pad)
-        //public static final SKTrigger kExamplePOV = new SKTrigger(kOperator, 270, POV);
 
-        // Example of AXIS action (R/L Trigger on the controller)
-        //public static final SKTrigger kExampleAXIS = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
+        /**
+        * Example of how to use POV buttons (D-pad)
+        * public static final SKTrigger kExamplePOV = new SKTrigger(kOperator, 270, POV);
+        *
+        * Example of AXIS action (R/L Trigger on the controller)
+        * public static final SKTrigger kExampleAXIS = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
+        *
+        * Example of rawAxis values (Joysticks on the controller)
+        * public static final FilteredAxis kExampleRawAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
+        */
 
-        //Example of rawAxis values (Joysticks on the controller)
-        //public static final FilteredAxis kExampleRawAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
-        
 
         // Party mode and Teal Lights
         public static final SKTrigger kPartyModeButton = new SKTrigger(kOperator, kStart.value, BUTTON);
-        // Elevator & End Effector
-        public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
-        // public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
-        //public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
-        public static final SKTrigger kLowAlgae = new SKTrigger(kOperator, kB.value, BUTTON);
-        
-        public static final SKTrigger kHighAlgae = new SKTrigger(kOperator, kY.value, BUTTON);
 
-        public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
-        public static final SKTrigger kZeroPositionOperator  = new SKTrigger(kOperator, kStart.value, BUTTON);
+        
+        // Elevator buttons
+        // Coral:
         public static final SKTrigger kIntakePos = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
+        public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
+        public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
+        // public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
+        // public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
+        // Algae:
+        public static final SKTrigger kLowAlgae = new SKTrigger(kOperator, kB.value, BUTTON);
+        public static final SKTrigger kHighAlgae = new SKTrigger(kOperator, kY.value, BUTTON);
         public static final SKTrigger kNetPos = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
-        // Elevator Overrides
+
+        // End Effector buttons
+        // Angles:
+        public static final SKTrigger kTopBranchEffector = new SKTrigger(kOperator, 0, POV);
+        public static final SKTrigger kMiddleBranchEffector = new SKTrigger(kOperator, 90, POV);
+        public static final SKTrigger kLowBranchEffector = new SKTrigger(kOperator, 180, POV);
+        public static final SKTrigger kTroughEffector = new SKTrigger(kOperator, 270, POV);
+        // Rollers:
+        public static final SKTrigger kIntake = new SKTrigger(kOperator, kLeftTrigger.value, AXIS);
+        public static final SKTrigger kShoot = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
+
+        // Manual Joystick Controls
         public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
-        public static final FilteredAxis endArm = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
+        public static final FilteredAxis kEndEffectorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
+
         // Misc.
+        public static final SKTrigger kZeroPositionOperator  = new SKTrigger(kOperator, kStart.value, BUTTON);
         public static final SKTrigger kResetElevatorPos = new SKTrigger(kOperator, kBack.value, BUTTON);
+
         public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
         public static final SKTrigger resetencoder = new SKTrigger(kOperator, kRightStick.value, BUTTON);
 
         //public static final SKTrigger kProcessor = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
-
-        public static final SKTrigger kTopBranchEffector = new SKTrigger(kOperator, 0, POV);
-        public static final SKTrigger kLowBranchEffector = new SKTrigger(kOperator, 180, POV);
-        public static final SKTrigger kMiddleBranchEffector = new SKTrigger(kOperator, 90, POV);
-        public static final SKTrigger kTroughEffector = new SKTrigger(kOperator, 270, POV);
         
-        //Climb
-        
-        public static final SKTrigger rollerintake = new SKTrigger(kOperator, kLeftTrigger.value, AXIS);
-        public static final SKTrigger rolleroutput = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
-        // public static final FilteredAxis rollerintake = new FilteredAxis(() -> kOperator.getRawAxis(kRightTrigger.value));
-        // public static final FilteredAx\is rolleroutput = new FilteredAxis(() -> kOperator.getRawAxis(kLeftTrigger.value));
     }
 
     /*
