@@ -52,34 +52,28 @@ public class CoralSubsystem extends SubsystemBase {
   
 
   final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.05)
-    .onChange((newValue) -> {
-        elevatorConfig.closedLoop.p(newValue);      
-        elevatorMotor.configure(
-          elevatorConfig,
-          ResetMode.kResetSafeParameters,
-          PersistMode.kPersistParameters
-        );
-    });
+  .onChange((newValue) -> reconfigureElevator());
 
     final Pref<Double> elevatorKi = SKPreferences.attach("elevatorKi", 0.0)
-    .onChange((newValue) -> {
-        elevatorConfig.closedLoop.i(newValue);      
-        elevatorMotor.configure(
-          elevatorConfig,
-          ResetMode.kResetSafeParameters,
-          PersistMode.kPersistParameters
-        );
-    });
+    .onChange((newValue) -> reconfigureElevator());
 
     final Pref<Double> elevatorKd = SKPreferences.attach("elevatorKd", 0.0008)
-    .onChange((newValue) -> {
-        elevatorConfig.closedLoop.d(newValue);      
-        elevatorMotor.configure(
-          elevatorConfig,
-          ResetMode.kResetSafeParameters,
-          PersistMode.kPersistParameters
-        );
-    });
+    .onChange((newValue) -> reconfigureElevator());
+
+
+    final Pref<Double> elevatorVelocity = SKPreferences.attach("elevatorVelocity", 4000.0)
+      .onChange((unused) -> reconfigureElevator());
+  
+    private void reconfigureElevator() {
+      elevatorConfig.closedLoop.pid(elevatorKp.get(), elevatorKi.get(), elevatorKd.get());  
+      elevatorConfig.closedLoop.maxMotion
+        .maxVelocity(elevatorVelocity.get());      
+      elevatorMotor.configure(
+        elevatorConfig,
+        ResetMode.kResetSafeParameters,
+        PersistMode.kNoPersistParameters
+      );
+    }
 
 
   public CoralSubsystem() {
@@ -176,6 +170,7 @@ public class CoralSubsystem extends SubsystemBase {
               break;
             case kIntake:
               elevatorCurrentTarget = ElevatorSetpoints.kIntake;
+              break;
             // case kProcessor:
             //   elevatorCurrentTarget = ElevatorSetpoints.kProcessor;
             //   break;

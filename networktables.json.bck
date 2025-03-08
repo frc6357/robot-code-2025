@@ -46,21 +46,5 @@
     "properties": {
       "persistent": true
     }
-  },
-  {
-    "name": "/Preferences/armKg",
-    "type": "double",
-    "value": 0.05,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/armAngleDeg",
-    "type": "double",
-    "value": 0.0,
-    "properties": {
-      "persistent": true
-    }
   }
 ]

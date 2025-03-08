@@ -310,7 +310,7 @@ public final class Konstants
               public static final double kLowAlgae = 22;  //-173
               public static final double kHighAlgae = 40;  //-173
               public static final double kNet = 75; //angle -90
-              public static final double kIntake = 31;
+              public static final double kIntake = 30;
 
              
 
@@ -347,10 +347,10 @@ public final class Konstants
                     .p(0.05)
                     .i(0.0)
                     .d(0.0008).dFilter(0.3)
-                     .outputRange(-0.4, 0.4)
+                     .outputRange(-0.45, 0.5)
                     .maxMotion
                     // Set MAXMotion parameters for position control
-                    .maxVelocity(4200)
+                    .maxVelocity(2500)
                     .maxAcceleration(6000)
                     .allowedClosedLoopError(0.05);
 

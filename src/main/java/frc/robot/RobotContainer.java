@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
@@ -90,7 +91,7 @@ public class RobotContainer {
     configureSubsystems();
 
     // sets up autos needed for pathplanner
-    // configurePathPlannerCommands();
+    configurePathPlannerCommands();
 
     // Configure the trigger bindings
     configureButtonBindings();
@@ -180,11 +181,19 @@ public class RobotContainer {
     {
         if (m_swerve.isPresent())
         {
-            if (m_elevator.isPresent())
+            if (m_coral.isPresent() && m_endEffector.isPresent())
             {
                 CoralSubsystem coral = m_coral.get();
+                SK25EndEffector effector = m_endEffector.get();
 
-                NamedCommands.registerCommand("ElevatorTroughPositionCommand",new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLevel1)));
+                NamedCommands.registerCommand("ElevatorTroughPositionCommand",
+                    Commands.parallel(
+                        coral.setSetpointCommand(Setpoint.kIntake),
+                        new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                        Commands.sequence(Commands.waitSeconds(5), effector.runRollerCommand(-0.4))   //correct itextake directoin
+                    )
+                );
+                
                 NamedCommands.registerCommand("ElevatorLowPositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLevel2)));
                 NamedCommands.registerCommand("ElevatorMidPositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLevel3)));
                 NamedCommands.registerCommand("ElevatorHighPositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLevel4)));
@@ -192,14 +201,14 @@ public class RobotContainer {
                 NamedCommands.registerCommand("ElevatorIntakePositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kIntake)));
                 NamedCommands.registerCommand("ElevatorLowAlgaePositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLowAlgae)));
                 NamedCommands.registerCommand("ElevatorHighAlgaePositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kHighAlgae)));
-                NamedCommands.registerCommand("ElevatorZeroPositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kZero)));
+                NamedCommands.registerCommand("ElevatorZeroPositionCommand", coral.setSetpointCommand(Setpoint.kZero));
             }
 
             if (m_endEffector.isPresent())
             {
                 SK25EndEffector effector = m_endEffector.get();
 
-                NamedCommands.registerCommand("ElevatorTroughPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, effector));
+                // NamedCommands.registerCommand("ElevatorTroughPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, effector));
                 NamedCommands.registerCommand("ElevatorLowPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kLowPositionAngle, effector));
                 NamedCommands.registerCommand("ElevatorMidPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, effector));
                 NamedCommands.registerCommand("ElevatorHighPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, effector));
@@ -209,8 +218,8 @@ public class RobotContainer {
                 NamedCommands.registerCommand("ElevatorHighAlgaePositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kHighAlgae, effector));
                 //NamedCommands.registerCommand("ElevatorZeroPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kZero, effector));
 
-                NamedCommands.registerCommand("IntakeAutoCommand", new InstantCommand(() -> effector.runRoller(-kRollerSpeed)));
-                NamedCommands.registerCommand("ExtakeAutoCommand", new InstantCommand(() -> effector.runRoller(kRollerSpeed)));
+                NamedCommands.registerCommand("IntakeAutoCommand", new InstantCommand(() -> effector.runRoller(kRollerSpeed)));
+                NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));
             }
         }
     }
