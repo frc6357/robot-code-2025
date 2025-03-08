@@ -303,7 +303,7 @@ public final class Konstants
         
             public static final class ElevatorSetpoints {
               public static final double kZero = 0;
-              public static final double kLevel1 = 20;
+              public static final double kLevel1 = 15;
               public static final double kLevel2 = 40;
               public static final double kLevel3 = 56; //-215
               public static final double kLevel4 = 79.5; //-190
