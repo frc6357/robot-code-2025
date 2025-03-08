@@ -194,7 +194,7 @@ public class RobotContainer {
                     Commands.parallel(
                         coral.setSetpointCommand(Setpoint.kLevel1),
                         new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
-                        Commands.sequence(Commands.waitSeconds(5), effector.runRollerCommand(-0.4))   //correct extake directoin
+                        Commands.sequence(Commands.waitSeconds(4), effector.runRollerCommand(-0.3))   //correct extake directoin
                     )
                 );
 

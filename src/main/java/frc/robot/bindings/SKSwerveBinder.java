@@ -12,30 +12,15 @@ import static frc.robot.Ports.DriverPorts.kSlowMode;
 import static frc.robot.Ports.DriverPorts.kTranslationXPort;
 import static frc.robot.Ports.DriverPorts.kTranslationYPort;
 import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;
-import static frc.robot.Ports.DriverPorts.kDriveFn;
-
-// Filters used for input types (specifically Axis inputs)
-import frc.robot.utils.filters.DeadbandFilter;
-import frc.robot.utils.filters.Filter;
-import frc.robot.utils.filters.FilteredAxis;
-import frc.robot.utils.filters.DriveStickFilter;
-import lombok.Getter;
-//import edu.wpi.first.math.filter.SlewRateLimiter;
-// Used for binding buttons to drive actions
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-
-import frc.robot.TunerConstants;
-
-// Adds the Swerve subsystem for construction
-import frc.robot.subsystems.SKSwerve;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.math.filter.SlewRateLimiter;
 // Used for binding buttons to drive actions
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -45,7 +30,6 @@ import frc.robot.preferences.SKPreferences;
 import frc.robot.subsystems.SK25Elevator;
 // Adds the Swerve subsystem for construction
 import frc.robot.subsystems.SKSwerve;
-// Filter used for input types (specifically Axis inputs)
 import frc.robot.utils.filters.DriveStickFilter;
 
 public class SKSwerveBinder implements CommandBinder{
@@ -105,19 +89,19 @@ public class SKSwerveBinder implements CommandBinder{
         this.slowModeStatus = false;
 
         // // apply acceleration limits based on the elevator height if the elevator is present
-        // if(m_elevator.isPresent())
+        // if(m_coral.isPresent())
         // {
         //     this.translationXFilter = new DriveStickFilter(
         //         MaxSpeed, 
         //         elevatorHeightDriveScalar(
         //             driverTranslationSlewPref.get(), 
-        //             m_elevator.get().getCurrentHeightMotorRotations()),
+        //             m_coral.get().getCurrentHeightMotorRotations()),
         //         kJoystickDeadband);
         //     this.translationYFilter = new DriveStickFilter(
         //         MaxSpeed, 
         //         elevatorHeightDriveScalar(
         //             driverTranslationSlewPref.get(), 
-        //             m_elevator.get().getCurrentHeightMotorRotations()), 
+        //             m_coral.get().getCurrentHeightMotorRotations()), 
         //         kJoystickDeadband);
 
         //     //rotation filter dosnt need to be scaled by elevator height since it dosn't affect the
@@ -127,7 +111,7 @@ public class SKSwerveBinder implements CommandBinder{
         //         driverRotationSlewPref.get(), 
         //         kJoystickDeadband);
         // }
-        //if the elevator is absent, apply the default slew rates
+        // //if the elevator is absent, apply the default slew rates
         // else
         // {
             this.translationXFilter = new DriveStickFilter(
@@ -175,21 +159,6 @@ public class SKSwerveBinder implements CommandBinder{
     {
         SmartDashboard.putBoolean("slowModeStatus", status);
         slowModeStatus = status;
-
-        // //If slowMode is enabled, drive at the slowMode speed.
-        // if (slowModeStatus)
-        // {
-        //     this.translationXFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
-        //     this.translationYFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
-        //     this.rotationFilter.setMaxSpeed(MaxAngularRate * kSlowModePercentage);
-        // }
-        // //If slow mode is not enabled, drive at the default speed.
-        // else
-        // {
-        //     this.translationXFilter.setMaxSpeed(MaxSpeed);
-        //     this.translationYFilter.setMaxSpeed(MaxSpeed);
-        //     this.rotationFilter.setMaxSpeed(MaxAngularRate);
-        // }
     }
 
     public double applyGains(double axis, double slowPercent)

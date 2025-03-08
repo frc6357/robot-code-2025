@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P2_ToMiddlePoint1"
+            "pathName": "ToBargePoint1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Level4ScoreCombo"
+            "name": "ElevatorTroughPositionCommand"
           }
         },
         {
