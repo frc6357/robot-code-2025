@@ -188,7 +188,7 @@ public class RobotContainer {
 
                 NamedCommands.registerCommand("ElevatorTroughPositionCommand",
                     Commands.parallel(
-                        coral.setSetpointCommand(Setpoint.kIntake),
+                        coral.setSetpointCommand(Setpoint.kLevel1),
                         new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
                         Commands.sequence(Commands.waitSeconds(5), effector.runRollerCommand(-0.4))   //correct itextake directoin
                     )
