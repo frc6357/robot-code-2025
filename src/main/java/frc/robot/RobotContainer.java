@@ -186,37 +186,93 @@ public class RobotContainer {
                 CoralSubsystem coral = m_coral.get();
                 SK25EndEffector effector = m_endEffector.get();
 
+
+
+                //||||||||||  DONT CHANGE UNTIL AFTER BELTON  |||||||||||\\
+
                 NamedCommands.registerCommand("ElevatorTroughPositionCommand",
                     Commands.parallel(
                         coral.setSetpointCommand(Setpoint.kLevel1),
                         new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
-                        Commands.sequence(Commands.waitSeconds(5), effector.runRollerCommand(-0.4))   //correct itextake directoin
+                        Commands.sequence(Commands.waitSeconds(5), effector.runRollerCommand(-0.4))   //correct extake directoin
+                    )
+                );
+
+                //||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+
+                
+
+                NamedCommands.registerCommand(
+                    "TroughScoreCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "Level2ScoreCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel2),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kLowPositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "Level3ScoreCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel3),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kMiddleAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "Level4ScoreCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel4),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "LowAlgaePickupCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "HighAlgaePickupCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "NetScoreCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "StationPickupCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                     )
                 );
                 
-                NamedCommands.registerCommand("ElevatorLowPositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLevel2)));
-                NamedCommands.registerCommand("ElevatorMidPositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLevel3)));
-                NamedCommands.registerCommand("ElevatorHighPositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLevel4)));
-                NamedCommands.registerCommand("ElevatorNetPositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kNet)));
-                NamedCommands.registerCommand("ElevatorIntakePositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kIntake)));
-                NamedCommands.registerCommand("ElevatorLowAlgaePositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLowAlgae)));
-                NamedCommands.registerCommand("ElevatorHighAlgaePositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kHighAlgae)));
-                NamedCommands.registerCommand("ElevatorZeroPositionCommand", coral.setSetpointCommand(Setpoint.kZero));
-            }
-
-            if (m_endEffector.isPresent())
-            {
-                SK25EndEffector effector = m_endEffector.get();
-
-                // NamedCommands.registerCommand("ElevatorTroughPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, effector));
-                NamedCommands.registerCommand("ElevatorLowPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kLowPositionAngle, effector));
-                NamedCommands.registerCommand("ElevatorMidPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, effector));
-                NamedCommands.registerCommand("ElevatorHighPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, effector));
-                NamedCommands.registerCommand("ElevatorNetPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kNetAngle, effector));
-                NamedCommands.registerCommand("ElevatorIntakePositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector));
-                NamedCommands.registerCommand("ElevatorLowAlgaePositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kLowAlgae, effector));
-                NamedCommands.registerCommand("ElevatorHighAlgaePositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kHighAlgae, effector));
-                //NamedCommands.registerCommand("ElevatorZeroPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kZero, effector));
+                NamedCommands.registerCommand(
+                    "ElevatorZeroPositionCommand",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kZero),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector)
+                    )
+                );
+            
 
                 NamedCommands.registerCommand("IntakeAutoCommand", new InstantCommand(() -> effector.runRoller(kRollerSpeed)));
                 NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));
