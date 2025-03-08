@@ -310,7 +310,7 @@ public final class Konstants
               public static final double kLowAlgae = 22;  //-173
               public static final double kHighAlgae = 40;  //-173
               public static final double kNet = 75; //angle -90
-              public static final double kIntake = 29;
+              public static final double kIntake = 31;
 
              
 
@@ -346,7 +346,7 @@ public final class Konstants
                     // Set PID values for position control
                     .p(0.05)
                     .i(0.0)
-                    .d(0.0)
+                    .d(0.0008).dFilter(0.3)
                      .outputRange(-0.4, 0.4)
                     .maxMotion
                     // Set MAXMotion parameters for position control
@@ -542,9 +542,9 @@ public final class Konstants
         public static final double kClimbI = 0.0;
         public static final double kClimbD = 0.0;
       //  public static final double kClimbSetpoint = 5.0;
-        public static final double kKrakenSpeed = .3;
+        public static final double kKrakenSpeed = .3 ;
         public static final int kClimbCurrentLimit = 50;
-        public static final double kClimbMaxPosition = 110;
+        public static final double kClimbMaxPosition = 120;
         public static final double kClimbMinPosition = 0.0;
         public static final double kClimbPositionTolerance = 0.2;
 
