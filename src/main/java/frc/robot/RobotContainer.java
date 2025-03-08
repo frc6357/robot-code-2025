@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 //import choreo.auto.AutoChooser;
 //import choreo.auto.AutoFactory;
@@ -22,17 +25,21 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.bindings.ClimbBinder;
 import frc.robot.bindings.CommandBinder;
-import frc.robot.bindings.SK25ElevatorBinder;
 import frc.robot.bindings.RevBindings;
+import frc.robot.bindings.SK25ElevatorBinder;
 //import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.bindings.SK25EndEffectorBinder;
 import frc.robot.bindings.SK25LightsBinder;
 import frc.robot.bindings.SK25ScoringBinder;
 import frc.robot.bindings.SKSwerveBinder;
+import frc.robot.commands.EndEffectorButtonCommand;
 import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.CoralSubsystem.Setpoint;
 //import frc.robot.subsystems.Configs.CoralSubsystem;
 import frc.robot.subsystems.SK25Climb;
 import frc.robot.subsystems.SK25Elevator;
@@ -169,22 +176,44 @@ public class RobotContainer {
     }
 
 
-    // public void configurePathPlannerCommands()
-    // {
-    //     if (m_swerve.isPresent())
-    //     {
-    //         if (m_elevator.isPresent())
-    //         {
-    //             SK25Elevator elevator = m_elevator.get();
+    public void configurePathPlannerCommands()
+    {
+        if (m_swerve.isPresent())
+        {
+            if (m_elevator.isPresent())
+            {
+                CoralSubsystem coral = m_coral.get();
 
+                NamedCommands.registerCommand("ElevatorTroughPositionCommand",new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLevel1)));
+                NamedCommands.registerCommand("ElevatorLowPositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLevel2)));
+                NamedCommands.registerCommand("ElevatorMidPositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLevel3)));
+                NamedCommands.registerCommand("ElevatorHighPositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLevel4)));
+                NamedCommands.registerCommand("ElevatorNetPositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kNet)));
+                NamedCommands.registerCommand("ElevatorIntakePositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kIntake)));
+                NamedCommands.registerCommand("ElevatorLowAlgaePositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kLowAlgae)));
+                NamedCommands.registerCommand("ElevatorHighAlgaePositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kHighAlgae)));
+                NamedCommands.registerCommand("ElevatorZeroPositionCommand", new InstantCommand(() -> coral.setSetpointCommand(Setpoint.kZero)));
+            }
 
-    //             NamedCommands.registerCommand("ElevatorTroughPositionCommand", new ElevatorButtonCommand(kTroughPosition, elevator));
-    //             NamedCommands.registerCommand("ElevatorLowPositionCommand", new ElevatorButtonCommand(kLowPosition, elevator));
-    //             NamedCommands.registerCommand("ElevatorMidPositionCommand", new ElevatorButtonCommand(kMidPosition, elevator));
-    //             NamedCommands.registerCommand("ElevatorHighPositionCommand", new ElevatorButtonCommand(kTopPosition, elevator));
-    //         }
-    //     }
-    // }
+            if (m_endEffector.isPresent())
+            {
+                SK25EndEffector effector = m_endEffector.get();
+
+                NamedCommands.registerCommand("ElevatorTroughPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, effector));
+                NamedCommands.registerCommand("ElevatorLowPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kLowPositionAngle, effector));
+                NamedCommands.registerCommand("ElevatorMidPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, effector));
+                NamedCommands.registerCommand("ElevatorHighPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, effector));
+                NamedCommands.registerCommand("ElevatorNetPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kNetAngle, effector));
+                NamedCommands.registerCommand("ElevatorIntakePositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector));
+                NamedCommands.registerCommand("ElevatorLowAlgaePositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kLowAlgae, effector));
+                NamedCommands.registerCommand("ElevatorHighAlgaePositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kHighAlgae, effector));
+                //NamedCommands.registerCommand("ElevatorZeroPositionCommand", new EndEffectorButtonCommand(EndEffectorPosition.kZero, effector));
+
+                NamedCommands.registerCommand("IntakeAutoCommand", new InstantCommand(() -> effector.runRoller(-kRollerSpeed)));
+                NamedCommands.registerCommand("ExtakeAutoCommand", new InstantCommand(() -> effector.runRoller(kRollerSpeed)));
+            }
+        }
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
