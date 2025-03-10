@@ -36,7 +36,7 @@ import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.commands.EndEffectorButtonCommand;
 import frc.robot.subsystems.SK25Climb;
 import frc.robot.subsystems.SK25Elevator;
-import frc.robot.subsystems.SK25Elevator.Setpoint;
+import frc.robot.subsystems.SK25Elevator.ElevatorSetpoint;
 import frc.robot.subsystems.SK25EndEffector;
 import frc.robot.subsystems.SK25Lights;
 import frc.robot.subsystems.SKSwerve;
@@ -184,7 +184,7 @@ public class RobotContainer {
 
                     NamedCommands.registerCommand("ElevatorTroughPositionCommand",
                         Commands.parallel(
-                            elevator.setSetpointCommand(Setpoint.kTrough),
+                            elevator.setSetpointCommand(ElevatorSetpoint.kTrough),
                             new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
                             Commands.sequence(Commands.waitSeconds(4), effector.runRollerCommand(-0.3))   //correct extake directoin
                         )
@@ -196,7 +196,7 @@ public class RobotContainer {
                     //Position Commands
                     NamedCommands.registerCommand(
                         "TroughScoreCombo",
-                        Commands.parallel(elevator.setSetpointCommand(Setpoint.kTrough),
+                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kTrough),
                         new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
                         Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                         )
@@ -204,7 +204,7 @@ public class RobotContainer {
 
                     NamedCommands.registerCommand(
                         "Level2ScoreCombo",
-                        Commands.parallel(elevator.setSetpointCommand(Setpoint.kLevel2),
+                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kLevel2),
                         new EndEffectorButtonCommand(EndEffectorPosition.kL2Angle, effector),
                         Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                         )
@@ -212,7 +212,7 @@ public class RobotContainer {
 
                     NamedCommands.registerCommand(
                         "Level3ScoreCombo",
-                        Commands.parallel(elevator.setSetpointCommand(Setpoint.kLevel3),
+                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kLevel3),
                         new EndEffectorButtonCommand(EndEffectorPosition.kMiddleAngle, effector),
                         Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                         )
@@ -220,7 +220,7 @@ public class RobotContainer {
 
                     NamedCommands.registerCommand(
                         "Level4ScoreCombo",
-                        Commands.parallel(elevator.setSetpointCommand(Setpoint.kLevel4),
+                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kLevel4),
                         new EndEffectorButtonCommand(EndEffectorPosition.kL4Angle, effector),
                         Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                         )
@@ -228,7 +228,7 @@ public class RobotContainer {
 
                     NamedCommands.registerCommand(
                         "LowAlgaePickupCombo",
-                        Commands.parallel(elevator.setSetpointCommand(Setpoint.kTrough),
+                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kTrough),
                         new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
                         Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                         )
@@ -236,7 +236,7 @@ public class RobotContainer {
 
                     NamedCommands.registerCommand(
                         "HighAlgaePickupCombo",
-                        Commands.parallel(elevator.setSetpointCommand(Setpoint.kTrough),
+                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kTrough),
                         new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
                         Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                         )
@@ -244,7 +244,7 @@ public class RobotContainer {
 
                     NamedCommands.registerCommand(
                         "NetScoreCombo",
-                        Commands.parallel(elevator.setSetpointCommand(Setpoint.kTrough),
+                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kTrough),
                         new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
                         Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                         )
@@ -252,7 +252,7 @@ public class RobotContainer {
 
                     NamedCommands.registerCommand(
                         "StationPickupCombo",
-                        Commands.parallel(elevator.setSetpointCommand(Setpoint.kTrough),
+                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kTrough),
                         new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
                         Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                         )
@@ -260,7 +260,7 @@ public class RobotContainer {
                     
                     NamedCommands.registerCommand(
                         "ElevatorZeroPositionCommand",
-                        Commands.parallel(elevator.setSetpointCommand(Setpoint.kZero),
+                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kZero),
                         new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector)
                         )
                     );

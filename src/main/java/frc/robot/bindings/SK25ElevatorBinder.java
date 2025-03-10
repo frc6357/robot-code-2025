@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.SK25Elevator;
-import frc.robot.subsystems.SK25Elevator.Setpoint;
+import frc.robot.subsystems.SK25Elevator.ElevatorSetpoint;
 
 public class SK25ElevatorBinder implements CommandBinder
 {
@@ -62,15 +62,15 @@ public class SK25ElevatorBinder implements CommandBinder
             //                  elevator));
             
             // Elevator Position Buttons
-            zeroPosition.onTrue(elevator.setSetpointCommand(Setpoint.kZero));
-            Trough.onTrue(elevator.setSetpointCommand(Setpoint.kTrough));
-            L2.onTrue(elevator.setSetpointCommand(Setpoint.kLevel2));
-            L3.onTrue(elevator.setSetpointCommand(Setpoint.kLevel3));
-            L4.onTrue(elevator.setSetpointCommand(Setpoint.kLevel4));
-            LowAlgae.onTrue(elevator.setSetpointCommand(Setpoint.kLowAlgae));
-            HighAlgae.onTrue(elevator.setSetpointCommand(Setpoint.kHighAlgae));
-            Net.onTrue(elevator.setSetpointCommand(Setpoint.kNet));
-            Station.onTrue(elevator.setSetpointCommand(Setpoint.kStation));
+            zeroPosition.onTrue(elevator.setSetpointCommand(ElevatorSetpoint.kZero));
+            Trough.onTrue(elevator.setSetpointCommand(ElevatorSetpoint.kTrough));
+            L2.onTrue(elevator.setSetpointCommand(ElevatorSetpoint.kLevel2));
+            L3.onTrue(elevator.setSetpointCommand(ElevatorSetpoint.kLevel3));
+            L4.onTrue(elevator.setSetpointCommand(ElevatorSetpoint.kLevel4));
+            LowAlgae.onTrue(elevator.setSetpointCommand(ElevatorSetpoint.kLowAlgae));
+            HighAlgae.onTrue(elevator.setSetpointCommand(ElevatorSetpoint.kHighAlgae));
+            Net.onTrue(elevator.setSetpointCommand(ElevatorSetpoint.kNet));
+            Station.onTrue(elevator.setSetpointCommand(ElevatorSetpoint.kStation));
         }
     }
 }

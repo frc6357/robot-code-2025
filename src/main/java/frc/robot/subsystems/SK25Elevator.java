@@ -24,7 +24,7 @@ import frc.robot.preferences.SKPreferences;
 public class SK25Elevator extends SubsystemBase
 {
     /** Elevator Setpoints */
-    public enum Setpoint
+    public enum ElevatorSetpoint
     {
         kZero,
         kTrough,
@@ -148,7 +148,7 @@ public class SK25Elevator extends SubsystemBase
     * @return The Command object which contains the (single run (runOnce()) command method, which runs 
     * its contents one time. In this case, the target elevator height is set, and the command ends imidiatley
     * after.*/
-    public Command setSetpointCommand(Setpoint setpoint)
+    public Command setSetpointCommand(ElevatorSetpoint setpoint)
     {
         return this.runOnce(() -> {
             switch (setpoint)
