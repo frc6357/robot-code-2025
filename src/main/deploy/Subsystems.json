@@ -1,7 +1,8 @@
 {
     "swerve": true,
-    "endeffector": false,
+    "endeffector": true,
     "lights": false,
-    "elevator": true,
-    "climb": true
+    "elevator": false,
+    "climb": true,
+    "coralSubsystem" : true
 }

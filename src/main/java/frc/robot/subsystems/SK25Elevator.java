@@ -2,7 +2,7 @@
 package frc.robot.subsystems;
 import static frc.robot.Konstants.ElevatorConstants.kPositionTolerance;
 // Ports
-import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
+//import static frc.robot.Ports.ElevatorPorts.kLeftElevatorMotor;
 import static frc.robot.Ports.ElevatorPorts.kRightElevatorMotor;
 
 import java.util.function.Supplier;
@@ -40,7 +40,7 @@ public class SK25Elevator extends Elevator
 {
     // Create Memory Motor Objects
     SparkFlex motorR;
-    SparkFlex motorL;
+    //SparkFlex motorL;
 
     // Encoder & ClosedLoop
     SparkClosedLoopController closedLoopController;
@@ -61,58 +61,59 @@ public class SK25Elevator extends Elevator
     double actualFF;
 
     // SKPreferences for PID & FF
-    public Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.5)
+    public Pref<Double> kPPref = SKPreferences.attach("elevatorKp", 0.05)
         .onChange((newValue) -> {
-            motorConfigL.closedLoop.p(newValue);
-            motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+            motorConfigR.closedLoop.p(newValue);
+            motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
     public Pref<Double> kIPref = SKPreferences.attach("elevatorKi", 0.0)
         .onChange((newValue) -> {
-            motorConfigL.closedLoop.i(newValue);
-            motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+            motorConfigR.closedLoop.i(newValue);
+            motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
     public Pref<Double> kDPref = SKPreferences.attach("elevatorkD", 0.01)
         .onChange((newValue) -> {
-            motorConfigL.closedLoop.d(newValue);
-            motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+            motorConfigR.closedLoop.d(newValue);
+            motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
     public Pref<Double> kFFPref = SKPreferences.attach("elevatorkVFF", 0.0) // Formula's asymptote FF value
         .onChange((newValue) -> {
-            motorConfigL.closedLoop.velocityFF(newValue);
-            motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+            motorConfigR.closedLoop.velocityFF(newValue);
+            motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
         public Pref<Double> kFFpPref = SKPreferences.attach("elevatorkpFF", 0.008) // Formula's asymptote FF value
         .onChange((newValue) -> {
-            motorConfigL.closedLoop.velocityFF(newValue);
-            motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+            motorConfigR.closedLoop.velocityFF(newValue);
+            motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         });
 
     // Constructor For Public Command Access
     public SK25Elevator()
     {
         // Motor initialization with REV
-        motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
+        //motorL = new SparkFlex(kLeftElevatorMotor.ID, MotorType.kBrushless);
         motorR = new SparkFlex(kRightElevatorMotor.ID, MotorType.kBrushless);
 
         motorConfigL = new SparkFlexConfig();
         motorConfigR = new SparkFlexConfig();
 
         // Closed loop control with REV
-        closedLoopController = motorL.getClosedLoopController();
+        closedLoopController = motorR.getClosedLoopController();
 
         // Encoder with REV through bore (external encoder attached to the shaft)
-        encoder = motorL.getExternalEncoder();
+        encoder = motorR.getExternalEncoder();
 
         // Limit switches with REV
         //forwardLimitSwitch = motorL.getForwardLimitSwitch();
         //reverseLimitSwitch = motorL.getReverseLimitSwitch();
 
         // Configurations for the left motor, limit switch, encoder, & closed loop control
-        motorConfigL
-            .idleMode(IdleMode.kCoast).smartCurrentLimit(50);
-        motorConfigL.softLimit
+        motorConfigR
+            .inverted(true)
+            .idleMode(IdleMode.kCoast);//.smartCurrentLimit(50);
+        motorConfigR.softLimit
             .reverseSoftLimitEnabled(false);
-        motorConfigL.externalEncoder
+        motorConfigR.externalEncoder
             .inverted(true)
             .positionConversionFactor(1)
             .velocityConversionFactor(0.01666667); // RPM -> RPS (Divide by 60)
@@ -121,39 +122,40 @@ public class SK25Elevator extends Elevator
             //.forwardLimitSwitchEnabled(true)
             //.reverseLimitSwitchType(Type.kNormallyOpen)
             //.reverseLimitSwitchEnabled(true);
-        motorConfigL.closedLoop
+        motorConfigR.closedLoop
             .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
             .pidf(kPPref.get(), kIPref.get(),kDPref.get(), kFFpPref.get()) 
-            .outputRange(-1, 1)
-            .dFilter(0.3)
-            .iZone(0.1);
+            .outputRange(-.3, .3);
+            //.position(ControlType.kPosition);
+            // .dFilter(0.3)
+            // .iZone(0.1);
             //.velocityFF(kFFPref.get()) (Taken care of in pidf)
-        motorConfigL.closedLoop.maxMotion
-            .maxAcceleration(1500)
-            .maxVelocity(1000)
-            .allowedClosedLoopError(0.01)
-            .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
-        
+        motorConfigR.closedLoop.maxMotion
+            .maxAcceleration(200)
+            .maxVelocity(100)
+            .allowedClosedLoopError(0.005);
+            //.positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
+        //robot.work(please!);
         // Apply motor configurations on the left motor
-        motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        motorR.configure(motorConfigR, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
 
         // Configurations for the right motor (follower)
-        motorConfigR
-            .follow(motorL, true)
-            .idleMode(IdleMode.kCoast);
+        //motorConfigL
+            //.follow(motorR, true)
+            //.idleMode(IdleMode.kCoast);
 
         // Apply motor configurations on the right motor
-        motorR.configure(motorConfigR, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        //motorL.configure(motorConfigL, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
         // Initialize current, target, and reset positions
         targetHeight = 0.0;
         currentHeight = 0.0;
         encoder.setPosition(0);
-        closedLoopController.setReference(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        closedLoopController.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
 
-        if(motorL.hasStickyFault() || motorL.hasStickyWarning())
+        if(motorR.hasStickyFault() || motorR.hasStickyWarning())
         {
-            motorL.clearFaults();
+            motorR.clearFaults();
         }
     }
     
@@ -168,7 +170,7 @@ public class SK25Elevator extends Elevator
     public void setTargetHeight(double targetHeight) 
     {
         this.targetHeight = targetHeight;
-        closedLoopController.setReference(this.targetHeight, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        // closedLoopController.setReference(this.targetHeight, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }
 
     /**
@@ -244,6 +246,8 @@ public class SK25Elevator extends Elevator
         // Current & Target Positions
         double currentPosition = getEncoderPosition();
         double targetPosition = getTargetPosition();
+
+        closedLoopController.setReference(this.targetHeight, ControlType.kMAXMotionPositionControl);
         
         // SmartDashboard Current & Target Positions
         SmartDashboard.putNumber("Current Estimated Position", currentPosition);

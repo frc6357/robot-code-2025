@@ -18,7 +18,7 @@ public class DriveStickFilter implements Filter {
         @Override
         public double filter(double rawAxis) {
             double processedAxis = deadbandFilter.filter(rawAxis);
-            return slewRateFilter.calculate(processedAxis) * MaxSpeed;
+            return slewRateFilter.calculate(processedAxis);
         }
     
     

@@ -4,11 +4,7 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kLowPosition;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kMidPosition;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTopPosition;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTroughPosition;
+import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,23 +25,28 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.bindings.ClimbBinder;
 import frc.robot.bindings.CommandBinder;
+import frc.robot.bindings.RevBindings;
 import frc.robot.bindings.SK25ElevatorBinder;
-import frc.robot.bindings.SK25LightsBinder;
-import frc.robot.bindings.SKSwerveBinder;
-import frc.robot.commands.ElevatorButtonCommand;
-import frc.robot.bindings.SK25ScoringBinder;
-import frc.robot.subsystems.SK25Elevator;
-import frc.robot.subsystems.SK25Lights;
-
-// import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.SKSwerve;
-import frc.robot.subsystems.SK25Climb;
 //import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.bindings.SK25EndEffectorBinder;
+import frc.robot.bindings.SK25LightsBinder;
+import frc.robot.bindings.SK25ScoringBinder;
+import frc.robot.bindings.SKSwerveBinder;
+import frc.robot.commands.EndEffectorButtonCommand;
+import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.CoralSubsystem.Setpoint;
+//import frc.robot.subsystems.Configs.CoralSubsystem;
+import frc.robot.subsystems.SK25Climb;
+import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25EndEffector;
+import frc.robot.subsystems.SK25Lights;
+import frc.robot.subsystems.SKSwerve;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
 
@@ -68,6 +69,7 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   public Optional<SK25Elevator> m_elevator = Optional.empty();
+  public Optional<CoralSubsystem> m_coral = Optional.empty();
   public Optional<SK25Lights> m_lights = Optional.empty();
   public Optional<SKSwerve> m_swerve = Optional.empty();
   // private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
@@ -89,7 +91,7 @@ public class RobotContainer {
     configureSubsystems();
 
     // sets up autos needed for pathplanner
-    // configurePathPlannerCommands();
+    configurePathPlannerCommands();
 
     // Configure the trigger bindings
     configureButtonBindings();
@@ -138,6 +140,9 @@ public class RobotContainer {
             if(subsystems.isClimbPresent()) {
                 m_Climb = Optional.of(new SK25Climb());
             }
+            if(subsystems.isCoralSubsystemPresent()) {
+                m_coral = Optional.of(new CoralSubsystem());
+            }
         }
         catch (IOException e)
         {
@@ -156,6 +161,7 @@ public class RobotContainer {
         buttonBinders.add(new SKSwerveBinder(m_swerve, m_elevator));
         buttonBinders.add(new SK25ElevatorBinder(m_elevator));
         buttonBinders.add(new SK25LightsBinder(m_lights));
+        buttonBinders.add(new RevBindings(m_coral));
 
         // Adding all the binding classes to the list
         buttonBinders.add(new ClimbBinder(m_Climb));
@@ -171,22 +177,108 @@ public class RobotContainer {
     }
 
 
-    // public void configurePathPlannerCommands()
-    // {
-    //     if (m_swerve.isPresent())
-    //     {
-    //         if (m_elevator.isPresent())
-    //         {
-    //             SK25Elevator elevator = m_elevator.get();
+    public void configurePathPlannerCommands()
+    {
+        if (m_swerve.isPresent())
+        {
+            if (m_coral.isPresent() && m_endEffector.isPresent())
+            {
+                CoralSubsystem coral = m_coral.get();
+                SK25EndEffector effector = m_endEffector.get();
 
 
-    //             NamedCommands.registerCommand("ElevatorTroughPositionCommand", new ElevatorButtonCommand(kTroughPosition, elevator));
-    //             NamedCommands.registerCommand("ElevatorLowPositionCommand", new ElevatorButtonCommand(kLowPosition, elevator));
-    //             NamedCommands.registerCommand("ElevatorMidPositionCommand", new ElevatorButtonCommand(kMidPosition, elevator));
-    //             NamedCommands.registerCommand("ElevatorHighPositionCommand", new ElevatorButtonCommand(kTopPosition, elevator));
-    //         }
-    //     }
-    // }
+
+                //||||||||||  DONT CHANGE UNTIL AFTER BELTON  |||||||||||\\
+
+                NamedCommands.registerCommand("ElevatorTroughPositionCommand",
+                    Commands.parallel(
+                        coral.setSetpointCommand(Setpoint.kLevel1),
+                        new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                        Commands.sequence(Commands.waitSeconds(4), effector.runRollerCommand(-0.3))   //correct extake directoin
+                    )
+                );
+
+                //||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+
+                
+
+                NamedCommands.registerCommand(
+                    "TroughScoreCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "Level2ScoreCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel2),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kLowPositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "Level3ScoreCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel3),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kMiddleAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "Level4ScoreCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel4),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "LowAlgaePickupCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "HighAlgaePickupCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "NetScoreCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+
+                NamedCommands.registerCommand(
+                    "StationPickupCombo",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    )
+                );
+                
+                NamedCommands.registerCommand(
+                    "ElevatorZeroPositionCommand",
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kZero),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector)
+                    )
+                );
+            
+
+                NamedCommands.registerCommand("IntakeAutoCommand", new InstantCommand(() -> effector.runRoller(kRollerSpeed)));
+                NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));
+            }
+        }
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -219,6 +311,10 @@ public class RobotContainer {
         {
             m_endEffector.get().testPeriodic();
         }
+        // if(m_coral.isPresent())
+        // {
+        //     m_coral.get().testPeriodic();
+        // }
     }
     public void testInit(){
         if(m_lights.isPresent())
@@ -246,15 +342,16 @@ public class RobotContainer {
         }
         if(m_endEffector.isPresent())
         {
-            SK25EndEffector endeffector = m_endEffector.get();
+            SK25lendEffector endeffector = m_endEffector.get();
         }
         */
     }
 
     public void teleopInit()
     {
-        
+        m_swerve.ifPresent((swerve) -> swerve.seedFieldCentric());
     }
+
     public void autonomousInit()
     {
         if(m_endEffector.isPresent()) {

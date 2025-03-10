@@ -9,28 +9,31 @@ import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 //import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
 ///import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
 
-//import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ArmFeedforward;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.preferences.Pref;
-import frc.robot.preferences.SKPreferences;
-
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkFlexConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
 //import au.grapplerobotics.LaserCan;
-
 import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 //import com.revrobotics.spark.SparkAbsoluteEncoder;
 //import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
+
+//import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.preferences.Pref;
+import frc.robot.preferences.SKPreferences;
 
 public class SK25EndEffector extends SubsystemBase
 {
@@ -128,6 +131,8 @@ public class SK25EndEffector extends SubsystemBase
     public void setTargetAngle(double angleDegrees)
     {
         mTargetAngle = angleDegrees;
+        SmartDashboard.putNumber("EffectorTargetAngle", mTargetAngle);
+        SmartDashboard.putNumber("EffectorCurrentAngle", getArmPosition());
 
         double motorRotations = angleDegrees * motorRatio / degrees;
 
@@ -228,6 +233,19 @@ public class SK25EndEffector extends SubsystemBase
      public void runRoller(double rollerspeed)
     {
         rollerMotor.set(rollerspeed);
+    }
+
+    public Command runRollerCommand(double rollerSpeed)
+    {
+        return Commands.sequence(
+            Commands.parallel(
+                Commands.waitSeconds(0.5),
+                new InstantCommand(() -> {
+                    rollerMotor.set(rollerSpeed);
+                })
+            ),
+            new InstantCommand(() -> rollerMotor.set(0))
+        );
     }
 
     public void runArm(double armspeed)

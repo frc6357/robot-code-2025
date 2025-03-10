@@ -19,7 +19,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.LinearVelocity;
 //import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
-
+import frc.robot.preferences.SKPreferences;
 
 //import static edu.wpi.first.units.Units.Rotations;
 //import static edu.wpi.first.units.Units.Radians;
@@ -28,6 +28,10 @@ import edu.wpi.first.units.measure.LinearVelocity;
 //import edu.wpi.first.math.util.Units;
 import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.LimitSwitchConfig.Type;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -249,8 +253,8 @@ public final class Konstants
          * Affects the steering and driving inertia.*/
         public static final double kSimulationLoopPeriod = 0.005;
 
-        /** The percentage of speed to drive in slow mode. Currently 20% of defualt speed.*/
-        public static final double kSlowModePercentage = 0.2;
+        /** The percentage of speed to drive in slow mode. Currently 30% of defualt speed.*/
+        public static final double kSlowModePercentage = 0.3;
     }
 
     /** Defines constraints and information for autonomous development */
@@ -291,6 +295,67 @@ public final class Konstants
             ElevatorPosition(double height)
             {
                 this.height = height;
+            }
+        }
+
+        public static final class CoralSubsystemConstants {
+            public static final int kElevatorMotorCanId = 41;
+        
+            public static final class ElevatorSetpoints {
+              public static final double kZero = 0;
+              public static final double kLevel1 = 15;
+              public static final double kLevel2 = 40;
+              public static final double kLevel3 = 56; //-215
+              public static final double kLevel4 = 79.5; //-190
+              public static final double kLowAlgae = 22;  //-173
+              public static final double kHighAlgae = 40;  //-173
+              public static final double kNet = 75; //angle -90
+              public static final double kIntake = 30;
+
+             
+
+              
+            }
+
+            public static final class CoralSubsystem {
+                public static final SparkFlexConfig elevatorConfig = new SparkFlexConfig();
+
+                static {
+
+                    // Configure basic settings of the elevator motor
+                    elevatorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(50).voltageCompensation(12);
+
+                    /*
+                    * Configure the reverse limit switch for the elevator. By enabling the limit switch, this
+                    * will prevent any actuation of the elevator in the reverse direction if the limit switch is
+                    * pressed.
+                    */
+                    // elevatorConfig
+                    //     .limitSwitch
+                    //     .reverseLimitSwitchEnabled(true)
+                    //     .reverseLimitSwitchType(Type.kNormallyOpen);
+
+                    /*
+                     * Configure the closed loop controller. We want to make sure we set the
+                     * feedback sensor as the primary encoder.
+                    */
+                    elevatorConfig
+                    .inverted(true)
+                    .closedLoop
+                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                    // Set PID values for position control
+                    .p(0.05)
+                    .i(0.0)
+                    .d(0.0008).dFilter(0.3)
+                     .outputRange(-0.45, 0.5)
+                    .maxMotion
+                    // Set MAXMotion parameters for position control
+                    .maxVelocity(2500)
+                    .maxAcceleration(6000)
+                    .allowedClosedLoopError(0.05);
+
+
+                }
             }
         }
 
@@ -393,17 +458,20 @@ public final class Konstants
         public static enum EndEffectorPosition
         {
             /** Set the angle to reach the top branch (L4) */ // 12.5
-            kTopPositionAngle(-20), // Angle
+            kTopPositionAngle(-190), // Angle
             /** Set the angle to reach the middle & low branch (L3) */
-            kMidLowPositionAngle(-173), // Angle
+            kLowPositionAngle(-215), // Angle
             /** Set the angle to reach the trough (L2) */
-            kTroughPositionAngle(-40), // Angle
+            kTroughPositionAngle(-195), // Angle -195
             /** Set the height to reach the station (L1) */
-            kIntakePositionAngle(-50), // Angle
+            kIntakePositionAngle(-100), // Angle
             /** Set the height to reach the bottom */
             kZeroPositionAngle(-60), // Angle
-            /** Set the height to reach the bottom */
-            kNetPositionAngle(-60); // Angle
+            kNetAngle(-90),
+            kHighAlgae(-173),
+            kMiddleAngle(-215),
+            kLowAlgae(-173),
+            kIntake(-70);
 
             public final double angle;
 
@@ -474,10 +542,9 @@ public final class Konstants
         public static final double kClimbI = 0.0;
         public static final double kClimbD = 0.0;
       //  public static final double kClimbSetpoint = 5.0;
-        public static final double kKrakenSpeed = .1;
-        public static final double kReverseKrakenSpeed = -.1;
+        public static final double kKrakenSpeed = .3 ;
         public static final int kClimbCurrentLimit = 50;
-        public static final double kClimbMaxPosition = 30.0;
+        public static final double kClimbMaxPosition = 120;
         public static final double kClimbMinPosition = 0.0;
         public static final double kClimbPositionTolerance = 0.2;
 

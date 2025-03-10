@@ -1,1 +1,50 @@
-[]
+[
+  {
+    "name": "/Preferences/elevatorKp",
+    "type": "double",
+    "value": 0.007,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorKi",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorkD",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorkFF",
+    "type": "double",
+    "value": 0.00196078431,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/driverTranslSlew",
+    "type": "double",
+    "value": 1.5,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/driverRotSlew",
+    "type": "double",
+    "value": 4.0,
+    "properties": {
+      "persistent": true
+    }
+  }
+]

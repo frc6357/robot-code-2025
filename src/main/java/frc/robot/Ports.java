@@ -17,7 +17,7 @@ import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kPigeonID;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.*;
-//import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
+import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.BUTTON;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
 
@@ -59,6 +59,8 @@ public class Ports
         public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, 180, POV); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
         public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kRightBumper.value, BUTTON); // Function Controlscheme
 
+        
+
         // Reset gyro
         public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kRightStick.value, BUTTON);
 
@@ -76,42 +78,57 @@ public class Ports
         // Operator Controller set to Xbox Controller
         public static final GenericHID kOperator = new FilteredXboxController(1).getHID();
 
-        // Example of how to use POV buttons (D-pad)
-        //public static final SKTrigger kExamplePOV = new SKTrigger(kOperator, 270, POV);
 
-        // Example of AXIS action (R/L Trigger on the controller)
-        //public static final SKTrigger kExampleAXIS = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
+        /**
+        * Example of how to use POV buttons (D-pad)
+        * public static final SKTrigger kExamplePOV = new SKTrigger(kOperator, 270, POV);
+        *
+        * Example of AXIS action (R/L Trigger on the controller)
+        * public static final SKTrigger kExampleAXIS = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
+        *
+        * Example of rawAxis values (Joysticks on the controller)
+        * public static final FilteredAxis kExampleRawAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
+        */
 
-        //Example of rawAxis values (Joysticks on the controller)
-        //public static final FilteredAxis kExampleRawAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
-        
 
         // Party mode and Teal Lights
         public static final SKTrigger kPartyModeButton = new SKTrigger(kOperator, kStart.value, BUTTON);
-        // Elevator
-        public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
-        public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
-        public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
-        public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
-        public static final SKTrigger kZeroPositionOperator  = new SKTrigger(kOperator, kStart.value, BUTTON);
+
+        
+        // Elevator buttons
+        // Coral:
         public static final SKTrigger kIntakePos = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
+        public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
+        public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
+        // public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
+        // public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
+        // Algae:
+        public static final SKTrigger kLowAlgae = new SKTrigger(kOperator, kB.value, BUTTON);
+        public static final SKTrigger kHighAlgae = new SKTrigger(kOperator, kY.value, BUTTON);
         public static final SKTrigger kNetPos = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
 
-        // End Effector
-        public static final SKTrigger kTroughEffector = new SKTrigger(kOperator, 270, POV);
+        // End Effector buttons
+        // Angles:
         public static final SKTrigger kTopBranchEffector = new SKTrigger(kOperator, 0, POV);
-        public static final SKTrigger kLowMidBranchEffector = new SKTrigger(kOperator, 90, POV);
-        public static final SKTrigger kZeroPositionOperatorEffector  = new SKTrigger(kOperator, kStart.value, BUTTON);
-        public static final SKTrigger kIntakePosEffector = new SKTrigger(kOperator, 270, POV);
-        public static final SKTrigger kNetEffector = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
+        public static final SKTrigger kMiddleBranchEffector = new SKTrigger(kOperator, 90, POV);
+        public static final SKTrigger kLowBranchEffector = new SKTrigger(kOperator, 180, POV);
+        public static final SKTrigger kTroughEffector = new SKTrigger(kOperator, 270, POV);
+        // Rollers:
+        public static final SKTrigger kIntake = new SKTrigger(kOperator, kLeftTrigger.value, AXIS);
+        public static final SKTrigger kShoot = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
 
-        // Elevator Overrides
+        // Manual Joystick Controls
         public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
-        public static final FilteredAxis endArm = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
+        public static final FilteredAxis kEndEffectorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
+
         // Misc.
+        public static final SKTrigger kZeroPositionOperator  = new SKTrigger(kOperator, kStart.value, BUTTON);
         public static final SKTrigger kResetElevatorPos = new SKTrigger(kOperator, kBack.value, BUTTON);
+
         public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
         public static final SKTrigger resetencoder = new SKTrigger(kOperator, kRightStick.value, BUTTON);
+
+        //public static final SKTrigger kProcessor = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
         
         //Climb
         
@@ -158,7 +175,7 @@ public class Ports
     {
         private static final String busName = "";
         public static final CANPort kRightElevatorMotor = new CANPort(41, busName);
-        public static final CANPort kLeftElevatorMotor = new CANPort(42, busName);
+        //public static final CANPort kLeftElevatorMotor = new CANPort(42, busName);
     }
 
     public static class LightsPorts

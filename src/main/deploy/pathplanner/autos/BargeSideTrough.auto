@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToBargePoint1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorTroughPositionCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorZeroPositionCommand"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
