@@ -16,12 +16,12 @@ import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLimitSwitch;
+//import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 // Limit Switches
-import com.revrobotics.spark.config.LimitSwitchConfig.Type;
-import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
+//import com.revrobotics.spark.config.LimitSwitchConfig.Type;
+//import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 // Configurations For Motors
 import com.revrobotics.spark.config.SparkFlexConfig;

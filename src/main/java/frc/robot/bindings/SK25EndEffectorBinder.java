@@ -2,6 +2,8 @@ package frc.robot.bindings;
 
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
+import static frc.robot.Konstants.EndEffectorConstants.kRollerIntakeSpeed;
+import static frc.robot.Konstants.EndEffectorConstants.kRollerEjectSpeed;
 import static frc.robot.Ports.OperatorPorts.kEndEffectorAxis;
 import static frc.robot.Ports.OperatorPorts.kEndEffectorEncoderReset;
 import static frc.robot.Ports.OperatorPorts.kExtake;
@@ -20,14 +22,14 @@ import java.util.Optional;
 
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.commands.EndEffectorButtonCommand;
-import frc.robot.commands.EndEffectorEncoderResetCommand;
 import frc.robot.commands.EndEffectorJoystickCommand;
-import frc.robot.commands.EndEffectorRollerIntakeCommand;
-import frc.robot.commands.EndEffectorRollerOutputCommand;
-import frc.robot.commands.EndEffectorRollerStopCommand;
+//import frc.robot.commands.EndEffectorRollerIntakeCommand;
+//import frc.robot.commands.EndEffectorRollerOutputCommand;
+//import frc.robot.commands.EndEffectorRollerStopCommand;
 import frc.robot.subsystems.SK25EndEffector;
 import frc.robot.utils.konstantLib.filters.DeadbandFilter;
 
@@ -92,7 +94,8 @@ public class SK25EndEffectorBinder implements CommandBinder {
             
 
             //Reset Encoder
-            ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector));
+            //ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector));
+            ResetEncoderButton.onTrue(new InstantCommand(() -> endEffector.resetEncoder()));
 
             //Coral
             ZeroPositionButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kZeroPositionAngle, endEffector));
@@ -108,10 +111,15 @@ public class SK25EndEffectorBinder implements CommandBinder {
             LowAlgaeButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kLowAlgae, endEffector)); 
             
             //Rollers
-            RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
-            RollerExtake.onTrue(new EndEffectorRollerOutputCommand(endEffector));
-            RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
-            RollerExtake.onFalse(new EndEffectorRollerStopCommand(endEffector));   
+            RollerIntake.onTrue(new InstantCommand(() -> endEffector.runRoller(kRollerIntakeSpeed)));
+            RollerExtake.onTrue(new InstantCommand(() -> endEffector.runRoller(kRollerEjectSpeed)));
+            RollerIntake.onFalse(new InstantCommand(() -> endEffector.stopRoller()));
+            RollerExtake.onFalse(new InstantCommand(() -> endEffector.stopRoller()));
+
+            //RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
+            //RollerExtake.onTrue(new EndEffectorRollerOutputCommand(endEffector));
+            //RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
+            //RollerExtake.onFalse(new EndEffectorRollerStopCommand(endEffector));   
         }
     }
 }

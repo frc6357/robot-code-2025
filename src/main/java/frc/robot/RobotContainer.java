@@ -4,7 +4,8 @@
 
 package frc.robot;
 
-import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
+import static frc.robot.Konstants.EndEffectorConstants.kRollerIntakeSpeed;
+import static frc.robot.Konstants.EndEffectorConstants.kRollerEjectSpeed;
 
 import java.io.File;
 import java.io.IOException;
@@ -267,8 +268,8 @@ public class RobotContainer {
                 );
             
 
-                NamedCommands.registerCommand("IntakeAutoCommand", new InstantCommand(() -> effector.runRoller(kRollerSpeed)));
-                NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));
+                NamedCommands.registerCommand("IntakeAutoCommand", new InstantCommand(() -> effector.runRoller(kRollerIntakeSpeed)));
+                NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(kRollerEjectSpeed));
             }
         }
     }
