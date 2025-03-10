@@ -2,6 +2,7 @@ package frc.robot;
 
 import static frc.robot.Konstants.kCANivoreName;
 import static frc.robot.Konstants.kDefualtRioBusName;
+import static frc.robot.Konstants.ElevatorConstants.kRightElevatorMotorID;
 import static frc.robot.Konstants.EndEffectorConstants.kEndEffectorArmMotorID;
 import static frc.robot.Konstants.EndEffectorConstants.kEndEffectorLaserCanID;
 import static frc.robot.Konstants.EndEffectorConstants.kEndEffectorRollerMotorID;
@@ -152,7 +153,7 @@ public class Ports
     public static class ElevatorPorts
     {
         //The bus name is empty, because this subsystem does not use a named CANbus.
-        public static final CANPort kRightElevatorMotor = new CANPort(41, kDefualtRioBusName);
+        public static final CANPort kRightElevatorMotor = new CANPort(kRightElevatorMotorID, kDefualtRioBusName);
     }
 
     public static class LightsPorts

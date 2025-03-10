@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * This class holds the subsystem control values as imported from the subsystem control
- * JSON file. This is made for the 2022 season
+ * JSON file. This is made for the 2025 season.
  */
 public class SubsystemControls
 {
@@ -14,29 +14,32 @@ public class SubsystemControls
     private final boolean elevator;
     private final boolean endEffector;
     private final boolean climb;
-    private final boolean coralSubsystem;
 
      /**  
      * @param swerve
      *            indicates if the swerve subsystem is present and should be enabled
      * @param lights
      *            indicates if the lights subsystem is present and should be enabled
+     * @param elevator
+     *            indicates if the elevator subsystem is present and should be enabled
+     * @param endEffector
+     *            indicates if the endEffector subsystem is present and should be enabled
+     * @param climb
+     *            indicates if the climb subsystem is present and should be enabled
      */
     public SubsystemControls(
         @JsonProperty(required = true, value = "swerve")      boolean swerve,
         @JsonProperty(required = true, value = "lights")      boolean lights,
         @JsonProperty(required = true, value = "elevator")    boolean elevator,
-        @JsonProperty(required = true, value = "endeffector") boolean endeffector,
-        @JsonProperty(required = true, value = "climb") boolean climb,
-        @JsonProperty(required = true, value = "coralSubsystem") boolean coralSubsystem
+        @JsonProperty(required = true, value = "endEffector") boolean endEffector,
+        @JsonProperty(required = true, value = "climb") boolean climb
     )
     {
         this.swerve = swerve;
         this.lights = lights;
         this.elevator = elevator;
-        this.endEffector = endeffector;
+        this.endEffector = endEffector;
         this.climb = climb;
-        this.coralSubsystem = coralSubsystem;
     }
 
 
@@ -65,9 +68,5 @@ public class SubsystemControls
     public boolean isClimbPresent() 
     {
         return climb;
-    }
-    public boolean isCoralSubsystemPresent() 
-    {
-        return coralSubsystem;
     }
 }

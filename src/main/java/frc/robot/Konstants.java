@@ -388,126 +388,65 @@ public final class Konstants
 
     public static final class ElevatorConstants
     {
+        //IDs
         public static final int kRightElevatorMotorID = 41;
         public static final int kLeftElevatorMotorID = 42;
-        
-        /** Heights for the different elevator positions */
-        public static enum ElevatorPosition
+
+        public static final class ElevatorSetpoints
         {
-            /** Set the height to reach the top branch (L4) */ // 12.5
-            kNetPosition(14), // 13.5 rotations of hex shaft
-            /** Set the height to reach the top branch (L4) */ // 12.5
-            kTopPosition(13.5), // 13.5 rotations of hex shaft
-            /** Set the height to reach the middle branch (L3) */
-            kMidPosition(9.5), // 9.5 rotations of hex shaft
-            /** Set the height to reach the low branch (L2) */
-            kIntakePosition(8.5), // 8.5 rotations of hex shaft
-            /** Set the height to reach the low branch (L2) */
-            kLowPosition(7), // 7 rotations of hex shaft
-            /** Set the height to reach the trough (L1) */
-            kTroughPosition(3), // 3 rotations of hex shaft
-            /** Set the height to reach the bottom */
-            kZeroPosition(0.0);
-
-            public final double height;
-
-            ElevatorPosition(double height)
-            {
-                this.height = height;
-            }
+            //The elevator setpoint heights in motor rotations
+            public static final double kZero = 0;
+            public static final double kTrough = 15;
+            public static final double kLevel2 = 40;
+            public static final double kLevel3 = 56; //-215
+            public static final double kLevel4 = 79.5; //-190
+            public static final double kLowAlgae = 22;  //-173
+            public static final double kHighAlgae = 40;  //-173
+            public static final double kNet = 75;
+            public static final double kIntake = 30;
         }
 
-        public static final class CoralSubsystemConstants {
-            public static final int kElevatorMotorCanId = 41;
-        
-            public static final class ElevatorSetpoints {
-              public static final double kZero = 0;
-              public static final double kTrough = 15;
-              public static final double kLevel2 = 40;
-              public static final double kLevel3 = 56; //-215
-              public static final double kLevel4 = 79.5; //-190
-              public static final double kLowAlgae = 22;  //-173
-              public static final double kHighAlgae = 40;  //-173
-              public static final double kNet = 75; //angle -90
-              public static final double kIntake = 30;
+        //Define elevato config object
+        public static final SparkFlexConfig elevatorConfig = new SparkFlexConfig();
 
-             
+        static {
 
-              
-            }
+            // Configure basic settings of the elevator motor
+            elevatorConfig.idleMode(IdleMode.kCoast)  //Coast mdoe
+                .smartCurrentLimit(50)  //stall current limit
+                .voltageCompensation(12);  //voltage compensation   //TODO: check voltage comp when tuning elevator PID
 
-            public static final class CoralSubsystem {
-                public static final SparkFlexConfig elevatorConfig = new SparkFlexConfig();
+            /*
+            * Configure the reverse limit switch for the elevator. By enabling the limit switch, this
+            * will prevent any actuation of the elevator in the reverse direction if the limit switch is
+            * pressed.
+            */
+            // elevatorConfig
+            //     .limitSwitch
+            //     .reverseLimitSwitchEnabled(true)
+            //     .reverseLimitSwitchType(Type.kNormallyOpen);
 
-                static {
-
-                    // Configure basic settings of the elevator motor
-                    elevatorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(50).voltageCompensation(12);
-
-                    /*
-                    * Configure the reverse limit switch for the elevator. By enabling the limit switch, this
-                    * will prevent any actuation of the elevator in the reverse direction if the limit switch is
-                    * pressed.
-                    */
-                    // elevatorConfig
-                    //     .limitSwitch
-                    //     .reverseLimitSwitchEnabled(true)
-                    //     .reverseLimitSwitchType(Type.kNormallyOpen);
-
-                    /*
-                     * Configure the closed loop controller. We want to make sure we set the
-                     * feedback sensor as the primary encoder.
-                    */
-                    elevatorConfig
-                    .inverted(true)
-                    .closedLoop
-                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                    // Set PID values for position control
-                    .p(0.05)
-                    .i(0.0)
-                    .d(0.0008).dFilter(0.3)
-                     .outputRange(-0.45, 0.5)
-                    .maxMotion
-                    // Set MAXMotion parameters for position control
-                    .maxVelocity(2500)
-                    .maxAcceleration(6000)
-                    .allowedClosedLoopError(0.05);
-
-
-                }
-            }
+            /*
+                * Configure the closed loop controller. We want to make sure we set the
+                * feedback sensor as the primary encoder.
+            */
+            elevatorConfig
+            .inverted(true)
+            .closedLoop
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+            // Set PID values for position control
+            .p(0.05)
+            .i(0.0)
+            .d(0.0008).dFilter(0.3)
+                .outputRange(-0.45, 0.5)
+            .maxMotion
+            // Set MAXMotion parameters for position control
+            .maxVelocity(2500)
+            .maxAcceleration(6000)
+            .allowedClosedLoopError(0.05);
         }
 
-        // PID Constants For Left & Right Elevator Motors (Should Be The Same)
-        public static final PIDConstants leftElevator = new PIDConstants(0.07, 0.00075, 0.001);
-        public static final PIDConstants rightElevator = new PIDConstants(0.07, 0.00075, 0.001);
-        public static final PIDConstants balancePID = new PIDConstants(0.0, 0.0, 0.0);
-
-        // Minimum & Maximum Integration Range For PID
-        public static final double kMinInteg = 0.0;
-        public static final double kMaxInteg = 0.15;
-
-        // Positive & Negative Acceleration Limits (In %/sec)
-        public static final double kPositiveAccelLimit = 2.0;
-        public static final double kNegativeAccelLimit = -1.0; // Previously -5
-
-        // Position Tolerance For The ELevator (+ or - The Target Position)
-        public static final double kPositionTolerance = 0.1;
-
-        // Minimum & Maximum Outputs For Elevator
-        public static final double kElevatorMotorMinOutput = -0.5;
-        public static final double kElevatorMotorMaxOutput = 0.8;
-
-        // Maximum Current Limit For The ELevator
-        public static final int kElevatorCurrentLimit = 30;
-        
-        /*
-        Minumum & Maximum Heights The Elevator Can Be Within
-        */
-        public static final double kMaxHeight = 15;
-        public static final double kMinHeight = 0;
-
-        // Important Joystick Settings
+        // Joystick Settings
         public static final double kJoystickChange   = 10.0;
         public static final double kJoystickDeadband = 0.1;  // Manual elevator movement axis deadband
         public static final boolean kJoystickReversed = true;  // Determines if the joystick movement is reversed

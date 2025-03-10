@@ -1,51 +1,41 @@
 package frc.robot.bindings;
-import java.util.Optional;
-
-// Elevator subsystem
-import frc.robot.subsystems.SK25Elevator;
-
-// Constants for the elevator
-import static frc.robot.Konstants.ElevatorConstants.*;
-
-// Ports
 import static frc.robot.Ports.OperatorPorts.*;
 
-// Misc.
+import java.util.Optional;
+
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
-// Commands
-import frc.robot.commands.ElevatorJoystickCommand;
-import frc.robot.utils.konstantLib.filters.DeadbandFilter;
-
-// Unused imports
-import frc.robot.commands.ElevatorButtonCommand;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.*;
+import frc.robot.subsystems.SK25Elevator;
+import frc.robot.subsystems.SK25Elevator.Setpoint;
 
 public class SK25ElevatorBinder implements CommandBinder
 {
     Optional<SK25Elevator> elevatorSubsystem;
-    Trigger LowButton;
-    Trigger MidButton;
-    Trigger TopButton;
-    Trigger TroughButton;
-    Trigger zeroPositionButton;
+    Trigger L2;
+    Trigger L3;
+    Trigger L4;
+    Trigger Trough;
+    Trigger zeroPosition;
     Trigger resetPos;
     Trigger elevatorOverride;
-    Trigger NetButton;
-    Trigger IntakeButton;
+    Trigger LowAlgae;
+    Trigger HighAlgae;
+    Trigger Net;
+    Trigger Station;
 
     public SK25ElevatorBinder(Optional<SK25Elevator> elevatorSubsystem)
     {
-        this.elevatorSubsystem  = elevatorSubsystem;
-        this.elevatorOverride   = kElevatorOverride.button;
-        this.zeroPositionButton = kZeroPos.button;
-        this.LowButton          = kL2BranchPos.button;
-        //this.MidButton          = kMiddleBranch.button;
-        //this.TopButton          = kTopBranch.button;
-        this.TroughButton       = kTroughPos.button;
-        this.resetPos           = kResetElevatorPos.button;
-        this.NetButton          = kNetPos.button;
-        this.IntakeButton       = kStationPos.button;
+        this.elevatorSubsystem = elevatorSubsystem;
+        this.elevatorOverride = kElevatorOverride.button;
+        this.zeroPosition = kZeroPos.button;
+        this.L2 = kL2BranchPos.button;
+        this.L3 = kL3BranchPos.button;
+        this.L4 = kL4BranchPos.button;
+        this.Trough = kTroughPos.button;
+        this.resetPos = kResetElevatorPos.button;
+        this.LowAlgae = kLowAlgaePos.button;
+        this.HighAlgae = kHighAlgaePos.button;
+        this.Net = kNetPos.button;
+        this.Station = kStationPos.button;
     }
 
     public void bindButtons()
@@ -55,30 +45,32 @@ public class SK25ElevatorBinder implements CommandBinder
         {
             SK25Elevator elevator = elevatorSubsystem.get();
 
-            double joystickGain = kJoystickReversed ? -kJoystickChange : kJoystickChange;
-            kElevatorAxis.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
+            // double joystickGain = kJoystickReversed ? -kJoystickChange : kJoystickChange;
+            // kElevatorAxis.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
 
-            elevatorOverride.whileTrue(new ElevatorJoystickCommand(
-                () -> {return kElevatorAxis.getFilteredAxis();},
-                () -> {return kElevatorOverride.button.getAsBoolean();},
-                elevator));
+            // elevatorOverride.whileTrue(new ElevatorJoystickCommand(
+            //     () -> {return kElevatorAxis.getFilteredAxis();},
+            //     () -> {return kElevatorOverride.button.getAsBoolean();},
+            //     elevator));
 
-            elevator.setDefaultCommand(
-                         // Vertical movement of the elevator is controlled by the Y axis of the left stick.
-                         // Up on the joystick moves elevator up, and down on stick moves the elevator down.
-                         new ElevatorJoystickCommand(
-                             () -> {return kElevatorAxis.getFilteredAxis();},
-                             () -> {return kElevatorOverride.button.getAsBoolean();},
-                             elevator));
+            // elevator.setDefaultCommand(
+            //              // Vertical movement of the elevator is controlled by the Y axis of the left stick.
+            //              // Up on the joystick moves elevator up, and down on stick moves th++e elevator down.
+            //              new ElevatorJoystickCommand(
+            //                  () -> {return kElevatorAxis.getFilteredAxis();},
+            //                  () -> {return kElevatorOverride.button.getAsBoolean();},
+            //                  elevator));
             
             // Elevator Position Buttons
-            zeroPositionButton.onTrue(new ElevatorButtonCommand(kZeroPosition, elevator));
-            TroughButton.onTrue(new ElevatorButtonCommand(kTroughPosition, elevator));
-            LowButton.onTrue(new ElevatorButtonCommand(kLowPosition, elevator));
-            MidButton.onTrue(new ElevatorButtonCommand(kMidPosition, elevator));
-            TopButton.onTrue(new ElevatorButtonCommand(kTopPosition, elevator));
-            NetButton.onTrue(new ElevatorButtonCommand(kNetPosition, elevator));
-            IntakeButton.onTrue(new ElevatorButtonCommand(kIntakePosition, elevator));
+            zeroPosition.onTrue(elevator.setSetpointCommand(Setpoint.kZero));
+            Trough.onTrue(elevator.setSetpointCommand(Setpoint.kTrough));
+            L2.onTrue(elevator.setSetpointCommand(Setpoint.kLevel2));
+            L3.onTrue(elevator.setSetpointCommand(Setpoint.kLevel3));
+            L4.onTrue(elevator.setSetpointCommand(Setpoint.kLevel4));
+            LowAlgae.onTrue(elevator.setSetpointCommand(Setpoint.kLowAlgae));
+            HighAlgae.onTrue(elevator.setSetpointCommand(Setpoint.kHighAlgae));
+            Net.onTrue(elevator.setSetpointCommand(Setpoint.kNet));
+            Station.onTrue(elevator.setSetpointCommand(Setpoint.kStation));
         }
     }
 }
