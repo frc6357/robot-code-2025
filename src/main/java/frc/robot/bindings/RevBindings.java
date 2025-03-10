@@ -1,10 +1,4 @@
 package frc.robot.bindings;
-import static frc.robot.Ports.OperatorPorts.kLowAlgae;
-import static frc.robot.Ports.OperatorPorts.kElevatorOverride;
-import static frc.robot.Ports.OperatorPorts.kHighAlgae;
-import static frc.robot.Ports.OperatorPorts.kLowBranch;
-import static frc.robot.Ports.OperatorPorts.kResetElevatorPos;
-import static frc.robot.Ports.OperatorPorts.kTrough;
 import static frc.robot.Ports.OperatorPorts.*;
 
 import java.util.Optional;
@@ -16,32 +10,32 @@ import frc.robot.subsystems.CoralSubsystem.Setpoint;
 public class RevBindings implements CommandBinder
 {
     Optional<CoralSubsystem> elevatorSubsystem;
-    Trigger LowButton;
-    Trigger MidButton;
-    Trigger TopButton;
-    Trigger TroughButton;
-    Trigger zeroPositionButton;
+    Trigger L2;
+    Trigger L3;
+    Trigger L4;
+    Trigger Trough;
+    Trigger zeroPosition;
     Trigger resetPos;
     Trigger elevatorOverride;
     Trigger LowAlgae;
     Trigger HighAlgae;
     Trigger Net;
-    Trigger Intake;
+    Trigger Station;
 
     public RevBindings(Optional<CoralSubsystem> elevatorSubsystem)
     {
-        this.elevatorSubsystem  = elevatorSubsystem;
-        this.elevatorOverride   = kElevatorOverride.button;
-        this.zeroPositionButton = kZeroPositionOperator.button;
-        this.LowButton          = kLowBranch.button;
-        this.MidButton          = kMiddleBranchEffector.button;
-        this.TopButton          = kTopBranchEffector.button;
-        this.TroughButton       = kTrough.button;
-        this.resetPos           = kResetElevatorPos.button;
-        this.LowAlgae = kLowAlgae.button;
-        this.HighAlgae = kHighAlgae.button;
+        this.elevatorSubsystem = elevatorSubsystem;
+        this.elevatorOverride = kElevatorOverride.button;
+        this.zeroPosition = kZeroPos.button;
+        this.L2 = kL2BranchPos.button;
+        this.L3 = kL3BranchPos.button;
+        this.L4 = kL4BranchPos.button;
+        this.Trough = kTroughPos.button;
+        this.resetPos = kResetElevatorPos.button;
+        this.LowAlgae = kLowAlgaePos.button;
+        this.HighAlgae = kHighAlgaePos.button;
         this.Net = kNetPos.button;
-        this.Intake = kIntakePos.button;
+        this.Station = kStationPos.button;
     }
 
     public void bindButtons()
@@ -68,15 +62,15 @@ public class RevBindings implements CommandBinder
             //                  elevator));
             
             // Elevator Position Buttons
-            zeroPositionButton.onTrue(elevator.setSetpointCommand(Setpoint.kZero));
-            TroughButton.onTrue(elevator.setSetpointCommand(Setpoint.kLevel1));
-            LowButton.onTrue(elevator.setSetpointCommand(Setpoint.kLevel2));
-            MidButton.onTrue(elevator.setSetpointCommand(Setpoint.kLevel3));
-            TopButton.onTrue(elevator.setSetpointCommand(Setpoint.kLevel4));
+            zeroPosition.onTrue(elevator.setSetpointCommand(Setpoint.kZero));
+            Trough.onTrue(elevator.setSetpointCommand(Setpoint.kTrough));
+            L2.onTrue(elevator.setSetpointCommand(Setpoint.kLevel2));
+            L3.onTrue(elevator.setSetpointCommand(Setpoint.kLevel3));
+            L4.onTrue(elevator.setSetpointCommand(Setpoint.kLevel4));
             LowAlgae.onTrue(elevator.setSetpointCommand(Setpoint.kLowAlgae));
             HighAlgae.onTrue(elevator.setSetpointCommand(Setpoint.kHighAlgae));
             Net.onTrue(elevator.setSetpointCommand(Setpoint.kNet));
-            Intake.onTrue(elevator.setSetpointCommand(Setpoint.kIntake));
+            Station.onTrue(elevator.setSetpointCommand(Setpoint.kIntake));
         }
     }
 }

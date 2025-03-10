@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 // Commands
 import frc.robot.commands.ElevatorJoystickCommand;
-import frc.robot.subsystems.SK25Elevator;
 import frc.robot.utils.konstantLib.filters.DeadbandFilter;
 
 // Unused imports
@@ -39,14 +38,14 @@ public class SK25ElevatorBinder implements CommandBinder
     {
         this.elevatorSubsystem  = elevatorSubsystem;
         this.elevatorOverride   = kElevatorOverride.button;
-        this.zeroPositionButton = kZeroPositionOperator.button;
-        this.LowButton          = kLowBranch.button;
+        this.zeroPositionButton = kZeroPos.button;
+        this.LowButton          = kL2BranchPos.button;
         //this.MidButton          = kMiddleBranch.button;
         //this.TopButton          = kTopBranch.button;
-        this.TroughButton       = kTrough.button;
+        this.TroughButton       = kTroughPos.button;
         this.resetPos           = kResetElevatorPos.button;
         this.NetButton          = kNetPos.button;
-        this.IntakeButton       = kIntakePos.button;
+        this.IntakeButton       = kStationPos.button;
     }
 
     public void bindButtons()

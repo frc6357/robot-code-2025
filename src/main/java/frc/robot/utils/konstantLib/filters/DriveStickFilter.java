@@ -3,13 +3,13 @@ package frc.robot.utils.konstantLib.filters;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 
 public class DriveStickFilter implements Filter {
-    private double MaxSpeed;
+    // private double MaxSpeed;
 
     private DeadbandFilter deadbandFilter;
     private SlewRateLimiter slewRateFilter;
         
             public DriveStickFilter(double MaxSpeed, double slewRate, double deadband) {
-                this.MaxSpeed = MaxSpeed;
+                // this.MaxSpeed = MaxSpeed;
                 
                 setDeadband(deadband);
                 setSlewRate(slewRate);
@@ -29,9 +29,9 @@ public class DriveStickFilter implements Filter {
         public void setSlewRate(double slewRate) {
             this.slewRateFilter = new SlewRateLimiter(slewRate);
         }
-        public void setMaxSpeed(double newMaxSpeed)
-        {
-            this.MaxSpeed = newMaxSpeed;
-        }
+        // public void setMaxSpeed(double newMaxSpeed)
+        // {
+        //     this.MaxSpeed = newMaxSpeed;
+        // }
     
 }

@@ -379,8 +379,7 @@ public final class Konstants
     /** Defines constraints and information for autonomous development */
     public static final class AutoConstants
     {
-
-        // PID Constants
+        // PID Constants for translation and rotatio PID controller of swerve for pathplanner
         public static final PIDConstants kTranslationPIDConstants = new PIDConstants(6, 0, 0);
         public static final PIDConstants kRotationPIDConstants    = new PIDConstants(6, 0.4, 0);
 
@@ -425,7 +424,7 @@ public final class Konstants
         
             public static final class ElevatorSetpoints {
               public static final double kZero = 0;
-              public static final double kLevel1 = 15;
+              public static final double kTrough = 15;
               public static final double kLevel2 = 40;
               public static final double kLevel3 = 56; //-215
               public static final double kLevel4 = 79.5; //-190
@@ -576,6 +575,12 @@ public final class Konstants
     }
     public static final class EndEffectorConstants
     {
+
+        //IDs
+        public static final int kEndEffectorArmMotorID = 33;
+        public static final int kEndEffectorRollerMotorID = 35;
+        public static final int kEndEffectorLaserCanID = 42;
+
         /** Heights for the different elevator positions */
         public static enum EndEffectorPosition
         {

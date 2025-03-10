@@ -68,6 +68,6 @@ public class SubsystemControls
     }
     public boolean isCoralSubsystemPresent() 
     {
-        return climb;
+        return coralSubsystem;
     }
 }

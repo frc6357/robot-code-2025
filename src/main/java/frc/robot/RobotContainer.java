@@ -5,10 +5,6 @@
 package frc.robot;
 
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
-// import static edu.wpi.first.units.Units.MetersPerSecond;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kLowPosition;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kMidPosition;
-import static frc.robot.Konstants.ElevatorConstants.ElevatorPosition.kTopPosition;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,8 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-//import choreo.auto.AutoChooser;
-//import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -37,15 +31,13 @@ import frc.robot.bindings.ClimbBinder;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.RevBindings;
 import frc.robot.bindings.SK25ElevatorBinder;
-//import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.bindings.SK25EndEffectorBinder;
 import frc.robot.bindings.SK25LightsBinder;
-import frc.robot.bindings.SK25ScoringBinder;
+//import frc.robot.bindings.SK25ScoringBinder;
 import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.commands.EndEffectorButtonCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
-//import frc.robot.subsystems.Configs.CoralSubsystem;
 import frc.robot.subsystems.SK25Climb;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25EndEffector;
@@ -75,7 +67,6 @@ public class RobotContainer {
   public Optional<CoralSubsystem> m_coral = Optional.empty();
   public Optional<SK25Lights> m_lights = Optional.empty();
   public Optional<SKSwerve> m_swerve = Optional.empty();
-  // private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
   public Optional <SK25Climb> m_Climb = Optional.empty();
   public Optional<SK25EndEffector> m_endEffector = Optional.empty();
 
@@ -161,15 +152,14 @@ public class RobotContainer {
      */
     private void configureButtonBindings()
     {
+        // Adding all the binding classes to the list
         buttonBinders.add(new SKSwerveBinder(m_swerve, m_elevator));
         buttonBinders.add(new SK25ElevatorBinder(m_elevator));
         buttonBinders.add(new SK25LightsBinder(m_lights));
         buttonBinders.add(new RevBindings(m_coral));
-
-        // Adding all the binding classes to the list
         buttonBinders.add(new ClimbBinder(m_Climb));
         buttonBinders.add(new SK25EndEffectorBinder(m_endEffector));
-        buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
+        //buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
@@ -195,7 +185,7 @@ public class RobotContainer {
 
                 NamedCommands.registerCommand("ElevatorTroughPositionCommand",
                     Commands.parallel(
-                        coral.setSetpointCommand(Setpoint.kLevel1),
+                        coral.setSetpointCommand(Setpoint.kTrough),
                         new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
                         Commands.sequence(Commands.waitSeconds(4), effector.runRollerCommand(-0.3))   //correct extake directoin
                     )
@@ -207,7 +197,7 @@ public class RobotContainer {
 
                 NamedCommands.registerCommand(
                     "TroughScoreCombo",
-                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kTrough),
                     new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
                     Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                     )
@@ -239,7 +229,7 @@ public class RobotContainer {
 
                 NamedCommands.registerCommand(
                     "LowAlgaePickupCombo",
-                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kTrough),
                     new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
                     Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                     )
@@ -247,7 +237,7 @@ public class RobotContainer {
 
                 NamedCommands.registerCommand(
                     "HighAlgaePickupCombo",
-                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kTrough),
                     new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
                     Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                     )
@@ -255,7 +245,7 @@ public class RobotContainer {
 
                 NamedCommands.registerCommand(
                     "NetScoreCombo",
-                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kTrough),
                     new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
                     Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                     )
@@ -263,7 +253,7 @@ public class RobotContainer {
 
                 NamedCommands.registerCommand(
                     "StationPickupCombo",
-                    Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
+                    Commands.parallel(coral.setSetpointCommand(Setpoint.kTrough),
                     new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
                     Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                     )
@@ -332,34 +322,28 @@ public class RobotContainer {
         {
             m_endEffector.get().testInit();
         }
+        // if(m_coral.isPresent())
+        // {
+        //     m_coral.get().testPeriodic();
+        // }
     }
 
     public void matchInit()
     {
-        /*
-        if (m_elevator.isPresent())
-        {
-            //SK25Elevator elevator = elevatorSubsystem.get();
-            //elevator.setRightTargetHeight(0.0);
-            //elevator.setLeftTargetHeight(0.0);
-        }
-        if(m_endEffector.isPresent())
-        {
-            SK25lendEffector endeffector = m_endEffector.get();
-        }
-        */
     }
 
     public void teleopInit()
     {
+        //Reset the swerve odometry at the end of auto, since it otherwise starts facing the wrong direction.
         m_swerve.ifPresent((swerve) -> swerve.seedFieldCentric());
     }
 
     public void autonomousInit()
     {
+        //Lower the End Effector at the start of auto, to prevent the elevator from going up wihile it is
+        //still stowed.
         if(m_endEffector.isPresent()) {
             m_endEffector.get().leave();
         }
-
     } 
 }

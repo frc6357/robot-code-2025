@@ -64,11 +64,6 @@ public class Robot extends LoggedRobot
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
 
-        //Schedule a warmup command to prevent delay at the begenning of auto. This helps aleviate a 
-        //java specific isssue of the auto starting late.
-        //FollowPathCommand.warmupCommand().schedule();
-
-
         //get the saved elastic dashboard layout
         WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
     }

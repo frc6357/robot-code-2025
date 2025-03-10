@@ -5,18 +5,12 @@ import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
-//import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
-//import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
-///import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
 
 import com.revrobotics.RelativeEncoder;
-//import au.grapplerobotics.LaserCan;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-//import com.revrobotics.spark.SparkAbsoluteEncoder;
-//import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -24,13 +18,12 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
-//import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
@@ -139,10 +132,10 @@ public class SK25EndEffector extends SubsystemBase
         //System.out.println("Motor " + motorRotations);
         //System.out.println("Encoder " + mEncoder.getPosition());
         //Come back and change this, need fraction for Encoder Rotations in place of angle
-        double targetAngleRadians = 
-            Degrees.of(angleDegrees)
-            .plus(Degrees.of(90))
-            .in(Radians);
+        // double targetAngleRadians = 
+        //     Degrees.of(angleDegrees)
+        //     .plus(Degrees.of(90))
+        //     .in(Radians);
         //System.out.println(targetAngleRadians);
         //double armFF = armFeedforward.calculate(targetAngleRadians, 0);
         mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0);

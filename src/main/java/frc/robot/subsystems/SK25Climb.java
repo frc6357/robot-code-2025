@@ -1,43 +1,31 @@
 //Subsystem Essentials
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
-import frc.robot.preferences.Pref;
-import frc.robot.preferences.SKPreferences;
-
-//import static edu.wpi.first.units.Units.Rotations;
-import static frc.robot.Konstants.ClimbConstants.*;
-//import static frc.robot.Ports.ClimbPorts.*;
-//import static edu.wpi.first.units.Units.Rotation;
-//import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Konstants.ClimbConstants.kClimbD;
 import static frc.robot.Konstants.ClimbConstants.kClimbI;
+import static frc.robot.Konstants.ClimbConstants.kClimbMaxPosition;
+import static frc.robot.Konstants.ClimbConstants.kClimbMinPosition;
 import static frc.robot.Konstants.ClimbConstants.kClimbP;
+import static frc.robot.Konstants.ClimbConstants.kClimbPositionTolerance;
 import static frc.robot.Ports.ClimbPorts.kClimbMotor;
 
-//import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
-import com.ctre.phoenix6.controls.compound.Diff_DutyCycleOut_Velocity;
-//import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-//import com.ctre.phoenix6.hardware.core.CoreCANcoder;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-//import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
-import edu.wpi.first.units.Units;
-//import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Angle;
-//SmartDashboard Import
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
+import frc.robot.preferences.Pref;
+import frc.robot.preferences.SKPreferences;
 
 public class SK25Climb extends SubsystemBase 
 {
@@ -95,19 +83,8 @@ public class SK25Climb extends SubsystemBase
 
          motorConfig.withSlot0(climbPID0);
 
-   //Neutral Mode Attempts
-      // motorConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake); //Neutral Mode
-      // motor.setNeutralMode(NeutralModeValue.Brake);
-      // outputConfigs.withNeutralMode(NeutralModeValue.Brake);
-
-      //  why = new PositionVoltage(0).withSlot(0);
-      //  TalonFXConfiguration configar = new TalonFXConfiguration();
-      //  Slot0Configs configs = new Slot0Configs();
-      //  configs.kP = kClimbP;
-      //  configs.kI = kClimbI;
-      //  configs.kD = kClimbD;
-      //  configar.Voltage.withPeakForwardVoltage(Volts.of(0))
-      //    .withPeakReverseVoltage(Volts.of(-0));
+      //Brake Mode
+      // motorConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
 
        motorCurrentPosition = kClimbMinPosition;
        motorTargetPosition = kClimbMaxPosition;
@@ -121,11 +98,13 @@ public class SK25Climb extends SubsystemBase
    }
    //If we Eyeball
    public void runMotor(double speed) {
-      if((getMotorPosition() > (kClimbMaxPosition - kClimbPositionTolerance)) && Math.signum(speed) > 0) {
+      if((getMotorPosition() > (kClimbMaxPosition - kClimbPositionTolerance)) && Math.signum(speed) > 0)
+      {
          stop();
          return;
       }
-      else{ 
+      else
+      { 
          // Sets a velocity to target via pid and supplies an average duty cycle in volts
          motor.setControl(new DutyCycleOut(speed));//.withFeedForward(3.0)); // FF in volts
       }
@@ -172,7 +151,7 @@ public class SK25Climb extends SubsystemBase
       timestamp += Robot.kDefaultPeriod;
       motorCurrentPosition = getMotorPosition(); 
      //motorCurrentPosition =  motor.getPosition().getValue().in(Rotation);
-     SmartDashboard.putNumber("Velocity (RpMs)", getMotorSpeed());
+     SmartDashboard.putNumber("ClimbVelocity (RpMs)", getMotorSpeed());
      SmartDashboard.putNumber("ClimbPos", getMotorPosition());
    }
 }
