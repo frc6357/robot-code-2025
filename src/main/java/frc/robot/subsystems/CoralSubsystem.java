@@ -65,9 +65,9 @@ public class CoralSubsystem extends SubsystemBase {
       .onChange((unused) -> reconfigureElevator());
   
     private void reconfigureElevator() {
-      elevatorConfig.closedLoop.pid(elevatorKp.get(), elevatorKi.get(), elevatorKd.get());  
+      elevatorConfig.closedLoop.dFilter(.0003).pid(elevatorKp.get(), elevatorKi.get(), elevatorKd.get());  
       elevatorConfig.closedLoop.maxMotion
-        .maxVelocity(elevatorVelocity.get());      
+        .maxVelocity(elevatorVelocity.get());
       elevatorMotor.configure(
         elevatorConfig,
         ResetMode.kResetSafeParameters,
