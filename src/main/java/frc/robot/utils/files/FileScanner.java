@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import edu.wpi.first.wpilibj.Filesystem;
+import frc.robot.utils.konstantLib.filters.ExtensionFilter;
 
 /**
  * A utility class with various functionalites that can be used for file manipulation

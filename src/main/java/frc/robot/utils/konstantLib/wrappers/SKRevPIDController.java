@@ -1,4 +1,4 @@
-package frc.robot.utils;
+package frc.robot.utils.konstantLib.wrappers;
 
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.ControlType;

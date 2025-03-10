@@ -1,14 +1,19 @@
 package frc.robot;
 
-import static edu.wpi.first.wpilibj.XboxController.Axis.*;
-import static edu.wpi.first.wpilibj.XboxController.Button.*;
+import static frc.robot.Konstants.kCANivoreName;
+import static frc.robot.Konstants.kDefualtRioBusName;
+import static frc.robot.Konstants.ElevatorConstants.kLeftElevatorMotorID;
+import static frc.robot.Konstants.ElevatorConstants.kRightElevatorMotorID;
+import static frc.robot.Konstants.EndEffectorConstants.kEndEffectorArmMotorID;
+import static frc.robot.Konstants.EndEffectorConstants.kEndEffectorLaserCanID;
+import static frc.robot.Konstants.EndEffectorConstants.kEndEffectorRollerMotorID;
+import static frc.robot.Konstants.LightConstants.kCandleID;
 import static frc.robot.Konstants.SwerveConstants.kBackLeftDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kBackLeftEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kBackLeftTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightTurnMotorID;
-import static frc.robot.Konstants.SwerveConstants.kCANivoreNameString;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftTurnMotorID;
@@ -20,21 +25,22 @@ import static frc.robot.utils.SKTrigger.INPUT_TYPE.*;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.BUTTON;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
+import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.LEFT_X;
+import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.LEFT_Y;
+import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.RIGHT_X;
+import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.RIGHT_Y;
+import static frc.robot.utils.konstantLib.SKController.ControllerType.XBOX;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import frc.robot.utils.CANPort;
-import frc.robot.utils.SKTrigger;
-import frc.robot.utils.filters.FilteredAxis;
-import frc.robot.utils.filters.FilteredXboxController;
+import frc.robot.utils.konstantLib.CANPort;
+import frc.robot.utils.konstantLib.SKController;
+import frc.robot.utils.konstantLib.filters.FilteredAxis;
+import frc.robot.utils.konstantLib.wrappers.SKTrigger;
 
-// Unused Imports
 
-//import static frc.robot.utils.SKTrigger.INPUT_TYPE.*;
-//import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
 
 public class Ports
 {
-    public static class DriverPorts
+    public static class DriverPorts 
     {
         // Driver Controller set to Xbox Controller
         //public static final CommandXboxController kDriver = new CommandXboxController(0);
@@ -66,6 +72,30 @@ public class Ports
 
         // Party mode
         
+       // public static final GenericHID swerveController = new FilteredXboxController(0).getHID();
+        public static final SKController kDriver = new SKController(XBOX, 0);
+        
+        // Filtered axis (translation & rotation)
+        //public static final FilteredAxis kTranslationXPort = new FilteredAxis(() -> swerveController.getRawAxis(kLeftY.value));
+        // public static final FilteredAxis kTranslationYPort = new FilteredAxis(() -> swerveController.getRawAxis(kLeftX.value));
+        // public static final FilteredAxis kVelocityOmegaPort = new FilteredAxis(() -> swerveController.getRawAxis(kRightX.value)); 
+        public static final FilteredAxis kTranslationXPort = kDriver.getRawSKContorllerAxis(LEFT_Y);
+        public static final FilteredAxis kTranslationYPort = kDriver.getRawSKContorllerAxis(LEFT_X);
+        public static final FilteredAxis kVelocityOmegaPort = kDriver.getRawSKContorllerAxis(RIGHT_X);
+        
+        // Driver Function Button (Activates secondary control scheme when held)
+        // public static final SKTrigger kDriveFn = new SKTrigger(swerveController, kLeftBumper.value, BUTTON);
+        public static final SKTrigger kDriveFn = kDriver.mapLeftShoulderButton();
+
+        // Switch modes
+        // public static final SKTrigger kRobotCentricMode = new SKTrigger(swerveController, 180, POV); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
+        // public static final SKTrigger kSlowMode = new SKTrigger(swerveController, kRightBumper.value, BUTTON); // Function Controlscheme
+        public static final SKTrigger kRobotCentric = kDriver.mapDownDPad();
+        public static final SKTrigger kSlowMode = kDriver.mapRightShoulderButton();
+
+        // Reset gyro
+        // public static final SKTrigger kResetGyroPos = new SKTrigger(swerveController, kRightStick.value, BUTTON);
+        public static final SKTrigger kResetGyroPos = kDriver.mapRightJoystickPress();
 
     }
     /**
@@ -134,34 +164,82 @@ public class Ports
         
         public static final SKTrigger rollerintake = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
         public static final SKTrigger rolleroutput = new SKTrigger(kOperator, kLeftTrigger.value, AXIS);
+        // public static final GenericHID kOperator = new FilteredXboxController(1).getHID();
+        public static final SKController kOperator = new SKController(XBOX, 1);
+        
+        // Party mode and Teal Lights
+        // public static final SKTrigger kPartyModeButton = new SKTrigger(kOperator, kStart.value, BUTTON);
+        // public static final SKTrigger kLightsToTealButton = new SKTrigger(kOperator, kBack.value, BUTTON);
+        public static final SKTrigger kPartyMode = kOperator.mapStart();
+        public static final SKTrigger kLightsToTeal = kOperator.mapSelect();
+
+        // Elevator
+        // public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
+        // public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
+        // public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
+        // public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
+        // public static final SKTrigger kZeroPositionOperator  = new SKTrigger(kOperator, kStart.value, BUTTON);
+        public static final SKTrigger kTrough = kOperator.mapX();
+        public static final SKTrigger kTopBranch = kOperator.mapY();
+        public static final SKTrigger kMiddleBranch = kOperator.mapB();
+        public static final SKTrigger kLowBranch = kOperator.mapA();
+        public static final SKTrigger kZeroPositionOperator = kOperator.mapStart();
+
+        // Elevator Overrides
+        // public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
+        // public static final SKTrigger kResetElevatorPos = new SKTrigger(kOperator, kBack.value, BUTTON);
+        // public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
+        public static final FilteredAxis kElevatorAxis = kOperator.getRawSKContorllerAxis(LEFT_Y);
+        public static final SKTrigger kResetElevatorPos = kOperator.mapSelect();
+        public static final SKTrigger kElevatorOverride = kOperator.mapLeftJoystickPress();
+
+    
+        // public static final SKTrigger armTrough = new SKTrigger(kOperator, kX.value, BUTTON);
+        // public static final SKTrigger armMiddleLow = new SKTrigger(kOperator, kY.value, BUTTON);
+        // public static final SKTrigger armHigh = new SKTrigger(kOperator, kA.value, BUTTON);
+        // public static final SKTrigger intakebut = new SKTrigger(kOperator, kB.value, BUTTON);
+        // public static final SKTrigger zeropos = new SKTrigger(kOperator, kStart.value, BUTTON);
+        // public static final SKTrigger resetencoder = new SKTrigger(kOperator, kRightStick.value, BUTTON);
+        // public static final SKTrigger rollerintake = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
+        // public static final SKTrigger rolleroutput = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
+        public static final SKTrigger kArmTrough = kOperator.mapX();
+        public static final SKTrigger kArmMiddleLow = kOperator.mapY();
+        public static final SKTrigger kArmHigh = kOperator.mapA();
+        public static final SKTrigger kIntakeBut = kOperator.mapB();
+        public static final SKTrigger kZeroPos = kOperator.mapStart();
+        public static final SKTrigger kResetEncoder = kOperator.mapRightJoystickPress();
+        public static final SKTrigger kRollerIntake = kOperator.mapRightShoulderButton();
+        public static final SKTrigger kRollerOutput = kOperator.mapLeftShoulderButton();
+
+        // public static final FilteredAxis endArm = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
+        public static final FilteredAxis kEndArm = kOperator.getRawSKContorllerAxis(RIGHT_Y);
     }
 
     /*
      * Defines all the ports needed to create sensors and actuators for the drivetrain.
      */
-
     public static class DrivePorts
     {
         // CAN IDs for the drive motors on the swerve module
-        public static final CANPort kFrontLeftDriveMotorPort  = new CANPort(kFrontLeftDriveMotorID, kCANivoreNameString);
-        public static final CANPort kFrontRightDriveMotorPort = new CANPort(kFrontRightDriveMotorID, kCANivoreNameString);
-        public static final CANPort kBackLeftDriveMotorPort   = new CANPort(kBackLeftDriveMotorID, kCANivoreNameString);
-        public static final CANPort kBackRightDriveMotorPort  = new CANPort(kBackRightDriveMotorID, kCANivoreNameString);
+        public static final CANPort kFrontLeftDriveMotorPort  = new CANPort(kFrontLeftDriveMotorID, kCANivoreName);
+        public static final CANPort kFrontRightDriveMotorPort = new CANPort(kFrontRightDriveMotorID, kCANivoreName);
+        public static final CANPort kBackLeftDriveMotorPort   = new CANPort(kBackLeftDriveMotorID, kCANivoreName);
+        public static final CANPort kBackRightDriveMotorPort  = new CANPort(kBackRightDriveMotorID, kCANivoreName);
 
         // CAN IDs for the turning motors on the swerve module
-        public static final CANPort kFrontLeftTurnMotorPort  = new CANPort(kFrontLeftTurnMotorID, kCANivoreNameString);
-        public static final CANPort kFrontRightTurnMotorPort = new CANPort(kFrontRightTurnMotorID, kCANivoreNameString);
-        public static final CANPort kBackLeftTurnMotorPort   = new CANPort(kBackLeftTurnMotorID, kCANivoreNameString);
-        public static final CANPort kBackRightTurnMotorPort  = new CANPort(kBackRightTurnMotorID, kCANivoreNameString);
+        public static final CANPort kFrontLeftTurnMotorPort  = new CANPort(kFrontLeftTurnMotorID, kCANivoreName);
+        public static final CANPort kFrontRightTurnMotorPort = new CANPort(kFrontRightTurnMotorID, kCANivoreName);
+        public static final CANPort kBackLeftTurnMotorPort   = new CANPort(kBackLeftTurnMotorID, kCANivoreName);
+        public static final CANPort kBackRightTurnMotorPort  = new CANPort(kBackRightTurnMotorID, kCANivoreName);
 
         // CAN IDs for the CANCoders
-        public static final CANPort kFrontLeftEncoderPort  = new CANPort(kFrontLeftEncoderID, kCANivoreNameString);
-        public static final CANPort kFrontRightEncoderPort = new CANPort(kFrontRightEncoderID, kCANivoreNameString);
-        public static final CANPort kBackLeftEncoderPort   = new CANPort(kBackLeftEncoderID, kCANivoreNameString);
-        public static final CANPort kBackRightEncoderPort  = new CANPort(kBackRightEncoderID, kCANivoreNameString);
+        public static final CANPort kFrontLeftEncoderPort  = new CANPort(kFrontLeftEncoderID, kCANivoreName);
+        public static final CANPort kFrontRightEncoderPort = new CANPort(kFrontRightEncoderID, kCANivoreName);
+        public static final CANPort kBackLeftEncoderPort   = new CANPort(kBackLeftEncoderID, kCANivoreName);
+        public static final CANPort kBackRightEncoderPort  = new CANPort(kBackRightEncoderID, kCANivoreName);
         
         // CAN ID for IMU
-        public static final CANPort kPigeonPort = new CANPort(kPigeonID, kCANivoreNameString);
+        public static final CANPort kPigeonPort = new CANPort(kPigeonID, kCANivoreName);
     }
     
     public static class ClimbPorts
@@ -173,37 +251,23 @@ public class Ports
 
     public static class ElevatorPorts
     {
-        private static final String busName = "";
-        public static final CANPort kRightElevatorMotor = new CANPort(41, busName);
-        //public static final CANPort kLeftElevatorMotor = new CANPort(42, busName);
+        //The bus name is empty, because this subsystem does not use a named CANbus.
+        public static final CANPort kRightElevatorMotor = new CANPort(41, kDefualtRioBusName);
     }
 
     public static class LightsPorts
     {
-    private static final String busName = "";
-    //assign an ID of 48 to the CANdle
-    public static final CANPort kCANdle = new CANPort(48, busName);
+        //The bus name is empty, because this subsystem does not use a named CANbus.
+        public static final CANPort kCANdle = new CANPort(kCandleID, kDefualtRioBusName);
     }
 
     public static class EndEffectorPorts
     {
-        private static final String busName = "";
-        //assign an ID of 48 to the CANdle
-        public static final CANPort kCANdle = new CANPort(48, busName);
-    
-        public static final CANPort kEndEffectorArmMotor = new CANPort(33, busName);
-        public static final CANPort kEndEffectorRollerMotor = new CANPort(34, busName);
-        public static final CANPort kLaserCanEndEffector = new CANPort(46, busName);
+        //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
+        //The bus name is empty, because this subsystem does not use a named CANbus.
+        public static final CANPort kEndEffectorArmMotor = new CANPort(kEndEffectorArmMotorID, kDefualtRioBusName);
+        public static final CANPort kEndEffectorRollerMotor = new CANPort(kEndEffectorRollerMotorID, kDefualtRioBusName);
+        public static final CANPort kLaserCanEndEffector = new CANPort(kEndEffectorLaserCanID, kDefualtRioBusName);
 
     }
-
-
-    // public static class ExamplePorts
-    // {
-    //     //bus name is null
-    //     private static final String busName = "";
-
-    //     //assign a motor ID of 49 to the example motor
-    //     public static final CANPort kExampleMotor = new CANPort(59, busName); 
-    // }
 }

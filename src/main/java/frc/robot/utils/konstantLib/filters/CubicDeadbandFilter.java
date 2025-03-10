@@ -1,4 +1,4 @@
-package frc.robot.utils.filters;
+package frc.robot.utils.konstantLib.filters;
 
 /**
  * CubicDeadbandFilter can filter a value through a cubic relation, but also applies a

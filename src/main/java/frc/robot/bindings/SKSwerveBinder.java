@@ -24,13 +24,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // Used for binding buttons to drive actions
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.TunerConstants;
+import frc.robot.Konstants.TunerConstants;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 import frc.robot.subsystems.SK25Elevator;
 // Adds the Swerve subsystem for construction
 import frc.robot.subsystems.SKSwerve;
-import frc.robot.utils.filters.DriveStickFilter;
+import frc.robot.utils.konstantLib.filters.DriveStickFilter;
 
 public class SKSwerveBinder implements CommandBinder{
     Optional<SKSwerve>  m_drive;
@@ -197,6 +197,7 @@ public class SKSwerveBinder implements CommandBinder{
         // Resets gyro angles / robot oreintation
         resetButton.onTrue(new InstantCommand(() -> {drivetrain.seedFieldCentric();} ));
 
+        //when no other command it being run with the swerve subsystem, run this one (defualt drive command)
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> {

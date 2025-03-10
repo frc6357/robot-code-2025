@@ -1,6 +1,7 @@
 package frc.robot.bindings;
 
-import static frc.robot.Ports.OperatorPorts.kPartyModeButton;
+import static frc.robot.Ports.OperatorPorts.kLightsToTeal;
+import static frc.robot.Ports.OperatorPorts.kPartyMode;
 
 import java.util.Optional;
 
@@ -22,7 +23,8 @@ public class SK25LightsBinder implements CommandBinder
         this.m_lights = lights;
 
         //tie the triggers to their respective buttons
-        this.PartyMode = kPartyModeButton.button;
+        this.LightsToTeal = kLightsToTeal.button;
+        this.PartyMode = kPartyMode.button;
     }
 
     public void bindButtons()

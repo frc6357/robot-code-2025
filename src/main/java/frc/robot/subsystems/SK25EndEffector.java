@@ -302,6 +302,10 @@ public class SK25EndEffector extends SubsystemBase
 
         SmartDashboard.putNumber("Arm Target Position", armTargetPosition);
         SmartDashboard.putBoolean("Arm at Setpoint", isArmAtTargetPosition());*/
+
+        SmartDashboard.putNumber("EndEffector Current Angle", mCurrentAngle);
+        SmartDashboard.putNumber("EndEffector Target Angle", mTargetAngle);
+        SmartDashboard.putBoolean("Is EndEffector at Target", isArmAtTargetPosition());
         
     }
 

@@ -1,6 +1,6 @@
-package frc.robot.utils.filters;
+package frc.robot.utils.konstantLib.filters;
 
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj.Joystick;
 
 /**
  * This class filters Joystick inputs based on a series of provided Filter objects.
@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
  * Values read from an axis using getFilteredAxis() will be the result of the Filter being
  * applied to the raw axis value if a Filter for that axis has been provided.
  */
-public class FilteredXboxController extends CommandXboxController
+public class FilteredJoystick extends Joystick
 {
     private static final int MAX_AXES = 16;
 
@@ -20,7 +20,7 @@ public class FilteredXboxController extends CommandXboxController
      * @param joystickNumber
      *            The port of the Joystick this FilteredJoystick
      */
-    public FilteredXboxController(int joystickNumber)
+    public FilteredJoystick(int joystickNumber)
     {
         super(joystickNumber);
         filters = new Filter[MAX_AXES];

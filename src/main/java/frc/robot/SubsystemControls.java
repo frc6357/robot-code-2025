@@ -1,4 +1,4 @@
-package frc.robot.utils;
+package frc.robot;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
