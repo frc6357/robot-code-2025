@@ -30,21 +30,5 @@
     "properties": {
       "persistent": true
     }
-  },
-  {
-    "name": "/Preferences/driverTranslSlew",
-    "type": "double",
-    "value": 1.5,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/driverRotSlew",
-    "type": "double",
-    "value": 4.0,
-    "properties": {
-      "persistent": true
-    }
   }
 ]
