@@ -186,7 +186,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand("ElevatorTroughPositionCommand",
                     Commands.parallel(
                         coral.setSetpointCommand(Setpoint.kTrough),
-                        new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                        new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
                         Commands.sequence(Commands.waitSeconds(4), effector.runRollerCommand(-0.3))   //correct extake directoin
                     )
                 );
@@ -198,7 +198,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand(
                     "TroughScoreCombo",
                     Commands.parallel(coral.setSetpointCommand(Setpoint.kTrough),
-                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
                     Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                     )
                 );
@@ -206,7 +206,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand(
                     "Level2ScoreCombo",
                     Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel2),
-                    new EndEffectorButtonCommand(EndEffectorPosition.kLowPositionAngle, effector),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kL2Angle, effector),
                     Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                     )
                 );
@@ -222,7 +222,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand(
                     "Level4ScoreCombo",
                     Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel4),
-                    new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, effector),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kL4Angle, effector),
                     Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                     )
                 );
@@ -230,7 +230,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand(
                     "LowAlgaePickupCombo",
                     Commands.parallel(coral.setSetpointCommand(Setpoint.kTrough),
-                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
                     Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                     )
                 );
@@ -238,7 +238,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand(
                     "HighAlgaePickupCombo",
                     Commands.parallel(coral.setSetpointCommand(Setpoint.kTrough),
-                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
                     Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                     )
                 );
@@ -246,7 +246,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand(
                     "NetScoreCombo",
                     Commands.parallel(coral.setSetpointCommand(Setpoint.kTrough),
-                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
                     Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                     )
                 );
@@ -254,7 +254,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand(
                     "StationPickupCombo",
                     Commands.parallel(coral.setSetpointCommand(Setpoint.kTrough),
-                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
                     Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
                     )
                 );
@@ -262,7 +262,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand(
                     "ElevatorZeroPositionCommand",
                     Commands.parallel(coral.setSetpointCommand(Setpoint.kZero),
-                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector)
+                    new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector)
                     )
                 );
             

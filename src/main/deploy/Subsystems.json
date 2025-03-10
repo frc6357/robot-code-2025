@@ -4,5 +4,5 @@
     "lights": false,
     "elevator": false,
     "climb": true,
-    "coralSubsystem" : true
+    "coralSubsystem": true
 }

@@ -394,8 +394,6 @@ public final class Konstants
         /** Heights for the different elevator positions */
         public static enum ElevatorPosition
         {
-            //TODO FIX DURING TESTING - Measure Elevator Heights
-
             /** Set the height to reach the top branch (L4) */ // 12.5
             kNetPosition(14), // 13.5 rotations of hex shaft
             /** Set the height to reach the top branch (L4) */ // 12.5
@@ -505,7 +503,6 @@ public final class Konstants
         
         /*
         Minumum & Maximum Heights The Elevator Can Be Within
-        TODO Change the height and see how that works, check SmartDashboard for elevator values first.
         */
         public static final double kMaxHeight = 15;
         public static final double kMinHeight = 0;
@@ -581,24 +578,27 @@ public final class Konstants
         public static final int kEndEffectorRollerMotorID = 35;
         public static final int kEndEffectorLaserCanID = 42;
 
-        /** Heights for the different elevator positions */
+        /** Heights for the different elevator positions in degrees */
         public static enum EndEffectorPosition
         {
-            /** Set the angle to reach the top branch (L4) */ // 12.5
-            kTopPositionAngle(-190), // Angle
-            /** Set the angle to reach the middle & low branch (L3) */
-            kLowPositionAngle(-215), // Angle
-            /** Set the angle to reach the trough (L2) */
-            kTroughPositionAngle(-195), // Angle -195
-            /** Set the height to reach the station (L1) */
-            kIntakePositionAngle(-100), // Angle
-            /** Set the height to reach the bottom */
-            kZeroPositionAngle(-60), // Angle
-            kNetAngle(-90),
-            kHighAlgae(-173),
+            /** Set the angle to reach the top branch (L4) */
+            kL4Angle(-190),
+            /** Set the angle to reach the middle branch (L3) */
             kMiddleAngle(-215),
-            kLowAlgae(-173),
-            kIntake(-70);
+            /** Set the angle to reach the low branch (L2) */
+            kL2Angle(-215),
+            /** Set the angle to reach the trough (L1) */
+            kTroughAngle(-195),
+            /** Set the height to reach the station */
+            kStationAngle(-100), //TODO: Angle -100 or -70 (check this)
+            /** Set the height to reach the bottom */
+            kZeroPositionAngle(-60),
+            /** Set the angle to reach the net */
+            kNetAngle(-90),
+            /** Set the angle to reach the high algae on the reef */
+            kHighAlgae(-173),
+            /** Set the angle to reach the low algae on the reef */
+            kLowAlgae(-173);
 
             public final double angle;
 
@@ -606,14 +606,7 @@ public final class Konstants
             {
                 this.angle = angle;
             }
-        }
-
-    //    /** Angles for the different endeffector positions */
-    //    public static final double kLevel4Angle = -20;
-    //    public static final double kLevel23Angle = -30;    
-    //    public static final double kLevel1Angle = -40;     
-    //    public static final double kIntakeAngle = -50;          
-    //    public static final double kHortizontalAngle = -60;     
+        }    
 
        /* PID values for arm motion control */
        public static final double kArmP = 1.9;
@@ -667,10 +660,10 @@ public final class Konstants
     public static final class ClimbConstants
     {
         //Keeping P value at 0 will result in motor not spinning
-        public static final double kClimbP = 1.0;         //TODO: tune climb PID
+        public static final double kClimbP = 1.0;
         public static final double kClimbI = 0.0;
         public static final double kClimbD = 0.0;
-      //  public static final double kClimbSetpoint = 5.0;
+        //public static final double kClimbSetpoint = 5.0;
         public static final double kKrakenSpeed = .3 ;
         public static final int kClimbCurrentLimit = 50;
         public static final double kClimbMaxPosition = 120;

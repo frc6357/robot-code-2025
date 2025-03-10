@@ -2,8 +2,19 @@ package frc.robot.bindings;
 
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
-import static frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition.kIntake;
-import static frc.robot.Ports.OperatorPorts.*;
+import static frc.robot.Ports.OperatorPorts.kEndEffectorAxis;
+import static frc.robot.Ports.OperatorPorts.kEndEffectorEncoderReset;
+import static frc.robot.Ports.OperatorPorts.kExtake;
+import static frc.robot.Ports.OperatorPorts.kHighAlgaePos;
+import static frc.robot.Ports.OperatorPorts.kIntake;
+import static frc.robot.Ports.OperatorPorts.kL2BranchPos;
+import static frc.robot.Ports.OperatorPorts.kL3BranchPos;
+import static frc.robot.Ports.OperatorPorts.kL4BranchPos;
+import static frc.robot.Ports.OperatorPorts.kLowAlgaePos;
+import static frc.robot.Ports.OperatorPorts.kNetPos;
+import static frc.robot.Ports.OperatorPorts.kStationPos;
+import static frc.robot.Ports.OperatorPorts.kTroughPos;
+import static frc.robot.Ports.OperatorPorts.kZeroPos;
 
 import java.util.Optional;
 
@@ -24,38 +35,36 @@ public class SK25EndEffectorBinder implements CommandBinder {
 
     Optional<SK25EndEffector> endEffectorSubsystem;
 
-    Trigger LowButton;
-    Trigger MiddleButton;
-    Trigger TopButton;
+    Trigger L2Button;
+    Trigger L3Button;
+    Trigger L4Button;
     Trigger TroughButton;
     Trigger StationButton;
     Trigger ResetEncoderButton;
     Trigger RollerIntake;
-    Trigger RollerOutPut;
-    Trigger zeroPositionButton;
-    Trigger zeroPositionButtonDriver;
-    Trigger resetPos;
-    Trigger endEffectorAxis;
+    Trigger RollerExtake;
+    Trigger ZeroPositionButton;
+    Trigger ResetPos;
+    Trigger EndEffectorAxis;
     Trigger NetButton;
     Trigger HighAlgaeButton;
-    Trigger LowAlgae;
-    Trigger Processor;
+    Trigger LowAlgaeButton;
 
     RelativeEncoder mEncoder;
 
     public SK25EndEffectorBinder(Optional<SK25EndEffector> endEffectorSubsystem)
     {
         this.endEffectorSubsystem = endEffectorSubsystem;
-        this.ResetEncoderButton = resetEndEffectorEncoder.button;
+        this.ResetEncoderButton = kEndEffectorEncoderReset.button;
         this.RollerIntake = kIntake.button;
-        this.RollerOutPut = kExtake.button;
-        this.zeroPositionButton = kZeroPos.button;
-        this.LowButton = kL2BranchPos.button;
-        this.MiddleButton = kL3BranchPos.button;
+        this.RollerExtake = kExtake.button;
+        this.ZeroPositionButton = kZeroPos.button;
+        this.L2Button = kL2BranchPos.button;
+        this.L3Button = kL3BranchPos.button;
         this.StationButton = kStationPos.button;
-        this.TopButton = kL4BranchPos.button;
+        this.L4Button = kL4BranchPos.button;
         this.TroughButton = kTroughPos.button;
-        this.LowAlgae = kLowAlgaePos.button;
+        this.LowAlgaeButton = kLowAlgaePos.button;
         this.HighAlgaeButton = kHighAlgaePos.button;
         this.NetButton = kNetPos.button;
     }
@@ -86,23 +95,23 @@ public class SK25EndEffectorBinder implements CommandBinder {
             ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector));
 
             //Coral
-            zeroPositionButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kZeroPositionAngle, endEffector));
-            TroughButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, endEffector));
-            LowButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kLowPositionAngle, endEffector));
-            MiddleButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kMiddleAngle, endEffector));
-            StationButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, endEffector));
-            TopButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, endEffector));   
+            ZeroPositionButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kZeroPositionAngle, endEffector));
+            TroughButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTroughAngle, endEffector));
+            L2Button.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kL2Angle, endEffector));
+            L3Button.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kMiddleAngle, endEffector));
+            StationButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, endEffector));
+            L4Button.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kL4Angle, endEffector));   
             
             //Algae
             NetButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kNetAngle, endEffector));
             HighAlgaeButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kHighAlgae, endEffector));
-            LowAlgae.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kLowAlgae, endEffector)); 
+            LowAlgaeButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kLowAlgae, endEffector)); 
             
             //Rollers
             RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
-            RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
+            RollerExtake.onTrue(new EndEffectorRollerOutputCommand(endEffector));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
-            RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));   
+            RollerExtake.onFalse(new EndEffectorRollerStopCommand(endEffector));   
         }
     }
 }
