@@ -10,13 +10,14 @@ import frc.robot.subsystems.SK25EndEffector;
 
 public class LineupCombo extends ParallelCommandGroup
 {
-
   /**
-   * Command to score any level of the reef, using both the elevator & end effector.
+   * Command to align with any known position, using both the elevator & end effector.
+   * @param elevatorPos The setpoint of the elevator
    * @param elevator    Elevator subystem to use
+   * @param endEffectorPos The angle of the endEffector
    * @param endEffector Endeffector subsystem to use
    */
-  public void ScoreCommandGroup(ElevatorSetpoint elevatorPos, SK25Elevator elevator, EndEffectorPosition endEffectorPos, SK25EndEffector endEffector) 
+  public LineupCombo(ElevatorSetpoint elevatorPos, SK25Elevator elevator, EndEffectorPosition endEffectorPos, SK25EndEffector endEffector) 
   {
       addCommands(
           new InstantCommand(() -> elevator.setSetpointCommand(elevatorPos)),

@@ -34,6 +34,7 @@ import frc.robot.bindings.SK25EndEffectorBinder;
 import frc.robot.bindings.SK25LightsBinder;
 import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.commands.EndEffectorButtonCommand;
+import frc.robot.commands.commandGroups.ScoreCombo;
 import frc.robot.subsystems.SK25Climb;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Elevator.ElevatorSetpoint;
@@ -192,6 +193,13 @@ public class RobotContainer {
 
                     //||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
 
+
+                    //try this
+                    NamedCommands.registerCommand("TempTroughScoreCombo", new ScoreCombo(
+                        ElevatorSetpoint.kTrough,
+                        elevator,
+                        EndEffectorPosition.kStationAngle,
+                        effector));
                     
                     //Position Commands
                     NamedCommands.registerCommand(
