@@ -12,23 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.bindings.CommandBinder;
+import frc.robot.bindings.SK25VisionBinder;
 import frc.robot.bindings.SKSwerveBinder;
 
 import frc.robot.subsystems.SKSwerve;
@@ -36,9 +32,10 @@ import frc.robot.subsystems.vision.SK25Vision;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Lights;
 
+import frc.robot.Konstants.TunerConstants;
+
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.filters.FilteredJoystick;
-//import static frc.robot.subsystems.TempSwerve.config;
 
 
 /**
@@ -127,7 +124,7 @@ public class RobotContainer {
                 m_elevator = m_elevatorContainer.get();
             }
             if(subsystems.isSwervePresent()) {
-                m_swerveContainer = Optional.of(TunerConstants.createDrivetrain());
+                m_swerveContainer = Optional.of(Konstants.TunerConstants.createDrivetrain());
                 m_swerve = m_swerveContainer.get(); // Returns new SKSwerve
             }
             if(subsystems.isVisionPresent() && subsystems.isSwervePresent()) {
@@ -150,6 +147,7 @@ public class RobotContainer {
     private void configureButtonBindings()
     {
         buttonBinders.add(new SKSwerveBinder(m_swerveContainer));
+        buttonBinders.add(new SK25VisionBinder(m_visionContainer, m_swerveContainer));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)
@@ -229,13 +227,7 @@ public class RobotContainer {
 
     public void matchInit()
     {
-        //if (elevatorSubsystem.isPresent())
-        //{
-            //SK25Elevator elevator = elevatorSubsystem.get();
-            //TODO Add this back :)
-            //elevator.setRightTargetHeight(0.0);
-            //elevator.setLeftTargetHeight(0.0);
-        //}
+
     }
 
     public void teleopInit()

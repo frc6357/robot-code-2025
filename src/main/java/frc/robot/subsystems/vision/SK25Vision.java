@@ -24,7 +24,7 @@ import frc.robot.utils.vision.LimelightHelpers.RawFiducial;
 import frc.robot.utils.Trio;
 import frc.robot.utils.Field;
 import frc.robot.RobotContainer;
-import frc.robot.TunerConstants;
+import frc.robot.Konstants.TunerConstants;
 import frc.robot.subsystems.SKSwerve;
 
 public class SK25Vision extends SubsystemBase implements NTSendable {
@@ -42,6 +42,10 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     public final Limelight[] reefLimelights = {frontLL}; // Effectively used for pose estimating, 
                                                         // but are specifically for use with the reef
 
+    public boolean frontLLEnabled = false;
+    public boolean backLLEnabled = false;
+
+
     private final DecimalFormat df = new DecimalFormat();
 
     public boolean isIntegrating = false; // Boolean statign whether or not limelight poses are being integrated with actual
@@ -58,6 +62,9 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
         /* Limelight startup configurator*/
         for(Limelight ll : allLimelights) {
+            if(!ll.isAttached()) {
+                ll.setLogStatus("Disabled");
+            }
             ll.setLEDMode(false); // Turns off LED lights on startup
         }
     }
@@ -176,6 +183,10 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("VisionDriving", isDriving);
+        SmartDashboard.putString("BackLLStatus", backLL.getLogStatus());
+        SmartDashboard.putString("FrontLLStatus", frontLL.getLogStatus());
+        SmartDashboard.putString("ResetPoseToVisionStatus", resetPoseToVisionLog);
+
 
         double yaw = m_swerve.getRotation().getDegrees();
 
