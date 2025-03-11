@@ -8,6 +8,8 @@ import frc.robot.subsystems.SK25Elevator.ElevatorSetpoint;
 import frc.robot.subsystems.SK25EndEffector;
 
 
+//Parallel Command Groups run all of their commands at the same time, and end when all of their 
+//commands have ended. All commands in the group start imidiatley when the group is called.
 public class LineupCombo extends ParallelCommandGroup
 {
   /**

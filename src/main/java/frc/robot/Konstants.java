@@ -379,6 +379,12 @@ public final class Konstants
     /** Defines constraints and information for autonomous development */
     public static final class AutoConstants
     {
+        // Time and speed for rollers in auto
+        public static final double kIntakeAutoSpeed = -0.7;
+        public static final double kExtakeAutoSpeed = 0.7;
+        public static final double kIntakeAutoDurationSeconds = 0.5;
+        public static final double kExtakeAutoDurationSeconds = 0.5;
+
         // PID Constants for translation and rotatio PID controller of swerve for pathplanner
         public static final PIDConstants kTranslationPIDConstants = new PIDConstants(6, 0, 0);
         public static final PIDConstants kRotationPIDConstants    = new PIDConstants(6, 0.4, 0);

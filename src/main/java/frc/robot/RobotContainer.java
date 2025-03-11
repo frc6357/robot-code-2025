@@ -34,6 +34,7 @@ import frc.robot.bindings.SK25EndEffectorBinder;
 import frc.robot.bindings.SK25LightsBinder;
 import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.commands.EndEffectorButtonCommand;
+import frc.robot.commands.commandGroups.LineupCombo;
 import frc.robot.commands.commandGroups.ScoreCombo;
 import frc.robot.subsystems.SK25Climb;
 import frc.robot.subsystems.SK25Elevator;
@@ -171,9 +172,12 @@ public class RobotContainer {
             {
                 SK25EndEffector effector = m_endEffector.get();
 
+
                 //Roller Commands
+
                 NamedCommands.registerCommand("IntakeAutoCommand", new InstantCommand(() -> effector.runRoller(kRollerSpeed)));
                 NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));
+
 
                 if(m_elevator.isPresent())
                 {
@@ -181,7 +185,7 @@ public class RobotContainer {
 
                     
 
-                    //||||||||||  DONT CHANGE UNTIL AFTER BELTON  |||||||||||\\
+                    //||||||||||  DONT CHANGE UNTIL OTHER COMMANDS WORK!  |||||||||||\\
 
                     NamedCommands.registerCommand("ElevatorTroughPositionCommand",
                         Commands.parallel(
@@ -191,87 +195,71 @@ public class RobotContainer {
                         )
                     );
 
-                    //||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+                    //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
 
 
-                    //try this
-                    NamedCommands.registerCommand("TempTroughScoreCombo", new ScoreCombo(
+
+                    //Score Commands
+
+                    NamedCommands.registerCommand("TroughScoreCombo", new ScoreCombo(
                         ElevatorSetpoint.kTrough,
                         elevator,
                         EndEffectorPosition.kStationAngle,
                         effector));
-                    
-                    //Position Commands
-                    NamedCommands.registerCommand(
-                        "TroughScoreCombo",
-                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kTrough),
-                        new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
-                        Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-                        )
-                    );
 
-                    NamedCommands.registerCommand(
-                        "Level2ScoreCombo",
-                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kLevel2),
-                        new EndEffectorButtonCommand(EndEffectorPosition.kL2Angle, effector),
-                        Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-                        )
-                    );
+                    NamedCommands.registerCommand("L2ScoreCombo", new ScoreCombo(
+                        ElevatorSetpoint.kTrough,
+                        elevator,
+                        EndEffectorPosition.kStationAngle,
+                        effector));
 
-                    NamedCommands.registerCommand(
-                        "Level3ScoreCombo",
-                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kLevel3),
-                        new EndEffectorButtonCommand(EndEffectorPosition.kMiddleAngle, effector),
-                        Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-                        )
-                    );
+                    NamedCommands.registerCommand("L3ScoreCombo", new ScoreCombo(
+                        ElevatorSetpoint.kTrough,
+                        elevator,
+                        EndEffectorPosition.kStationAngle,
+                        effector));
 
-                    NamedCommands.registerCommand(
-                        "Level4ScoreCombo",
-                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kLevel4),
-                        new EndEffectorButtonCommand(EndEffectorPosition.kL4Angle, effector),
-                        Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-                        )
-                    );
+                    NamedCommands.registerCommand("L4ScoreCombo", new ScoreCombo(
+                        ElevatorSetpoint.kTrough,
+                        elevator,
+                        EndEffectorPosition.kStationAngle,
+                        effector));
 
-                    NamedCommands.registerCommand(
-                        "LowAlgaePickupCombo",
-                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kTrough),
-                        new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
-                        Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-                        )
-                    );
+                    NamedCommands.registerCommand("NetScoreCombo", new ScoreCombo(
+                        ElevatorSetpoint.kTrough,
+                        elevator,
+                        EndEffectorPosition.kStationAngle,
+                        effector));
 
-                    NamedCommands.registerCommand(
-                        "HighAlgaePickupCombo",
-                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kTrough),
-                        new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
-                        Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-                        )
-                    );
 
-                    NamedCommands.registerCommand(
-                        "NetScoreCombo",
-                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kTrough),
-                        new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
-                        Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-                        )
-                    );
+                    //Pickup Commands
 
-                    NamedCommands.registerCommand(
-                        "StationPickupCombo",
-                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kTrough),
-                        new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector),
-                        Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-                        )
-                    );
-                    
-                    NamedCommands.registerCommand(
-                        "ElevatorZeroPositionCommand",
-                        Commands.parallel(elevator.setSetpointCommand(ElevatorSetpoint.kZero),
-                        new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, effector)
-                        )
-                    );
+                    NamedCommands.registerCommand("StationPickupCombo", new ScoreCombo(
+                        ElevatorSetpoint.kTrough,
+                        elevator,
+                        EndEffectorPosition.kStationAngle,
+                        effector));
+
+                    NamedCommands.registerCommand("LowAlgaePickupCombo", new ScoreCombo(
+                        ElevatorSetpoint.kTrough,
+                        elevator,
+                        EndEffectorPosition.kStationAngle,
+                        effector));
+
+                    NamedCommands.registerCommand("HighAlgaePickupCombo", new ScoreCombo(
+                        ElevatorSetpoint.kTrough,
+                        elevator,
+                        EndEffectorPosition.kStationAngle,
+                        effector));
+
+
+                    //Zero Position Command
+
+                    NamedCommands.registerCommand("ZeroPositionCommand", new LineupCombo(
+                        ElevatorSetpoint.kZero,
+                        elevator,
+                        EndEffectorPosition.kZeroPositionAngle,
+                        effector));
                 }
             }
         }
