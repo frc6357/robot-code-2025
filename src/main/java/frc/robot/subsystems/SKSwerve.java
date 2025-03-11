@@ -41,8 +41,6 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
-    public boolean isReefAligning = false; // This is used for the 2025 game and is used for Triggers
-
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
     /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
@@ -200,18 +198,6 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
      * @return Command to run
      */
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
-        isReefAligning = false;
-        return run(() -> this.setControl(requestSupplier.get()));
-    }
-
-    /**
-     * Same as applyRequest, only it sets the isReefAligning to true as well
-     *
-     * @param request Function returning the request to apply
-     * @return Command to run
-     */
-    public Command applyReefAligningRequest(Supplier<SwerveRequest> requestSupplier) {
-        isReefAligning = true;
         return run(() -> this.setControl(requestSupplier.get()));
     }
 

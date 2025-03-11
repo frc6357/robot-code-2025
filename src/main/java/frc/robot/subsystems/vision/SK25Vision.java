@@ -46,6 +46,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public boolean isIntegrating = false; // Boolean statign whether or not limelight poses are being integrated with actual
 
+    public boolean isDriving = false; // Provides a boolean as to whether or not the Limelights are "driving" the robot with their measurements
+
     // Creates an ArrayList to store estimated vision poses during autonomous 
     public ArrayList<Trio<Pose3d, Pose2d, Double>> autonPoses = new ArrayList<Trio<Pose3d, Pose2d, Double>>();
 
@@ -75,7 +77,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         });
     }
 
-    public static final class AlignTranslationWithPose extends CommandConfig {
+    public static final class AlignTranslationWithPose extends MultiLimelightCommandConfig {
         private AlignTranslationWithPose() {
             configKp(0.2);
             configKi(0.0);
@@ -84,19 +86,13 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             configMaxOutput(TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() * 0.6);
             configError(0.3);
             configPipelineIndex(kAprilTagPipeline);
-            configLimelight(RobotContainer.m_vision.frontLL);
+            configLimelights(RobotContainer.m_vision.poseLimelights);
         }
 
         public static AlignTranslationWithPose getConfig() {
             return new AlignTranslationWithPose();
         }
     }
-
-    // public static final class AlignRotationWithPose extends CommandConfig {
-    //     private AlignRotationWithPose() {
-    //         configKp(0);
-    //     }
-    // }
 
     public static final class AlignToReefTag extends CommandConfig {
         private AlignToReefTag() {
@@ -179,7 +175,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     @Override
     public void periodic() {
-        SmartDashboard.putData("Vision", this);
+        SmartDashboard.putBoolean("VisionDriving", isDriving);
 
         double yaw = m_swerve.getRotation().getDegrees();
 

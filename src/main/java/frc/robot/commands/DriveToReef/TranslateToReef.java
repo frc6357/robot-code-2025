@@ -1,15 +1,11 @@
 package frc.robot.commands.DriveToReef;
 
-import static frc.robot.Konstants.VisionConstants.kAprilTagPipeline;
-
 import java.util.function.Supplier;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision.CommandConfig;
@@ -38,14 +34,13 @@ public class TranslateToReef{
     private double xOut;
     private double yOut;
 
-    private Supplier<Pose2d> currentPose;
     private Supplier<Double> currentX;
     private Supplier<Double> currentY;
 
     private boolean outputtingX;
     private boolean outputtingY;
     
-    public TranslateToReef(CommandConfig config, Pose2d targetPose, SKSwerve m_swerve) {
+    public TranslateToReef(CommandConfig config, SKSwerve m_swerve) {
         this.config = config;
         this.m_swerve = m_swerve;
 
@@ -56,8 +51,6 @@ public class TranslateToReef{
         yPID = new ProfiledPIDController(config.kp, config.ki, config.kd, constraints);
         yPID.setTolerance(config.tolerance);
 
-        this.targetX = targetPose.getX();
-        this.targetY = targetPose.getY();
 
         currentX = () -> (m_swerve.getRobotPose().getX());
         currentY = () -> (m_swerve.getRobotPose().getY());
@@ -66,7 +59,9 @@ public class TranslateToReef{
         outputtingY = true;
     }
 
-    public void initialize() {
+    public void initialize(Pose2d targetPose) {
+        this.targetX = targetPose.getX();
+        this.targetY = targetPose.getY();
         reset();
     }
 

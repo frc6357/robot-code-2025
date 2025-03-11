@@ -42,13 +42,16 @@ public class Ports
         public static final FilteredAxis kTranslationYPort = new FilteredAxis(() -> kDriver.getRawAxis(kLeftX.value));
         public static final FilteredAxis kVelocityOmegaPort = new FilteredAxis(() -> kDriver.getRawAxis(kRightX.value)); 
         
+        // Vision Driving buttons
+        public static final SKTrigger kDriveToClosestReef = new SKTrigger(kDriver, kX.value, BUTTON);
+        public static final SKTrigger kLeftReef = new SKTrigger(kDriver, kLeftTrigger.value, AXIS);
+        public static final SKTrigger kRightReef = new SKTrigger(kDriver, kRightTrigger.value, AXIS);
+
         // Driver Function Button (Activates secondary control scheme when held)
         public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kLeftBumper.value, BUTTON);
 
         // Switch modes
-        public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, 180, POV); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
-        public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kRightTrigger.value, BUTTON); // Function Controlscheme
-
+        public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, 180, POV); // Function Mapping (NOTE: This button is meant to be impossible to accidentally press)
         // Reset gyro
         public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kRightStick.value, BUTTON);
 
@@ -90,11 +93,6 @@ public class Ports
         public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
         public static final SKTrigger kResetElevatorPos = new SKTrigger(kOperator, kBack.value, BUTTON);
         public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
-
-        // Vision Commands
-        public static final SKTrigger kMoveToSourceCommand = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
-        // public static final SKTrigger kAlignToLeftReefCommand = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
-        public static final SKTrigger kAlignToRightReefCommand = new SKTrigger(kOperator, kRightBumper.value, BUTTON);
 
         // Party mode
         public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kRightBumper.value, BUTTON);

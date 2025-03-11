@@ -6,7 +6,6 @@ import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
 import static frc.robot.Konstants.OIConstants.kSlowModePercent;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
 import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
-import static frc.robot.Ports.DriverPorts.kSlowMode;
 import static frc.robot.Ports.DriverPorts.kTranslationXPort;
 import static frc.robot.Ports.DriverPorts.kTranslationYPort;
 import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;

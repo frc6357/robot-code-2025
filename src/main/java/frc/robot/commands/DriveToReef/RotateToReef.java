@@ -2,18 +2,13 @@ package frc.robot.commands.DriveToReef;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
+// import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.SKSwerve;
-import frc.robot.subsystems.vision.SK25Vision.CommandConfig;
 import frc.robot.subsystems.vision.SK25Vision.MultiLimelightCommandConfig;
-import frc.robot.utils.vision.Limelight;
 
 /**
  * This is to have a very similar layout to a command with the "execute"
@@ -31,22 +26,14 @@ public class RotateToReef {
 
     private Supplier<Double> targetHeading;
 
-    private Supplier<Double> differenceHeading;
-
-    private double targetDifference = 0; // For rotating to a specific heading, this is almost always 0
-
-    private double rotOut;
-
-    private Supplier<Pose2d> currentPose;
     private Supplier<Double> currentHeading;
 
-    private SlewRateLimiter slewFilter;
+    // private SlewRateLimiter slewFilter;
 
     private boolean outputting;
-    private double error;
 
 
-    public RotateToReef(MultiLimelightCommandConfig config, Pose2d targetPose, SKSwerve m_swerve) {
+    public RotateToReef(MultiLimelightCommandConfig config, SKSwerve m_swerve) {
         this.config = config;
         this.m_swerve = m_swerve;
 
@@ -58,15 +45,15 @@ public class RotateToReef {
         rotPID.enableContinuousInput(-Math.PI, Math.PI);
         rotPID.setTolerance(config.tolerance);
 
-        this.currentHeading = () -> (m_swerve.getRobotPose().getRotation().getRadians()); // initAngle
-
-        this.targetHeading = () -> (targetPose.getRotation().getRadians()); // finalAngle
+        this.currentHeading = () -> (m_swerve.getRobotPose().getRotation().getRadians());
 
         outputting = true;
     }
 
-    public void initialize() {
-        rotPID.reset(currentHeading.get(), m_swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond); // Position, velocity
+    public void initialize(Pose2d targetPose) {
+        this.targetHeading = () -> (targetPose.getRotation().getRadians());
+
+        rotPID.reset(currentHeading.get(), m_swerve.getVelocity(true).omegaRadiansPerSecond); // Position, velocity
     }
 
     public double getOutput() {

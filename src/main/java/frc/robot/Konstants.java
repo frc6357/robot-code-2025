@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Amps;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import com.ctre.phoenix6.CANBus;
@@ -12,6 +13,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Current;
@@ -388,6 +390,60 @@ public final class Konstants
             public static final double kYaw = 27; // (yaw) yaw rotated clockwise/ccw from 0° North [think of a compass facing cw/ccw]
             
             public static final boolean kAttached = false;
+        }
+
+        public static final class PoseConstants {
+            public static final HashMap<String, Pose2d> fieldPositions = new HashMap<String, Pose2d>() {{
+              
+            /* SOUTH (Face closest to driver station) */
+            put("reefA", new Pose2d(3.178, 4.2, new Rotation2d(0)));
+            put("reefB", new Pose2d(3.178, 3.892, new Rotation2d(0)));//
+            put("reefABAlgae", new Pose2d(3.12, 4.386, new Rotation2d(0)));//
+
+            /* SOUTHEAST */
+            put("reefC", (new Pose2d(3.696, 2.979, new Rotation2d(1.047))));
+            put("reefD", (new Pose2d(3.961, 2.801, new Rotation2d(1.047))));
+            put("reefCDAlgae", new Pose2d(3.487, 2.988, new Rotation2d(1.047)));
+
+            /* NORTHEAST */
+            put("reefE", new Pose2d(5.00, 2.81, new Rotation2d(2.0944)));
+            put("reefF", new Pose2d(5.259, 2.9880, new Rotation2d(2.0944)));
+            put("reefEFAlgae", new Pose2d(4.867, 2.678, new Rotation2d(2.0944)));
+
+
+            /* NORTH (Face furthest from driver station) */
+            put("reefG", new Pose2d(5.806, 3.858, new Rotation2d(3.1459)));
+            put("reefH", new Pose2d(5.75, 4.160, new Rotation2d(3.1459)));
+            put("reefGHAlgae", new Pose2d(5.859, 3.686, new Rotation2d(3.1459)));
+
+            /* NORTHWEST */
+            put("reefI", new Pose2d(5.3, 5.05, new Rotation2d(-2.094)));
+            put("reefJ", new Pose2d(4.965, 5.220, new Rotation2d(-2.094)));
+            put("reefIJAlgae", new Pose2d(5.456, 5.034, new Rotation2d(-2.094)));
+
+            /* SOUTHWEST */
+            put("reefL", new Pose2d(3.7114, 5.0915, new Rotation2d(-1.047)));
+            put("reefK", new Pose2d(3.9911, 5.2315, new Rotation2d(-1.047)));
+            put("reefKLAlgae", new Pose2d(4.107, 5.391, new Rotation2d(-1.047)));
+        
+            put("Source", new Pose2d(1.00, 7.2, new Rotation2d(-1.13)));
+            put("Test", new Pose2d(2.16, 3.9, new Rotation2d(0)));
+        }};
+
+        public static final HashMap<Integer, List<String>> tagDestinationMap = new HashMap<Integer, List<String>>() {{
+            put(18, List.of("reefA", "reefB", "reefABAlgae")); // blue
+            put(7, List.of("reefA", "reefB", "reefABAlgae")); // red
+            put(17, List.of("reefC", "reefD", "reefCDAlgae")); // blue
+            put(8, List.of("reefC", "reefD", "reefCDAlgae")); // red
+            put(19, List.of("reefK", "reefL", "reefKLAlgae")); // blue
+            put(6, List.of("reefK", "reefL", "reefKLAlgae")); // red
+            put(21, List.of("reefH", "reefG", "reefGHAlgae")); // blue
+            put(10, List.of("reefH", "reefG", "reefGHAlgae")); // red
+            put(20, List.of("reefI", "reefJ", "reefIJAlgae")); // blue
+            put(11, List.of("reefI", "reefJ", "reefIJAlgae")); // red
+            put(22, List.of("reefF", "reefE", "reefEFAlgae")); // blue
+            put(9, List.of("reefF", "reefE", "reefEFAlgae")); // red
+        }};
         }
 
         public static final double kVisionRejectDist = 1.8;
