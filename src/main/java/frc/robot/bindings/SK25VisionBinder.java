@@ -10,8 +10,8 @@ import static frc.robot.Ports.OperatorPorts.kMoveToSourceCommand;
 import java.util.Optional;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DriveToPoseTranslationCommand;
 import frc.robot.commands.VisionAlignCommands;
+import frc.robot.commands.DriveToPose.DriveToPoseTranslationCommand;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
 import frc.robot.utils.Field;

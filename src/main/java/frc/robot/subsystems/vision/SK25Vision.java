@@ -39,6 +39,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public final Limelight[] allLimelights = {frontLL, backLL}; // List of all limelights
     public final Limelight[] poseLimelights = {frontLL, backLL}; // Limelights specifically used for estimating pose
+    public final Limelight[] reefLimelights = {frontLL}; // Effectively used for pose estimating, 
+                                                        // but are specifically for use with the reef
 
     private final DecimalFormat df = new DecimalFormat();
 
@@ -96,7 +98,6 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     //     }
     // }
 
-    // TODO: Make new pipelines for both limelights that only detects each alliance's reef tags
     public static final class AlignToReefTag extends CommandConfig {
         private AlignToReefTag() {
             configKp(0.02);
@@ -114,9 +115,65 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         }
     }
 
-    public static final class DriveToPose extends CommandConfig {
+    public static final class DriveToReef extends MultiLimelightCommandConfig {
+        private DriveToReef() {
+            configKpid(0.2, 0, 0);
+            configTolerance(0.01);
+            configMaxOutput(TunerConstants.MaxSpeed * 0.75);
+            configError(0.3);
+            configPipelineIndex(kAprilTagPipeline);
+            configLimelights(RobotContainer.m_vision.poseLimelights);
+        }
+
+        public static DriveToReef getConfig() {
+            return new DriveToReef();
+        }
+    }
+
+    public static final class RotateToReef extends MultiLimelightCommandConfig {
+        private RotateToReef() {
+            configKpid(0.02, 0, 0);
+            configTolerance(0.01);
+            configMaxOutput(TunerConstants.MaxAngularRate * 0.85);
+            configError(0.3);
+            configPipelineIndex(kAprilTagPipeline);
+            configLimelights(RobotContainer.m_vision.poseLimelights);
+        }
+
+        public static RotateToReef getConfig() {
+            return new RotateToReef();
+        }
+    }
+
+    public static final class DriveToPose extends MultiLimelightCommandConfig {
         private DriveToPose() {
-            
+            configKpid(0.2, 0, 0);
+            configTolerance(0.01);
+            configProfile(TunerConstants.MaxSpeed * 0.85, TunerConstants.MaxSpeed * 1.5); //85% Max Speed; 1.5x Acceleration
+            configMaxOutput(TunerConstants.MaxSpeed * 0.85);
+            configError(0.3);
+            configPipelineIndex(kAprilTagPipeline);
+            configLimelights(RobotContainer.m_vision.poseLimelights);
+        }
+
+        public static DriveToPose getConfig() {
+            return new DriveToPose();
+        }
+    }
+
+    public static final class RotateToPose extends MultiLimelightCommandConfig {
+        private RotateToPose() {
+            configKpid(0.02, 0, 0);
+            configTolerance(0.01);
+            configProfile(TunerConstants.MaxAngularRate * 0.9, TunerConstants.MaxAngularRate * 1.5); // 90% Angular speed; 1.5x acceleration
+            configMaxOutput(TunerConstants.MaxAngularRate * 0.9);
+            configError(0.3);
+            configPipelineIndex(kAprilTagPipeline);
+            configLimelights(RobotContainer.m_vision.poseLimelights);
+        }
+
+        public static RotateToPose getConfig() {
+            return new RotateToPose();
         }
     }
 
@@ -167,7 +224,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     }
 
-    public static boolean reefTargetClose(Limelight ll) { 
+    public boolean reefTargetClose(Limelight ll) { 
         // RawFiducial[] tags = ll.getRawFiducial(); // Assuming we're on blue alliance
         int[] targetIDs = blueReefTagIDs;
 
@@ -188,7 +245,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         return false;
     }
 
-    public enum FIELD_ELEMENT { // We don't really care how close the other tags are (processor, barge)
+    public static enum FIELD_ELEMENT { // We don't really care how close the other tags are (processor, barge)
         REEF
     }
 
@@ -199,14 +256,14 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
      * @param element The field element's tag(s) to target
      * @return The closest matching tag found.
      */
-    public static RawFiducial getClosestTargetFiducial(Limelight ll, FIELD_ELEMENT element) {
+    public RawFiducial getClosestTargetFiducial(Limelight ll, FIELD_ELEMENT element) {
         RawFiducial[] tags = ll.getRawFiducial();
         ArrayList<RawFiducial> goodTags = new ArrayList<RawFiducial>();
         int[] targetIDs = {};
 
         if(tags.length == 0) {
             //TODO: make this report somewhere else
-            DriverStation.reportWarning("Vision: Cannot find target tag; no tags seen!", false);
+            DriverStation.reportWarning("Vision: " + ll.getName() + " Cannot find target tag; no tags seen!", false);
         }
 
         switch(element) {
@@ -228,7 +285,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
         if(goodTags.isEmpty()) {
             //TODO: Make this report somewhere else
-            DriverStation.reportWarning("Vision: No target tags found for " + element, false);
+            DriverStation.reportWarning("Vision: [" + ll.getName() + "] No target tags found for " + element, false);
             return null;
         }
 
@@ -542,6 +599,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         public double kp = 0;
         public double ki = 0;
         public double kd = 0;
+        public double maxVelocity;
+        public double maxAcceleration;
         public double tolerance;
         public double maxOutput;
         public double error;
@@ -551,6 +610,10 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         public CommandConfig alignCommand;
         public double verticalSetpoint; // numbers get small as the cone gets closer
         public double verticalMaxView;
+
+        public void configKpid(double kp, double ki, double kd) {
+            this.kp = kp; this.ki = ki; this.kd = kd;
+        }
 
         public void configKp(double kp) {
             this.kp = kp;
@@ -562,6 +625,11 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
         public void configKd(double kd) {
             this.kd = kd;
+        }
+
+        public void configProfile(double maxVel, double maxAccel) {
+            this.maxVelocity = maxVel;
+            this.maxAcceleration = maxAccel;
         }
 
         public void configTolerance(double tolerance) {
@@ -597,5 +665,12 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         }
 
         public CommandConfig() {}
+    }
+
+    public static class MultiLimelightCommandConfig extends CommandConfig {
+        public Limelight[] limelights;
+        public void configLimelights(Limelight... limelights) {
+            this.limelights = limelights;
+        }
     }
 }

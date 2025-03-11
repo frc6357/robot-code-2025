@@ -35,22 +35,22 @@ public class Ports
         //public static final CommandXboxController kDriver = new CommandXboxController(0);
         //static CommandXboxController importedKDriver = frc.robot.bindings.SK25SwerveBinder.kDriver;
         //static GenericHID kUnderlyingDriverController = importedKDriver.getHID();
-        public static final GenericHID swerveController = new FilteredXboxController(0).getHID();
+        public static final GenericHID kDriver = new FilteredXboxController(0).getHID();
         
         // Filtered axis (translation & rotation)
-        public static final FilteredAxis kTranslationXPort = new FilteredAxis(() -> swerveController.getRawAxis(kLeftY.value));
-        public static final FilteredAxis kTranslationYPort = new FilteredAxis(() -> swerveController.getRawAxis(kLeftX.value));
-        public static final FilteredAxis kVelocityOmegaPort = new FilteredAxis(() -> swerveController.getRawAxis(kRightX.value)); 
+        public static final FilteredAxis kTranslationXPort = new FilteredAxis(() -> kDriver.getRawAxis(kLeftY.value));
+        public static final FilteredAxis kTranslationYPort = new FilteredAxis(() -> kDriver.getRawAxis(kLeftX.value));
+        public static final FilteredAxis kVelocityOmegaPort = new FilteredAxis(() -> kDriver.getRawAxis(kRightX.value)); 
         
         // Driver Function Button (Activates secondary control scheme when held)
-        public static final SKTrigger kDriveFn = new SKTrigger(swerveController, kLeftBumper.value, BUTTON);
+        public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kLeftBumper.value, BUTTON);
 
         // Switch modes
-        public static final SKTrigger kRobotCentricMode = new SKTrigger(swerveController, 180, POV); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
-        public static final SKTrigger kSlowMode = new SKTrigger(swerveController, kRightTrigger.value, BUTTON); // Function Controlscheme
+        public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, 180, POV); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
+        public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kRightTrigger.value, BUTTON); // Function Controlscheme
 
         // Reset gyro
-        public static final SKTrigger kResetGyroPos = new SKTrigger(swerveController, kRightStick.value, BUTTON);
+        public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kRightStick.value, BUTTON);
 
         // Party mode
         

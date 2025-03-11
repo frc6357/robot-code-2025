@@ -13,7 +13,7 @@ import frc.robot.commands.DriveCommand;
 
 public class AlignToVisionTargetCommand extends Command {
     private CommandConfig config;
-    private  Limelight limelight;
+    private Limelight limelight;
     DriveCommand driveCommand;
     Supplier<Double> fwdPositiveSupplier; // This is a robot centric foward/backwards
     private double out = 0;
