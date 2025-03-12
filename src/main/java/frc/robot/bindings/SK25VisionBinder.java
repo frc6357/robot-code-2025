@@ -4,6 +4,7 @@ package frc.robot.bindings;
 
 import java.util.Optional;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveToReef.DriveToReefCommand;
 import frc.robot.subsystems.SKSwerve;
@@ -12,6 +13,8 @@ import frc.robot.subsystems.vision.SK25Vision;
 import static frc.robot.Ports.DriverPorts.kDriveToClosestReef;
 import static frc.robot.Ports.DriverPorts.kLeftReef;
 import static frc.robot.Ports.DriverPorts.kRightReef;
+import static frc.robot.Ports.DriverPorts.kForceResetPoseToVision;
+
 
 public class SK25VisionBinder implements CommandBinder {
     Optional<SK25Vision> m_visionContainer;
@@ -20,6 +23,7 @@ public class SK25VisionBinder implements CommandBinder {
     Trigger driveToClosestReef;
     Trigger driveToLeftReef;
     Trigger driveToRightReef;
+    Trigger forceResetPoseToVision;
 
     public SK25VisionBinder(Optional<SK25Vision> m_visionContainer, Optional<SKSwerve> m_swerveContainer) {
         this.m_visionContainer = m_visionContainer;
@@ -28,6 +32,7 @@ public class SK25VisionBinder implements CommandBinder {
         this.driveToClosestReef = kDriveToClosestReef.button;
         this.driveToLeftReef = kLeftReef.button;
         this.driveToRightReef = kRightReef.button;
+        this.forceResetPoseToVision = kForceResetPoseToVision.button;
     }
 
     public void bindButtons() {
@@ -38,6 +43,8 @@ public class SK25VisionBinder implements CommandBinder {
             // either in sequence or parallel with itself.
             SKSwerve m_swerve = m_swerveContainer.get();
             SK25Vision m_vision = m_visionContainer.get();
+
+            forceResetPoseToVision.onTrue(new InstantCommand(() -> m_vision.forcePoseToVision()));
 
             /* This command feeds triggers into its constructor in order for it  */
             driveToClosestReef.whileTrue(

@@ -43,6 +43,7 @@ public class Ports
         public static final FilteredAxis kVelocityOmegaPort = new FilteredAxis(() -> kDriver.getRawAxis(kRightX.value)); 
         
         // Vision Driving buttons
+        public static final SKTrigger kForceResetPoseToVision = new SKTrigger(kDriver, kY.value, BUTTON);
         public static final SKTrigger kDriveToClosestReef = new SKTrigger(kDriver, kX.value, BUTTON);
         public static final SKTrigger kLeftReef = new SKTrigger(kDriver, kLeftTrigger.value, AXIS);
         public static final SKTrigger kRightReef = new SKTrigger(kDriver, kRightTrigger.value, AXIS);
