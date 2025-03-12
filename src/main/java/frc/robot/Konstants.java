@@ -463,8 +463,8 @@ public final class Konstants
         // Each limelight has a greek letter name and an individual class for their own set of constants
         public static final class limelightAlpha {
             // Network/pipeline values
-            public static final String kName = "limelight-alpha"; // Hostname? Camera name? TODO: Figure out limelight names
-            public static final int kAprilTagPipeline = 0; // TODO BEFORE MERGE: check with actual AprilTag Pipeline
+            public static final String kName = "limelight-alpha"; // Hostname? Camera name?
+            public static final int kAprilTagPipeline = 0;
 
             // Translation (in meters) from center of robot
             public static final double kForward = 0; // (z) meters forward of center; negative is backwards
@@ -481,7 +481,7 @@ public final class Konstants
         public static final class limelightBeta {
             // Network/pipeline values
             public static final String kName = "limelight-beta";
-            public static final int kAprilTagPipeline = 0; // TODO BEFORE MERGE: Check with actual AprilTag Pipeline
+            public static final int kAprilTagPipeline = 0; 
 
             // Translation (in meters) from center of robot
             public static final double kForward = 0; // (z) meters forward of center; negative is backwards
