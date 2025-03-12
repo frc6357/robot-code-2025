@@ -6,6 +6,7 @@ import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -31,7 +32,7 @@ import frc.robot.preferences.SKPreferences;
 public class SK25EndEffector extends SubsystemBase
 {
     //may not need anymore, external encoder now in use, keep just in case.
-    final double motorRatio = 12.5;
+    final double motorRatio = 1;
     final int gear1Rotation = 1;
     final int gear2Rotation = 1;
     final int degrees = 360;
@@ -44,7 +45,7 @@ public class SK25EndEffector extends SubsystemBase
     double mTargetAngle;
     double mCurrentAngle;
 
-    public RelativeEncoder mEncoder;
+    public AbsoluteEncoder mEncoder;
 
     ArmFeedforward  armFeedforward;
 
@@ -74,8 +75,12 @@ public class SK25EndEffector extends SubsystemBase
 
         armConfig = new SparkFlexConfig();
         
+        armConfig.absoluteEncoder 
+            .positionConversionFactor(1)
+            .velocityConversionFactor(1)
+            .setSparkMaxDataPortConfig();
         armConfig.closedLoop
-            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
             .p(1.9)
             .i(.0002)
             .d(2.1)
@@ -96,7 +101,8 @@ public class SK25EndEffector extends SubsystemBase
             .smartCurrentLimit(30); // TODO: Consider adding a .voltageCompensation(double nominalVoltage) in order to limit maximum volts to the motor
 
         mPID = armMotor.getClosedLoopController();
-        mEncoder = armMotor.getEncoder();
+        
+        mEncoder = armMotor.getAbsoluteEncoder();
         
         armFeedforward = new ArmFeedforward(0, armKg.get(), 0, 0); // Is this used anywhere?
 
@@ -105,7 +111,7 @@ public class SK25EndEffector extends SubsystemBase
         mTargetAngle = 0.0;
         mCurrentAngle = 0.0;
 
-        mEncoder.setPosition(0);
+       //mEncoder.setPosition(0);
 
         //laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
     }
@@ -118,7 +124,7 @@ public class SK25EndEffector extends SubsystemBase
     
     public void resetEncoder()
     {
-        mEncoder.setPosition(0);
+        //mEncoder.setPosition(0);
     }
 
     public void setTargetAngle(double angleDegrees)
