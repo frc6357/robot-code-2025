@@ -12,7 +12,7 @@ public class SubsystemControls
     private final boolean swerve;
     private final boolean lights;
     private final boolean elevator;
-    private final boolean endEffector;
+    private final boolean endeffector;
     private final boolean climb;
 
      /**  
@@ -22,7 +22,7 @@ public class SubsystemControls
      *            indicates if the lights subsystem is present and should be enabled
      * @param elevator
      *            indicates if the elevator subsystem is present and should be enabled
-     * @param endEffector
+     * @param endeffector
      *            indicates if the endEffector subsystem is present and should be enabled
      * @param climb
      *            indicates if the climb subsystem is present and should be enabled
@@ -31,14 +31,14 @@ public class SubsystemControls
         @JsonProperty(required = true, value = "swerve")      boolean swerve,
         @JsonProperty(required = true, value = "lights")      boolean lights,
         @JsonProperty(required = true, value = "elevator")    boolean elevator,
-        @JsonProperty(required = true, value = "endEffector") boolean endEffector,
-        @JsonProperty(required = true, value = "climb") boolean climb
+        @JsonProperty(required = true, value = "endeffector") boolean endeffector,
+        @JsonProperty(required = true, value = "climb")       boolean climb
     )
     {
         this.swerve = swerve;
         this.lights = lights;
         this.elevator = elevator;
-        this.endEffector = endEffector;
+        this.endeffector = endeffector;
         this.climb = climb;
     }
 
@@ -63,7 +63,7 @@ public class SubsystemControls
     }
     public boolean isEndEffectorPresent()
     {
-        return endEffector;
+        return endeffector;
     } 
     public boolean isClimbPresent() 
     {

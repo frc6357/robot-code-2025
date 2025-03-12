@@ -2,7 +2,6 @@
     "swerve": true,
     "endeffector": true,
     "lights": false,
-    "elevator": false,
-    "climb": true,
-    "coralSubsystem": true
+    "elevator": true,
+    "climb": true
 }

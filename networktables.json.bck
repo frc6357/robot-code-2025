@@ -2,7 +2,7 @@
   {
     "name": "/Preferences/elevatorKp",
     "type": "double",
-    "value": 0.007,
+    "value": 0.05,
     "properties": {
       "persistent": true
     }
@@ -27,6 +27,78 @@
     "name": "/Preferences/elevatorkFF",
     "type": "double",
     "value": 0.00196078431,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/driverTranslSlew",
+    "type": "double",
+    "value": 1.5,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/driverRotSlew",
+    "type": "double",
+    "value": 4.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/armKg",
+    "type": "double",
+    "value": 0.05,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/armAngleDeg",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/climbP",
+    "type": "double",
+    "value": 1.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/climbI",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/climbD",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorKd",
+    "type": "double",
+    "value": 0.0008,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorTargetHeight",
+    "type": "double",
+    "value": 0.0,
     "properties": {
       "persistent": true
     }

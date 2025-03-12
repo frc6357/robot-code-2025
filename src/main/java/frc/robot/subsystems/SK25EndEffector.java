@@ -213,6 +213,22 @@ public class SK25EndEffector extends SubsystemBase
 
         if(angle < -180)
         {
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+            
             setTargetAngle(140);
             stopArm();
         }
