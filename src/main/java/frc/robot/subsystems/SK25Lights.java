@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -109,19 +110,22 @@ public class SK25Lights implements Subsystem{
     }
     
     public void processQueue() {
-        if (!queueEmpty()) {
-            Duo<Animation, Double> currentAnim = animationQueue.get(0);  // Get the first color in the queue
-            double elapsedTime = Timer.getFPGATimestamp() - lastChangeTime;
+        for (int i = 0; i < animationQueue.size(); i++) 
+        {
+            if (!queueEmpty()) {
+                Duo<Animation, Double> currentAnim = animationQueue.get(i);  // Get the first color in the queue
+                double elapsedTime = Timer.getFPGATimestamp() - lastChangeTime;
 
-            // If the duration for the current color has passed, move to the next color
-            if (elapsedTime >= currentAnim.getSecond()) {
-                animationQueue.remove(0);
-                lastChangeTime = Timer.getFPGATimestamp();
+                // If the duration for the current color has passed move to the next color
+                if (elapsedTime >= currentAnim.getSecond()) {
+                    //animationQueue.get(i);
+                    lastChangeTime = Timer.getFPGATimestamp();
+                } else {
+                    m_candle.animate(currentAnim.getFirst(), 1);
+                }
             } else {
-                m_candle.animate(currentAnim.getFirst(), 1);
+                m_candle.clearAnimation(1);
             }
-        } else {
-            m_candle.clearAnimation(1);
         }
     }
 
