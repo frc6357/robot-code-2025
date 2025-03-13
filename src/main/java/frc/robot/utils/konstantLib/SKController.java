@@ -175,7 +175,7 @@ public class SKController
         switch(type)
         {
             case XBOX:
-                return new FilteredAxis(() -> xboxController.getRawAxis(axisType.axisPort));
+                return new FilteredAxis(() -> xboxController.getFilteredAxis(axisType.axisPort));
             default:
                 return new FilteredAxis(() -> hIDController.getRawAxis(axisType.axisPort));
         }

@@ -198,7 +198,7 @@ public class SKSwerveBinder implements CommandBinder{
             drivetrain.applyRequest(() -> {
                 return feildCentricDrive.withVelocityX(applyGains(MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercentage)) // Drive forward with negative Y (forward)
                     .withVelocityY(applyGains(MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercentage)) // Drive left with negative X (left)
-                    .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercentage)); // Drive counterclockwise with negative X (left)
+                    .withRotationalRate(applyGains(MaxSpeed * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercentage)); // Drive counterclockwise with negative X (left)
             })
         );
     }

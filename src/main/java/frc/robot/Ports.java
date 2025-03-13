@@ -1,5 +1,8 @@
 package frc.robot;
 
+import static edu.wpi.first.wpilibj.XboxController.Axis.*;
+import static edu.wpi.first.wpilibj.XboxController.Button.*;
+import static frc.robot.utils.konstantLib.wrappers.SKTrigger.INPUT_TYPE.*;
 import static frc.robot.Konstants.kCANivoreName;
 import static frc.robot.Konstants.kDefualtRioBusName;
 import static frc.robot.Konstants.ElevatorConstants.kRightElevatorMotorID;
@@ -20,8 +23,8 @@ import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kPigeonID;
-import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.LEFT_X;
 import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.LEFT_Y;
+import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.LEFT_X;
 import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.RIGHT_X;
 import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.RIGHT_Y;
 import static frc.robot.utils.konstantLib.SKController.ControllerType.XBOX;
@@ -52,6 +55,9 @@ public class Ports
         public static final FilteredAxis kTranslationXPort = kDriver.getRawSKContorllerAxis(LEFT_Y);
         public static final FilteredAxis kTranslationYPort = kDriver.getRawSKContorllerAxis(LEFT_X);
         public static final FilteredAxis kVelocityOmegaPort = kDriver.getRawSKContorllerAxis(RIGHT_X);
+        // public static final FilteredAxis kTranslationXPort = new FilteredAxis(() -> kDriver.getUnderlyingHIDController().getRawAxis(kLeftY.value));
+        // public static final FilteredAxis kTranslationYPort = new FilteredAxis(() -> kDriver.getUnderlyingHIDController().getRawAxis(kLeftX.value));
+        // public static final FilteredAxis kVelocityOmegaPort = new FilteredAxis(() -> kDriver.getUnderlyingHIDController().getRawAxis(kRightX.value));
         
         // Driver Function Button (Activates secondary control scheme when held)
         public static final SKTrigger kDriveFn = kDriver.mapLeftShoulderButton();
@@ -69,6 +75,30 @@ public class Ports
         public static final SKTrigger climbStopButton = kDriver.mapRightDPad();
         public static final SKTrigger climbSlowButton = kDriver.mapLeftDPad();
 
+
+        // public static final GenericHID kDriver = new FilteredXboxController(0).getHID();
+        
+        // // Filtered axis (translation & rotation)
+        // public static final FilteredAxis kTranslationXPort = new FilteredAxis(() -> kDriver.getRawAxis(kLeftY.value));
+        // public static final FilteredAxis kTranslationYPort = new FilteredAxis(() -> kDriver.getRawAxis(kLeftX.value));
+        // public static final FilteredAxis kVelocityOmegaPort = new FilteredAxis(() -> kDriver.getRawAxis(kRightX.value)); 
+
+        // public static final SKTrigger climbRaiseButton = new SKTrigger(kDriver, 0, POV);
+        // public static final SKTrigger climbLowerButton = new SKTrigger(kDriver, 180, POV);
+        // public static final SKTrigger climbStopButton = new SKTrigger(kDriver, 90, POV);
+        // public static final SKTrigger climbSlowButton = new SKTrigger(kDriver, 270, POV);
+        
+        // // Driver Function Button (Activates secondary control scheme when held)
+        // public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kLeftBumper.value, BUTTON);
+
+        // // Switch modes
+        // public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, 180, POV); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
+        // public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kRightBumper.value, BUTTON); // Function Controlscheme
+
+        
+
+        // // Reset gyro
+        // public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kRightStick.value, BUTTON);
     }
 
     /**
