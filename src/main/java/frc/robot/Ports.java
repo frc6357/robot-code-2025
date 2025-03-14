@@ -74,31 +74,6 @@ public class Ports
         public static final SKTrigger climbLowerButton = kDriver.mapDownDPad();
         public static final SKTrigger climbStopButton = kDriver.mapRightDPad();
         public static final SKTrigger climbSlowButton = kDriver.mapLeftDPad();
-
-
-        // public static final GenericHID kDriver = new FilteredXboxController(0).getHID();
-        
-        // // Filtered axis (translation & rotation)
-        // public static final FilteredAxis kTranslationXPort = new FilteredAxis(() -> kDriver.getRawAxis(kLeftY.value));
-        // public static final FilteredAxis kTranslationYPort = new FilteredAxis(() -> kDriver.getRawAxis(kLeftX.value));
-        // public static final FilteredAxis kVelocityOmegaPort = new FilteredAxis(() -> kDriver.getRawAxis(kRightX.value)); 
-
-        // public static final SKTrigger climbRaiseButton = new SKTrigger(kDriver, 0, POV);
-        // public static final SKTrigger climbLowerButton = new SKTrigger(kDriver, 180, POV);
-        // public static final SKTrigger climbStopButton = new SKTrigger(kDriver, 90, POV);
-        // public static final SKTrigger climbSlowButton = new SKTrigger(kDriver, 270, POV);
-        
-        // // Driver Function Button (Activates secondary control scheme when held)
-        // public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kLeftBumper.value, BUTTON);
-
-        // // Switch modes
-        // public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, 180, POV); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
-        // public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kRightBumper.value, BUTTON); // Function Controlscheme
-
-        
-
-        // // Reset gyro
-        // public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kRightStick.value, BUTTON);
     }
 
     /**
