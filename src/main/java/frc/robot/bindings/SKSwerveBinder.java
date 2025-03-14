@@ -65,7 +65,7 @@ public class SKSwerveBinder implements CommandBinder{
 
     //Other driver buttons
     //private final Trigger robotCentric = kRobotCentricMode.button.and(fn);
-    private final Trigger slowmode = kSlowMode.button.and(fn);
+    private final Trigger slowmode = kSlowMode.button; //and(fn)
     private final Trigger resetButton = kResetGyroPos.button;
 
     //Create swerve drive request objects for applicatoin to the drivetrain

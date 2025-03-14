@@ -230,7 +230,7 @@ public class RobotContainer {
                     "Level4ScoreCombo",
                     Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel4),
                     new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, effector),
-                    Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
+                    Commands.sequence(Commands.waitSeconds(3.5), effector.runRollerCommand(-0.4))
                     )
                 );
 
