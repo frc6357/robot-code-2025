@@ -204,52 +204,52 @@ public class RobotContainer {
                     NamedCommands.registerCommand("TroughScoreCombo", new ScoreCombo(
                         ElevatorSetpoint.kTrough,
                         elevator,
-                        EndEffectorPosition.kStationAngle,
+                        EndEffectorPosition.kTroughAngle,
                         effector));
 
                     NamedCommands.registerCommand("L2ScoreCombo", new ScoreCombo(
-                        ElevatorSetpoint.kTrough,
+                        ElevatorSetpoint.kLevel2,
                         elevator,
-                        EndEffectorPosition.kStationAngle,
+                        EndEffectorPosition.kL2Angle,
                         effector));
 
                     NamedCommands.registerCommand("L3ScoreCombo", new ScoreCombo(
-                        ElevatorSetpoint.kTrough,
+                        ElevatorSetpoint.kLevel3,
                         elevator,
-                        EndEffectorPosition.kStationAngle,
+                        EndEffectorPosition.kL3Angle,
                         effector));
 
                     NamedCommands.registerCommand("L4ScoreCombo", new ScoreCombo(
-                        ElevatorSetpoint.kTrough,
+                        ElevatorSetpoint.kLevel4,
                         elevator,
-                        EndEffectorPosition.kStationAngle,
+                        EndEffectorPosition.kL4Angle,
                         effector));
 
                     NamedCommands.registerCommand("NetScoreCombo", new ScoreCombo(
-                        ElevatorSetpoint.kTrough,
+                        ElevatorSetpoint.kNet,
                         elevator,
-                        EndEffectorPosition.kStationAngle,
+                        EndEffectorPosition.kNetAngle,
                         effector));
 
 
                     //Pickup Commands
 
                     NamedCommands.registerCommand("StationPickupCombo", new ScoreCombo(
-                        ElevatorSetpoint.kTrough,
+                        ElevatorSetpoint.kStation,
                         elevator,
                         EndEffectorPosition.kStationAngle,
                         effector));
 
                     NamedCommands.registerCommand("LowAlgaePickupCombo", new ScoreCombo(
-                        ElevatorSetpoint.kTrough,
+                        ElevatorSetpoint.kLowAlgae,
                         elevator,
-                        EndEffectorPosition.kStationAngle,
+                        EndEffectorPosition.kLowAlgae,
                         effector));
 
                     NamedCommands.registerCommand("HighAlgaePickupCombo", new ScoreCombo(
-                        ElevatorSetpoint.kTrough,
+                        ElevatorSetpoint.kHighAlgae,
                         elevator,
-                        EndEffectorPosition.kStationAngle,
+                        EndEffectorPosition.kHighAlgae,
                         effector));
 
 

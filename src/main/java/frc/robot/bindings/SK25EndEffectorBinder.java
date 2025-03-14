@@ -96,7 +96,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
             ZeroPositionButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kZeroPositionAngle, endEffector));
             TroughButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTroughAngle, endEffector));
             L2Button.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kL2Angle, endEffector));
-            L3Button.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kMiddleAngle, endEffector));
+            L3Button.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kL3Angle, endEffector));
             StationButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kStationAngle, endEffector));
             L4Button.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kL4Angle, endEffector));   
             

@@ -526,7 +526,7 @@ public final class Konstants
 
         //IDs
         public static final int kEndEffectorArmMotorID = 33;
-        public static final int kEndEffectorRollerMotorID = 35;
+        public static final int kEndEffectorRollerMotorID = 34;
         public static final int kEndEffectorLaserCanID = 42;
 
         /** Heights for the different elevator positions in degrees */
@@ -535,7 +535,7 @@ public final class Konstants
             /** Set the angle to reach the top branch (L4) */
             kL4Angle(-190),
             /** Set the angle to reach the middle branch (L3) */
-            kMiddleAngle(-215),
+            kL3Angle(-215),
             /** Set the angle to reach the low branch (L2) */
             kL2Angle(-215),
             /** Set the angle to reach the trough (L1) */
