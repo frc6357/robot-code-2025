@@ -350,7 +350,7 @@ public final class Konstants
                      .outputRange(-0.45, 0.5)
                     .maxMotion
                     // Set MAXMotion parameters for position control
-                    .maxVelocity(2500)
+                    .maxVelocity(3000)
                     .maxAcceleration(6000)
                     .allowedClosedLoopError(0.05);
 
@@ -466,7 +466,7 @@ public final class Konstants
             /** Set the height to reach the station (L1) */
             kIntakePositionAngle(-100), // Angle
             /** Set the height to reach the bottom */
-            kZeroPositionAngle(-60), // Angle
+            kZeroPositionAngle(-130), // Angle
             kNetAngle(-90),
             kHighAlgae(-173),
             kMiddleAngle(-215),

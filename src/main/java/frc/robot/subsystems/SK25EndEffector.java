@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
+import static frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 //import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
@@ -185,7 +186,7 @@ public class SK25EndEffector extends SubsystemBase
     }
 
     public void leave() {
-        setTargetAngle(-130);
+        setTargetAngle(EndEffectorPosition.kZeroPositionAngle.angle);
     }
 
     /*public boolean haveCoral()

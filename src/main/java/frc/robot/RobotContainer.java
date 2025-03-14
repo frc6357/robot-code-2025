@@ -328,6 +328,7 @@ public class RobotContainer {
         if(m_endEffector.isPresent())
         {
             m_endEffector.get().testInit();
+            m_endEffector.get().resetEncoder();
         }
     }
 
