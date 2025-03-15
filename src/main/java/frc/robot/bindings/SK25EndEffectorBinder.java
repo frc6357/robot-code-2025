@@ -26,12 +26,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.commands.EndEffectorButtonCommand;
 import frc.robot.commands.EndEffectorJoystickCommand;
+import frc.robot.commands.EndEffectorRollerCommand;
 import frc.robot.subsystems.SK25EndEffector;
+import frc.robot.utils.konstantLib.wrappers.SKCommandXboxTrigger;
 import frc.robot.utils.konstantLib.filters.DeadbandFilter;
 
 public class SK25EndEffectorBinder implements CommandBinder {
 
     Optional<SK25EndEffector> endEffectorSubsystem;
+
+    SKCommandXboxTrigger XboxTrigger;
 
     Trigger L2Button;
     Trigger L3Button;
@@ -49,6 +53,12 @@ public class SK25EndEffectorBinder implements CommandBinder {
     Trigger LowAlgaeButton;
 
     RelativeEncoder mEncoder;
+
+   
+    public void setThreshold()
+    {
+        XboxTrigger.setAxisReturnThreshold(0.1);
+    }
 
     public SK25EndEffectorBinder(Optional<SK25EndEffector> endEffectorSubsystem)
     {
@@ -106,8 +116,8 @@ public class SK25EndEffectorBinder implements CommandBinder {
             LowAlgaeButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kLowAlgae, endEffector)); 
             
             //Rollers
-            RollerIntake.onTrue(new InstantCommand(() -> endEffector.runRoller(-kRollerSpeed)));
-            RollerExtake.onTrue(new InstantCommand(() -> endEffector.runRoller(kRollerSpeed)));
+            RollerIntake.onTrue(new EndEffectorRollerCommand(true, endEffector));
+            RollerExtake.onTrue(new EndEffectorRollerCommand(false, endEffector));
             RollerIntake.onFalse(new InstantCommand(() -> endEffector.stopRoller()));
             RollerExtake.onFalse(new InstantCommand(() -> endEffector.stopRoller()));   
         }

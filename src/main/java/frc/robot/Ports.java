@@ -20,11 +20,15 @@ import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kPigeonID;
+import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.LEFT_TRIGGER;
 import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.LEFT_X;
 import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.LEFT_Y;
+import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.RIGHT_TRIGGER;
 import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.RIGHT_X;
 import static frc.robot.utils.konstantLib.SKController.AXIS_TYPE.RIGHT_Y;
 import static frc.robot.utils.konstantLib.SKController.ControllerType.XBOX;
+
+import java.nio.file.DirectoryStream.Filter;
 
 import frc.robot.utils.konstantLib.CANPort;
 import frc.robot.utils.konstantLib.SKController;
@@ -111,6 +115,8 @@ public class Ports
         //End Effector Rollers
         public static final SKTrigger kIntake = kOperator.mapRightTrigger();  //TODO: consider making speeds based on axis input
         public static final SKTrigger kExtake = kOperator.mapLeftTrigger();
+        public static final FilteredAxis kIntakeAxis = kOperator.getRawSKContorllerAxis(RIGHT_TRIGGER);
+        public static final FilteredAxis kExtakeAxis = kOperator.getRawSKContorllerAxis(LEFT_TRIGGER);
 
         //Manual Elevator and EndEffector Joystick Control
         public static final FilteredAxis kElevatorAxis = kOperator.getRawSKContorllerAxis(LEFT_Y);

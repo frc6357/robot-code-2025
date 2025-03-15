@@ -5,6 +5,8 @@ import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
+import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
+import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
@@ -19,6 +21,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
+import au.grapplerobotics.LaserCan;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -62,7 +65,7 @@ public class SK25EndEffector extends SubsystemBase
             setTargetAngle(newValue);
         });
 
-    //LaserCan laserCanSensor;
+    LaserCan laserCanSensor;
 
     public SK25EndEffector()
     {
@@ -113,7 +116,7 @@ public class SK25EndEffector extends SubsystemBase
 
        //mEncoder.setPosition(0);
 
-        //laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
+        laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
     }
 
     public void initialize()
@@ -187,7 +190,7 @@ public class SK25EndEffector extends SubsystemBase
         setTargetAngle(-130);
     }
 
-    /*public boolean haveCoral()
+    public boolean haveCoral()
     {
         LaserCan.Measurement sensorMeasurement = laserCanSensor.getMeasurement();
         if ((sensorMeasurement != null && sensorMeasurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)) {
@@ -199,7 +202,7 @@ public class SK25EndEffector extends SubsystemBase
         } 
         return false;
     }
-        */
+        
     public void checkPositionUp()
      {
     
