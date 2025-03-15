@@ -2,9 +2,11 @@ package frc.robot.commands.commandGroups;
 
 import static frc.robot.Konstants.AutoConstants.kExtakeAutoSpeed;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.CoralSubsystem;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
 import frc.robot.subsystems.SK25EndEffector;
 
@@ -23,10 +25,9 @@ public class ScoreCombo extends SequentialCommandGroup
   {
       addCommands(
           new LineupCombo(elevatorPos, elevator, endEffectorPos, endEffector),
-          //Parallel race groups run all of its commands periodicaly until every command has finished at 
-          //least once. Since wait command is prolonged for some amount of time, the runRoller() method will
-          //run for the amount of time specified in the wait command.
-          endEffector.runRollerCommand(kExtakeAutoSpeed)
+          new WaitCommand(1.5), //seconds
+          Commands.parallel(new WaitCommand(0.3), endEffector.runRollerCommand(kExtakeAutoSpeed)),
+          new WaitCommand(0.5) //seconds
       );
   }
 }

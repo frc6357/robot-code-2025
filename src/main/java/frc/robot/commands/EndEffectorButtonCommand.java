@@ -37,7 +37,6 @@ public class EndEffectorButtonCommand extends Command{
         {
             if(endEffector.isArmAtTargetPosition())
             {
-                
                 return true;
             }
             else

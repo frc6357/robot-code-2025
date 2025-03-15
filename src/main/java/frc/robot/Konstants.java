@@ -261,8 +261,8 @@ public final class Konstants
     public static final class AutoConstants
     {
         // Time and speed for rollers in auto
-        public static final double kIntakeAutoSpeed = -0.7;
-        public static final double kExtakeAutoSpeed = 0.7;
+        public static final double kIntakeAutoSpeed = 0.7;
+        public static final double kExtakeAutoSpeed = -0.7;
         public static final double kIntakeAutoDurationSeconds = 0.5;
 
         // PID Constants
@@ -462,7 +462,7 @@ public final class Konstants
         public static enum EndEffectorPosition
         {
             /** Set the angle to reach the top branch (L4) */ // 12.5
-            kTopPositionAngle(-190), // Angle
+            kTopPositionAngle(-190), // Angle -190
             /** Set the angle to reach the middle & low branch (L3) */
             kLowPositionAngle(-215), // Angle
             /** Set the angle to reach the trough (L2) */
@@ -519,7 +519,7 @@ public final class Konstants
             .withSupplyCurrentLowerLimit(50)
             .withSupplyCurrentLowerTime(0.3);
 
-       public static final double kArmTolerance = 1;
+       public static final double kArmTolerance = 2.5; //1  //TODO tune and find tolerance
 
        public static final double kCoralToLaserCanDistance = 24;
 
