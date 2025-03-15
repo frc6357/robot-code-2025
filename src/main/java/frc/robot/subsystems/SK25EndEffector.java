@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
+import static frc.robot.Konstants.AutoConstants.kIntakeAutoDurationSeconds;
+import static frc.robot.Konstants.AutoConstants.kIntakeAutoSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
@@ -240,7 +242,7 @@ public class SK25EndEffector extends SubsystemBase
     {
         return Commands.sequence(
             Commands.parallel(
-                Commands.waitSeconds(0.5),
+                Commands.waitSeconds(kIntakeAutoDurationSeconds),
                 new InstantCommand(() -> {
                     rollerMotor.set(rollerSpeed);
                 })

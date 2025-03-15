@@ -13,13 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Level4ScoreCombo"
+            "name": "L4ScoreCombo"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ElevatorZeroPositionCommand"
+            "name": "ZeroPositionCommand"
           }
         }
       ]

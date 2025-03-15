@@ -264,7 +264,6 @@ public final class Konstants
         public static final double kIntakeAutoSpeed = -0.7;
         public static final double kExtakeAutoSpeed = 0.7;
         public static final double kIntakeAutoDurationSeconds = 0.5;
-        public static final double kExtakeAutoDurationSeconds = 0.5;
 
         // PID Constants
         public static final PIDConstants kTranslationPIDConstants = new PIDConstants(6, 0, 0);
@@ -328,7 +327,7 @@ public final class Konstants
                 static {
 
                     // Configure basic settings of the elevator motor
-                    elevatorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(50).voltageCompensation(12);
+                    elevatorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80).voltageCompensation(12);
 
                     /*
                     * Configure the reverse limit switch for the elevator. By enabling the limit switch, this
@@ -349,15 +348,15 @@ public final class Konstants
                     .closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // Set PID values for position control
-                    .p(0.05)
-                    .i(0.0)
-                    .d(0.0008).dFilter(0.3)
-                     .outputRange(-0.45, 0.5)
+                    .p(0.12)
+                    //.i(0.0)
+                    //.d(0.0008).dFilter(0.3)
+                     .outputRange(-1, 1)
                     .maxMotion
                     // Set MAXMotion parameters for position control
-                    .maxVelocity(3000)
+                    .maxVelocity(4500)
                     .maxAcceleration(6000)
-                    .allowedClosedLoopError(0.05);
+                    .allowedClosedLoopError(0.1);
 
 
                 }

@@ -1,5 +1,4 @@
 package frc.robot.commands.commandGroups;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.commands.EndEffectorButtonCommand;
@@ -22,7 +21,7 @@ public class LineupCombo extends ParallelCommandGroup
   public LineupCombo(Setpoint elevatorPos, CoralSubsystem elevator, EndEffectorPosition endEffectorPos, SK25EndEffector endEffector) 
   {
       addCommands(
-          new InstantCommand(() -> elevator.setSetpointCommand(elevatorPos)),
+          elevator.setSetpointCommand(elevatorPos),
           new EndEffectorButtonCommand(endEffectorPos, endEffector)
       );
   }
