@@ -537,9 +537,9 @@ public final class Konstants
             /** Set the height to reach the station */
             kStationAngle(273), //TODO: Angle -100 or -70 (check this)
             /** Set the height to reach the bottom */
-            kZeroPositionAngle(313),
+            kZeroPositionAngle(200),
             /** Set the angle to reach the net */
-            kNetAngle(283),
+            kNetAngle(230),
             /** Set the angle to reach the high algae on the reef */
             kHighAlgae(200),
             /** Set the angle to reach the low algae on the reef */

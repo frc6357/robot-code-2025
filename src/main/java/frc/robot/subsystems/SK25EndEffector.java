@@ -60,10 +60,10 @@ public class SK25EndEffector extends SubsystemBase
         .onChange((newValue) -> {
             armFeedforward = new ArmFeedforward(0, newValue, 0, 0);
         });
-        Pref<Double> armAngleDeg = SKPreferences.attach("armAngleDeg", 0.0)
-        .onChange((newValue) -> {
-            setTargetAngle(newValue);
-        });
+        // Pref<Double> armAngleDeg = SKPreferences.attach("armAngleDeg", 0.0)
+        // .onChange((newValue) -> {
+        //     setTargetAngle(newValue);
+        // });
 
     LaserCan laserCanSensor;
 
@@ -202,45 +202,45 @@ public class SK25EndEffector extends SubsystemBase
         return false;
     }
         
-    public void checkPositionUp()
-     {
+    // public void checkPositionUp()
+    //  {
     
-        double encoder = mEncoder.getPosition();
-        double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
+    //     double encoder = mEncoder.getPosition();
+    //     double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
 
-        if(angle > -10)
-        {
-            setTargetAngle(-10);
-            stopArm();
-        }
-     }
-     public void checkPositionDown()
-     {
-        double encoder = mEncoder.getPosition();
-        double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
+    //     if(angle > -10)
+    //     {
+    //         setTargetAngle(-10);
+    //         stopArm();
+    //     }
+    //  }
+    //  public void checkPositionDown()
+    //  {
+    //     double encoder = mEncoder.getPosition();
+    //     double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
 
-        if(angle < -180)
-        {
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
-            //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //     if(angle < -180)
+    //     {
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
+    //         //TODO : FIX THIS IN ENDEFFECTOR!!!!!!!!!!!!!!!!!!!
             
-            setTargetAngle(140);
-            stopArm();
-        }
-     }
+    //         setTargetAngle(140);
+    //         stopArm();
+    //     }
+    //  }
 
 
             
