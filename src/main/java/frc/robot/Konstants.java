@@ -323,7 +323,7 @@ public final class Konstants
                 static {
 
                     // Configure basic settings of the elevator motor
-                    elevatorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(50).voltageCompensation(12);
+                    elevatorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80).voltageCompensation(12);
 
                     /*
                     * Configure the reverse limit switch for the elevator. By enabling the limit switch, this
@@ -345,16 +345,14 @@ public final class Konstants
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // Set PID values for position control
                     .p(0.05)
-                    .i(0.0)
-                    .d(0.0008).dFilter(0.3)
-                     .outputRange(-0.45, 0.5)
+                    //.i(0.0)
+                    //.d(0.0008)
+                    .outputRange(-1, 1)
                     .maxMotion
                     // Set MAXMotion parameters for position control
-                    .maxVelocity(3000)
+                    .maxVelocity(1200)
                     .maxAcceleration(6000)
-                    .allowedClosedLoopError(0.05);
-
-
+                    .allowedClosedLoopError(0.1);
                 }
             }
         }

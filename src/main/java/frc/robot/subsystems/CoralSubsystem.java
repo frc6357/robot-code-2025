@@ -51,26 +51,29 @@ public class CoralSubsystem extends SubsystemBase {
 
   
 
-  final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.055) //0.06
+  final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.05) //0.055
   .onChange((newValue) -> reconfigureElevator());
 
     final Pref<Double> elevatorKi = SKPreferences.attach("elevatorKi", 0.0) //0.0
     .onChange((newValue) -> reconfigureElevator());
 
-    final Pref<Double> elevatorKd = SKPreferences.attach("elevatorKd", 0.0015) //0.0012
+    final Pref<Double> elevatorKd = SKPreferences.attach("elevatorKd", 0.0) //0.0015
     .onChange((newValue) -> reconfigureElevator());
 
-    final Pref<Double> elevatorKpFF = SKPreferences.attach("elevatorKpFF", 0.001)
+    final Pref<Double> elevatorKpFF = SKPreferences.attach("elevatorKpFF", 0.0) //.001
     .onChange((newValue) -> reconfigureElevator());
 
 
-    final Pref<Double> elevatorVelocity = SKPreferences.attach("elevatorVelocity", 2500.0) //2500.0
+    final Pref<Double> elevatorVelocity = SKPreferences.attach("elevatorVelocity", 1200.0) //2500.0
       .onChange((unused) -> reconfigureElevator());
   
     private void reconfigureElevator() {
-      elevatorConfig.closedLoop.dFilter(.0003).pidf(elevatorKp.get(), elevatorKi.get(), elevatorKd.get(), elevatorKpFF.get());  
+      elevatorConfig.closedLoop
+      //.dFilter(.0003)
+      .pidf(elevatorKp.get(), elevatorKi.get(), elevatorKd.get(), elevatorKpFF.get());  
       elevatorConfig.closedLoop.maxMotion
         .maxVelocity(elevatorVelocity.get());
+
       elevatorMotor.configure(
         elevatorConfig,
         ResetMode.kResetSafeParameters,
