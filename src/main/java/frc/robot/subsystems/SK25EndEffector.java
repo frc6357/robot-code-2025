@@ -83,7 +83,7 @@ public class SK25EndEffector extends SubsystemBase
             .velocityConversionFactor(1)
             .setSparkMaxDataPortConfig();
         armConfig.closedLoop
-            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+            .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
             .p(1.9)
             .i(.0002)
             .d(2.1)
@@ -134,7 +134,7 @@ public class SK25EndEffector extends SubsystemBase
     {
         mTargetAngle = angleDegrees;
         SmartDashboard.putNumber("EffectorTargetAngle", mTargetAngle);
-        SmartDashboard.putNumber("EffectorCurrentAngle", getArmPosition());
+        SmartDashboard.putNumber("EffectorCurrentAngle", mEncoder.getPosition());
 
         double motorRotations = angleDegrees * motorRatio / degrees;
 
