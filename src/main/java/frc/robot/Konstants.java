@@ -344,13 +344,13 @@ public final class Konstants
                     .closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // Set PID values for position control
-                    .p(0.05)
+                    .p(0.12)
                     //.i(0.0)
                     //.d(0.0008)
                     .outputRange(-1, 1)
                     .maxMotion
                     // Set MAXMotion parameters for position control
-                    .maxVelocity(1200)
+                    .maxVelocity(4500)
                     .maxAcceleration(6000)
                     .allowedClosedLoopError(0.1);
                 }
