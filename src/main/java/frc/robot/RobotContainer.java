@@ -179,109 +179,6 @@ public class RobotContainer {
     }
 
 
-    // public void configurePathPlannerCommands()
-    // {
-    //     if (m_swerve.isPresent())
-    //     {
-    //         if (m_coral.isPresent() && m_endEffector.isPresent())
-    //         {
-    //             CoralSubsystem coral = m_coral.get();
-    //             SK25EndEffector effector = m_endEffector.get();
-
-
-
-    //             //||||||||||  DONT CHANGE UNTIL AFTER BELTON  |||||||||||\\
-
-    //             NamedCommands.registerCommand("ElevatorTroughPositionCommand",
-    //                 Commands.parallel(
-    //                     coral.setSetpointCommand(Setpoint.kLevel1),
-    //                     new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
-    //                     Commands.sequence(Commands.waitSeconds(4), effector.runRollerCommand(-0.3))   //correct extake directoin
-    //                 )
-    //             );
-
-    //             //||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
-
-                
-
-    //             NamedCommands.registerCommand(
-    //                 "TroughScoreCombo",
-    //                 Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
-    //                 new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
-    //                 Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-    //                 )
-    //             );
-
-    //             NamedCommands.registerCommand(
-    //                 "Level2ScoreCombo",
-    //                 Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel2),
-    //                 new EndEffectorButtonCommand(EndEffectorPosition.kLowPositionAngle, effector),
-    //                 Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-    //                 )
-    //             );
-
-    //             NamedCommands.registerCommand(
-    //                 "Level3ScoreCombo",
-    //                 Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel3),
-    //                 new EndEffectorButtonCommand(EndEffectorPosition.kMiddleAngle, effector),
-    //                 Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-    //                 )
-    //             );
-
-    //             NamedCommands.registerCommand(
-    //                 "Level4ScoreCombo",
-    //                 Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel4),
-    //                 new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, effector),
-    //                 Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-    //                 )
-    //             );
-
-    //             NamedCommands.registerCommand(
-    //                 "LowAlgaePickupCombo",
-    //                 Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
-    //                 new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
-    //                 Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-    //                 )
-    //             );
-
-    //             NamedCommands.registerCommand(
-    //                 "HighAlgaePickupCombo",
-    //                 Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
-    //                 new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
-    //                 Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-    //                 )
-    //             );
-
-    //             NamedCommands.registerCommand(
-    //                 "NetScoreCombo",
-    //                 Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
-    //                 new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
-    //                 Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-    //                 )
-    //             );
-
-    //             NamedCommands.registerCommand(
-    //                 "StationPickupCombo",
-    //                 Commands.parallel(coral.setSetpointCommand(Setpoint.kLevel1),
-    //                 new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
-    //                 Commands.sequence(Commands.waitSeconds(2), effector.runRollerCommand(-0.4))
-    //                 )
-    //             );
-                
-    //             NamedCommands.registerCommand(
-    //                 "ElevatorZeroPositionCommand",
-    //                 Commands.parallel(coral.setSetpointCommand(Setpoint.kZero),
-    //                 new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector)
-    //                 )
-    //             );
-            
-
-    //             NamedCommands.registerCommand("IntakeAutoCommand", new InstantCommand(() -> effector.runRoller(kRollerSpeed)));
-    //             NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));
-    //         }
-    //     }
-    // }
-
     public void configurePathPlannerCommands()
     {
         if (m_swerve.isPresent())
@@ -293,7 +190,7 @@ public class RobotContainer {
 
                 //Roller Commands
 
-                NamedCommands.registerCommand("IntakeAutoCommand", new InstantCommand(() -> effector.runRoller(kRollerSpeed)));
+                NamedCommands.registerCommand("IntakeAutoCommand", effector.runRollerCommand(kRollerSpeed));
                 NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));    //TODO: change to auto speeds in konstants
 
 
@@ -337,7 +234,7 @@ public class RobotContainer {
                         EndEffectorPosition.kMiddleAngle,
                         effector));
 
-                    NamedCommands.registerCommand("L4ScoreCombo", new ScoreCombo(
+                    NamedCommands.registerCommand("L4ScoreCombo", new LineupCombo(
                         Setpoint.kLevel4,
                         elevator,
                         EndEffectorPosition.kTopPositionAngle,
