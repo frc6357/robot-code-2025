@@ -121,7 +121,7 @@ public class SK25EndEffector extends SubsystemBase
 
     public void initialize()
     {
-
+        SmartDashboard.putNumber("EffectorCurrentAngle", getArmPosition());
     }
         
     
@@ -134,7 +134,6 @@ public class SK25EndEffector extends SubsystemBase
     {
         mTargetAngle = angleDegrees;
         SmartDashboard.putNumber("EffectorTargetAngle", mTargetAngle);
-        SmartDashboard.putNumber("EffectorCurrentAngle", mEncoder.getPosition());
 
         double motorRotations = angleDegrees * motorRatio / degrees;
 
@@ -324,6 +323,11 @@ public class SK25EndEffector extends SubsystemBase
         SmartDashboard.putNumber("EndEffector Current Angle", mCurrentAngle);
         SmartDashboard.putNumber("EndEffector Target Angle", mTargetAngle);
         SmartDashboard.putBoolean("Is EndEffector at Target", isArmAtTargetPosition());
+        SmartDashboard.putNumber("EffectorCurrentAngle", getArmPosition());
+        /*System.out.println("Current Encoder Position " + mEncoder.getPosition());
+        System.out.println("Current Arm Degrees " + getArmPosition());
+        System.out.println("Target Arm Position " + getTargetArmPosition());
+        */
         
     }
 

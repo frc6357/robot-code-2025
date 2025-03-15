@@ -527,23 +527,23 @@ public final class Konstants
         public static enum EndEffectorPosition
         {
             /** Set the angle to reach the top branch (L4) */
-            kL4Angle(-190),
+            kL4Angle(183),
             /** Set the angle to reach the middle branch (L3) */
-            kMiddleAngle(-215),
+            kMiddleAngle(158),
             /** Set the angle to reach the low branch (L2) */
-            kL2Angle(-215),
+            kL2Angle(158),
             /** Set the angle to reach the trough (L1) */
-            kTroughAngle(-195),
+            kTroughAngle(178),
             /** Set the height to reach the station */
-            kStationAngle(-100), //TODO: Angle -100 or -70 (check this)
+            kStationAngle(273), //TODO: Angle -100 or -70 (check this)
             /** Set the height to reach the bottom */
-            kZeroPositionAngle(-60),
+            kZeroPositionAngle(313),
             /** Set the angle to reach the net */
-            kNetAngle(-90),
+            kNetAngle(283),
             /** Set the angle to reach the high algae on the reef */
-            kHighAlgae(-173),
+            kHighAlgae(200),
             /** Set the angle to reach the low algae on the reef */
-            kLowAlgae(-173);
+            kLowAlgae(200);
 
             public final double angle;
 
