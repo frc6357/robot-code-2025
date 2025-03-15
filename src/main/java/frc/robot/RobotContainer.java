@@ -50,12 +50,12 @@ import frc.robot.utils.filters.FilteredJoystick;
  */
 public class RobotContainer {
 
-    private final Telemetry logger = new Telemetry(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond)); // "MaxSpeed"
+   // private final Telemetry logger = new Telemetry(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond)); // "MaxSpeed"
 
 
     private void configurePhoenixTelemetry() {
 
-        m_swerve.get().registerTelemetry(logger::telemeterize);
+       // m_swerve.get().registerTelemetry(logger::telemeterize);
     }
 
 
