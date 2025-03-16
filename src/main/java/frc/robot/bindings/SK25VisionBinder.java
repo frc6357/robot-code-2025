@@ -46,7 +46,11 @@ public class SK25VisionBinder implements CommandBinder {
 
             forceResetPoseToVision.onTrue(new InstantCommand(() -> m_vision.forcePoseToVision()));
 
-            /* This command feeds triggers into its constructor in order for it  */
+            /* 
+             * This command feeds triggers into its constructor in order for it to switch 
+             * targetting the left and right side of the reef face without needing to redetermine
+             * which face is closest every time.
+             */
             driveToClosestReef.whileTrue(
                 new DriveToReefCommand(
                     SK25Vision.DriveToPose.getConfig(),

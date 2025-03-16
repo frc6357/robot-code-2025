@@ -385,32 +385,15 @@ public class TunerConstants {
 
 
 
+    /** Defines constraints and information for autonomous development */
     public static final class AutoConstants
     {
-        public static List<String> autoList = new ArrayList<String>(Arrays.asList("P4_Taxi"));
-
-        // Autonomous translation constraints
-        public static final double          kMaxSpeedMetersPerSecond               = 3;
-        public static final double          kMaxAccelerationMetersPerSecondSquared = 2;
-        // public static final PathConstraints kPathConstraints                       =
-        //         new PathConstraints(kMaxSpeedMetersPerSecond,
-        //             kMaxAccelerationMetersPerSecondSquared);
-
-        // public static final PathConstraints kFastConstraints =
-        //     new PathConstraints(4.5, 3.5);
 
         // PID Constants
         public static final PIDConstants kTranslationPIDConstants = new PIDConstants(6, 0, 0);
         public static final PIDConstants kRotationPIDConstants    = new PIDConstants(6, 0.4, 0);
-        public static final PPHolonomicDriveController kAutoPathConfig = new PPHolonomicDriveController(
-            kTranslationPIDConstants,
-            kRotationPIDConstants,
-            Robot.kDefaultPeriod
-            //kMaxSpeedMetersPerSecond,
-            //Math.hypot(SwerveConstants.kFTBEncoderDistInches / 2, SwerveConstants.kLTREncoderDistInches / 2), 
-            //new ReplanningConfig()
-        );
 
+        public static final PPHolonomicDriveController pathConfig = new PPHolonomicDriveController(kTranslationPIDConstants, kRotationPIDConstants);
     }
 
     public static final class ElevatorConstants

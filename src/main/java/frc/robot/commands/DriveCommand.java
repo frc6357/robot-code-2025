@@ -52,21 +52,19 @@ public class DriveCommand {
         
         public void run(){
             if(fieldOriented.get() == true) { // Field centric drive requested
-                m_swerve.applyRequest(() -> {
-                    return fieldCentricDrive
+                m_swerve.setControl(
+                    fieldCentricDrive
                         .withVelocityX(velX.get())
                         .withVelocityY(velY.get())
-                        .withRotationalRate(rotRate.get());
-                    }
+                        .withRotationalRate(rotRate.get())
                 );
             }
             else { // Robot centric drive
-                m_swerve.applyRequest(() -> {
-                    return robotCentricDrive
+                m_swerve.setControl(
+                    robotCentricDrive
                         .withVelocityX(velX.get())
                         .withVelocityY(velY.get())
-                        .withRotationalRate(rotRate.get());
-                    }
+                        .withRotationalRate(rotRate.get())
                 );
             }
         }

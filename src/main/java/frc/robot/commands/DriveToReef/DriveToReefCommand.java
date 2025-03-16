@@ -36,7 +36,7 @@ public class DriveToReefCommand extends Command{
 
     DriveCommand driveCommand;
 
-    boolean valid = true;
+    boolean valid;
 
     boolean previousTargetLeftStatus;
     boolean previousTargetRightStatus;
@@ -47,6 +47,18 @@ public class DriveToReefCommand extends Command{
     RawFiducial closestTag;
 
 
+    /**
+     * 
+     * @param driveConfig The specific profiled PID and limelight config to use for translating the robot
+     * @param rotateConfig The specific profiled PID and limelight config to use for rotating the robot
+     * @param m_vision The vision instance used to run tag recognition and distance calculations
+     * @param m_swerve The swerve instance to drive
+     * @param targetLeftSide The Trigger to use 
+     * @param targetRightSide
+     * 
+     * @return A command to override the swerve's default command and use PID loops to move the robot
+     * chassis to a known position on the reef based on the tags the pose limelights see.
+     */
     public DriveToReefCommand(
                 MultiLimelightCommandConfig driveConfig,
                 MultiLimelightCommandConfig rotateConfig, 
@@ -84,20 +96,25 @@ public class DriveToReefCommand extends Command{
         List<String> targetPositions = PoseConstants.tagDestinationMap.get(closestTag.id);
             String targetPosition = targetPositions.get(2); // Default to middle face
 
-            /* Effectively prioritizes left scoring */
+            /* Effectively prioritizes left side scoring */
             if(targetLeftSide.getAsBoolean()) {
                 previousTargetLeftStatus = true;
                 previousTargetRightStatus = false;
+                m_vision.reefDriveTarget = "LEFT";
+
                 targetPosition = targetPositions.get(0); // Left position is at index 0
             }
             else if(targetRightSide.getAsBoolean()) {
                 previousTargetRightStatus = true;
                 previousTargetLeftStatus = false;
+                m_vision.reefDriveTarget = "RIGHT";
+
                 targetPosition = targetPositions.get(1); // Right position is at index 1
             }
             else {
                 previousTargetLeftStatus = false;
                 previousTargetRightStatus = false;
+                m_vision.reefDriveTarget = "CENTER";
             }
 
             targetPose = PoseConstants.fieldPositions.get(targetPosition);
@@ -111,9 +128,10 @@ public class DriveToReefCommand extends Command{
             rotateController.initialize(targetPose);
     }
 
+    ArrayList<RawFiducial> reefTags;
     @Override
     public void initialize() {
-        ArrayList<RawFiducial> reefTags = new ArrayList<RawFiducial>();
+        reefTags = new ArrayList<RawFiducial>();
         closestTag = null;
 
         for(Limelight ll : limelights) {
@@ -137,6 +155,9 @@ public class DriveToReefCommand extends Command{
                     }
                 }
             }
+
+            System.out.println("closest Reef Tag: " + closestTag.id);
+            valid = true;
         }
         else {
             valid = false;
@@ -161,6 +182,7 @@ public class DriveToReefCommand extends Command{
                 DriverPorts.kDriver.setRumble(RumbleType.kBothRumble, 0.5);
             }
 
+            // If the driver has pressed a different button
             if(previousTargetLeftStatus != targetLeftSide.getAsBoolean()) {
                 setTargetPose();
             }
@@ -186,6 +208,7 @@ public class DriveToReefCommand extends Command{
     @Override
     public void end(boolean isInterrupted) {
         m_vision.isDriving = false;
+        m_vision.reefDriveTarget = "OFF";
         DriverPorts.kDriver.setRumble(RumbleType.kBothRumble, 0.0);
         driveController.end();
         rotateController.end();

@@ -52,6 +52,7 @@ public class Ports
         public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kLeftBumper.value, BUTTON);
 
         // Switch modes
+        public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kRightBumper.value, BUTTON);
         public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, 180, POV); // Function Mapping (NOTE: This button is meant to be impossible to accidentally press)
         // Reset gyro
         public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kRightStick.value, BUTTON);

@@ -51,6 +51,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     public boolean isIntegrating = false; // Boolean statign whether or not limelight poses are being integrated with actual
 
     public boolean isDriving = false; // Provides a boolean as to whether or not the Limelights are "driving" the robot with their measurements
+    public String reefDriveTarget;
 
     // Creates an ArrayList to store estimated vision poses during autonomous 
     public ArrayList<Trio<Pose3d, Pose2d, Double>> autonPoses = new ArrayList<Trio<Pose3d, Pose2d, Double>>();
@@ -67,6 +68,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             }
             ll.setLEDMode(false); // Turns off LED lights on startup
         }
+
+        reefDriveTarget = "OFF";
     }
 
     @Override
@@ -183,12 +186,13 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("VisionDriving", isDriving);
+        SmartDashboard.putString("ReefDriveTarget", reefDriveTarget);
         SmartDashboard.putString("BackLLStatus", backLL.getLogStatus());
         SmartDashboard.putString("FrontLLStatus", frontLL.getLogStatus());
         SmartDashboard.putString("ResetPoseToVisionStatus", resetPoseToVisionLog);
 
 
-        double yaw = m_swerve.getRotation().getDegrees();
+        double yaw = m_swerve.getPigeon2().getRotation2d().getDegrees();
 
         for(Limelight ll : poseLimelights) {
         // Used for MEGATAG 2
@@ -201,7 +205,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             double timestamp = ll.getRawPoseTimestamp(); // Timestamp of when the pose was collected
 
             Pose2d estimatedRobotPose = // Uses limelight (effectively swerve) rotation value instead of estimated rotation value
-                new Pose2d(megaPose2d.getTranslation(), botPose3d.toPose2d().getRotation()); 
+                // TODO: Look into whether or not to use MEGATAG1 rotation or IMU rotation
+                new Pose2d(megaPose2d.getTranslation(), megaPose2d.getRotation()); 
             
             autonPoses.add(Trio.of(botPose3d, estimatedRobotPose, timestamp)); // Adds both poses into the auto pose feeder
             }
@@ -226,8 +231,6 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         catch(Exception e) {
             DriverStation.reportWarning("Vision: Attempted to access nonexistent vision pose!", false);
         }
-
-        
 
     }
 
@@ -258,7 +261,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     /**
      * Finds the closest AprilTag for a specific field element for your alliance.
-     * SURROUND THIS IN TRY/CATCH! It will return null if no AprilTags of specific target are seen!
+     * SURROUND THIS IN TRY/CATCH OR IF/ELSE! It will return null if no AprilTags of specific target are seen!
      * @param ll The limelight to reed tags from
      * @param element The field element's tag(s) to target
      * @return The closest matching tag found.
@@ -294,6 +297,10 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             //TODO: Make this report somewhere else
             DriverStation.reportWarning("Vision: [" + ll.getName() + "] No target tags found for " + element, false);
             return null;
+        }
+        else if(!goodTags.isEmpty()) {
+            // TODO: Make this report somewhere else
+            System.out.println("Vision: [" + ll.getName() + "] Target tag(s) found for " + element + " - " + goodTags.toString());
         }
 
         RawFiducial closestTag = null;
@@ -454,7 +461,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
             // distance from current pose to vision estimated pose
             double poseDifference =
-                    m_swerve.getRobotPose().getTranslation().getDistance(botpose.getTranslation());
+                    m_swerve.getRobotPose().getTranslation().getDistance(megaPose2d.getTranslation());
 
             /* rejections */
 
@@ -475,13 +482,13 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
                     return;
                 }
             }
-            if (Field.poseOutOfField(botpose3D)) {
+            if (Field.poseOutOfField(megaPose2d)) {
                 // reject if pose is out of the field
                 LL.sendInvalidStatus("bound rejection");
                 return;
             } else if (Math.abs(robotSpeed.omegaRadiansPerSecond) >= 0.5) {
                 // reject if we are rotating more than 0.5 rad/s
-                LL.sendInvalidStatus("rotation rejection");
+                LL.sendInvalidStatus("rotation speed rejection");
                 return;
             } else if (Math.abs(botpose3D.getZ()) > 0.25) {
                 // reject if pose is .25 meters in the air
