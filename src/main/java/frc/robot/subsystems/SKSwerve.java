@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Konstants.AutoConstants.pathConfig;
@@ -36,6 +37,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -51,6 +54,8 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+
+    private Field2d field = new Field2d();
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -153,7 +158,9 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
             startSimThread();
         }
 
+
         configureAutoBuilder();
+        SmartDashboard.putData("Field", field);
     }
 
     /**
@@ -180,6 +187,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
         }
 
         configureAutoBuilder();
+        SmartDashboard.putData("Field", field);
     }
 
     /**
@@ -214,6 +222,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
         }
 
         configureAutoBuilder();
+        SmartDashboard.putData("Field", field);
     }
     
 
@@ -269,6 +278,8 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+
+        field.setRobotPose(getRobotPose());
     }
 
     private void startSimThread() {
