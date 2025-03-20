@@ -2,9 +2,9 @@ package frc.robot.bindings;
 import static frc.robot.Ports.OperatorPorts.kLowAlgae;
 import static frc.robot.Ports.OperatorPorts.kElevatorOverride;
 import static frc.robot.Ports.OperatorPorts.kHighAlgae;
-import static frc.robot.Ports.OperatorPorts.kLowBranch;
+//import static frc.robot.Ports.OperatorPorts.kLowBranch;
 import static frc.robot.Ports.OperatorPorts.kResetElevatorPos;
-import static frc.robot.Ports.OperatorPorts.kTrough;
+//import static frc.robot.Ports.OperatorPorts.kTrough;
 import static frc.robot.Ports.OperatorPorts.*;
 
 import java.util.Optional;
@@ -33,10 +33,10 @@ public class RevBindings implements CommandBinder
         this.elevatorSubsystem  = elevatorSubsystem;
         this.elevatorOverride   = kElevatorOverride.button;
         this.zeroPositionButton = kZeroPositionOperator.button;
-        this.LowButton          = kLowBranch.button;
+        this.LowButton          = kLowBranchEffector.button;
         this.MidButton          = kMiddleBranchEffector.button;
         this.TopButton          = kTopBranchEffector.button;
-        this.TroughButton       = kTrough.button;
+        this.TroughButton       = kTroughEffector.button;
         this.resetPos           = kResetElevatorPos.button;
         this.LowAlgae = kLowAlgae.button;
         this.HighAlgae = kHighAlgae.button;

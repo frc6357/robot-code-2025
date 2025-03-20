@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P1Trough"
+            "pathName": "LeftPush"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PushToTrough"
           }
         },
         {

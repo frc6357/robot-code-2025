@@ -315,10 +315,6 @@ public final class Konstants
               public static final double kHighAlgae = 40;  //-173
               public static final double kNet = 75; //angle -90
               public static final double kIntake = 30;
-
-             
-
-              
             }
 
             public static final class CoralSubsystem {
@@ -357,8 +353,6 @@ public final class Konstants
                     .maxVelocity(4500)
                     .maxAcceleration(6000)
                     .allowedClosedLoopError(0.1);
-
-
                 }
             }
         }
@@ -462,15 +456,15 @@ public final class Konstants
         public static enum EndEffectorPosition
         {
             /** Set the angle to reach the top branch (L4) */ // 12.5
-            kTopPositionAngle(-190), // Angle -190
+            kTopPositionAngle(-200), // Angle -190
             /** Set the angle to reach the middle & low branch (L3) */
             kLowPositionAngle(-215), // Angle
             /** Set the angle to reach the trough (L2) */
-            kTroughPositionAngle(-195), // Angle -195
+            kTroughPositionAngle(-130), // Angle -195
             /** Set the height to reach the station (L1) */
             kIntakePositionAngle(-100), // Angle
             /** Set the height to reach the bottom */
-            kZeroPositionAngle(-130), // Angle
+            kZeroPositionAngle(-100), // Angle
             kNetAngle(-90),
             kHighAlgae(-173),
             kMiddleAngle(-215),

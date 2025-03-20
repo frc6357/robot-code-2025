@@ -7,25 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P1Trough"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "pathName": "D-S"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ExtakeAutoCommand"
+            "name": "StationPickupCombo"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LS-DR"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ZeroPositionCommand"
+            "name": "L4ScoreCombo"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DRR"
           }
         }
       ]

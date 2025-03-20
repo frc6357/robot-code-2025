@@ -8,30 +8,49 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.804303278688525,
-        "y": 7.430061475409837
+        "x": 6.8830340118327795,
+        "y": 7.329846762795807
       },
       "isLocked": false,
       "linkedName": "P1"
     },
     {
       "anchor": {
-        "x": 5.02125,
-        "y": 5.4095
+        "x": 5.166700819672132,
+        "y": 5.145850409836064
       },
       "prevControl": {
-        "x": 4.77125,
-        "y": 5.4095
+        "x": 5.325010267236447,
+        "y": 5.339339734636895
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "CR"
+      "linkedName": "CTrough"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "TroughScoreCombo",
+      "waypointRelativePos": 0.6,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "TroughScoreCombo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,7 +61,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -122.905242922988
+    "rotation": -138.57633437499737
   },
   "reversed": false,
   "folder": "P1",

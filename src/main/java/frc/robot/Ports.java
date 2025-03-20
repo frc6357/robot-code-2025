@@ -98,8 +98,8 @@ public class Ports
         // Elevator buttons
         // Coral:
         public static final SKTrigger kIntakePos = new SKTrigger(kOperator, kLeftBumper.value, BUTTON);
-        public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
-        public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
+        //public static final SKTrigger kTrough = new SKTrigger(kOperator, kX.value, BUTTON);
+        //public static final SKTrigger kLowBranch = new SKTrigger(kOperator, kA.value, BUTTON);
         // public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
         // public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
         // Algae:

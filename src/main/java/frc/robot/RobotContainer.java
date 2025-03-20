@@ -216,10 +216,10 @@ public class RobotContainer {
 
                     //Score Commands
 
-                    NamedCommands.registerCommand("TroughScoreCombo", new ScoreCombo(
+                    NamedCommands.registerCommand("TroughScoreCombo", new LineupCombo(
                         Setpoint.kLevel1,
                         elevator,
-                        EndEffectorPosition.kIntakePositionAngle,
+                        EndEffectorPosition.kTroughPositionAngle,
                         effector));
 
                     NamedCommands.registerCommand("L2ScoreCombo", new ScoreCombo(
@@ -249,7 +249,7 @@ public class RobotContainer {
 
                     //Pickup Commands
 
-                    NamedCommands.registerCommand("StationPickupCombo", new ScoreCombo(
+                    NamedCommands.registerCommand("StationPickupCombo", new LineupCombo(
                         Setpoint.kIntake,
                         elevator,
                         EndEffectorPosition.kIntake,

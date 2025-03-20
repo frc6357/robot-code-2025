@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Konstants.AutoConstants.kIntakeAutoDurationSeconds;
 import static frc.robot.Konstants.AutoConstants.kIntakeAutoSpeed;
+import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
 import static frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
@@ -35,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 
@@ -66,18 +68,41 @@ public class SK25EndEffector extends SubsystemBase
         .onChange((newValue) -> {
             armFeedforward = new ArmFeedforward(0, newValue, 0, 0);
         });
-        Pref<Double> armAngleDeg = SKPreferences.attach("armAngleDeg", 0.0)
+    Pref<Double> armAngleDeg = SKPreferences.attach("armAngleDeg", 0.0)
         .onChange((newValue) -> {
             setTargetAngle(newValue);
         });
+    
+    final Pref<Double> endEffectorKp = SKPreferences.attach("elevatorKi", 0.0) //0.0
+    .onChange((newValue) -> reconfigureEndEffector());
+
+    final Pref<Double> endEffectorKi = SKPreferences.attach("elevatorKd", 0.0) //0.0015
+    .onChange((newValue) -> reconfigureEndEffector());
+
+    final Pref<Double> endEffectorKd = SKPreferences.attach("elevatorKpFF", 0.0) //0.001
+    .onChange((newValue) -> reconfigureEndEffector());
+
+    final Pref<Double> endEffectorKpFF = SKPreferences.attach("elevatorKpFF", 0.0) //0.001
+    .onChange((newValue) -> reconfigureEndEffector());
+
+    final Pref<Double> endEffectorVelocity = SKPreferences.attach("elevatorKpFF", 0.0) //0.001
+    .onChange((newValue) -> reconfigureEndEffector());
+
+    private void reconfigureEndEffector() {
+      elevatorConfig.closedLoop.pidf(endEffectorKp.get(), endEffectorKi.get(), endEffectorKd.get(), endEffectorKpFF.get());   //dFilter(.0003)
+      elevatorConfig.closedLoop.maxMotion
+        .maxVelocity(endEffectorVelocity.get());
+      armMotor.configure(
+        armConfig,
+        ResetMode.kResetSafeParameters,
+        PersistMode.kNoPersistParameters
+      );
+    }
 
     //LaserCan laserCanSensor;
 
     public SK25EndEffector()
     {
-        
-
-        
         //initialize the new motor object with its motor ID and type
         rollerMotor = new SparkFlex(kEndEffectorRollerMotor.ID, MotorType.kBrushless);
         armMotor = new SparkFlex(kEndEffectorArmMotor.ID, MotorType.kBrushless);
@@ -86,24 +111,24 @@ public class SK25EndEffector extends SubsystemBase
         
         armConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .p(1.9)
-            .i(.0002)
-            .d(2.1)
-            .outputRange(-.1, .1) //TODO: Add a velocityFF in order to provide a feedforwards to counteract gravity and maintain the arm at a set point
+            .p(.3)
+            //.i(.0002)
+            //.d(2.1)
+            .outputRange(-1, 1); //TODO: Add a velocityFF in order to provide a feedforwards to counteract gravity and maintain the arm at a set point
             //.p(0, ClosedLoopSlot.kSlot1)
             //.i(0, ClosedLoopSlot.kSlot1)
             //.d(0, ClosedLoopSlot.kSlot1)
-            .velocityFF(1.0/5767, ClosedLoopSlot.kSlot1);
+            //.velocityFF(1.0/5767, ClosedLoopSlot.kSlot1);
             //.outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
             armConfig.closedLoop.maxMotion
-            .maxAcceleration(500)
-            .maxVelocity(550)
-            .allowedClosedLoopError(1);
+            .maxAcceleration(300)
+            .maxVelocity(150)
+            .allowedClosedLoopError(0.1);
 
         armConfig
             .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(30); // TODO: Consider adding a .voltageCompensation(double nominalVoltage) in order to limit maximum volts to the motor
+            .smartCurrentLimit(80); // TODO: Consider adding a .voltageCompensation(double nominalVoltage) in order to limit maximum volts to the motor
 
         mPID = armMotor.getClosedLoopController();
         mEncoder = armMotor.getEncoder();

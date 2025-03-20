@@ -3,63 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.8134375,
-        "y": 4.179559659090909
+        "x": 7.179545454545455,
+        "y": 4.18
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.802049180327868,
-        "y": 5.649334016393442
-      },
-      "isLocked": false,
-      "linkedName": "MiddlePoint1"
-    },
-    {
-      "anchor": {
-        "x": 3.5843237704918027,
-        "y": 5.98498975409836
-      },
-      "prevControl": {
-        "x": 5.969877049180328,
-        "y": 5.181813524590163
-      },
-      "nextControl": {
-        "x": 3.347392144067829,
-        "y": 6.064760703698392
+        "x": 6.929545454545455,
+        "y": 4.18
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.1867827868852459,
-        "y": 6.979969262295082
+        "x": 5.8134375,
+        "y": 4.179559659090909
       },
       "prevControl": {
-        "x": 1.8580942622950818,
-        "y": 6.680276639344262
+        "x": 6.0634375,
+        "y": 4.179559659090909
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LS"
+      "linkedName": "MiddlePoint1"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.42622950819671196,
-      "rotationDegrees": 180.0
-    },
-    {
-      "waypointRelativePos": 0.8996401439424216,
-      "rotationDegrees": 126.86999999999999
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "StationPickupCombo",
-      "waypointRelativePos": 1.2,
+      "name": "L4ScoreCombo",
+      "waypointRelativePos": 0.3914759273875309,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -68,7 +43,13 @@
             {
               "type": "named",
               "data": {
-                "name": "StationPickupCombo"
+                "name": "L4ScoreCombo"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "ZeroPositionCommand"
               }
             }
           ]
@@ -86,10 +67,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 126.86989764584406
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "CollectCoral",
+  "folder": "P2",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
