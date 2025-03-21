@@ -189,7 +189,7 @@ public class Ports
     
         public static final CANPort kEndEffectorArmMotor = new CANPort(33, busName);
         public static final CANPort kEndEffectorRollerMotor = new CANPort(34, busName);
-        public static final CANPort kLaserCanEndEffector = new CANPort(46, busName);
+        public static final CANPort kLaserCanEndEffector = new CANPort(35, busName);
 
     }
 

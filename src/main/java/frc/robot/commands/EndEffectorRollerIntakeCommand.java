@@ -19,10 +19,14 @@ public class EndEffectorRollerIntakeCommand extends Command {
         Subsystem.runRoller(-kRollerSpeed);
     }
 
+    public void end(boolean interrupted)
+    {
+        Subsystem.stopRoller();
+    }
 
     public boolean isFinished()
     {
-        return Subsystem.haveCoral();
+        return true;
     }
     
 }
