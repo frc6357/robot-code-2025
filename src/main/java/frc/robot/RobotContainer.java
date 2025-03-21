@@ -41,6 +41,7 @@ import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.commands.EndEffectorButtonCommand;
 import frc.robot.commands.commandGroups.LineupCombo;
 import frc.robot.commands.commandGroups.ScoreCombo;
+import frc.robot.commands.commandGroups.StationCombo;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
 //import frc.robot.subsystems.Configs.CoralSubsystem;
@@ -269,6 +270,13 @@ public class RobotContainer {
                         EndEffectorPosition.kHighAlgae,
                         effector));
 
+                    //Station Commands
+
+                    NamedCommands.registerCommand("StationWaitCombo", new StationCombo(
+                        Setpoint.kIntake,
+                        elevator,
+                        EndEffectorPosition.kIntake,
+                        effector));
 
                     //Zero Position Command
 

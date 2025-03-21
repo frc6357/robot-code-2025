@@ -3,6 +3,7 @@ package frc.robot.bindings;
 // Joystick constants
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
+import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 import static frc.robot.Ports.OperatorPorts.kEndEffectorAxis;
 import static frc.robot.Ports.OperatorPorts.kHighAlgae;
 import static frc.robot.Ports.OperatorPorts.kIntakePos;
@@ -25,6 +26,8 @@ import java.util.Optional;
 // Relative encoder (REV)
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 
@@ -113,10 +116,15 @@ public class SK25EndEffectorBinder implements CommandBinder {
            // Processor.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, endEffector));
             
             
-            RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
+            //RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
             RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
             RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
+
+            RollerIntake.whileTrue(new WaitUntilCommand(endEffector::haveCoral)
+                    .beforeStarting(() -> endEffector.runRoller(-kRollerSpeed), endEffector)
+                    .andThen(new WaitCommand(.23))
+                    .finallyDo(() -> endEffector.runRoller(0)));
 
             endEffector.setDefaultCommand(
                     // Vertical movement of the arm is controlled by the Y axis of the right stick.
