@@ -252,7 +252,7 @@ public class RobotContainer {
 
                     //Pickup Commands
 
-                    NamedCommands.registerCommand("StationPickupCombo", new StationCombo(
+                    NamedCommands.registerCommand("StationPickupCombo", new LineupCombo(
                         Setpoint.kIntake,
                         elevator,
                         EndEffectorPosition.kIntake,

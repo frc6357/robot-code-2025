@@ -45,12 +45,6 @@
               "data": {
                 "name": "L4ScoreCombo"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "ZeroPositionCommand"
-              }
             }
           ]
         }
