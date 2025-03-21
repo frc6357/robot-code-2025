@@ -142,7 +142,7 @@ public class SK25EndEffector extends SubsystemBase
 
         mEncoder.setPosition(0);
 
-        //laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
+        laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
     }
 
     public void initialize()

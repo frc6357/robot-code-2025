@@ -192,7 +192,9 @@ public class RobotContainer {
 
                 NamedCommands.registerCommand("IntakeAutoCommand", effector.runRollerCommand(kRollerSpeed));
                 NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));    //TODO: change to auto speeds in konstants
-
+                NamedCommands.registerCommand("L4ExtakeAutoCommand", Commands.parallel(
+                    new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
+                    effector.runRollerCommand(-kRollerSpeed)));
 
                 if(m_coral.isPresent())
                 {
@@ -240,7 +242,7 @@ public class RobotContainer {
                         EndEffectorPosition.kTopPositionAngle,
                         effector));
 
-                    NamedCommands.registerCommand("NetScoreCombo", new ScoreCombo(
+                    NamedCommands.registerCommand("NetScoreCombo", new LineupCombo(
                         Setpoint.kNet,
                         elevator,
                         EndEffectorPosition.kNetAngle,
