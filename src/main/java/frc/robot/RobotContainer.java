@@ -39,6 +39,7 @@ import frc.robot.bindings.SK25LightsBinder;
 // import frc.robot.bindings.SK25ScoringBinder;
 import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.commands.EndEffectorButtonCommand;
+import frc.robot.commands.commandGroups.IntakeAutoCommand;
 import frc.robot.commands.commandGroups.LineupCombo;
 import frc.robot.commands.commandGroups.ScoreCombo;
 import frc.robot.commands.commandGroups.StationCombo;
@@ -191,7 +192,7 @@ public class RobotContainer {
 
                 //Roller Commands
 
-                NamedCommands.registerCommand("IntakeAutoCommand", effector.runRollerCommand(kRollerSpeed));
+                NamedCommands.registerCommand("IntakeAutoCommand", new IntakeAutoCommand(EndEffectorPosition.kIntakePositionAngle, effector));
                 NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));    //TODO: change to auto speeds in konstants
                 NamedCommands.registerCommand("L4ExtakeAutoCommand", Commands.parallel(
                     new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),

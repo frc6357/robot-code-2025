@@ -48,7 +48,7 @@
   "folder": "RemoveAlgae",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -176.8107665865603
   },
   "useDefaultConstraints": true
 }

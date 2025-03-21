@@ -124,10 +124,11 @@ public class SK25EndEffectorBinder implements CommandBinder {
 
             /*
             RollerIntake.whileTrue(new WaitUntilCommand(endEffector::haveCoral)
-                    .beforeStarting(() -> endEffector.runRoller(-kRollerSpeed), endEffector)
+                    .beforeStarting(() -> endEffector.runRoller(kRollerSpeed), endEffector)
                     .andThen(new WaitCommand(.23))
                     .finallyDo(() -> endEffector.runRoller(0)));
             */
+            
 
             endEffector.setDefaultCommand(
                     // Vertical movement of the arm is controlled by the Y axis of the right stick.
