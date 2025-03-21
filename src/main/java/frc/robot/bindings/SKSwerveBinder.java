@@ -40,7 +40,7 @@ public class SKSwerveBinder implements CommandBinder{
     boolean slowModeStatus;
 
     //Allow alterable slew rates from the dashboard.
-     Pref<Double> driverTranslationSlewPref = SKPreferences.attach("driverTranslSlew", 1.5)
+     Pref<Double> driverTranslationSlewPref = SKPreferences.attach("driverTranslSlew", 4.0)
                  .onChange((newValue) -> {
                      translationXFilter.setSlewRate(newValue);
                      translationYFilter.setSlewRate(newValue);
