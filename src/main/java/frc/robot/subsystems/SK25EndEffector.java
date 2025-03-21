@@ -10,8 +10,8 @@ import static frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 //import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
-//import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
-///import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
+import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
+import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
 
 import com.revrobotics.RelativeEncoder;
 //import au.grapplerobotics.LaserCan;
@@ -28,6 +28,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
+import au.grapplerobotics.LaserCan;
 //import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -55,6 +56,8 @@ public class SK25EndEffector extends SubsystemBase
     SparkClosedLoopController mPID;
     double mTargetAngle;
     double mCurrentAngle;
+
+    private LaserCan laserCanSensor;
 
     public RelativeEncoder mEncoder;
 
@@ -142,7 +145,7 @@ public class SK25EndEffector extends SubsystemBase
 
         mEncoder.setPosition(0);
 
-        //laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
+        laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
     }
 
     public void initialize()
@@ -216,7 +219,7 @@ public class SK25EndEffector extends SubsystemBase
         setTargetAngle(EndEffectorPosition.kZeroPositionAngle.angle);
     }
 
-    /*public boolean haveCoral()
+    public boolean haveCoral()
     {
         LaserCan.Measurement sensorMeasurement = laserCanSensor.getMeasurement();
         if ((sensorMeasurement != null && sensorMeasurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)) {
@@ -228,7 +231,7 @@ public class SK25EndEffector extends SubsystemBase
         } 
         return false;
     }
-        */
+        
     public void checkPositionUp()
      {
     
