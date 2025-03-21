@@ -258,13 +258,13 @@ public class RobotContainer {
                         EndEffectorPosition.kIntake,
                         effector));
 
-                    NamedCommands.registerCommand("LowAlgaePickupCombo", new ScoreCombo(
+                    NamedCommands.registerCommand("LowAlgaePickupCombo", new LineupCombo(
                         Setpoint.kLowAlgae,
                         elevator,
                         EndEffectorPosition.kLowAlgae,
                         effector));
 
-                    NamedCommands.registerCommand("HighAlgaePickupCombo", new ScoreCombo(
+                    NamedCommands.registerCommand("HighAlgaePickupCombo", new LineupCombo(
                         Setpoint.kHighAlgae,
                         elevator,
                         EndEffectorPosition.kHighAlgae,
