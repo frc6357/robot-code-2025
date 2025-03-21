@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.927999999998979,
-        "y": 4.054250000005676
+        "x": 5.8134375,
+        "y": 3.9470799180327862
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.937750000000001,
-        "y": 3.7324999999999995
+        "x": 7.18063524590164,
+        "y": 3.9590676229508195
       },
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": "MiddlePoint2"
     },
     {
       "anchor": {
@@ -20,18 +20,42 @@
         "y": 0.6222499999999991
       },
       "prevControl": {
-        "x": 5.976750000001022,
-        "y": 1.0414999999999988
+        "x": 7.000819672131148,
+        "y": 4.1748463114754095
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "P"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3074770091963187,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ZeroPositionCommand",
+      "waypointRelativePos": 0.07834757834757831,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ZeroPositionCommand"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -48,7 +72,7 @@
   "folder": "Processor",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -177.70938995669064
+    "rotation": 179.5488614532127
   },
   "useDefaultConstraints": true
 }

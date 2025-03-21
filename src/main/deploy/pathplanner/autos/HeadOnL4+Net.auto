@@ -1,0 +1,73 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HeadOnMiddlePoint1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HighAlgaePickupCombo"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BRR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeAutoCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B_N"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LowAlgaePickupCombo"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

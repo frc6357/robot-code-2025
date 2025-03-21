@@ -8,30 +8,54 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.4175,
-        "y": 5.28275
+        "x": 5.71813524590164,
+        "y": 6.308657786885245
       },
       "isLocked": false,
       "linkedName": "C"
     },
     {
       "anchor": {
-        "x": 7.761,
-        "y": 5.029249999999999
+        "x": 7.744057377049179,
+        "y": 5.961014344262295
       },
       "prevControl": {
-        "x": 7.513512626584708,
-        "y": 5.064605339059327
+        "x": 7.496570003633887,
+        "y": 5.996369683321622
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "N"
+      "linkedName": "N2"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3586565373850476,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "NetScoreCombo",
+      "waypointRelativePos": 0.8000949667616392,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "NetScoreCombo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
