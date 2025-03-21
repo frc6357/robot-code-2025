@@ -50,13 +50,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LS-DR"
+            "pathName": "LeftStationToTrough"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -74,7 +74,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "D-S"
+            "pathName": "LeftTroughToStation2"
           }
         },
         {

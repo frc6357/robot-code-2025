@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4818688524590167,
-        "y": 5.281870901639343
+        "x": 1.3357083556762201,
+        "y": 6.984844720012486
       },
       "isLocked": false,
       "linkedName": "LS"
     },
     {
       "anchor": {
-        "x": 3.6082991803278692,
-        "y": 5.1698258196721305
+        "x": 3.6464999999999996,
+        "y": 5.117
       },
       "prevControl": {
-        "x": 3.381349908715156,
-        "y": 5.274678230776783
+        "x": 3.857897062575916,
+        "y": 4.98354108521993
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,26 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "L4ScoreCombo",
+      "waypointRelativePos": 0.6032432432432437,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "L4ScoreCombo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
