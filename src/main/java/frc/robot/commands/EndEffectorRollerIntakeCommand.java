@@ -22,7 +22,7 @@ public class EndEffectorRollerIntakeCommand extends Command {
 
     public boolean isFinished()
     {
-        return true;
+        return Subsystem.haveCoral();
     }
     
 }
