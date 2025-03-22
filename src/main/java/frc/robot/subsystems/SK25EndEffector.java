@@ -30,8 +30,10 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.interfaces.LaserCanInterface;
 import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
 import au.grapplerobotics.interfaces.LaserCanInterface.RegionOfInterest;
+import edu.wpi.first.math.MathUtil;
 //import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -61,6 +63,7 @@ public class SK25EndEffector extends SubsystemBase
     double mCurrentAngle;
 
     private LaserCan laserCanSensor;
+    private LaserCanChecker lidarChecker = new LaserCanChecker();
 
     public RelativeEncoder mEncoder;
 
@@ -69,6 +72,9 @@ public class SK25EndEffector extends SubsystemBase
     double armTargetAngle;
 
     public boolean isRunning;
+
+    Pref<Integer> lidarTargetDistMm = SKPreferences.attach("lidarTargetDistMm", 75);
+    Pref<Integer> lidarThreshold = SKPreferences.attach("lidarThreshold", 5);
 
     Pref<Double> armKg = SKPreferences.attach("armKg", 0.05)
         .onChange((newValue) -> {
@@ -147,11 +153,11 @@ public class SK25EndEffector extends SubsystemBase
         mCurrentAngle = 0.0;
 
         mEncoder.setPosition(0);
-
         laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
         try {
+            laserCanSensor.setTimingBudget(LaserCanInterface.TimingBudget.TIMING_BUDGET_50MS);
             laserCanSensor.setRangingMode(RangingMode.SHORT);
-            laserCanSensor.setRegionOfInterest(new RegionOfInterest(8, 8, 16, 16));
+            laserCanSensor.setRegionOfInterest(new RegionOfInterest(14, 14, 4, 4));
         } catch (ConfigurationFailedException e) {
 
         }
@@ -231,10 +237,10 @@ public class SK25EndEffector extends SubsystemBase
     public boolean haveCoral()
     {
         LaserCan.Measurement sensorMeasurement = laserCanSensor.getMeasurement();
-        if ((sensorMeasurement != null && sensorMeasurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)) {
-            SmartDashboard.putNumber("LaserCan distance", sensorMeasurement.distance_mm);
-          if(sensorMeasurement.distance_mm < (kCoralToLaserCanDistance))//plus 10 so theres room for error
+        if (sensorMeasurement != null) {
+          if(lidarChecker.check(sensorMeasurement))//plus 10 so theres room for error
           {
+            System.out.println("Coral detected");
             return true;
           }
         } 
@@ -348,4 +354,24 @@ public class SK25EndEffector extends SubsystemBase
     public void testPeriodic(){}
     public void testInit(){}
 
+
+    private class LaserCanChecker {
+        private int currentCount = 0;
+
+        public boolean check(LaserCan.Measurement measurement) {
+            if (measurement == null) {
+                return false;
+            }
+
+            if (measurement.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+                currentCount = Math.max(0, currentCount - 1);
+                return false;
+            }
+
+            SmartDashboard.putNumber("LaserCan distance", measurement.distance_mm);
+            int delta = measurement.distance_mm <= lidarTargetDistMm.get() ? 1 : -1;
+            currentCount = MathUtil.clamp(currentCount + delta, 0, 2 * lidarThreshold.get());
+            return currentCount >= lidarThreshold.get();
+        }
+    }
 }

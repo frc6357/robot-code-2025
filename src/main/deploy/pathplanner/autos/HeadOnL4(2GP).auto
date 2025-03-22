@@ -13,7 +13,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.75
           }
         },
         {
@@ -35,16 +35,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeAutoCommand"
-                }
-              }
-            ]
+            "name": "StationWaitCombo"
           }
         },
         {
@@ -68,7 +61,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ZeroPositionCommand"
+            "name": "StationPickupCombo"
           }
         },
         {
@@ -78,16 +71,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeAutoCommand"
-                }
-              }
-            ]
+            "name": "StationWaitCombo"
           }
         }
       ]

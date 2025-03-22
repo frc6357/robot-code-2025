@@ -35,16 +35,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeAutoCommand"
-                }
-              }
-            ]
+            "name": "StationWaitCombo"
           }
         },
         {
@@ -78,16 +71,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeAutoCommand"
-                }
-              }
-            ]
+            "name": "StationWaitCombo"
           }
         }
       ]

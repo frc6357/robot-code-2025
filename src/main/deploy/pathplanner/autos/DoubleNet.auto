@@ -25,7 +25,7 @@
         {
           "type": "named",
           "data": {
-            "name": "HighAlgaePickupCombo"
+            "name": "LowAlgaePickupCombo"
           }
         },
         {
@@ -61,7 +61,7 @@
         {
           "type": "named",
           "data": {
-            "name": "LowAlgaePickupCombo"
+            "name": "HighAlgaePickupCombo"
           }
         },
         {

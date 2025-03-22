@@ -309,10 +309,10 @@ public final class Konstants
               public static final double kZero = 0;
               public static final double kLevel1 = 15;
               public static final double kLevel2 = 40;
-              public static final double kLevel3 = 56; //-215
+              public static final double kLevel3 = 50; //-215
               public static final double kLevel4 = 79.5; //-190
               public static final double kLowAlgae = 22;  //-173
-              public static final double kHighAlgae = 40;  //-173
+              public static final double kHighAlgae = 37;  //-173
               public static final double kNet = 75; //angle -90
               public static final double kIntake = 30;
             }
@@ -467,7 +467,7 @@ public final class Konstants
             kZeroPositionAngle(-100), // Angle
             kNetAngle(-90),
             kHighAlgae(-173),
-            kMiddleAngle(-215),
+            kMiddleAngle(-190),
             kLowAlgae(-173),
             kIntake(-70);
 

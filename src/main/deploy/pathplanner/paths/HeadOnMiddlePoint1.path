@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "L4ScoreCombo",
-      "waypointRelativePos": 0.3914759273875309,
+      "waypointRelativePos": 0.16381766381766308,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
