@@ -15,7 +15,6 @@ import static frc.robot.Ports.OperatorPorts.kTopBranchEffector;
 import static frc.robot.Ports.OperatorPorts.kTroughEffector;
 import static frc.robot.Ports.OperatorPorts.kZeroPositionOperator;
 import static frc.robot.Ports.OperatorPorts.resetencoder;
-import static frc.robot.Ports.OperatorPorts.kMiddleBranchEffector;
 // Operator ports
 import static frc.robot.Ports.OperatorPorts.kIntake;
 import static frc.robot.Ports.OperatorPorts.kShoot;
@@ -124,11 +123,10 @@ public class SK25EndEffectorBinder implements CommandBinder {
 
             /*
             RollerIntake.whileTrue(new WaitUntilCommand(endEffector::haveCoral)
-                    .beforeStarting(() -> endEffector.runRoller(kRollerSpeed), endEffector)
+                    .beforeStarting(() -> endEffector.runRoller(-kRollerSpeed), endEffector)
                     .andThen(new WaitCommand(.23))
                     .finallyDo(() -> endEffector.runRoller(0)));
             */
-            
 
             endEffector.setDefaultCommand(
                     // Vertical movement of the arm is controlled by the Y axis of the right stick.

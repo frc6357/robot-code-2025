@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.commands.EndEffectorButtonCommand;
 import frc.robot.commands.EndEffectorRollerIntakeCommand;
+import frc.robot.commands.EndEffectorRollerIntakeCommandAuto;
 import frc.robot.commands.EndEffectorRollerStopCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
@@ -30,8 +31,7 @@ public class StationCombo extends SequentialCommandGroup
           elevator.setSetpointCommand(elevatorPos),
           new EndEffectorButtonCommand(endEffectorPos, endEffector)
         ),
-        new EndEffectorRollerIntakeCommand(endEffector),
-        new WaitUntilCommand(endEffector::haveCoral),
+        new EndEffectorRollerIntakeCommandAuto(endEffector),
         new EndEffectorRollerStopCommand(endEffector)
       );
   }
