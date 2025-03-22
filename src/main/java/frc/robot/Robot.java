@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import au.grapplerobotics.CanBridge;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -58,6 +58,7 @@ public class Robot extends LoggedRobot
     @Override
     public void robotInit()
     {
+        CanBridge.runTCP();
         // Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
         // Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);    //TODO: add this back, caused memory issue
         // if (isReal()) {

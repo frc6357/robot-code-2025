@@ -28,7 +28,10 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
+import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
+import au.grapplerobotics.interfaces.LaserCanInterface.RegionOfInterest;
 //import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -146,6 +149,12 @@ public class SK25EndEffector extends SubsystemBase
         mEncoder.setPosition(0);
 
         laserCanSensor = new LaserCan(kLaserCanEndEffector.ID);
+        try {
+            laserCanSensor.setRangingMode(RangingMode.SHORT);
+            laserCanSensor.setRegionOfInterest(new RegionOfInterest(8, 8, 16, 16));
+        } catch (ConfigurationFailedException e) {
+
+        }
     }
 
     public void initialize()
@@ -224,7 +233,7 @@ public class SK25EndEffector extends SubsystemBase
         LaserCan.Measurement sensorMeasurement = laserCanSensor.getMeasurement();
         if ((sensorMeasurement != null && sensorMeasurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)) {
             SmartDashboard.putNumber("LaserCan distance", sensorMeasurement.distance_mm);
-          if(sensorMeasurement.distance_mm < (kCoralToLaserCanDistance+10))//plus 10 so theres room for error
+          if(sensorMeasurement.distance_mm < (kCoralToLaserCanDistance))//plus 10 so theres room for error
           {
             return true;
           }

@@ -515,7 +515,7 @@ public final class Konstants
 
        public static final double kArmTolerance = 2.5; //1  //TODO tune and find tolerance
 
-       public static final double kCoralToLaserCanDistance = 24;
+       public static final double kCoralToLaserCanDistance = 10;
 
         // Important Joystick Settings
         public static final double kJoystickChange   = 0.05; // Manual setpoint value for units from 0.0 - 1.0 moved per second
