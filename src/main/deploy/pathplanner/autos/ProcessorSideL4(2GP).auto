@@ -7,67 +7,67 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P1_DL"
+            "pathName": "P3_FR"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "DL-S"
+            "pathName": "FR-Station"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "StationWaitCombo"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "LS-DR"
+            "pathName": "RightStation_FL"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "DRR"
+            "name": "ExtakeAutoCommand"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "D_N"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": null
+            "name": "StationPickupCombo"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "3GP",
+  "folder": null,
   "choreoAuto": false
 }

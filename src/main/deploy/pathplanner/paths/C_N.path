@@ -39,7 +39,7 @@
   "eventMarkers": [
     {
       "name": "NetScoreCombo",
-      "waypointRelativePos": 0.8000949667616392,
+      "waypointRelativePos": 0.65,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",

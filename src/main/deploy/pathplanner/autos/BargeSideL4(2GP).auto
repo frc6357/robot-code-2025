@@ -7,13 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P1_DL"
+            "pathName": "ToBargePoint1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.25
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
           }
         },
         {
@@ -25,7 +37,7 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "StationWaitCombo"
           }
         },
         {
@@ -35,39 +47,39 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.25
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": null
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "DRR"
+            "pathName": "DR-S"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "D_N"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": null
+            "name": "StationWaitCombo"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "3GP",
+  "folder": null,
   "choreoAuto": false
 }

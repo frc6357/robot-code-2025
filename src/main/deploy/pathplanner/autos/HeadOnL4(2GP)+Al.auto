@@ -7,67 +7,85 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P1_DL"
+            "pathName": "HeadOnMiddlePoint1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.75
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "DL-S"
+            "pathName": "B-LS"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "StationWaitCombo"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "LS-DR"
+            "pathName": "LS-CR"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "ExtakeAutoCommand"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "DRR"
+            "pathName": "CRR"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "IntakeAutoCommand"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "D_N"
+            "pathName": "C_N"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "ExtakeAutoCommand"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "3GP",
+  "folder": null,
   "choreoAuto": false
 }

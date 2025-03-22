@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LS-DR"
+            "pathName": "LS-DL"
           }
         },
         {
@@ -67,7 +67,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "D-S"
+            "pathName": "DL-S"
           }
         },
         {
