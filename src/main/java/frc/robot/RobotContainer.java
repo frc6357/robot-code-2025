@@ -193,7 +193,7 @@ public class RobotContainer {
                 //Roller Commands
 
                 NamedCommands.registerCommand("IntakeAutoCommand", new IntakeAutoCommand(EndEffectorPosition.kIntakePositionAngle, effector));
-                NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));    //TODO: change to auto speeds in konstants
+                NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));
                 NamedCommands.registerCommand("L4ExtakeAutoCommand", Commands.parallel(
                     new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
                     effector.runRollerCommand(-kRollerSpeed)));
@@ -226,13 +226,13 @@ public class RobotContainer {
                         EndEffectorPosition.kTroughPositionAngle,
                         effector));
 
-                    NamedCommands.registerCommand("L2ScoreCombo", new ScoreCombo(
+                    NamedCommands.registerCommand("L2ScoreCombo", new LineupCombo(
                         Setpoint.kLevel2,
                         elevator,
                         EndEffectorPosition.kLowPositionAngle,
                         effector));
 
-                    NamedCommands.registerCommand("L3ScoreCombo", new ScoreCombo(
+                    NamedCommands.registerCommand("L3ScoreCombo", new LineupCombo(
                         Setpoint.kLevel3,
                         elevator,
                         EndEffectorPosition.kMiddleAngle,
