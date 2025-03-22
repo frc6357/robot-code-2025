@@ -21,7 +21,7 @@ public class EndEffectorRollerIntakeCommandAuto extends Command {
 
     public void end(boolean interrupted)
     {
-         Subsystem.stopRoller();
+        Subsystem.stopRoller();
     }
 
     public boolean isFinished()
