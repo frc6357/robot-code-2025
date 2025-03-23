@@ -41,7 +41,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
-import frc.robot.subsystems.SK25Elevator;
 // Adds the Swerve subsystem for construction
 import frc.robot.subsystems.SKSwerve;
 // Filter used for input types (specifically Axis inputs)

@@ -29,7 +29,6 @@ import frc.robot.bindings.SKSwerveBinder;
 
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
-import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SK25Lights;
 
 import frc.robot.Konstants.TunerConstants;
@@ -58,12 +57,10 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
 
-  private Optional<SK25Elevator> m_elevatorContainer = Optional.empty();
   private Optional<SK25Lights> m_lightsContainer = Optional.empty();
   private Optional<SKSwerve> m_swerveContainer = Optional.empty();
   private Optional<SK25Vision> m_visionContainer = Optional.empty();
 
-  public static SK25Elevator m_elevator;
   public static SK25Lights m_lights;
   public static SK25Vision m_vision;
   public static SKSwerve m_swerve;
@@ -118,10 +115,6 @@ public class RobotContainer {
             {
                 m_lightsContainer = Optional.of(new SK25Lights());
                 m_lights = m_lightsContainer.get();
-            }
-            if(subsystems.isElevatorPresent()) {
-                m_elevatorContainer = Optional.of(new SK25Elevator());
-                m_elevator = m_elevatorContainer.get();
             }
             if(subsystems.isSwervePresent()) {
                 m_swerveContainer = Optional.of(Konstants.TunerConstants.createDrivetrain());
@@ -205,10 +198,6 @@ public class RobotContainer {
         {
             m_lightsContainer.get().testPeriodic();
         }
-        if(m_elevatorContainer.isPresent())
-        {
-            m_elevatorContainer.get().testPeriodic();
-        }
     }
     public void testInit(){
         // if(m_swerve.isPresent())
@@ -218,10 +207,6 @@ public class RobotContainer {
         if(m_lightsContainer.isPresent())
         {
             m_lightsContainer.get().testInit();
-        }
-        if(m_elevatorContainer.isPresent())
-        {
-            m_elevatorContainer.get().testInit();
         }
     }
 

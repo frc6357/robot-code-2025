@@ -42,8 +42,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     public final Limelight[] reefLimelights = {frontLL}; // Effectively used for pose estimating, 
                                                         // but are specifically for use with the reef
 
-    public boolean frontLLEnabled = false;
-    public boolean backLLEnabled = false;
+    public boolean frontLLEnabled = frontLL.isAttached();
+    public boolean backLLEnabled = backLL.isAttached();
 
 
     private final DecimalFormat df = new DecimalFormat();
@@ -333,8 +333,9 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     }
 
     public void forcePoseToVision() {
-        Limelight ll = backLL;
+        Limelight ll = getBestLimelight();
 
+        ll.setRobotOrientation(m_swerve.getRotation().getDegrees());
         m_swerve.resetPose(ll.getMegaPose2d());
     }
 
@@ -452,16 +453,16 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             boolean multiTags = LL.multipleTagsInView();
             double timeStamp = LL.getRawPoseTimestamp();
             double targetSize = LL.getTargetSize();
-            Pose3d botpose3D = LL.getRawPose3d();
-            Pose2d botpose = botpose3D.toPose2d();
-            Pose2d megaPose2d = LL.getMegaPose2d();
+            Pose3d botpose3DMT1 = LL.getRawPose3d();
+            Pose2d botposeMT1 = botpose3DMT1.toPose2d();
+            Pose2d botposeMT2 = LL.getMegaPose2d();
             RawFiducial[] tags = LL.getRawFiducial();
             double highestAmbiguity = 2;
             ChassisSpeeds robotSpeed = m_swerve.getRobotRelativeSpeeds();
 
             // distance from current pose to vision estimated pose
             double poseDifference =
-                    m_swerve.getRobotPose().getTranslation().getDistance(megaPose2d.getTranslation());
+                    m_swerve.getRobotPose().getTranslation().getDistance(botposeMT2.getTranslation());
 
             /* rejections */
 
@@ -482,25 +483,25 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
                     return;
                 }
             }
-            if (Field.poseOutOfField(megaPose2d)) {
+            if (Field.poseOutOfField(botposeMT2)) {
                 // reject if pose is out of the field
-                LL.sendInvalidStatus("bound rejection");
+                LL.sendInvalidStatus("bound rejection - pose OOB");
                 return;
             } else if (Math.abs(robotSpeed.omegaRadiansPerSecond) >= 0.5) {
                 // reject if we are rotating more than 0.5 rad/s
-                LL.sendInvalidStatus("rotation speed rejection");
+                LL.sendInvalidStatus("rot speed rejection - too fast");
                 return;
-            } else if (Math.abs(botpose3D.getZ()) > 0.25) {
+            } else if (Math.abs(botpose3DMT1.getZ()) > 0.25) {
                 // reject if pose is .25 meters in the air
-                LL.sendInvalidStatus("height rejection");
+                LL.sendInvalidStatus("height rejection - in air");
                 return;
-            } else if (Math.abs(botpose3D.getRotation().getX()) > 5
-                    || Math.abs(botpose3D.getRotation().getY()) > 5) {
+            } else if (Math.abs(botpose3DMT1.getRotation().getX()) > 5
+                    || Math.abs(botpose3DMT1.getRotation().getY()) > 5) {
                 // reject if pose is 5 degrees titled in roll or pitch
-                LL.sendInvalidStatus("roll/pitch rejection");
+                LL.sendInvalidStatus("roll/pitch rejection - tilted");
                 return;
             } else if (targetSize <= 0.025) {
-                LL.sendInvalidStatus("size rejection");
+                LL.sendInvalidStatus("size rejection - target too small");
                 return;
             }
             /* integrations */
@@ -563,7 +564,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             VisionConfig.VISION_STD_DEV_Y = xyStds;
             VisionConfig.VISION_STD_DEV_THETA = degStds;
 
-            Pose2d integratedPose = new Pose2d(megaPose2d.getTranslation(), botpose.getRotation());
+            Pose2d integratedPose = new Pose2d(botposeMT2.getTranslation(), botposeMT2.getRotation());
 
             addVisionMeasurementWithStdDevs(
                 integratedPose, 

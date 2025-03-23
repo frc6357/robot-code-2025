@@ -25,6 +25,7 @@ import com.pathplanner.lib.util.DriveFeedforwards;
 //import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -54,6 +55,8 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+
+    private SwerveDrivePoseEstimator poseEstimator;
 
     private Field2d field = new Field2d();
 
@@ -158,7 +161,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
             startSimThread();
         }
 
-
+        setupPoseEstimator();
         configureAutoBuilder();
         SmartDashboard.putData("Field", field);
     }
@@ -186,6 +189,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
             startSimThread();
         }
 
+        setupPoseEstimator();
         configureAutoBuilder();
         SmartDashboard.putData("Field", field);
     }
@@ -221,6 +225,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
             startSimThread();
         }
 
+        setupPoseEstimatorWithStdDevs(odometryStandardDeviation, visionStandardDeviation);
         configureAutoBuilder();
         SmartDashboard.putData("Field", field);
     }
@@ -279,8 +284,30 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
             });
         }
 
+        poseEstimator.update(getRotation(), getState().ModulePositions);
         field.setRobotPose(getRobotPose());
     }
+
+    private void setupPoseEstimator() {
+        poseEstimator = 
+            new SwerveDrivePoseEstimator(
+                getKinematics(), 
+                new Rotation2d(getPigeon2().getYaw().getValue()), 
+                getState().ModulePositions, 
+                new Pose2d());
+    }
+
+    private void setupPoseEstimatorWithStdDevs(Matrix<N3, N1> odomStdDevs, Matrix<N3, N1> visionStdDevs) {
+        poseEstimator = 
+            new SwerveDrivePoseEstimator(
+                getKinematics(), 
+                new Rotation2d(getPigeon2().getYaw().getValue()), 
+                getState().ModulePositions, 
+                new Pose2d(),
+                odomStdDevs, 
+                visionStdDevs);
+    }
+
 
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
@@ -306,7 +333,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
      */
     @Override
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
-        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
+        poseEstimator.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
     /**
@@ -328,7 +355,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
         double timestampSeconds,
         Matrix<N3, N1> visionMeasurementStdDevs
     ) {
-        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
+        poseEstimator.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
     /* Odemetry Methods */
@@ -353,8 +380,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     public Pose2d getRobotPose() {
-        Pose2d pose = this.getState().Pose;
-        return keepPoseOnField(pose);
+        return poseEstimator.getEstimatedPosition();
        // return pose;
     }
 
@@ -376,7 +402,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
         try {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(
-                () -> getState().Pose,   // Supplier of current robot pose
+                this::getRobotPose,   // Supplier of current robot pose
                 this::resetPose,         // Consumer for seeding pose against auto
                 () -> getState().Speeds, // Supplier of current robot speeds
                 // Consumer of ChassisSpeeds and feedforwards to drive the robot
@@ -407,20 +433,23 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
 
-   /** Resets odometry to the given pose.
-   * @param initalHolonomicPose The pose to set the odometry to
-   */
-  public void resetOdometry(Pose2d initalHolonomicPose)
-  {
-    this.seedFieldCentric();      //TODO: is resting pose same as odometry?
-  }
+    /** Resets odometry to the given pose.
+     * @param initalHolonomicPose The pose to set the odometry to
+     */
+    public void resetOdometry(Pose2d initalHolonomicPose)
+    {
+        this.seedFieldCentric();      //TODO: is resting pose same as odometry?
+    }
 
+    public void resetPose(Pose2d pose) {
+        poseEstimator.resetPose(pose);
+    }
     
     public SwerveModuleState[] getModuleStates() {
         return getState().ModuleStates;
     }
     public Rotation2d getRotation() {
-        return getRobotPose().getRotation();
+        return new Rotation2d(getPigeon2().getYaw().getValue());
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds() {
