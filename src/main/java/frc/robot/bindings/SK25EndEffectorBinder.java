@@ -3,7 +3,7 @@ package frc.robot.bindings;
 // Joystick constants
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
-import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
+//import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 import static frc.robot.Ports.OperatorPorts.kEndEffectorAxis;
 import static frc.robot.Ports.OperatorPorts.kHighAlgae;
 import static frc.robot.Ports.OperatorPorts.kIntakePos;
@@ -25,8 +25,8 @@ import java.util.Optional;
 // Relative encoder (REV)
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+//import edu.wpi.first.wpilibj2.command.WaitCommand;
+//import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 
