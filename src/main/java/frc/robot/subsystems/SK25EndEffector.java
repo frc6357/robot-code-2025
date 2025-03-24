@@ -4,13 +4,13 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Konstants.AutoConstants.kIntakeAutoDurationSeconds;
-import static frc.robot.Konstants.AutoConstants.kIntakeAutoSpeed;
+//import static frc.robot.Konstants.AutoConstants.kIntakeAutoSpeed;
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
-import static frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
+//import static frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 //import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
-import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
+//import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
 import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
 
 import com.revrobotics.RelativeEncoder;

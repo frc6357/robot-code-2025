@@ -25,8 +25,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
-import com.ctre.phoenix6.controls.compound.Diff_DutyCycleOut_Velocity;
+// import com.ctre.phoenix6.controls.VelocityDutyCycle;
+// import com.ctre.phoenix6.controls.compound.Diff_DutyCycleOut_Velocity;
 //import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 //import com.ctre.phoenix6.hardware.core.CoreCANcoder;
@@ -35,7 +35,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 //import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
-import edu.wpi.first.units.Units;
+//import edu.wpi.first.units.Units;
 //import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Angle;
 //SmartDashboard Import

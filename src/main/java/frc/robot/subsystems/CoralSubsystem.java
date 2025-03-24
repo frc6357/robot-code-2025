@@ -31,7 +31,7 @@ public class CoralSubsystem extends SubsystemBase {
     kHighAlgae,
     kNet,
     kIntake;
-    //kProcessor;
+    //kProcessor; This is just zero position
   }
 
 
