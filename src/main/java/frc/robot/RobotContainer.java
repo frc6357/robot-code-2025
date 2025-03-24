@@ -361,7 +361,7 @@ public class RobotContainer {
 
     public void teleopInit()
     {
-        m_swerve.ifPresent((swerve) -> swerve.seedFieldCentric());
+        //m_swerve.ifPresent((swerve) -> swerve.seedFieldCentric());
     }
 
     public void autonomousInit()

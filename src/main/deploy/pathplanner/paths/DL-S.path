@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.779232954545455,
-        "y": 5.086974431818182
+        "x": 3.7042008196721308,
+        "y": 5.061936475409836
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4294829545454557,
-        "y": 6.880974431818182
+        "x": 1.3544508196721314,
+        "y": 6.855936475409837
       },
       "isLocked": false,
-      "linkedName": "BargePoint1"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.0669602272727272,
-        "y": 6.82203125
+        "x": 0.9470286885245902,
+        "y": 6.944006147540984
       },
       "prevControl": {
-        "x": 1.2434924748504377,
-        "y": 6.6450104445415406
+        "x": 1.123560936102301,
+        "y": 6.766985342082524
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LS"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
