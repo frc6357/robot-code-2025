@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1028688524590162,
-        "y": 7.075870901639344
+        "x": 0.9949795081967214,
+        "y": 6.896055327868852
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3184787580100052,
-        "y": 6.949330913381506
+        "x": 1.2105894137477105,
+        "y": 6.769515339611014
       },
       "isLocked": false,
       "linkedName": "LS"
     },
     {
       "anchor": {
-        "x": 3.94875,
-        "y": 5.312
+        "x": 3.812090163934426,
+        "y": 5.001997950819672
       },
       "prevControl": {
-        "x": 3.7115791754873704,
-        "y": 5.391056941504207
+        "x": 3.5749193394217964,
+        "y": 5.081054892323879
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "DL"
+      "linkedName": "BargePoint1"
     }
   ],
   "rotationTargets": [],
@@ -61,7 +61,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -57.847704858717684
+    "rotation": -60.124007308310546
   },
   "reversed": false,
   "folder": "ScoreFromStation",

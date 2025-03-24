@@ -13,7 +13,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.75
           }
         },
         {
@@ -25,7 +25,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ZeroPositionCommand"
+            "name": "StationPickupCombo"
           }
         },
         {
@@ -43,13 +43,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftStationToTrough"
+            "pathName": "LS-CR"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -59,21 +59,27 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "CRR"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "ZeroPositionCommand"
+            "name": "IntakeAutoCommand"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "LeftTroughToStation2"
+            "pathName": "C_N"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StationWaitCombo"
+            "name": "ExtakeAutoCommand"
           }
         }
       ]

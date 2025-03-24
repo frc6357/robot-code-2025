@@ -47,8 +47,8 @@ public class Ports
         public static final FilteredAxis kTranslationYPort = new FilteredAxis(() -> kDriver.getRawAxis(kLeftX.value));
         public static final FilteredAxis kVelocityOmegaPort = new FilteredAxis(() -> kDriver.getRawAxis(kRightX.value)); 
 
-        public static final SKTrigger climbRaiseButton = new SKTrigger(kDriver, 0, POV);
-        public static final SKTrigger climbLowerButton = new SKTrigger(kDriver, 180, POV);
+        public static final SKTrigger climbRaiseButton = new SKTrigger(kDriver, kRightTrigger.value, AXIS);
+        public static final SKTrigger climbLowerButton = new SKTrigger(kDriver, kLeftTrigger.value, AXIS);
         public static final SKTrigger climbStopButton = new SKTrigger(kDriver, 90, POV);
         public static final SKTrigger climbSlowButton = new SKTrigger(kDriver, 270, POV);
         

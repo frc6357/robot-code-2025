@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HeadOnMiddlePoint1"
+            "pathName": "P3_FR"
           }
         },
         {
@@ -25,13 +25,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ZeroPositionCommand"
+            "name": "StationPickupCombo"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "B-LS"
+            "pathName": "FR-Station"
           }
         },
         {
@@ -43,13 +43,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftStationToTrough"
+            "pathName": "RightStation_FL"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -61,19 +61,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ZeroPositionCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LeftTroughToStation2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StationWaitCombo"
+            "name": "StationPickupCombo"
           }
         }
       ]

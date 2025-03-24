@@ -13,7 +13,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.75
           }
         },
         {
@@ -35,22 +35,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeAutoCommand"
-                }
-              }
-            ]
+            "name": "StationWaitCombo"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "LS-DR"
+            "pathName": "LS-DL"
           }
         },
         {
@@ -68,26 +61,19 @@
         {
           "type": "named",
           "data": {
-            "name": "ZeroPositionCommand"
+            "name": "StationPickupCombo"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "D-S"
+            "pathName": "DL-S"
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeAutoCommand"
-                }
-              }
-            ]
+            "name": "StationWaitCombo"
           }
         }
       ]
