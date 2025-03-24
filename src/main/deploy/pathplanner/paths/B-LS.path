@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.8134375,
-        "y": 4.179559659090909
+        "x": 5.883238636363636,
+        "y": 4.18
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.802049180327868,
-        "y": 5.649334016393442
+        "x": 5.871850316691504,
+        "y": 5.649774357302532
       },
       "isLocked": false,
       "linkedName": "MiddlePoint1"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 0.9949795081967214,
-        "y": 6.896055327868852
+        "x": 1.0569886363636365,
+        "y": 6.82203125
       },
       "prevControl": {
-        "x": 1.6662909836065576,
-        "y": 6.596362704918032
+        "x": 1.7283001117734726,
+        "y": 6.52233862704918
       },
       "nextControl": null,
       "isLocked": false,
@@ -59,7 +59,7 @@
   "eventMarkers": [
     {
       "name": "StationPickupCombo",
-      "waypointRelativePos": 1.2,
+      "waypointRelativePos": 0.9621145374449477,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -74,6 +74,12 @@
           ]
         }
       }
+    },
+    {
+      "name": "StationWaitCombo",
+      "waypointRelativePos": 1.8220264317180643,
+      "endWaypointRelativePos": null,
+      "command": null
     }
   ],
   "globalConstraints": {

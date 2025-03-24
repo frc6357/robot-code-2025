@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.9949795081967214,
-        "y": 6.896055327868852
+        "x": 1.0569886363636365,
+        "y": 6.82203125
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2278190114139254,
-        "y": 6.805029146241994
+        "x": 1.2898281395808404,
+        "y": 6.731005068373142
       },
       "isLocked": false,
       "linkedName": "LS"
     },
     {
       "anchor": {
-        "x": 3.3205942622950824,
-        "y": 4.534477459016394
+        "x": 3.2806534090909087,
+        "y": 4.757911931818182
       },
       "prevControl": {
-        "x": 3.5319913248709986,
-        "y": 4.401018544236323
+        "x": 3.492050471666825,
+        "y": 4.624453017038111
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "L4ScoreCombo",
-      "waypointRelativePos": 0.6032432432432437,
+      "waypointRelativePos": 0.4035242290748927,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",

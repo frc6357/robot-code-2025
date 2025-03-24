@@ -263,7 +263,7 @@ public final class Konstants
         // Time and speed for rollers in auto
         public static final double kIntakeAutoSpeed = 0.7;
         public static final double kExtakeAutoSpeed = -0.7;
-        public static final double kIntakeAutoDurationSeconds = 0.5;
+        public static final double kIntakeAutoDurationSeconds = 0.3;  //0.5
 
         // PID Constants
         public static final PIDConstants kTranslationPIDConstants = new PIDConstants(6, 0, 0);
