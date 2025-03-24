@@ -192,7 +192,8 @@ public class RobotContainer {
 
                 //Roller Commands
 
-                NamedCommands.registerCommand("IntakeAutoCommand", new IntakeAutoCommand(EndEffectorPosition.kIntakePositionAngle, effector));
+                //NamedCommands.registerCommand("IntakeAutoCommand", new IntakeAutoCommand(EndEffectorPosition.kIntakePositionAngle, effector));
+                NamedCommands.registerCommand("IntakeAutoCommand", effector.runRollerCommand(kRollerSpeed));
                 NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));
                 NamedCommands.registerCommand("L4ExtakeAutoCommand", Commands.parallel(
                     new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),

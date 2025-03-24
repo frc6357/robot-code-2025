@@ -11,15 +11,45 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "ToProcessorPoint2"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "StationWaitCombo"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "ToProcessorPoint3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
           }
         }
       ]
