@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HeadOnMiddlePoint1"
+            "pathName": "P2_ToHeadOnPoint1"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "B-LS"
+            "pathName": "ToHeadOnPoint2"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LS-DL"
+            "pathName": "ToHeadOnPoint3"
           }
         },
         {
@@ -61,7 +61,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DL-S"
+            "pathName": "ToHeadOnPoint4"
           }
         },
         {
@@ -73,7 +73,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LS-DR"
+            "pathName": "ToHeadOnPoint5"
           }
         },
         {
@@ -92,6 +92,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "HeadOn(P2)",
   "choreoAuto": false
 }

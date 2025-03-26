@@ -3,38 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0788934426229508,
-        "y": 6.836116803278688
+        "x": 4.885855396412037,
+        "y": 5.0422558593749995
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3117329458401548,
-        "y": 6.74509062165183
+        "x": 5.436490642313676,
+        "y": 6.068163646260245
       },
       "isLocked": false,
-      "linkedName": "BP2"
+      "linkedName": "C"
     },
     {
       "anchor": {
-        "x": 3.3205942622950824,
-        "y": 4.594415983606558
+        "x": 7.420871672453703,
+        "y": 5.653517795138889
       },
       "prevControl": {
-        "x": 3.5319913248709986,
-        "y": 4.460957068826487
+        "x": 7.173384299038411,
+        "y": 5.688873134198216
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "DR"
+      "linkedName": "N2"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3586565373850476,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L4ScoreCombo",
-      "waypointRelativePos": 0.4035242290748927,
+      "name": "NetScoreCombo",
+      "waypointRelativePos": 0.65,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -43,7 +48,7 @@
             {
               "type": "named",
               "data": {
-                "name": "L4ScoreCombo"
+                "name": "NetScoreCombo"
               }
             }
           ]
@@ -61,13 +66,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -56.84207611532774
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "ScoreFromStation",
+  "folder": "NothingButNet",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 126.86989764584406
+    "rotation": -119.2913621709842
   },
   "useDefaultConstraints": true
 }

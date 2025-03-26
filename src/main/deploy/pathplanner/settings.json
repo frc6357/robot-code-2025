@@ -4,19 +4,19 @@
   "holonomicMode": true,
   "pathFolders": [
     "CollectCoral",
-    "Nothing But Net",
+    "OtherPaths",
+    "NothingButNet",
     "P1",
     "P2",
     "P3",
-    "Processor",
     "RemoveAlgae",
     "ScoreFromStation"
   ],
   "autoFolders": [
-    "1GP",
-    "2GP",
-    "3GP",
-    "4GP"
+    "BargeSide(P1)",
+    "HeadOn(P2)",
+    "OtherAutos",
+    "ProcessorSide(P3)"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

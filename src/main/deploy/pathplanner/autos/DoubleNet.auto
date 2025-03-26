@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HeadOnMiddlePoint1"
+            "pathName": "P2_ToHeadOnPoint1"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BRR"
+            "pathName": "HeadOnRemoveAlgae1"
           }
         },
         {
@@ -61,7 +61,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "B_N"
+            "pathName": "HeadOnScoreNet1"
           }
         },
         {
@@ -85,7 +85,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "N_C"
+            "pathName": "HeadOnRemoveAlgae2"
           }
         },
         {
@@ -109,7 +109,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "C_N"
+            "pathName": "HeadOnScoreNet2"
           }
         },
         {
@@ -134,6 +134,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "HeadOn(P2)",
   "choreoAuto": false
 }

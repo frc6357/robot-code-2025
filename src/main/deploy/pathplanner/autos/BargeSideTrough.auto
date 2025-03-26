@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P1Trough"
+            "pathName": "P1_ToTrough"
           }
         },
         {
@@ -32,6 +32,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "BargeSide(P1)",
   "choreoAuto": false
 }

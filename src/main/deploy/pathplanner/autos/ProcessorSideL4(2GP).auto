@@ -7,7 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P3_FR"
+            "pathName": "P3_ToProcessorPoint1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToProcessorPoint2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationWaitCombo"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToProcessorPoint3"
           }
         },
         {
@@ -31,7 +67,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FR-Station"
+            "pathName": "ToProcessorPoint4"
           }
         },
         {
@@ -43,7 +79,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightStation_FL"
+            "pathName": "ToProcessorPoint5"
           }
         },
         {
@@ -68,6 +104,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "ProcessorSide(P3)",
   "choreoAuto": false
 }

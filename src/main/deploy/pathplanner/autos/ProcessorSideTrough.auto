@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P2_ToHeadOnPoint1"
+            "pathName": "P3_ToTrough"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -32,6 +32,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "HeadOn(P2)",
+  "folder": "ProcessorSide(P3)",
   "choreoAuto": false
 }

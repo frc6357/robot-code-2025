@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ToBargePoint1"
+            "pathName": "P1_ToBargePoint1"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DL-S"
+            "pathName": "ToBargePoint2"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LS-DR"
+            "pathName": "ToBargePoint3"
           }
         },
         {
@@ -67,7 +67,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DR-S"
+            "pathName": "ToBargePoint4"
           }
         },
         {
@@ -79,7 +79,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSide3rd"
+            "pathName": "ToBargePoint5"
           }
         },
         {
@@ -98,6 +98,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "BargeSide(P1)",
   "choreoAuto": false
 }

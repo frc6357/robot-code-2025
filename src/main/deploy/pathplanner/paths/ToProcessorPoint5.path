@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0788934426229508,
-        "y": 6.836116803278688
+        "x": 1.3665983606557375,
+        "y": 0.6744364754098353
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3117329458401548,
-        "y": 6.74509062165183
+        "x": 1.5586536805550817,
+        "y": 0.8344825753259549
       },
       "isLocked": false,
-      "linkedName": "BP2"
+      "linkedName": "ProcessorPoint4"
     },
     {
       "anchor": {
-        "x": 3.3205942622950824,
-        "y": 4.594415983606558
+        "x": 3.368545081967213,
+        "y": 2.904149590163935
       },
       "prevControl": {
-        "x": 3.5319913248709986,
-        "y": 4.460957068826487
+        "x": 3.191768386670576,
+        "y": 2.727372894867298
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "DR"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -34,19 +34,12 @@
   "eventMarkers": [
     {
       "name": "L4ScoreCombo",
-      "waypointRelativePos": 0.4035242290748927,
+      "waypointRelativePos": 0.4651982378854653,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "sequential",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "L4ScoreCombo"
-              }
-            }
-          ]
+          "name": "L4ScoreCombo"
         }
       }
     }
@@ -61,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -56.84207611532774
+    "rotation": 57.61932229343087
   },
   "reversed": false,
   "folder": "ScoreFromStation",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 126.86989764584406
+    "rotation": -127.30394827798341
   },
   "useDefaultConstraints": true
 }

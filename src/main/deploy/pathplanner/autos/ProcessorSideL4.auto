@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P3_AL"
+            "pathName": "P3_ToL4"
           }
         },
         {
@@ -32,6 +32,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "ProcessorSide(P3)",
   "choreoAuto": false
 }

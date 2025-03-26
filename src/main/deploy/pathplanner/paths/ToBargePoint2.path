@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6067344486132717,
-        "y": 6.148934706026561
+        "x": 1.4503524590163939,
+        "y": 6.760034836065573
       },
       "isLocked": false,
       "linkedName": "BargePoint1"
     },
     {
       "anchor": {
-        "x": 1.31625,
-        "y": 7.0114914772727275
+        "x": 1.0788934426229508,
+        "y": 6.836116803278688
       },
       "prevControl": {
-        "x": 1.6380000000000003,
-        "y": 6.670241477272727
+        "x": 1.2554256902006617,
+        "y": 6.659095997820228
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BargePoint2"
+      "linkedName": "BP2"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 130.13743544495597
+    "rotation": 126.86989764584406
   },
   "reversed": false,
   "folder": "CollectCoral",
