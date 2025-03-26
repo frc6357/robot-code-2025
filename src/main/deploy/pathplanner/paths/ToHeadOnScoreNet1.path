@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.68,
-        "y": 3.9590676229508195
+        "x": 5.574282786885245,
+        "y": 3.899129098360655
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.890294618848576,
-        "y": 4.094257020772291
+        "x": 5.784577405733821,
+        "y": 4.034318496182127
       },
       "isLocked": false,
       "linkedName": "HeadOnRemoveAlgae1"
