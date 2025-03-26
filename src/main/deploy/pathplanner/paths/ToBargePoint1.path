@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.060266686563347,
-        "y": 6.80015368852459
+        "x": 5.262602459016393,
+        "y": 7.4594774590163935
       },
       "isLocked": false,
       "linkedName": "P1"
     },
     {
       "anchor": {
-        "x": 3.7042008196721308,
-        "y": 5.061936475409836
+        "x": 3.800102459016393,
+        "y": 4.966034836065573
       },
       "prevControl": {
-        "x": 3.4730312950534517,
-        "y": 4.966749024096262
+        "x": 3.568932934397714,
+        "y": 4.870847384751999
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
   "eventMarkers": [
     {
       "name": "L4ScoreCombo",
-      "waypointRelativePos": 0.6203630623520124,
+      "waypointRelativePos": 0.4375422012154043,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",

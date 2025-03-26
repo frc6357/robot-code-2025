@@ -75,6 +75,24 @@
           "data": {
             "name": "StationWaitCombo"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeSide3rd"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
         }
       ]
     }

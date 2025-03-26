@@ -308,10 +308,10 @@ public final class Konstants
             public static final class ElevatorSetpoints {
               public static final double kZero = 0;
               public static final double kLevel1 = 15;
-              public static final double kLevel2 = 40;
+              public static final double kLevel2 = 32.5;  //40
               public static final double kLevel3 = 50; //-215
               public static final double kLevel4 = 79.5; //-190
-              public static final double kLowAlgae = 22;  //-173
+              public static final double kLowAlgae = 25;  //-22
               public static final double kHighAlgae = 37;  //-173
               public static final double kNet = 75; //angle -90
               public static final double kIntake = 30;
@@ -458,16 +458,16 @@ public final class Konstants
             /** Set the angle to reach the top branch (L4) */ // 12.5
             kTopPositionAngle(-190), // Angle -190
             /** Set the angle to reach the middle & low branch (L3) */
-            kLowPositionAngle(-210), // Angle
+            kLowPositionAngle(-175), // Angle -210
             /** Set the angle to reach the trough (L2) */
             kTroughPositionAngle(-125), // Angle -195
             /** Set the height to reach the station (L1) */
-            kIntakePositionAngle(-95), // Angle
+            kIntakePositionAngle(-80), // Angle -95
             /** Set the height to reach the bottom */
             kZeroPositionAngle(-95), // Angle
             kNetAngle(-90),
-            kHighAlgae(-173),
-            kMiddleAngle(-190),
+            kHighAlgae(-145), //-173
+            kMiddleAngle(-173), //-190
             kLowAlgae(-173),
             kIntake(-70);  //not used for station
 
