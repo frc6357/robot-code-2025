@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 3.368545081967213,
-        "y": 2.904149590163935
+        "x": 2.9023732119635883,
+        "y": 3.841807542262678
       },
       "prevControl": {
-        "x": 3.191768386670576,
-        "y": 2.727372894867298
+        "x": 2.7255965166669514,
+        "y": 3.665030846966041
       },
       "nextControl": null,
       "isLocked": false,
@@ -54,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 57.61932229343087
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "ScoreFromStation",
