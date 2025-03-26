@@ -12,7 +12,7 @@
         "y": 6.853429274037245
       },
       "isLocked": false,
-      "linkedName": "LS"
+      "linkedName": "HeadOnPoint2"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BargePoint1"
+      "linkedName": "HeadOnPoint3"
     }
   ],
   "rotationTargets": [],

@@ -37,7 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HeadOnRemoveAlgae1"
+            "pathName": "ToHeadOnRemoveAlgae1"
           }
         },
         {
@@ -61,7 +61,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HeadOnScoreNet1"
+            "pathName": "ToHeadOnScoreNet1"
           }
         },
         {

@@ -3,43 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.885855396412037,
-        "y": 5.0422558593749995
+        "x": 5.68,
+        "y": 3.9590676229508195
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.436490642313676,
-        "y": 6.068163646260245
+        "x": 5.890294618848576,
+        "y": 4.094257020772291
       },
       "isLocked": false,
-      "linkedName": "C"
+      "linkedName": "HeadOnRemoveAlgae1"
     },
     {
       "anchor": {
-        "x": 7.420871672453703,
-        "y": 5.653517795138889
+        "x": 7.336475409836066,
+        "y": 4.73826844262295
       },
       "prevControl": {
-        "x": 7.173384299038411,
-        "y": 5.688873134198216
+        "x": 7.1402547184527085,
+        "y": 4.583357370478195
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "N2"
+      "linkedName": "HeadOnScoreNet1"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.3586565373850476,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "NetScoreCombo",
-      "waypointRelativePos": 0.65,
+      "waypointRelativePos": 0.8019943019943008,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -72,7 +67,7 @@
   "folder": "NothingButNet",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.2913621709842
+    "rotation": 179.5488614532127
   },
   "useDefaultConstraints": true
 }

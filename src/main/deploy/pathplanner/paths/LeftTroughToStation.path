@@ -12,7 +12,7 @@
         "y": 5.8171618852459
       },
       "isLocked": false,
-      "linkedName": "CTrough"
+      "linkedName": "BargeTrough"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LS"
+      "linkedName": "BargeStationFromTrough"
     }
   ],
   "rotationTargets": [],
