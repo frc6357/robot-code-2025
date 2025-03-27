@@ -6,7 +6,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 // import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision.MultiLimelightCommandConfig;
 
@@ -37,7 +36,6 @@ public class RotateToReef {
         this.config = config;
         this.m_swerve = m_swerve;
 
-        //TODO: Maybe add slew rate limiter based on robot performance?
 
         Constraints constraints = new Constraints(config.maxVelocity, config.maxAcceleration);
         rotPID = new ProfiledPIDController(config.kp, config.ki, config.kd, constraints);

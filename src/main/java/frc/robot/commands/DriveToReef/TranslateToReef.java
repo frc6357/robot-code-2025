@@ -6,10 +6,8 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision.CommandConfig;
-import frc.robot.utils.vision.Limelight;
 
 /**
  * This is to have a very similar layout to a command with the "execute"
@@ -20,8 +18,6 @@ import frc.robot.utils.vision.Limelight;
  */
 public class TranslateToReef{
     private CommandConfig config;
-    private Limelight[] limelights;
-    DriveCommand driveCommand;
     
     private SKSwerve m_swerve;
 
@@ -31,8 +27,6 @@ public class TranslateToReef{
     private double targetX;
     private double targetY;
 
-    private double xOut;
-    private double yOut;
 
     private Supplier<Double> currentX;
     private Supplier<Double> currentY;
@@ -40,8 +34,8 @@ public class TranslateToReef{
     private boolean outputtingX;
     private boolean outputtingY;
     
-    public TranslateToReef(CommandConfig config, SKSwerve m_swerve) {
-        this.config = config;
+    public TranslateToReef(CommandConfig c, SKSwerve m_swerve) {
+        this.config = c;
         this.m_swerve = m_swerve;
 
         Constraints constraints = new Constraints(config.maxVelocity, config.maxAcceleration);

@@ -380,7 +380,6 @@ public class Limelight {
         LimelightHelpers.setPipelineIndex(config.name, pipelineIndex);
     }
 
-    //TODO: change Limelight calls for setting the swerve drivetrain
 
     public void setRobotOrientation(double degrees) {
         if (!isAttached()) {

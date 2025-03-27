@@ -213,12 +213,17 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     }
 
-    private void updatePoseAutonomous(Limelight ll) {
-        if(!(DriverStation.isAutonomousEnabled() && ll.targetInView())) {
+    private void updatePoseAutonomous() {
+        if(!DriverStation.isAutonomousEnabled()) {
             return;
         }
+        for(Limelight ll : poseLimelights) {
+            if(!ll.targetInView()) {
+                continue;
+            }
 
-        updatePoseMultiCam(ll);
+            updatePoseMultiCam(ll);
+        }
     }
 
     private void updatePoseSingleCam(Limelight ll) {

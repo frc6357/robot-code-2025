@@ -129,33 +129,5 @@ public class Ports
         public static final CANPort kPigeonPort = new CANPort(kPigeonID, kCANivoreName);
     }
 
-    public static class ElevatorPorts
-    {
-        private static final String busName = "";
-        //TODO FIX_BEFORE_TESTING - Verify CAN Bus port numbers
-        public static final CANPort kRightElevatorMotor = new CANPort(40, busName);
-        public static final CANPort kLeftElevatorMotor = new CANPort(41, busName);
-        //public static final CANPort kEncoderL = new CANPort(43, busName);
-        //public static final CANPort kEncoderR = new CANPort(44, busName); 
-    }
-
-
-    public static class ExamplePorts
-    {
-        //bus name is null
-        private static final String busName = "";
-
-        //assign a motor ID of 49 to the example motor
-        public static final CANPort kExampleMotor = new CANPort(59, busName); 
-    }
-
-    public static class LightsPorts
-    {
-        //bus name is null
-        private static final String busName = "";
-        //assign an ID of 48 to the CANdle
-        public static final CANPort kCANdle = new CANPort(48, busName);
-    }
-
     //
 }

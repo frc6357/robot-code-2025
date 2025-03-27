@@ -72,10 +72,6 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     private final SwerveRequest.ApplyFieldSpeeds m_pathApplyFieldSpeeds = new SwerveRequest.ApplyFieldSpeeds();
 
-    private final PIDController m_pathXController = new PIDController(10, 0, 0);
-    private final PIDController m_pathYController = new PIDController(10, 0, 0);
-    private final PIDController m_pathThetaController = new PIDController(7, 0, 0);
-
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
@@ -451,7 +447,6 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
 
 
     public void resetOrientation() {
-        Pose2d currentPose = getRobotPose();
         boolean flip = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
           if (flip) {
             resetRotation(Rotation2d.k180deg);
