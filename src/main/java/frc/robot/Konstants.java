@@ -466,9 +466,9 @@ public final class Konstants
             /** Set the height to reach the bottom */
             kZeroPositionAngle(-95), // Angle
             kNetAngle(-90),
-            kHighAlgae(-145), //-173
+            kHighAlgae(-140), //-145
             kMiddleAngle(-173), //-190
-            kLowAlgae(-165),
+            kLowAlgae(-160), //-165
             kIntake(-70);  //not used for station
 
             public final double angle;

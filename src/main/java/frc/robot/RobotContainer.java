@@ -17,16 +17,18 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import static frc.robot.Ports.DriverPorts.kDriver;
+import static frc.robot.Ports.OperatorPorts.kOperator;
 
 //import choreo.auto.AutoChooser;
 //import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.bindings.ClimbBinder;
@@ -39,9 +41,7 @@ import frc.robot.bindings.SK25LightsBinder;
 // import frc.robot.bindings.SK25ScoringBinder;
 import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.commands.EndEffectorButtonCommand;
-import frc.robot.commands.commandGroups.IntakeAutoCommand;
 import frc.robot.commands.commandGroups.LineupCombo;
-import frc.robot.commands.commandGroups.ScoreCombo;
 import frc.robot.commands.commandGroups.StationCombo;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
@@ -52,6 +52,8 @@ import frc.robot.subsystems.SK25EndEffector;
 import frc.robot.subsystems.SK25Lights;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.utils.SubsystemControls;
+import frc.robot.utils.files.Elastic;
+import frc.robot.utils.files.Elastic.Notification.NotificationLevel;
 import frc.robot.utils.filters.FilteredJoystick;
 
 
@@ -61,7 +63,7 @@ import frc.robot.utils.filters.FilteredJoystick;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
-public class RobotContainer {
+public class RobotContainer extends Robot{
 
     // private final Telemetry logger = new Telemetry(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond)); // "MaxSpeed"
 
@@ -85,6 +87,10 @@ public class RobotContainer {
 
   SendableChooser<Command> autoCommandSelector;
 
+  double matchTime = DriverStation.getMatchTime();
+  
+  boolean thirtySecondsReached = false;
+
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -107,6 +113,9 @@ public class RobotContainer {
     autoCommandSelector = AutoBuilder.buildAutoChooser("Taxi");
     //set delete old files = true in build.gradle to prevent sotrage of unused orphans
     SmartDashboard.putData("Select an Auto", autoCommandSelector);
+
+    //display match time
+    SmartDashboard.putNumber("Match Time", matchTime);
   }
   
   /**
@@ -360,9 +369,37 @@ public class RobotContainer {
         */
     }
 
+    @Override
+    public void teleopPeriodic()
+    {
+        if (matchTime == 30 && thirtySecondsReached == false)
+        {
+            //dont let the notification send more than once
+            thirtySecondsReached = true;
+
+            //send elastic notification that thirty seconds are left
+            Elastic.Notification timeToClimbNotification = new Elastic.Notification(
+                NotificationLevel.INFO, 
+                "Time to Climb!", 
+                "There are thirty seconds left in the match."
+            );
+            //make the notification take up more of the screen
+            Elastic.sendNotification(timeToClimbNotification
+                .withDisplaySeconds(5.0)
+                .withWidth(2.0)
+                .withHeight(2.0)
+            );
+
+            //controller rumble to alert driver and operator
+            kDriver.setRumble(RumbleType.kBothRumble, 0.5);
+            kOperator.setRumble(RumbleType.kBothRumble, 0.5);
+        }
+    }
+
     public void teleopInit()
     {
-        //m_swerve.ifPresent((swerve) -> swerve.seedFieldCentric());
+        //ensure this value is reset before thirty seconds can ever be reached
+        thirtySecondsReached = false;
     }
 
     public void autonomousInit()

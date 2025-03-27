@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 8.33625,
-        "y": 6.0
+        "y": 6.7
       },
       "prevControl": null,
       "nextControl": {
         "x": 7.807588278230469,
-        "y": 5.97679878685931
+        "y": 6.67679878685931
       },
       "isLocked": false,
       "linkedName": null
@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 0.6182386363636363,
-        "y": 6.0
+        "y": 6.7
       },
       "prevControl": {
         "x": 1.4373445466332675,
-        "y": 6.0097232856599545
+        "y": 6.709723285659955
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RollOffPoint"
     }
   ],
   "rotationTargets": [],
