@@ -67,6 +67,9 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             if(!ll.isAttached()) {
                 ll.setLogStatus("Disabled");
             }
+            else {
+                ll.setLogStatus("Idle");
+            }
             ll.setIMUMode(IMUMode.EXTERNAL); // For Limelight 4s only; this makes sure that we're only using the external IMU for Megatag 2
             ll.setLEDMode(false); // Turns off LED lights on startup
         }
@@ -157,7 +160,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public static final class DriveToPose extends MultiLimelightCommandConfig {
         private DriveToPose() {
-            configKpid(5, 0, 0);
+            configKpid(6, 0, 0);
             configTolerance(0.05);
             configProfile(TunerConstants.MaxSpeed * 0.85, TunerConstants.MaxSpeed * 1.5); //85% Max Speed; 1.5x Acceleration
             configMaxOutput(TunerConstants.MaxSpeed * 0.85);
@@ -173,7 +176,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public static final class RotateToPose extends MultiLimelightCommandConfig {
         private RotateToPose() {
-            configKpid(10, 0, 0);
+            configKpid(6, 0.4, 0);
             configTolerance(0.01);
             configProfile(TunerConstants.MaxAngularRate * 0.9, TunerConstants.MaxAngularRate * 1.5); // 90% Angular speed; 1.5x acceleration
             configMaxOutput(TunerConstants.MaxAngularRate * 0.9);
