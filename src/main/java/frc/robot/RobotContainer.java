@@ -370,7 +370,7 @@ public class RobotContainer extends Robot{
     @Override
     public void teleopPeriodic()
     {
-        if (matchTime <= 30 && thirtySecondsReached == false)
+        if (DriverStation.getMatchTime() <= 30 && thirtySecondsReached == false)  //previously match time
         {
             //dont let the notification send more than once
             thirtySecondsReached = true;
@@ -394,16 +394,11 @@ public class RobotContainer extends Robot{
 
             //raise the climb to the ready position
             m_Climb.get().readyTheClimb(kKrakenSpeed);
+
+            rumbling = true;
         }
 
-        if (matchTime <= 29 && (thirtySecondsReached == true))
-        {
-            //stop rumbling after 1 second
-            kDriver.setRumble(RumbleType.kBothRumble, 0.0);
-            kOperator.setRumble(RumbleType.kBothRumble, 0.0);
-        }
-
-        if (matchTime <= 29 && rumbling == true)
+        if (DriverStation.getMatchTime() <= 29 && rumbling == true)
             {
                 //stop rumble after 1 second
                 kDriver.setRumble(RumbleType.kBothRumble, 0.0);
