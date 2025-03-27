@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.574282786885245,
+        "x": 5.584,
         "y": 3.899129098360655
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.784577405733821,
+        "x": 5.794294618848576,
         "y": 4.034318496182127
       },
       "isLocked": false,
@@ -34,16 +34,22 @@
   "eventMarkers": [
     {
       "name": "NetScoreCombo",
-      "waypointRelativePos": 0.8019943019943008,
+      "waypointRelativePos": 0.6995273463875743,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "NetScoreCombo"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeAutoCommand"
               }
             }
           ]
