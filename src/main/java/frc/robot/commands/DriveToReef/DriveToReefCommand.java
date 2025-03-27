@@ -5,12 +5,9 @@ import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Ports.DriverPorts;
-import frc.robot.Ports.OperatorPorts;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
@@ -20,6 +17,9 @@ import frc.robot.utils.vision.Limelight;
 import frc.robot.utils.vision.LimelightHelpers.RawFiducial;
 import static frc.robot.Ports.DriverPorts.kLeftReef;
 import static frc.robot.Ports.DriverPorts.kRightReef;
+import static frc.robot.Ports.DriverPorts.kDriver;
+import static frc.robot.Ports.OperatorPorts.kOperator;
+
 import frc.robot.Konstants.VisionConstants.PoseConstants;
 
 public class DriveToReefCommand extends Command{
@@ -47,37 +47,9 @@ public class DriveToReefCommand extends Command{
     RawFiducial closestTag;
 
     static enum Target {
-        
         CENTER,
         LEFT,
         RIGHT
-
-        // CENTER(new Trigger(
-        //     kLeftReef.button.and(kRightReef.button) // If both targetting buttons pressed
-        //     .or(kLeftReef.button.and(kRightReef.button).negate()) // If neither targetting buttons pressed
-        // )), 
-
-        // LEFT(new Trigger(
-        //     kLeftReef.button.and(kRightReef.button.negate())
-        // )), // If only left trigger pressed
-
-        // RIGHT(new Trigger(
-        //     kRightReef.button.and(kLeftReef.button.negate())
-        // )); // If only right trigger pressed
-
-
-        // private Trigger target;
-        // Target(Trigger t) {
-        //     this.target = t;
-        // }
-
-        // public boolean equals(Target other) {
-        //     return this.get().equals(other.get());
-        // }
-
-        // public boolean get() {
-        //     return target.getAsBoolean();
-        // }
     }
 
     Target prevTarget;
@@ -123,6 +95,7 @@ public class DriveToReefCommand extends Command{
 
         // Since we will be driving and rotating at the same time, the drive type will need to be field-centric
         this.driveCommand = new DriveCommand(
+            // TODO: Put the driveController outputs back
             () -> (0.0), // driveController.getXOutput()
             () -> (0.0), // driveController.getYOutput()
             () -> (rotateController.getOutput()), 
@@ -196,7 +169,7 @@ public class DriveToReefCommand extends Command{
                 }
             }
 
-            System.out.println("closest Reef Tag: " + closestTag.id);
+            System.out.println("Closest Reef Tag: " + closestTag.id);
             valid = true;
         }
         else {
@@ -222,7 +195,12 @@ public class DriveToReefCommand extends Command{
             m_vision.isDriving = true;
             // We don't want the controller rumbling during auto
             if(DriverStation.isTeleopEnabled()) {
-                DriverPorts.kDriver.setRumble(RumbleType.kBothRumble, 0.5);
+                kDriver.setRumble(RumbleType.kBothRumble, 0.5);
+
+                if(rotateController.isFinished())  {// TODO: Add back in " && driveController.isFinished()"
+                    // This signals to the operator that vision is done aligning and is ready to score
+                    kOperator.setRumble(RumbleType.kBothRumble, 0.5);
+                }
             }
 
             // If the driver has pressed a different button
@@ -235,7 +213,8 @@ public class DriveToReefCommand extends Command{
             prevTarget = currentTarget;
         }
         else {
-            DriverPorts.kDriver.setRumble(RumbleType.kBothRumble, 0.0);
+            kOperator.setRumble(RumbleType.kBothRumble, 0.0);
+            kDriver.setRumble(RumbleType.kBothRumble, 0.0);
         }
     }
 
@@ -252,16 +231,11 @@ public class DriveToReefCommand extends Command{
     public void end(boolean isInterrupted) {
         m_vision.isDriving = false;
         m_vision.reefDriveTarget = "OFF";
-        DriverPorts.kDriver.setRumble(RumbleType.kBothRumble, 0.0);
+        kDriver.setRumble(RumbleType.kBothRumble, 0.0);
+        kOperator.setRumble(RumbleType.kBothRumble, 0.0);
         // TOOD: Uncomment
         // driveController.end();
         rotateController.end();
-        if(!isInterrupted && DriverStation.isTeleopEnabled()) {
-            // If in teleop, provide a short rumble to the operator to signal the command's completion
-            OperatorPorts.kOperator.setRumble(RumbleType.kBothRumble, 0.5);
-            Timer.delay(0.15); // TODO: Make this not use Timer
-            OperatorPorts.kOperator.setRumble(RumbleType.kBothRumble, 0.0);
-        }
     }
 
 }

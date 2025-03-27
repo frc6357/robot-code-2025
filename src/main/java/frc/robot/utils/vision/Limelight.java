@@ -245,8 +245,6 @@ public class Limelight {
             return new Pose2d();
         }
         return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name).pose; // 2024: all alliances use blue as 0,0
-        
-        //TODO: see if starting blue alliance coords have changed
     }
 
     /** Leverages the limelight's view of multiple tags and their distance from the robot to check if the
@@ -274,7 +272,7 @@ public class Limelight {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
-    /** Gets an array of the raw network table ouput (the raw april tag data)*/           //TODO: need more understanding
+    /** Gets an array of the raw network table ouput (the raw april tag data)*/
     public RawFiducial[] getRawFiducial() {
         return LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name).rawFiducials;
     }

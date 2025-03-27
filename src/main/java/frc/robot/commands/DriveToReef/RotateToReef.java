@@ -41,7 +41,7 @@ public class RotateToReef {
         rotPID = new ProfiledPIDController(config.kp, config.ki, config.kd, constraints);
 
         rotPID.enableContinuousInput(-Math.PI, Math.PI);
-        rotPID.setTolerance(config.tolerance);
+        rotPID.setTolerance(0); // TODO: Change back to config.tolerance
 
         this.currentHeading = () -> (m_swerve.getGyroRotation().getRadians());
 
@@ -56,7 +56,8 @@ public class RotateToReef {
     }
 
     public double getOutput() {
-        outputting = (rotPID.getPositionError() > config.error);
+
+        outputting = (rotPID.getPositionError() > 0); //TODO: Change 0 back to config.error
         if(!outputting) {
             return 0;
         }
