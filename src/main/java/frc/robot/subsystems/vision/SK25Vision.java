@@ -197,6 +197,13 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     }
 
+    /**
+     * Adds the estimated pose of a camera into an array to be stored for later usage.
+     * <p>
+     * Always use this within a for-loop of all cameras you wish to get the estimated pose with
+     * and then pass the current camera into the method.
+     * @param ll The camera to estimate the robot pose with
+     */
     private void updatePoseMultiCam(Limelight ll) {
         // Sets the robot's yaw for use with MEGATAG2 right before integrating with estimator
         ll.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
@@ -206,7 +213,6 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         double timestamp = ll.getRawPoseTimestamp(); // Timestamp of when the pose was collected
 
         Pose2d estimatedRobotPose = // Uses limelight (effectively swerve) rotation value instead of estimated rotation value
-            // TODO: Look into whether or not to use MEGATAG1 rotation or IMU rotation
             new Pose2d(megaPose2d.getTranslation(), megaPose2d.getRotation()); 
         
         autonPoses.add(Trio.of(botPose3d, estimatedRobotPose, timestamp)); // Adds both poses into the auto pose feeder
@@ -227,17 +233,11 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     }
 
     private void updatePoseSingleCam(Limelight ll) {
-        Limelight bestLL = getBestLimelight();
-        if (ll.getName() != bestLL.getName()) {
-            ll.sendInvalidStatus("Rejected: Not best Limelight");
-            return;
-        }
-        
         try {
             isIntegrating = false;
             // Sets the robot's yaw for use with MEGATAG2 right before integrating with estimator
-            bestLL.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
-            addFilteredLimelightInput(bestLL);
+            ll.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
+            addFilteredLimelightInput(ll);
             // A limelight's integrating status is determined by if it's received a valid status to integrate its pose
             isIntegrating |= ll.getConfig().isIntegrating();
         }
@@ -246,38 +246,40 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         }
     }
 
-    private void updatePoseTeleop(Limelight ll) {
+    private void updatePoseTeleop() {
         if (!DriverStation.isTeleopEnabled()) {
             return;
         }
 
-        updatePoseSingleCam(ll);    
+        Limelight bestLL = getBestLimelight();
+        for(Limelight ll : poseLimelights) {
+            if (ll.getName() != bestLL.getName()) {
+                ll.sendInvalidStatus("Rejected: Not best Limelight");
+            }
+        }
+
+        updatePoseSingleCam(bestLL);    
     }
 
     public void estimatePose() {
-        
         // Make sure robot orientation is correct
-        for(Limelight ll : poseLimelights) {
-            
-            /*
-            Autonomous pose updater:
-            
-            For each limelight that has a tag in view, send it to be aggregated into the current pose estimate, alongside other
-            recent poses.
-            */
-            // updatePoseAutonomous(ll);
+        /*
+        Autonomous pose updater:
+        
+        For each limelight that has a tag in view, send it to be aggregated into the current pose estimate, alongside other
+        recent poses.
+        */
+        // updatePoseAutonomous(); TODO: uncomment
 
-            /*
-            Teleop pose updater:
+        /*
+        Teleop pose updater:
 
-            Instead of allowing all limelights to feed data into the SwervePoseEstimator, it scores each limelight that has a
-            tag in view based on the tag's proximity to the bot and the number of tags seen. Only then does it feed a pose measurement 
-            into the pose estimator. The pose can still be rejected for being too erroneous, but scoring each camera significantly
-            reduces the chances of a pose estimate being rejected.
-            */
-            // updatePoseTeleop(ll);
-        }
-
+        Instead of allowing all limelights to feed data into the SwervePoseEstimator, it scores each limelight that has a
+        tag in view based on the tag's proximity to the bot and the number of tags seen. Only then does it feed a pose measurement 
+        into the pose estimator. The pose can still be rejected for being too erroneous, but scoring each camera significantly
+        reduces the chances of a pose estimate being rejected.
+        */
+        // updatePoseTeleop(); TODO: uncomment
     }
 
     public boolean reefTargetClose(Limelight ll) { 

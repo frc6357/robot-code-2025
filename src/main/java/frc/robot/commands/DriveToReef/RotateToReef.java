@@ -32,8 +32,8 @@ public class RotateToReef {
     private boolean outputting;
 
 
-    public RotateToReef(MultiLimelightCommandConfig config, SKSwerve m_swerve) {
-        this.config = config;
+    public RotateToReef(MultiLimelightCommandConfig c, SKSwerve m_swerve) {
+        this.config = c;
         this.m_swerve = m_swerve;
 
 
