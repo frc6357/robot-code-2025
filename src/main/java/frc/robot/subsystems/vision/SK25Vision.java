@@ -6,6 +6,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.pathplanner.lib.config.PIDConstants;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -162,8 +164,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         private DriveToPose() {
             configKpid(6, 0, 0);
             configTolerance(0.05);
-            configProfile(TunerConstants.MaxSpeed * 0.85, TunerConstants.MaxSpeed * 1.5); //85% Max Speed; 1.5x Acceleration
-            configMaxOutput(TunerConstants.MaxSpeed * 0.85);
+            configProfile(TunerConstants.MaxSpeed * 0.40, TunerConstants.MaxSpeed * 0.60); //60% Max Speed; 1.75x Acceleration
+            configMaxOutput(TunerConstants.MaxSpeed * 0.40);
             configError(0.3);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
@@ -178,8 +180,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         private RotateToPose() {
             configKpid(6, 0.4, 0);
             configTolerance(0.01);
-            configProfile(TunerConstants.MaxAngularRate * 0.9, TunerConstants.MaxAngularRate * 1.5); // 90% Angular speed; 1.5x acceleration
-            configMaxOutput(TunerConstants.MaxAngularRate * 0.9);
+            configProfile((100) * TunerConstants.MaxAngularRate * 0.9, TunerConstants.MaxAngularRate * 1.5); // 90% Angular speed; 1.5x acceleration
+            configMaxOutput((100)* TunerConstants.MaxAngularRate * 0.9);
             configError(0.01);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
@@ -198,6 +200,9 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         SmartDashboard.putString("FrontLLStatus", frontLL.getLogStatus());
         SmartDashboard.putString("ResetPoseToVisionStatus", resetPoseToVisionLog);
 
+        for(Limelight ll : poseLimelights) {
+            ll.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
+        }
     }
 
     /**
@@ -282,7 +287,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         into the pose estimator. The pose can still be rejected for being too erroneous, but scoring each camera significantly
         reduces the chances of a pose estimate being rejected.
         */
-        // updatePoseTeleop(); TODO: uncomment
+         updatePoseTeleop();
     }
 
     public boolean reefTargetClose(Limelight ll) { 
@@ -359,6 +364,13 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         else if(!goodTags.isEmpty()) {
             // TODO: Make this report somewhere else
             System.out.println("Vision: [" + ll.getName() + "] " + goodTags.size() + " target tag(s) found for " + element);
+            if(goodTags.size() > 1) {
+                System.out.print("Tag IDs: ");
+                for(int i=0; i<goodTags.size(); i++) {
+                    System.out.print(goodTags.get(i).id + " ");
+                }
+                System.out.println();
+            }
         }
 
         RawFiducial closestTag = null;
@@ -398,8 +410,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
         ll.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
         //TODO: if MT2 doesn't work, change it to the line below
-        // m_swerve.resetPose(ll.getRawPose3d().toPose2d());
-        m_swerve.resetPose(ll.getMegaPose2d());
+        m_swerve.resetPose(ll.getRawPose3d().toPose2d());
+        //m_swerve.resetPose(ll.getMegaPose2d());
     }
 
     public void autonResetPoseToVision() {
@@ -498,7 +510,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
                             VisionConfig.VISION_STD_DEV_Y,
                             VisionConfig.VISION_STD_DEV_THETA));
 
-            Pose2d integratedPose = new Pose2d(megaPose.getTranslation(), megaPose.getRotation());
+            Pose2d integratedPose = new Pose2d(botpose.getTranslation(), botpose.getRotation());
             m_swerve.addVisionMeasurement(integratedPose, poseTimestamp);
             // robotPose = m_swerve.getRobotPose(); // get updated pose
             resetPoseToVisionLog = ("ResetPoseToVision: SUCCESS");
@@ -689,22 +701,54 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         public double verticalSetpoint; // numbers get small as the cone gets closer
         public double verticalMaxView;
 
+        /**
+         * Configures the pid constants of the controller using PathPlanner Autonomous
+         * PIDConstants.
+         * @param Constants PIDConstants to set the controller's PID values to.
+         */
+        public void configKpid(PIDConstants Constants) {
+            this.kp = Constants.kP; this.ki = Constants.kI; this.kd = Constants.kD;
+        }
+
+        /**
+         * Configures the pid constants of the controller using three values
+         * @param kp The P value of the controller
+         * @param ki The I value of the controller
+         * @param kd the D value of the controller
+         */
         public void configKpid(double kp, double ki, double kd) {
             this.kp = kp; this.ki = ki; this.kd = kd;
         }
 
+        /**
+         * Configures only the P value of the PID controller
+         * @param kp The P value of the controller
+         */
         public void configKp(double kp) {
             this.kp = kp;
         }
 
+        /**
+         * Configures only the I value of the PID controller
+         * @param ki The I value of the controller
+         */
         public void configKi(double ki) {
             this.ki = ki;
         }
 
+        /**
+         * Configures only the D value of the PID controller
+         * @param kd The D value of the controller
+         */
         public void configKd(double kd) {
             this.kd = kd;
         }
 
+        /**
+         * Configures the Trapezoidal motion profile of the controller
+         * @param maxVel The maximum velocity to configure the profile with
+         * @param maxAccel The maximum acceleration to configure the profile with
+         */
         public void configProfile(double maxVel, double maxAccel) {
             this.maxVelocity = maxVel;
             this.maxAcceleration = maxAccel;

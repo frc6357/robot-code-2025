@@ -96,9 +96,9 @@ public class DriveToReefCommand extends Command{
         // Since we will be driving and rotating at the same time, the drive type will need to be field-centric
         this.driveCommand = new DriveCommand(
             // TODO: Put the driveController outputs back
-            () -> (0.0), // driveController.getXOutput()
-            () -> (0.0), // driveController.getYOutput()
-            () -> (rotateController.getOutput()), 
+            () -> (driveController.getXOutput()), // driveController.getXOutput()
+            () -> (driveController.getYOutput()), // driveController.getYOutput()
+            () -> (rotateController.getOutput() * rotateConfig.maxVelocity), 
             () -> (true));
         
         // Drive config and rotate config both use the same limelights, so only need to call one config's array here
@@ -137,7 +137,7 @@ public class DriveToReefCommand extends Command{
                     Field.flipAngleIfRed(targetPose.getRotation()));
 
         // TODO: uncomment
-        // driveController.initialize(targetPose);
+        driveController.initialize(targetPose);
         rotateController.initialize(targetPose);
     }
 
@@ -180,9 +180,10 @@ public class DriveToReefCommand extends Command{
 
         this.rotateController = new RotateToReef(rotateConfig, m_swerve);
         // TODO: uncomment this
-        // this.driveController = new TranslateToReef(driveConfig, m_swerve);
+        this.driveController = new TranslateToReef(driveConfig, m_swerve);
 
         if(valid) {
+            m_vision.resetPoseToVision();
             setTargetPose();
         }
     }
@@ -197,7 +198,7 @@ public class DriveToReefCommand extends Command{
             if(DriverStation.isTeleopEnabled()) {
                 kDriver.setRumble(RumbleType.kBothRumble, 0.5);
 
-                if(rotateController.isFinished())  {// TODO: Add back in " && driveController.isFinished()"
+                if(rotateController.isFinished() && driveController.isFinished())  {
                     // This signals to the operator that vision is done aligning and is ready to score
                     kOperator.setRumble(RumbleType.kBothRumble, 0.5);
                 }
@@ -234,7 +235,7 @@ public class DriveToReefCommand extends Command{
         kDriver.setRumble(RumbleType.kBothRumble, 0.0);
         kOperator.setRumble(RumbleType.kBothRumble, 0.0);
         // TOOD: Uncomment
-        // driveController.end();
+        driveController.end();  
         rotateController.end();
     }
 
