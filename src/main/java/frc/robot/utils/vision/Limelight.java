@@ -362,6 +362,15 @@ public class Limelight {
         return LimelightHelpers.getLatestResults(config.name);
     }
 
+    public enum IMUMode {
+        EXTERNAL,
+        FUSED,
+        INTERNAL
+    }
+    public void setIMUMode(IMUMode m) {
+        LimelightHelpers.SetIMUMode(config.name, m.ordinal());
+    }
+
     /** Sets the limelight target pipeline. Nothing happens if the limelight is not attached.
      * @param pipelineIndex use pipeline indexes in {@link VisionConfig} */
     public void setLimelightPipeline(int pipelineIndex) {

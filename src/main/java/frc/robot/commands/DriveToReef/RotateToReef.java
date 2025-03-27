@@ -45,7 +45,7 @@ public class RotateToReef {
         rotPID.enableContinuousInput(-Math.PI, Math.PI);
         rotPID.setTolerance(config.tolerance);
 
-        this.currentHeading = () -> (m_swerve.getRotation().getRadians());
+        this.currentHeading = () -> (m_swerve.getGyroRotation().getRadians());
 
         outputting = true;
     }

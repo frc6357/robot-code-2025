@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.vision.Limelight;
+import frc.robot.utils.vision.Limelight.IMUMode;
 import frc.robot.utils.vision.LimelightHelpers.RawFiducial;
 import frc.robot.utils.Trio;
 import frc.robot.utils.Field;
@@ -66,6 +67,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             if(!ll.isAttached()) {
                 ll.setLogStatus("Disabled");
             }
+            ll.setIMUMode(IMUMode.EXTERNAL); // For Limelight 4s only; this makes sure that we're only using the external IMU for Megatag 2
             ll.setLEDMode(false); // Turns off LED lights on startup
         }
 
@@ -87,6 +89,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         });
     }
 
+    // Unused
     public static final class AlignTranslationWithPose extends MultiLimelightCommandConfig {
         private AlignTranslationWithPose() {
             configKp(0.2);
@@ -104,6 +107,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         }
     }
 
+    // Unused
     public static final class AlignToReefTag extends CommandConfig {
         private AlignToReefTag() {
             configKp(0.02);
@@ -195,7 +199,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     private void updatePoseMultiCam(Limelight ll) {
         // Sets the robot's yaw for use with MEGATAG2 right before integrating with estimator
-        ll.setRobotOrientation(m_swerve.getRotation().getDegrees());
+        ll.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
 
         Pose3d botPose3d = ll.getRawPose3d(); // Gets the 3D pose of the limelight on the robot using the position offsets
         Pose2d megaPose2d = ll.getMegaPose2d(); // Gets the estimated pose of the robot using MegaTag2 objects
@@ -227,7 +231,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         try {
             isIntegrating = false;
             // Sets the robot's yaw for use with MEGATAG2 right before integrating with estimator
-            bestLL.setRobotOrientation(m_swerve.getRotation().getDegrees());
+            bestLL.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
             addFilteredLimelightInput(bestLL);
             // A limelight's integrating status is determined by if it's received a valid status to integrate its pose
             isIntegrating |= ll.getConfig().isIntegrating();
@@ -378,7 +382,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     public void forcePoseToVision() {
         Limelight ll = getBestLimelight();
 
-        ll.setRobotOrientation(m_swerve.getRotation().getDegrees());
+        ll.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
         m_swerve.resetPose(ll.getRawPose3d().toPose2d());
     }
 
@@ -478,7 +482,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
                             VisionConfig.VISION_STD_DEV_Y,
                             VisionConfig.VISION_STD_DEV_THETA));
 
-            Pose2d integratedPose = new Pose2d(megaPose.getTranslation(), botpose.getRotation());
+            Pose2d integratedPose = new Pose2d(megaPose.getTranslation(), megaPose.getRotation());
             m_swerve.addVisionMeasurement(integratedPose, poseTimestamp);
             // robotPose = m_swerve.getRobotPose(); // get updated pose
             resetPoseToVisionLog = ("ResetPoseToVision: SUCCESS");
@@ -498,6 +502,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             return;
         }
 
+        LL.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
         boolean multiTags = LL.multipleTagsInView();
         double timeStamp = LL.getRawPoseTimestamp();
         double targetSize = LL.getTargetSize();
@@ -634,8 +639,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             stdDevY,
             stdDevTheta
         );
-        m_swerve.setVisionMeasurementStdDevs(stdDevs);
-        m_swerve.addVisionMeasurement(integratedPose, timeStamp);
+        addVisionMeasurementWithStdDevs(integratedPose, timeStamp, stdDevs);
     }
 
     /** If at least one limelight has an accurate pose */

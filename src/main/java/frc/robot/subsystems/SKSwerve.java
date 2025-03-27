@@ -280,9 +280,9 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
             });
         }
 
-        poseEstimator.update(getRotation(), getState().ModulePositions);
+        poseEstimator.update(getGyroRotation(), getState().ModulePositions);
         field.setRobotPose(getRobotPose());
-        SmartDashboard.putNumber("SwerveRotRads", getRotation().getRadians());
+        SmartDashboard.putNumber("SwerveRotRads", getGyroRotation().getRadians());
     }
 
     private void setupPoseEstimator() {
@@ -392,6 +392,10 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
         return pose;
     }
 
+    /**
+     * 
+     * @return The estimation of the robot's pose
+     */
     public Pose2d getRobotPose() {
         return poseEstimator.getEstimatedPosition();
        // return pose;
@@ -479,8 +483,13 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     public SwerveModuleState[] getModuleStates() {
         return getState().ModuleStates;
     }
-    public Rotation2d getRotation() {
-        return new Rotation2d(getPigeon2().getYaw().getValue());
+
+    public Rotation2d getRobotRotation() {
+        return getRobotPose().getRotation();
+    }
+
+    public Rotation2d getGyroRotation() {
+        return getPigeon2().getRotation2d();
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds() {
@@ -489,7 +498,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
 
     public ChassisSpeeds getVelocity(boolean fieldRelative) {
         if(fieldRelative) {
-            return ChassisSpeeds.fromRobotRelativeSpeeds(getRobotRelativeSpeeds(), getRotation());
+            return ChassisSpeeds.fromRobotRelativeSpeeds(getRobotRelativeSpeeds(), getGyroRotation());
         }
         else {
             return getRobotRelativeSpeeds();
