@@ -389,9 +389,14 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public void forcePoseToVision() {
         Limelight ll = getBestLimelight();
+        if(ll == null) {
+            return;
+        }
 
         ll.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
-        m_swerve.resetPose(ll.getRawPose3d().toPose2d());
+        //TODO: if MT2 doesn't work, change it to the line below
+        // m_swerve.resetPose(ll.getRawPose3d().toPose2d());
+        m_swerve.resetPose(ll.getMegaPose2d());
     }
 
     public void autonResetPoseToVision() {
