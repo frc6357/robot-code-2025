@@ -3,19 +3,17 @@
 //Subsystem Essentials
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
-import frc.robot.preferences.Pref;
-import frc.robot.preferences.SKPreferences;
-
 //import static edu.wpi.first.units.Units.Rotations;
-import static frc.robot.Konstants.ClimbConstants.*;
 //import static frc.robot.Ports.ClimbPorts.*;
 //import static edu.wpi.first.units.Units.Rotation;
 //import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Konstants.ClimbConstants.kClimbD;
 import static frc.robot.Konstants.ClimbConstants.kClimbI;
+import static frc.robot.Konstants.ClimbConstants.kClimbMaxPosition;
+import static frc.robot.Konstants.ClimbConstants.kClimbMinPosition;
 import static frc.robot.Konstants.ClimbConstants.kClimbP;
+import static frc.robot.Konstants.ClimbConstants.kClimbPositionTolerance;
+import static frc.robot.Konstants.ClimbConstants.kClimbReadyPos;
 import static frc.robot.Ports.ClimbPorts.kClimbMotor;
 
 //import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -35,11 +33,16 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 //import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
+import edu.wpi.first.units.Units;
 //import edu.wpi.first.units.Units;
 //import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Angle;
 //SmartDashboard Import
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
+import frc.robot.preferences.Pref;
+import frc.robot.preferences.SKPreferences;
 
 public class SK25Climb extends SubsystemBase 
 {
@@ -134,6 +137,11 @@ public class SK25Climb extends SubsystemBase
 
    }
 
+   public void readyTheClimb(double speed)
+   {
+      motor.setPosition(Units.Rotations.of(kClimbReadyPos));
+   }
+
    public double getMotorSpeed() {
       return motor.getVelocity().getValueAsDouble(); // Rotations / sec
    }
@@ -176,5 +184,7 @@ public class SK25Climb extends SubsystemBase
      //motorCurrentPosition =  motor.getPosition().getValue().in(Rotation);
      SmartDashboard.putNumber("Velocity (RpMs)", getMotorSpeed());
      SmartDashboard.putNumber("ClimbPos", getMotorPosition());
+
+     SmartDashboard.putString("RawClimbPos", motor.getPosition().getValue().toString());
    }
 }

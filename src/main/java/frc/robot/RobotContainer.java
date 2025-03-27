@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import static frc.robot.Konstants.ClimbConstants.kKrakenSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 
 import java.io.File;
@@ -372,7 +373,7 @@ public class RobotContainer extends Robot{
     @Override
     public void teleopPeriodic()
     {
-        if (matchTime == 30 && thirtySecondsReached == false)
+        if (matchTime <= 30 && thirtySecondsReached == false)
         {
             //dont let the notification send more than once
             thirtySecondsReached = true;
@@ -393,8 +394,19 @@ public class RobotContainer extends Robot{
             //controller rumble to alert driver and operator
             kDriver.setRumble(RumbleType.kBothRumble, 0.5);
             kOperator.setRumble(RumbleType.kBothRumble, 0.5);
+
+            //raise the climb to the ready position
+            m_Climb.get().readyTheClimb(kKrakenSpeed);
+        }
+
+        if (matchTime <= 29 && (thirtySecondsReached == true))
+        {
+            //stop rumbling after 1 second
+            kDriver.setRumble(RumbleType.kBothRumble, 0.0);
+            kOperator.setRumble(RumbleType.kBothRumble, 0.0);
         }
     }
+
 
     public void teleopInit()
     {
@@ -404,7 +416,8 @@ public class RobotContainer extends Robot{
 
     public void autonomousInit()
     {
-        if(m_endEffector.isPresent()) {
+        if(m_endEffector.isPresent())
+        {
             m_endEffector.get().leave();
         }
 
