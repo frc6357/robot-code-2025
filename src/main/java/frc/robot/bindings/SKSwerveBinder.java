@@ -33,6 +33,7 @@ import frc.robot.subsystems.SKSwerve;
 import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -223,13 +224,13 @@ public class SKSwerveBinder implements CommandBinder{
         slowmode.onFalse(new InstantCommand(() -> setSlowMode(false)));
         
         // Resets gyro angles / robot oreintation
-        resetButton.onTrue(new InstantCommand(() -> {drivetrain.seedFieldCentric();} ));
+        resetButton.onTrue(new InstantCommand(() -> {drivetrain.resetOrientation();} ));
 
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> {
-                return feildCentricDrive.withVelocityX(applyGains(MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercentage)) // Drive forward with negative Y (forward)
-                    .withVelocityY(applyGains(MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercentage)) // Drive left with negative X (left)
+                return feildCentricDrive.withVelocityX(applyGains(-1 * MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercentage)) // Drive forward with negative Y (forward)
+                    .withVelocityY(applyGains(-1 * MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercentage)) // Drive left with negative X (left)
                     .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercentage)); // Drive counterclockwise with negative X (left)
             })
         );

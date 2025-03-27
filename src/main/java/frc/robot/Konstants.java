@@ -157,11 +157,11 @@ public class TunerConstants {
     private static final int kPigeonId = kPigeonID;
 
     // These are only used for simulation
-    private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.01);
-    private static final MomentOfInertia kDriveInertia = KilogramSquareMeters.of(0.01);
+    private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.001);
+    private static final MomentOfInertia kDriveInertia = KilogramSquareMeters.of(0.001);
     // Simulated voltage necessary to overcome friction
-    private static final Voltage kSteerFrictionVoltage = Volts.of(0.2);
-    private static final Voltage kDriveFrictionVoltage = Volts.of(0.2);
+    private static final Voltage kSteerFrictionVoltage = Volts.of(0.1);
+    private static final Voltage kDriveFrictionVoltage = Volts.of(0.1);
 
     public static final SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants()
             .withCANBusName(kCANBus.getName())
@@ -478,7 +478,7 @@ public class TunerConstants {
             public static final double kPitch = 0; // (pitch) degrees tilted up/down from 0° level [think plane nose tilting up/down]
             public static final double kYaw = 180; // (yaw) yaw rotated clockwise/ccw from 0° North [think of a compass facing cw/ccw]
 
-            public static final boolean kAttached = true;
+            public static final boolean kAttached = false;
         }
         public static final class limelightBeta {
             // Network/pipeline values
@@ -492,7 +492,8 @@ public class TunerConstants {
             // Rotation of limelight (in degrees and yaw)
             public static final double kRoll = 0; // (roll) degrees tilted clockwise/ccw from 0° level [think plane wings tilting cw/ccw]
             public static final double kPitch = 1.9; // (pitch) degrees tilted up/down from 0° level [think plane nose tilting up/down]
-            public static final double kYaw = -27; // (yaw) yaw rotated clockwise/ccw from 0° North [think of a compass facing cw/ccw]
+            // TODO: Update in Web Interface too
+            public static final double kYaw = -23; // (yaw) yaw rotated clockwise/ccw from 0° North [think of a compass facing cw/ccw]
             
             public static final boolean kAttached = true;
         }

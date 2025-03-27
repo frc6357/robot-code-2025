@@ -28,8 +28,8 @@ import frc.robot.Konstants.TunerConstants;
 import frc.robot.subsystems.SKSwerve;
 
 public class SK25Vision extends SubsystemBase implements NTSendable {
-    public final Limelight backLL = new Limelight(VisionConfig.BACK_CONFIG);
-    public final Limelight frontLL = new Limelight(VisionConfig.FRONT_CONFIG);
+    public final Limelight backLL = new Limelight(VisionConfig.BACK_CONFIG); // limelight-alpha
+    public final Limelight frontLL = new Limelight(VisionConfig.FRONT_CONFIG); // limelight-beta
     private SKSwerve m_swerve;
 
     private static final int[] blueReefTagIDs = {17, 18, 19, 20, 21, 22};
@@ -37,8 +37,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     //TODO: Add logging/telemetry for both limelights
 
-    public final Limelight[] allLimelights = {frontLL, backLL}; // List of all limelights
-    public final Limelight[] poseLimelights = {frontLL, backLL}; // Limelights specifically used for estimating pose
+    public final Limelight[] allLimelights = {frontLL}; // List of all limelights
+    public final Limelight[] poseLimelights = {frontLL}; // Limelights specifically used for estimating pose
     public final Limelight[] reefLimelights = {frontLL}; // Effectively used for pose estimating, 
                                                         // but are specifically for use with the reef
 
@@ -121,40 +121,40 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         }
     }
 
-    public static final class DriveToReef extends MultiLimelightCommandConfig {
-        private DriveToReef() {
-            configKpid(0.2, 0, 0);
-            configTolerance(0.01);
-            configMaxOutput(TunerConstants.MaxSpeed * 0.75);
-            configError(0.3);
-            configPipelineIndex(kAprilTagPipeline);
-            configLimelights(RobotContainer.m_vision.poseLimelights);
-        }
+    // public static final class DriveToReef extends MultiLimelightCommandConfig {
+    //     private DriveToReef() {
+    //         configKpid(0.2, 0, 0);
+    //         configTolerance(0.01);
+    //         configMaxOutput(TunerConstants.MaxSpeed * 0.75);
+    //         configError(0.3);
+    //         configPipelineIndex(kAprilTagPipeline);
+    //         configLimelights(RobotContainer.m_vision.poseLimelights);
+    //     }
 
-        public static DriveToReef getConfig() {
-            return new DriveToReef();
-        }
-    }
+    //     public static DriveToReef getConfig() {
+    //         return new DriveToReef();
+    //     }
+    // }
 
-    public static final class RotateToReef extends MultiLimelightCommandConfig {
-        private RotateToReef() {
-            configKpid(0.02, 0, 0);
-            configTolerance(0.01);
-            configMaxOutput(TunerConstants.MaxAngularRate * 0.85);
-            configError(0.3);
-            configPipelineIndex(kAprilTagPipeline);
-            configLimelights(RobotContainer.m_vision.poseLimelights);
-        }
+    // public static final class RotateToReef extends MultiLimelightCommandConfig {
+    //     private RotateToReef() {
+    //         configKpid(0.02, 0, 0);
+    //         configTolerance(0.01);
+    //         configMaxOutput(TunerConstants.MaxAngularRate * 0.85);
+    //         configError(0.3);
+    //         configPipelineIndex(kAprilTagPipeline);
+    //         configLimelights(RobotContainer.m_vision.poseLimelights);
+    //     }
 
-        public static RotateToReef getConfig() {
-            return new RotateToReef();
-        }
-    }
+    //     public static RotateToReef getConfig() {
+    //         return new RotateToReef();
+    //     }
+    // }
 
     public static final class DriveToPose extends MultiLimelightCommandConfig {
         private DriveToPose() {
-            configKpid(0.2, 0, 0);
-            configTolerance(0.01);
+            configKpid(5, 0, 0);
+            configTolerance(0.05);
             configProfile(TunerConstants.MaxSpeed * 0.85, TunerConstants.MaxSpeed * 1.5); //85% Max Speed; 1.5x Acceleration
             configMaxOutput(TunerConstants.MaxSpeed * 0.85);
             configError(0.3);
@@ -169,11 +169,11 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public static final class RotateToPose extends MultiLimelightCommandConfig {
         private RotateToPose() {
-            configKpid(0.02, 0, 0);
+            configKpid(10, 0, 0);
             configTolerance(0.01);
             configProfile(TunerConstants.MaxAngularRate * 0.9, TunerConstants.MaxAngularRate * 1.5); // 90% Angular speed; 1.5x acceleration
             configMaxOutput(TunerConstants.MaxAngularRate * 0.9);
-            configError(0.3);
+            configError(0.01);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
         }
@@ -191,45 +191,82 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         SmartDashboard.putString("FrontLLStatus", frontLL.getLogStatus());
         SmartDashboard.putString("ResetPoseToVisionStatus", resetPoseToVisionLog);
 
+    }
 
-        double yaw = m_swerve.getPigeon2().getRotation2d().getDegrees();
+    private void updatePoseMultiCam(Limelight ll) {
+        // Sets the robot's yaw for use with MEGATAG2 right before integrating with estimator
+        ll.setRobotOrientation(m_swerve.getRotation().getDegrees());
 
-        for(Limelight ll : poseLimelights) {
-        // Used for MEGATAG 2
-        ll.setRobotOrientation(yaw); // Periodically updates limelight orientation based on robot facing
+        Pose3d botPose3d = ll.getRawPose3d(); // Gets the 3D pose of the limelight on the robot using the position offsets
+        Pose2d megaPose2d = ll.getMegaPose2d(); // Gets the estimated pose of the robot using MegaTag2 objects
+        double timestamp = ll.getRawPoseTimestamp(); // Timestamp of when the pose was collected
 
-        /* Autonomous pose updater */
-        if(DriverStation.isAutonomousEnabled() && ll.targetInView()) {
-            Pose3d botPose3d = ll.getRawPose3d(); // Gets the 3D pose of the limelight on the robot using the position offsets
-            Pose2d megaPose2d = ll.getMegaPose2d(); // Gets the estimated pose of the robot using MegaTag2 objects
-            double timestamp = ll.getRawPoseTimestamp(); // Timestamp of when the pose was collected
+        Pose2d estimatedRobotPose = // Uses limelight (effectively swerve) rotation value instead of estimated rotation value
+            // TODO: Look into whether or not to use MEGATAG1 rotation or IMU rotation
+            new Pose2d(megaPose2d.getTranslation(), megaPose2d.getRotation()); 
+        
+        autonPoses.add(Trio.of(botPose3d, estimatedRobotPose, timestamp)); // Adds both poses into the auto pose feeder
 
-            Pose2d estimatedRobotPose = // Uses limelight (effectively swerve) rotation value instead of estimated rotation value
-                // TODO: Look into whether or not to use MEGATAG1 rotation or IMU rotation
-                new Pose2d(megaPose2d.getTranslation(), megaPose2d.getRotation()); 
-            
-            autonPoses.add(Trio.of(botPose3d, estimatedRobotPose, timestamp)); // Adds both poses into the auto pose feeder
-            }
+    }
+
+    private void updatePoseAutonomous(Limelight ll) {
+        if(!(DriverStation.isAutonomousEnabled() && ll.targetInView())) {
+            return;
         }
 
+        updatePoseMultiCam(ll);
+    }
+
+    private void updatePoseSingleCam(Limelight ll) {
+        Limelight bestLL = getBestLimelight();
+        if (ll.getName() != bestLL.getName()) {
+            ll.sendInvalidStatus("Rejected: Not best Limelight");
+            return;
+        }
+        
         try {
             isIntegrating = false;
-            if(DriverStation.isTeleopEnabled()) {
-                Limelight bestLL = getBestLimelight();
-                for(Limelight ll : poseLimelights) {
-                    if(ll.getName() == bestLL.getName()) {
-                        addFilteredLimelightInput(bestLL);
-                    }
-                    else {
-                        ll.sendInvalidStatus("Rejected: Not best Limelight");
-                    }
-                    // A limelight's integrating status is determined by if it's received a valid status to integrate its pose
-                    isIntegrating |= ll.getConfig().isIntegrating(); 
-                }
-            }
+            // Sets the robot's yaw for use with MEGATAG2 right before integrating with estimator
+            bestLL.setRobotOrientation(m_swerve.getRotation().getDegrees());
+            addFilteredLimelightInput(bestLL);
+            // A limelight's integrating status is determined by if it's received a valid status to integrate its pose
+            isIntegrating |= ll.getConfig().isIntegrating();
         }
-        catch(Exception e) {
+        catch (Exception e) {
             DriverStation.reportWarning("Vision: Attempted to access nonexistent vision pose!", false);
+        }
+    }
+
+    private void updatePoseTeleop(Limelight ll) {
+        if (!DriverStation.isTeleopEnabled()) {
+            return;
+        }
+
+        updatePoseSingleCam(ll);    
+    }
+
+    public void estimatePose() {
+        
+        // Make sure robot orientation is correct
+        for(Limelight ll : poseLimelights) {
+            
+            /*
+            Autonomous pose updater:
+            
+            For each limelight that has a tag in view, send it to be aggregated into the current pose estimate, alongside other
+            recent poses.
+            */
+            // updatePoseAutonomous(ll);
+
+            /*
+            Teleop pose updater:
+
+            Instead of allowing all limelights to feed data into the SwervePoseEstimator, it scores each limelight that has a
+            tag in view based on the tag's proximity to the bot and the number of tags seen. Only then does it feed a pose measurement 
+            into the pose estimator. The pose can still be rejected for being too erroneous, but scoring each camera significantly
+            reduces the chances of a pose estimate being rejected.
+            */
+            // updatePoseTeleop(ll);
         }
 
     }
@@ -267,7 +304,13 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
      * @return The closest matching tag found.
      */
     public RawFiducial getClosestTargetFiducial(Limelight ll, FIELD_ELEMENT element) {
-        RawFiducial[] tags = ll.getRawFiducial();
+        RawFiducial[] tags = {};
+        try {
+            tags = ll.getRawFiducial();
+        }
+        catch(NullPointerException e) {
+            DriverStation.reportWarning("Limelight.getRawFiducial() returned null!", false);
+        }
         ArrayList<RawFiducial> goodTags = new ArrayList<RawFiducial>();
         int[] targetIDs = {};
 
@@ -300,7 +343,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         }
         else if(!goodTags.isEmpty()) {
             // TODO: Make this report somewhere else
-            System.out.println("Vision: [" + ll.getName() + "] Target tag(s) found for " + element + " - " + goodTags.toString());
+            System.out.println("Vision: [" + ll.getName() + "] Target tag(s) found for " + element);
         }
 
         RawFiducial closestTag = null;
@@ -336,7 +379,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         Limelight ll = getBestLimelight();
 
         ll.setRobotOrientation(m_swerve.getRotation().getDegrees());
-        m_swerve.resetPose(ll.getMegaPose2d());
+        m_swerve.resetPose(ll.getRawPose3d().toPose2d());
     }
 
     public void autonResetPoseToVision() {
@@ -356,18 +399,18 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
                     firstSuccess = true;
                 }
                 reject = false;
-                // Print somewhere: "AutonResetPoseToVision succeeded on " + (autonPoses.size() - i) + " try");
+                System.out.println("AutonResetPoseToVision succeeded on " + (autonPoses.size() - i) + " try");
                 break;
             }
         }
 
         if (reject) {
-            // Print somewhere
-            //         "AutonResetPoseToVision failed after "
-            //                 + batchSize
-            //                 + " of "
-            //                 + autonPoses.size()
-            //                 + " possible tries");
+            System.out.println(
+                    "AutonResetPoseToVision failed after "
+                            + batchSize
+                            + " of "
+                            + autonPoses.size()
+                            + " possible tries");
             
             // Flash LEDs Red?
         } else {
@@ -397,7 +440,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         if (targetInView) {
             Pose2d botpose = botpose3D.toPose2d();
             // Pose2d robotPose = m_swerve.getRobotPose(); // TODO: Add telemetry for pose before and after integrating vision
-            if (Field.poseOutOfField(botpose3D)
+            if (Field.poseOutOfField(megaPose)
                     || Math.abs(botpose3D.getZ()) > 0.25 // Robot pose is floating
                     || (Math.abs(botpose3D.getRotation().getX()) > 5
                             || Math.abs(botpose3D.getRotation().getY()) > 5)) {     
@@ -449,135 +492,135 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         double degStds = 1000;
 
         // integrate vision
-        if (LL.targetInView()) {
-            boolean multiTags = LL.multipleTagsInView();
-            double timeStamp = LL.getRawPoseTimestamp();
-            double targetSize = LL.getTargetSize();
-            Pose3d botpose3DMT1 = LL.getRawPose3d();
-            Pose2d botposeMT1 = botpose3DMT1.toPose2d();
-            Pose2d botposeMT2 = LL.getMegaPose2d();
-            RawFiducial[] tags = LL.getRawFiducial();
-            double highestAmbiguity = 2;
-            ChassisSpeeds robotSpeed = m_swerve.getRobotRelativeSpeeds();
-
-            // distance from current pose to vision estimated pose
-            double poseDifference =
-                    m_swerve.getRobotPose().getTranslation().getDistance(botposeMT2.getTranslation());
-
-            /* rejections */
-
-            // reject pose if individual tag ambiguity is too high
-            LL.setTagStatus("");
-            for (RawFiducial tag : tags) {
-                // search for highest ambiguity tag for later checks
-                if (highestAmbiguity == 2) {
-                    highestAmbiguity = tag.ambiguity;
-                } else if (tag.ambiguity > highestAmbiguity) {
-                    highestAmbiguity = tag.ambiguity;
-                }
-                // log ambiguities
-                LL.setTagStatus(LL.getTagStatus() + "Tag " + tag.id + ": " + tag.ambiguity);
-                // ambiguity rejection check
-                if (tag.ambiguity > 0.9) {
-                    LL.sendInvalidStatus("ambiguity rejection");
-                    return;
-                }
-            }
-            if (Field.poseOutOfField(botposeMT2)) {
-                // reject if pose is out of the field
-                LL.sendInvalidStatus("bound rejection - pose OOB");
-                return;
-            } else if (Math.abs(robotSpeed.omegaRadiansPerSecond) >= 0.5) {
-                // reject if we are rotating more than 0.5 rad/s
-                LL.sendInvalidStatus("rot speed rejection - too fast");
-                return;
-            } else if (Math.abs(botpose3DMT1.getZ()) > 0.25) {
-                // reject if pose is .25 meters in the air
-                LL.sendInvalidStatus("height rejection - in air");
-                return;
-            } else if (Math.abs(botpose3DMT1.getRotation().getX()) > 5
-                    || Math.abs(botpose3DMT1.getRotation().getY()) > 5) {
-                // reject if pose is 5 degrees titled in roll or pitch
-                LL.sendInvalidStatus("roll/pitch rejection - tilted");
-                return;
-            } else if (targetSize <= 0.025) {
-                LL.sendInvalidStatus("size rejection - target too small");
-                return;
-            }
-            /* integrations */
-
-            // if almost stationary and extremely close to tag
-            else if (robotSpeed.vxMetersPerSecond + robotSpeed.vyMetersPerSecond <= 0.2
-                    && targetSize > 0.4) {
-                LL.sendValidStatus("Stationary close integration");
-                xyStds = 0.1;
-                degStds = 0.1;
-            } 
-            // If multiple tags detected
-            else if (multiTags && targetSize > 0.05) {
-                LL.sendValidStatus("Multi integration");
-                xyStds = 0.25;
-                degStds = 8;
-                if (targetSize > 0.09) { // If larger tag size
-                    LL.sendValidStatus("Strong Multi integration");
-                    xyStds = 0.1;
-                    degStds = 0.1;
-                }
-            }
-            // If tag is very close, loosen up pose strictness
-            else if (targetSize > 0.8 && poseDifference < 0.5) {
-                LL.sendValidStatus("Close integration");
-                xyStds = 0.5;
-                degStds = 16;
-            } 
-            // If tag is moderately close but pose difference is small
-            else if (targetSize > 0.1 && poseDifference < 0.3) {
-                LL.sendValidStatus("Proximity integration");
-                xyStds = 2.0;
-                degStds = 999999;
-            } 
-            // If inaccuracy (ambiguity) is low and target size is ok
-            else if (highestAmbiguity < 0.25 && targetSize >= 0.03) {
-                LL.sendValidStatus("Stable integration");
-                xyStds = 0.5;
-                degStds = 999999;
-            } 
-            else {
-                LL.sendInvalidStatus(
-                        "catch rejection: "
-                                + poseDifference
-                                + " poseDiff");
-                return;
-            }
-
-            // strict with degree std and ambiguity and rotation because this is megatag1
-            if (highestAmbiguity > 0.5) {
-                degStds = 15;
-            }
-
-            if (robotSpeed.omegaRadiansPerSecond >= 0.5) {
-                degStds = 15;
-            }
-
-            // track STDs
-            VisionConfig.VISION_STD_DEV_X = xyStds;
-            VisionConfig.VISION_STD_DEV_Y = xyStds;
-            VisionConfig.VISION_STD_DEV_THETA = degStds;
-
-            Pose2d integratedPose = new Pose2d(botposeMT2.getTranslation(), botposeMT2.getRotation());
-
-            addVisionMeasurementWithStdDevs(
-                integratedPose, 
-                timeStamp, 
-                VecBuilder.fill(
-                    VisionConfig.VISION_STD_DEV_X,
-                    VisionConfig.VISION_STD_DEV_Y,
-                    VisionConfig.VISION_STD_DEV_THETA));
-        } 
-        else {
+        if (!LL.targetInView()) {
             LL.setTagStatus("no tags");
             LL.sendInvalidStatus("no tag found rejection");
+            return;
         }
+
+        boolean multiTags = LL.multipleTagsInView();
+        double timeStamp = LL.getRawPoseTimestamp();
+        double targetSize = LL.getTargetSize();
+        Pose3d botpose3DMT1 = LL.getRawPose3d();
+        Pose2d botposeMT1 = botpose3DMT1.toPose2d();
+        Pose2d botposeMT2 = LL.getMegaPose2d();
+        RawFiducial[] tags = LL.getRawFiducial();
+        double highestAmbiguity = 2;
+        ChassisSpeeds robotSpeed = m_swerve.getRobotRelativeSpeeds();
+
+        // distance from current pose to vision estimated pose
+        double poseDifference =
+                m_swerve.getRobotPose().getTranslation().getDistance(botposeMT2.getTranslation());
+
+        /* rejections */
+
+        // reject pose if individual tag ambiguity is too high
+        LL.setTagStatus("");
+        for (RawFiducial tag : tags) {
+            // search for highest ambiguity tag for later checks
+            if (highestAmbiguity == 2) {
+                highestAmbiguity = tag.ambiguity;
+            } else if (tag.ambiguity > highestAmbiguity) {
+                highestAmbiguity = tag.ambiguity;
+            }
+            // log ambiguities
+            LL.setTagStatus(LL.getTagStatus() + "Tag " + tag.id + ": " + tag.ambiguity);
+            // ambiguity rejection check
+            if (tag.ambiguity > 0.9) {
+                LL.sendInvalidStatus("ambiguity rejection");
+                return;
+            }
+        }
+        if (Field.poseOutOfField(botposeMT2)) {
+            // reject if pose is out of the field
+            LL.sendInvalidStatus("bound rejection - pose OOB");
+            return;
+        } else if (Math.abs(robotSpeed.omegaRadiansPerSecond) >= 0.5) {
+            // reject if we are rotating more than 0.5 rad/s
+            LL.sendInvalidStatus("rot speed rejection - too fast");
+            return;
+        } else if (Math.abs(botpose3DMT1.getZ()) > 0.25) {
+            // reject if pose is .25 meters in the air
+            LL.sendInvalidStatus("height rejection - in air");
+            return;
+        } else if (Math.abs(botpose3DMT1.getRotation().getX()) > 5
+                || Math.abs(botpose3DMT1.getRotation().getY()) > 5) {
+            // reject if pose is 5 degrees titled in roll or pitch
+            LL.sendInvalidStatus("roll/pitch rejection - tilted");
+            return;
+        } else if (targetSize <= 0.025) {
+            LL.sendInvalidStatus("size rejection - target too small");
+            return;
+        }
+        /* integrations */
+
+        // if almost stationary and extremely close to tag
+        else if (robotSpeed.vxMetersPerSecond + robotSpeed.vyMetersPerSecond <= 0.2
+                && targetSize > 0.4) {
+            LL.sendValidStatus("Stationary close integration");
+            xyStds = 0.1;
+            degStds = 0.1;
+        } 
+        // If multiple tags detected
+        else if (multiTags && targetSize > 0.05) {
+            LL.sendValidStatus("Multi integration");
+            xyStds = 0.25;
+            degStds = 8;
+            if (targetSize > 0.09) { // If larger tag size
+                LL.sendValidStatus("Strong Multi integration");
+                xyStds = 0.1;
+                degStds = 0.1;
+            }
+        }
+        // If tag is very close, loosen up pose strictness
+        else if (targetSize > 0.8 && poseDifference < 0.5) {
+            LL.sendValidStatus("Close integration");
+            xyStds = 0.5;
+            degStds = 16;
+        } 
+        // If tag is moderately close but pose difference is small
+        else if (targetSize > 0.1 && poseDifference < 0.3) {
+            LL.sendValidStatus("Proximity integration");
+            xyStds = 2.0;
+            degStds = 999999;
+        } 
+        // If inaccuracy (ambiguity) is low and target size is ok
+        else if (highestAmbiguity < 0.25 && targetSize >= 0.03) {
+            LL.sendValidStatus("Stable integration");
+            xyStds = 0.5;
+            degStds = 999999;
+        } 
+        else {
+            LL.sendInvalidStatus(
+                    "catch rejection: "
+                            + poseDifference
+                            + " poseDiff");
+            return;
+        }
+
+        // strict with degree std and ambiguity and rotation because this is megatag1
+        if (highestAmbiguity > 0.5) {
+            degStds = 15;
+        }
+
+        if (robotSpeed.omegaRadiansPerSecond >= 0.5) {
+            degStds = 15;
+        }
+
+        // track STDs
+        VisionConfig.VISION_STD_DEV_X = xyStds;
+        VisionConfig.VISION_STD_DEV_Y = xyStds;
+        VisionConfig.VISION_STD_DEV_THETA = degStds;
+
+        Pose2d integratedPose = new Pose2d(botposeMT2.getTranslation(), botposeMT2.getRotation());
+
+        addVisionMeasurementWithStdDevs(
+            integratedPose, 
+            timeStamp, 
+            VecBuilder.fill(
+                VisionConfig.VISION_STD_DEV_X,
+                VisionConfig.VISION_STD_DEV_Y,
+                VisionConfig.VISION_STD_DEV_THETA));
     }
 
     private void addVisionMeasurementWithStdDevs(Pose2d integratedPose, double timeStamp, Vector<N3>stdDevs) {

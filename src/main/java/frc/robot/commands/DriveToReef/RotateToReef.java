@@ -45,7 +45,7 @@ public class RotateToReef {
         rotPID.enableContinuousInput(-Math.PI, Math.PI);
         rotPID.setTolerance(config.tolerance);
 
-        this.currentHeading = () -> (m_swerve.getRobotPose().getRotation().getRadians());
+        this.currentHeading = () -> (m_swerve.getRotation().getRadians());
 
         outputting = true;
     }
@@ -53,7 +53,8 @@ public class RotateToReef {
     public void initialize(Pose2d targetPose) {
         this.targetHeading = () -> (targetPose.getRotation().getRadians());
 
-        rotPID.reset(currentHeading.get(), m_swerve.getVelocity(true).omegaRadiansPerSecond); // Position, velocity
+        rotPID.setGoal(targetHeading.get());
+        rotPID.reset(currentHeading.get(), m_swerve.getVelocity(false).omegaRadiansPerSecond); // Position, velocity
     }
 
     public double getOutput() {

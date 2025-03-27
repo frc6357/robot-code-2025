@@ -56,9 +56,8 @@ public class SK25VisionBinder implements CommandBinder {
                     SK25Vision.DriveToPose.getConfig(),
                     SK25Vision.RotateToPose.getConfig(), 
                     m_vision, 
-                    m_swerve,
-                    driveToLeftReef,
-                    driveToRightReef));
+                    m_swerve
+                    ));
         }
     }
 }

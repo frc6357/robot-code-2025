@@ -2,6 +2,7 @@ package frc.robot.commands.DriveToReef;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Ports.DriverPorts;
 import frc.robot.Ports.OperatorPorts;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.SKSwerve;
@@ -17,7 +19,8 @@ import frc.robot.subsystems.vision.SK25Vision.MultiLimelightCommandConfig;
 import frc.robot.utils.Field;
 import frc.robot.utils.vision.Limelight;
 import frc.robot.utils.vision.LimelightHelpers.RawFiducial;
-import static frc.robot.Ports.DriverPorts;
+import static frc.robot.Ports.DriverPorts.kLeftReef;
+import static frc.robot.Ports.DriverPorts.kRightReef;
 import frc.robot.Konstants.VisionConstants.PoseConstants;
 
 public class DriveToReefCommand extends Command{
@@ -38,14 +41,61 @@ public class DriveToReefCommand extends Command{
 
     boolean valid;
 
-    boolean previousTargetLeftStatus;
-    boolean previousTargetRightStatus;
 
-    Trigger targetLeftSide;
-    Trigger targetRightSide;
+    Trigger targetLeftSide = kLeftReef.button;
+    Trigger targetRightSide = kRightReef.button;
 
     RawFiducial closestTag;
 
+    static enum Target {
+        
+        CENTER,
+        LEFT,
+        RIGHT
+
+        // CENTER(new Trigger(
+        //     kLeftReef.button.and(kRightReef.button) // If both targetting buttons pressed
+        //     .or(kLeftReef.button.and(kRightReef.button).negate()) // If neither targetting buttons pressed
+        // )), 
+
+        // LEFT(new Trigger(
+        //     kLeftReef.button.and(kRightReef.button.negate())
+        // )), // If only left trigger pressed
+
+        // RIGHT(new Trigger(
+        //     kRightReef.button.and(kLeftReef.button.negate())
+        // )); // If only right trigger pressed
+
+
+        // private Trigger target;
+        // Target(Trigger t) {
+        //     this.target = t;
+        // }
+
+        // public boolean equals(Target other) {
+        //     return this.get().equals(other.get());
+        // }
+
+        // public boolean get() {
+        //     return target.getAsBoolean();
+        // }
+    }
+
+    Target prevTarget;
+    Target currentTarget;
+
+    private void setCurrentTarget() {
+        if(targetLeftSide.and(targetRightSide).getAsBoolean() || // Both triggers pressed
+        targetLeftSide.negate().and(targetRightSide.negate()).getAsBoolean()) { // Neither trigger pressed
+            currentTarget = Target.CENTER;
+        }
+        else if(targetLeftSide.getAsBoolean()) {
+            currentTarget = Target.LEFT;
+        }
+        else {
+            currentTarget = Target.RIGHT;
+        }
+    }
 
     /**
      * 
@@ -53,8 +103,6 @@ public class DriveToReefCommand extends Command{
      * @param rotateConfig The specific profiled PID and limelight config to use for rotating the robot
      * @param m_vision The vision instance used to run tag recognition and distance calculations
      * @param m_swerve The swerve instance to drive
-     * @param targetLeftSide The Trigger to use 
-     * @param targetRightSide
      * 
      * @return A command to override the swerve's default command and use PID loops to move the robot
      * chassis to a known position on the reef based on the tags the pose limelights see.
@@ -63,25 +111,21 @@ public class DriveToReefCommand extends Command{
                 MultiLimelightCommandConfig driveConfig,
                 MultiLimelightCommandConfig rotateConfig, 
                 SK25Vision m_vision, 
-                SKSwerve m_swerve,
-                Trigger targetLeftSide,
-                Trigger targetRightSide) {
+                SKSwerve m_swerve) {
 
         this.driveConfig = driveConfig;
         this.rotateConfig = rotateConfig;
         this.m_vision = m_vision;
         this.m_swerve = m_swerve;
-        this.targetLeftSide = targetLeftSide;
-        this.targetRightSide = targetRightSide;
 
-        previousTargetLeftStatus = targetLeftSide.getAsBoolean();
-        previousTargetRightStatus = targetRightSide.getAsBoolean();
-
+        
+        setCurrentTarget(); // Call this at the beginning of every loop as well
+        prevTarget = currentTarget; // Call this at the end of every loop as well
 
         // Since we will be driving and rotating at the same time, the drive type will need to be field-centric
         this.driveCommand = new DriveCommand(
-            () -> (driveController.getXOutput()),
-            () -> (driveController.getYOutput()), 
+            () -> (0.0), // driveController.getXOutput()
+            () -> (0.0), // driveController.getYOutput()
             () -> (rotateController.getOutput()), 
             () -> (true));
         
@@ -94,38 +138,35 @@ public class DriveToReefCommand extends Command{
     /* Switches the target of the reef pose while maintaining target reef face */
     private void setTargetPose() {
         List<String> targetPositions = PoseConstants.tagDestinationMap.get(closestTag.id);
-            String targetPosition = targetPositions.get(2); // Default to middle face
+        String targetPosition = "";
 
-            /* Effectively prioritizes left side scoring */
-            if(targetLeftSide.getAsBoolean()) {
-                previousTargetLeftStatus = true;
-                previousTargetRightStatus = false;
-                m_vision.reefDriveTarget = "LEFT";
+        /* Effectively prioritizes left side scoring */
+        if(currentTarget == Target.LEFT) {
+            m_vision.reefDriveTarget = "LEFT";
 
-                targetPosition = targetPositions.get(0); // Left position is at index 0
-            }
-            else if(targetRightSide.getAsBoolean()) {
-                previousTargetRightStatus = true;
-                previousTargetLeftStatus = false;
-                m_vision.reefDriveTarget = "RIGHT";
+            targetPosition = targetPositions.get(0); // Left position is at index 0
+        }
+        else if(currentTarget == Target.RIGHT) {
+            m_vision.reefDriveTarget = "RIGHT";
 
-                targetPosition = targetPositions.get(1); // Right position is at index 1
-            }
-            else {
-                previousTargetLeftStatus = false;
-                previousTargetRightStatus = false;
-                m_vision.reefDriveTarget = "CENTER";
-            }
+            targetPosition = targetPositions.get(1); // Right position is at index 1
+        }
+        else {
+            m_vision.reefDriveTarget = "CENTER";
 
-            targetPose = PoseConstants.fieldPositions.get(targetPosition);
+            targetPosition = targetPositions.get(2); // Center position is at index 2
+        }
 
-            targetPose = new Pose2d(
-                        Field.flipXifRed(targetPose.getX()),
-                        Field.flipYifRed(targetPose.getY()),
-                        Field.flipAngleIfRed(targetPose.getRotation()));
+        targetPose = PoseConstants.fieldPositions.get(targetPosition);
 
-            driveController.initialize(targetPose);
-            rotateController.initialize(targetPose);
+        targetPose = new Pose2d(
+                    Field.flipXifRed(targetPose.getX()),
+                    Field.flipYifRed(targetPose.getY()),
+                    Field.flipAngleIfRed(targetPose.getRotation()));
+
+        // TODO: uncomment
+        // driveController.initialize(targetPose);
+        rotateController.initialize(targetPose);
     }
 
     ArrayList<RawFiducial> reefTags;
@@ -166,7 +207,8 @@ public class DriveToReefCommand extends Command{
 
 
         this.rotateController = new RotateToReef(rotateConfig, m_swerve);
-        this.driveController = new TranslateToReef(driveConfig, m_swerve);
+        // TODO: uncomment this
+        // this.driveController = new TranslateToReef(driveConfig, m_swerve);
 
         if(valid) {
             setTargetPose();
@@ -176,6 +218,8 @@ public class DriveToReefCommand extends Command{
     @Override
     public void execute() {
         if(valid) {
+            setCurrentTarget();
+
             m_vision.isDriving = true;
             // We don't want the controller rumbling during auto
             if(DriverStation.isTeleopEnabled()) {
@@ -183,14 +227,13 @@ public class DriveToReefCommand extends Command{
             }
 
             // If the driver has pressed a different button
-            if(previousTargetLeftStatus != targetLeftSide.getAsBoolean()) {
-                setTargetPose();
-            }
-            else if(previousTargetRightStatus != targetRightSide.getAsBoolean()) {
+            if(currentTarget != prevTarget) {
                 setTargetPose();
             }
 
             driveCommand.run();
+
+            prevTarget = currentTarget;
         }
         else {
             DriverPorts.kDriver.setRumble(RumbleType.kBothRumble, 0.0);
@@ -202,7 +245,8 @@ public class DriveToReefCommand extends Command{
         if(!valid) {
             return true;
         }
-        return (driveController.isFinished() && rotateController.isFinished());
+
+        return false;
     }
 
     @Override
@@ -210,7 +254,8 @@ public class DriveToReefCommand extends Command{
         m_vision.isDriving = false;
         m_vision.reefDriveTarget = "OFF";
         DriverPorts.kDriver.setRumble(RumbleType.kBothRumble, 0.0);
-        driveController.end();
+        // TOOD: Uncomment
+        // driveController.end();
         rotateController.end();
         if(!isInterrupted && DriverStation.isTeleopEnabled()) {
             // If in teleop, provide a short rumble to the operator to signal the command's completion
