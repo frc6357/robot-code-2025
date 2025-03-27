@@ -309,7 +309,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     /**
      * Finds the closest AprilTag for a specific field element for your alliance.
-     * SURROUND THIS IN TRY/CATCH OR IF/ELSE! It will return null if no AprilTags of specific target are seen!
+     * <p>
+     * <b>SURROUND THIS IN TRY/CATCH OR IF/ELSE! It will return null if no AprilTags of specific target are seen!</b>
      * @param ll The limelight to reed tags from
      * @param element The field element's tag(s) to target
      * @return The closest matching tag found.
@@ -354,7 +355,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         }
         else if(!goodTags.isEmpty()) {
             // TODO: Make this report somewhere else
-            System.out.println("Vision: [" + ll.getName() + "] Target tag(s) found for " + element);
+            System.out.println("Vision: [" + ll.getName() + "] " + goodTags.size() + " target tag(s) found for " + element);
         }
 
         RawFiducial closestTag = null;
