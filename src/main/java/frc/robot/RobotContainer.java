@@ -87,10 +87,10 @@ public class RobotContainer extends Robot{
   public List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
 
   SendableChooser<Command> autoCommandSelector;
-
-  double matchTime = DriverStation.getMatchTime();
   
   boolean thirtySecondsReached = false;
+
+  boolean rumbling = false;
 
 
 
@@ -114,9 +114,6 @@ public class RobotContainer extends Robot{
     autoCommandSelector = AutoBuilder.buildAutoChooser("Taxi");
     //set delete old files = true in build.gradle to prevent sotrage of unused orphans
     SmartDashboard.putData("Select an Auto", autoCommandSelector);
-
-    //display match time
-    SmartDashboard.putNumber("Match Time", matchTime);
   }
   
   /**
@@ -405,6 +402,15 @@ public class RobotContainer extends Robot{
             kDriver.setRumble(RumbleType.kBothRumble, 0.0);
             kOperator.setRumble(RumbleType.kBothRumble, 0.0);
         }
+
+        if (matchTime <= 29 && rumbling == true)
+            {
+                //stop rumble after 1 second
+                kDriver.setRumble(RumbleType.kBothRumble, 0.0);
+                kOperator.setRumble(RumbleType.kBothRumble, 0.0);
+
+                rumbling = false;
+            }
     }
 
 

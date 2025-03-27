@@ -43,6 +43,8 @@ import edu.wpi.first.wpilibj.Filesystem;
  */
 public class Robot extends LoggedRobot
 {
+    public static double matchTime;
+
     public static final double kDefaultPeriod = 0.2;
 
     private Command m_autonomousCommand;
@@ -110,6 +112,9 @@ public class Robot extends LoggedRobot
 
         //display real time memory consumption
         SmartDashboard.putNumber("Memory", Runtime.getRuntime().freeMemory());
+        
+        // display match time
+        SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
