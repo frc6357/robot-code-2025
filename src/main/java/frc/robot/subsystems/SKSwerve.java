@@ -18,12 +18,17 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.FlippingUtil;
 
 //import choreo.Choreo.TrajectoryLogger;
 //import choreo.auto.AutoFactory;
 //import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -36,10 +41,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.Konstants.TunerConstants.TunerSwerveDrivetrain;
 import frc.robot.utils.Field;
 import frc.robot.utils.Util;
 
@@ -52,10 +59,14 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
+    private SwerveDrivePoseEstimator poseEstimator;
+
+    private Field2d field = new Field2d();
+
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
-    private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
+    private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.kZero;
     /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
-    private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.k180deg;
+    private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.k180deg;
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean m_hasAppliedOperatorPerspective = false;
 
@@ -153,7 +164,9 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
             startSimThread();
         }
 
+        setupPoseEstimator();
         configureAutoBuilder();
+        SmartDashboard.putData("Field", field);
     }
 
     /**
@@ -179,7 +192,9 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
             startSimThread();
         }
 
+        setupPoseEstimator();
         configureAutoBuilder();
+        SmartDashboard.putData("Field", field);
     }
 
     /**
@@ -213,7 +228,9 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
             startSimThread();
         }
 
+        setupPoseEstimatorWithStdDevs(odometryStandardDeviation, visionStandardDeviation);
         configureAutoBuilder();
+        SmartDashboard.putData("Field", field);
     }
     
 
@@ -262,14 +279,44 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
             DriverStation.getAlliance().ifPresent(allianceColor -> {
                 setOperatorPerspectiveForward(
-                    allianceColor == Alliance.Red
-                        ? kRedAlliancePerspectiveRotation
-                        : kBlueAlliancePerspectiveRotation
+                    allianceColor == Alliance.Blue
+                        ? Rotation2d.kZero
+                        : Rotation2d.k180deg
                 );
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+
+        poseEstimator.update(getGyroRotation(), getState().ModulePositions);
+        field.setRobotPose(getRobotPose());
+        SmartDashboard.putNumber("SwerveRotRads", getGyroRotation().getRadians());
+        SmartDashboard.putNumber("PoseX", getRobotPose().getX());
+        SmartDashboard.putNumber("PoseY", getRobotPose().getY());
+        SmartDashboard.putNumber("PoseRad", getRobotPose().getRotation().getRadians());
+        SmartDashboard.putNumber("PoseDeg", getRobotPose().getRotation().getDegrees());
+
     }
+
+    private void setupPoseEstimator() {
+        poseEstimator = 
+            new SwerveDrivePoseEstimator(
+                getKinematics(), 
+                new Rotation2d(getPigeon2().getYaw().getValue()), 
+                getState().ModulePositions, 
+                new Pose2d());
+    }
+
+    private void setupPoseEstimatorWithStdDevs(Matrix<N3, N1> odomStdDevs, Matrix<N3, N1> visionStdDevs) {
+        poseEstimator = 
+            new SwerveDrivePoseEstimator(
+                getKinematics(), 
+                new Rotation2d(getPigeon2().getYaw().getValue()), 
+                getState().ModulePositions, 
+                new Pose2d(),
+                odomStdDevs, 
+                visionStdDevs);
+    }
+
 
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
@@ -287,6 +334,22 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     /**
+     * Sets the pose estimator's trust of global measurements. This might be used to
+     * change trust in vision measurements after the autonomous period, or to change
+     * trust as distance to a vision target increases.
+     *
+     * @param visionMeasurementStdDevs Standard deviations of the vision
+     *                                 measurements. Increase these numbers to
+     *                                 trust global measurements from vision less.
+     *                                 This matrix is in the form [x, y, theta]ᵀ,
+     *                                 with units in meters and radians.
+     */
+    @Override
+    public void setVisionMeasurementStdDevs(Matrix<N3, N1> visionMeasurementStdDevs) {
+        poseEstimator.setVisionMeasurementStdDevs(visionMeasurementStdDevs);
+    }
+
+    /**
      * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
      * while still accounting for measurement noise.
      *
@@ -295,7 +358,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
      */
     @Override
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
-        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
+        poseEstimator.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
     /**
@@ -317,7 +380,7 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
         double timestampSeconds,
         Matrix<N3, N1> visionMeasurementStdDevs
     ) {
-        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
+        poseEstimator.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
     /* Odemetry Methods */
@@ -341,13 +404,98 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
         return pose;
     }
 
+    /**
+     * 
+     * @return The estimation of the robot's pose
+     */
     public Pose2d getRobotPose() {
-        Pose2d pose = this.getState().Pose;
-        return keepPoseOnField(pose);
+        return poseEstimator.getEstimatedPosition();
        // return pose;
     }
 
-    public Rotation2d getRotation() {
+
+//|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+
+
+    // public void robotRelativeDrive(ChassisSpeeds speeds)
+    // {
+    //     final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric();
+    //     this.applyRequest(() ->
+    //             robotCentricDrive.withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
+    //                 .withVelocityY(speeds.vyMetersPerSecond) // Drive left with negative X (left)
+    //                 .withRotationalRate(speeds.omegaRadiansPerSecond)); // Drive counterclockwise with negative X (left)
+    // }
+
+
+     private void configureAutoBuilder() {
+        try {
+            var config = RobotConfig.fromGUISettings();
+            AutoBuilder.configure(
+                this::getRobotPose,   // Supplier of current robot pose
+                this::resetPose,         // Consumer for seeding pose against auto
+                () -> getState().Speeds, // Supplier of current robot speeds
+                // Consumer of ChassisSpeeds and feedforwards to drive the robot
+                (speeds, feedforwards) -> setControl(
+                    m_pathApplyRobotSpeeds.withSpeeds(speeds)
+                        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+                ),
+                pathConfig,
+                config,
+                // Assume the path needs to be flipped for Red vs Blue, this is normally the case
+                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                this // Subsystem for requirements
+            );
+        } catch (Exception ex) {
+            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
+        }
+    }
+
+    /**
+   * Set chassis speeds of robot to drive it robot oreintedly.
+   * @param chassisSpeeds Chassis Speeds to set.
+   */
+    public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds, DriveFeedforwards ff)
+    {
+        SwerveRequest chassisSpeed = new SwerveRequest.ApplyRobotSpeeds().withSpeeds(chassisSpeeds);
+        this.setControl(chassisSpeed);
+    }
+
+
+    public void resetOrientation() {
+        boolean flip = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
+          if (flip) {
+            resetRotation(Rotation2d.k180deg);
+          } else {
+            resetRotation(Rotation2d.kZero);
+          }
+    }
+
+    /** Resets odometry to the given pose.
+     * @param bluepose The pose to set the odometry to
+     */
+    public void resetOdometry(Pose2d bluePose)
+    {
+        boolean flip = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
+          if (flip) {
+            resetPose(FlippingUtil.flipFieldPose(bluePose));
+          } else {
+            resetPose(bluePose);
+          }
+
+        // this.seedFieldCentric();      //TODO: is resting pose same as odometry?
+    }
+
+    public void resetPose(Pose2d pose) {
+        super.resetPose(pose);
+        poseEstimator.resetPose(pose);
+    }
+    
+    public SwerveModuleState[] getModuleStates() {
+        return getState().ModuleStates;
+    }
+
+    public Rotation2d getRobotRotation() {
         return getRobotPose().getRotation();
     }
 

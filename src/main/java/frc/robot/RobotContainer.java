@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.bindings.ClimbBinder;
 import frc.robot.bindings.CommandBinder;
+import frc.robot.bindings.SK25VisionBinder;
 import frc.robot.bindings.RevBindings;
 import frc.robot.bindings.SK25ElevatorBinder;
 //import frc.robot.utils.SK25AutoBuilder;
@@ -48,9 +49,10 @@ import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
 //import frc.robot.subsystems.Configs.CoralSubsystem;
 import frc.robot.subsystems.SK25Climb;
-import frc.robot.subsystems.SK25Elevator;
+import frc.robot.subsystems.vision.SK25Vision;
+
 import frc.robot.subsystems.SK25EndEffector;
-import frc.robot.subsystems.SK25Lights;
+import frc.robot.Konstants.TunerConstants;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.files.Elastic;
@@ -75,6 +77,13 @@ public class RobotContainer extends Robot{
     // }
 
   // The robot's subsystems and commands are defined here...
+
+  private Optional<SKSwerve> m_swerveContainer = Optional.empty();
+  private Optional<SK25Vision> m_visionContainer = Optional.empty();
+
+  public static SK25Vision m_vision;
+  public static SKSwerve m_swerve;
+
   public Optional<SK25Elevator> m_elevator = Optional.empty();
   public Optional<CoralSubsystem> m_coral = Optional.empty();
   public Optional<SK25Lights> m_lights = Optional.empty();
@@ -142,7 +151,12 @@ public class RobotContainer extends Robot{
                 m_elevator = Optional.of(new SK25Elevator());
             }
             if(subsystems.isSwervePresent()) {
-                m_swerve = Optional.of(TunerConstants.createDrivetrain()); // Returns new SKSwerve
+                m_swerveContainer = Optional.of(Konstants.TunerConstants.createDrivetrain());
+                m_swerve = m_swerveContainer.get(); // Returns new SKSwerve
+            }
+            if(subsystems.isVisionPresent() && subsystems.isSwervePresent()) {
+                m_visionContainer = Optional.of(new SK25Vision(m_swerveContainer));
+                m_vision = m_visionContainer.get();
             }
             if(subsystems.isEndEffectorPresent())
             {
@@ -178,6 +192,7 @@ public class RobotContainer extends Robot{
         buttonBinders.add(new ClimbBinder(m_Climb));
         buttonBinders.add(new SK25EndEffectorBinder(m_endEffector));
         // buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
+        buttonBinders.add(new SK25VisionBinder(m_visionContainer, m_swerveContainer));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)

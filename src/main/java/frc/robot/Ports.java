@@ -8,7 +8,7 @@ import static frc.robot.Konstants.SwerveConstants.kBackLeftTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightTurnMotorID;
-import static frc.robot.Konstants.SwerveConstants.kCANivoreNameString;
+import static frc.robot.Konstants.kCANivoreName;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftTurnMotorID;
@@ -52,14 +52,18 @@ public class Ports
         public static final SKTrigger climbStopButton = new SKTrigger(kDriver, 90, POV);
         public static final SKTrigger climbSlowButton = new SKTrigger(kDriver, 270, POV);
         
+        // Vision Driving buttons
+        public static final SKTrigger kForceResetPoseToVision = new SKTrigger(kDriver, kY.value, BUTTON);
+        public static final SKTrigger kDriveToClosestReef = new SKTrigger(kDriver, kX.value, BUTTON);
+        public static final SKTrigger kLeftReef = new SKTrigger(kDriver, kLeftTrigger.value, AXIS);
+        public static final SKTrigger kRightReef = new SKTrigger(kDriver, kRightTrigger.value, AXIS);
+
         // Driver Function Button (Activates secondary control scheme when held)
         public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kLeftBumper.value, BUTTON);
 
         // Switch modes
         public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, 180, POV); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
         public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kRightBumper.value, BUTTON); // Function Controlscheme
-
-        
 
         // Reset gyro
         public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kRightStick.value, BUTTON);
@@ -139,22 +143,22 @@ public class Ports
     public static class DrivePorts
     {
         // CAN IDs for the drive motors on the swerve module
-        public static final CANPort kFrontLeftDriveMotorPort  = new CANPort(kFrontLeftDriveMotorID, kCANivoreNameString);
-        public static final CANPort kFrontRightDriveMotorPort = new CANPort(kFrontRightDriveMotorID, kCANivoreNameString);
-        public static final CANPort kBackLeftDriveMotorPort   = new CANPort(kBackLeftDriveMotorID, kCANivoreNameString);
-        public static final CANPort kBackRightDriveMotorPort  = new CANPort(kBackRightDriveMotorID, kCANivoreNameString);
+        public static final CANPort kFrontLeftDriveMotorPort  = new CANPort(kFrontLeftDriveMotorID, kCANivoreName);
+        public static final CANPort kFrontRightDriveMotorPort = new CANPort(kFrontRightDriveMotorID, kCANivoreName);
+        public static final CANPort kBackLeftDriveMotorPort   = new CANPort(kBackLeftDriveMotorID, kCANivoreName);
+        public static final CANPort kBackRightDriveMotorPort  = new CANPort(kBackRightDriveMotorID, kCANivoreName);
 
         // CAN IDs for the turning motors on the swerve module
-        public static final CANPort kFrontLeftTurnMotorPort  = new CANPort(kFrontLeftTurnMotorID, kCANivoreNameString);
-        public static final CANPort kFrontRightTurnMotorPort = new CANPort(kFrontRightTurnMotorID, kCANivoreNameString);
-        public static final CANPort kBackLeftTurnMotorPort   = new CANPort(kBackLeftTurnMotorID, kCANivoreNameString);
-        public static final CANPort kBackRightTurnMotorPort  = new CANPort(kBackRightTurnMotorID, kCANivoreNameString);
+        public static final CANPort kFrontLeftTurnMotorPort  = new CANPort(kFrontLeftTurnMotorID, kCANivoreName);
+        public static final CANPort kFrontRightTurnMotorPort = new CANPort(kFrontRightTurnMotorID, kCANivoreName);
+        public static final CANPort kBackLeftTurnMotorPort   = new CANPort(kBackLeftTurnMotorID, kCANivoreName);
+        public static final CANPort kBackRightTurnMotorPort  = new CANPort(kBackRightTurnMotorID, kCANivoreName);
 
         // CAN IDs for the CANCoders
-        public static final CANPort kFrontLeftEncoderPort  = new CANPort(kFrontLeftEncoderID, kCANivoreNameString);
-        public static final CANPort kFrontRightEncoderPort = new CANPort(kFrontRightEncoderID, kCANivoreNameString);
-        public static final CANPort kBackLeftEncoderPort   = new CANPort(kBackLeftEncoderID, kCANivoreNameString);
-        public static final CANPort kBackRightEncoderPort  = new CANPort(kBackRightEncoderID, kCANivoreNameString);
+        public static final CANPort kFrontLeftEncoderPort  = new CANPort(kFrontLeftEncoderID, kCANivoreName);
+        public static final CANPort kFrontRightEncoderPort = new CANPort(kFrontRightEncoderID, kCANivoreName);
+        public static final CANPort kBackLeftEncoderPort   = new CANPort(kBackLeftEncoderID, kCANivoreName);
+        public static final CANPort kBackRightEncoderPort  = new CANPort(kBackRightEncoderID, kCANivoreName);
         
         // CAN ID for IMU
         public static final CANPort kPigeonPort = new CANPort(kPigeonID, kCANivoreNameString);

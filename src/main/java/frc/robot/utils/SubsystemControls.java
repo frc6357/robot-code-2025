@@ -15,6 +15,7 @@ public class SubsystemControls
     private final boolean endEffector;
     private final boolean climb;
     private final boolean coralSubsystem;
+    private final boolean vision;
 
      /**  
      * @param swerve
@@ -28,7 +29,8 @@ public class SubsystemControls
         @JsonProperty(required = true, value = "elevator")    boolean elevator,
         @JsonProperty(required = true, value = "endeffector") boolean endeffector,
         @JsonProperty(required = true, value = "climb") boolean climb,
-        @JsonProperty(required = true, value = "coralSubsystem") boolean coralSubsystem
+        @JsonProperty(required = true, value = "coralSubsystem") boolean coralSubsystem,
+        @JsonProperty(required = true, value = "vision")      boolean vision
     )
     {
         this.swerve = swerve;
@@ -37,6 +39,7 @@ public class SubsystemControls
         this.endEffector = endeffector;
         this.climb = climb;
         this.coralSubsystem = coralSubsystem;
+        this.vision = vision;
     }
 
 
@@ -50,13 +53,20 @@ public class SubsystemControls
     {
         return swerve;
     }
-    public boolean isLightsPresent()
-    {
-        return lights;
+    public boolean isVisionPresent() {
+        return vision;
     }
-    public boolean isElevatorPresent()
+    public boolean isEndEffectorPresent()
     {
-        return elevator;
+        return endEffector;
+    } 
+    public boolean isClimbPresent() 
+    {
+        return climb;
+    }
+    public boolean isCoralSubsystemPresent() 
+    {
+        return climb;
     }
     public boolean isEndEffectorPresent()
     {

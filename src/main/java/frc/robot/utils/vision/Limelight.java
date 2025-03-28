@@ -30,7 +30,7 @@ public class Limelight {
         /** Physical Config : The distances of the limelight from the center of the robot.
          * Uses foward, right, up in meters where the specified directions are positive */
         @Getter private double forward, right, up; // meters
-        /** The angle of the limelight in terms of roll, pitch, and yaw respectivley in degrees*/
+        /** The angle of the limelight in terms of roll, pitch, and yaw respectively in degrees*/
         @Getter private double roll, pitch, yaw; // degrees
 
         /** Creates a new limelight config (configurable limelight)
@@ -157,7 +157,7 @@ public class Limelight {
     }
 
     /** 
-     * Determines if any valid targets are in veiw of the limelight (specified by pipelines) using getTV() from the limelight helpers class.
+     * Determines if any valid targets are in view of the limelight (specified by pipelines) using getTV() from the limelight helpers class.
      * @return Whether the LL has any valid targets (April tags or other vision targets) 
      * If the limelight is not attached, return false.*/
     public boolean targetInView() {
@@ -168,7 +168,7 @@ public class Limelight {
     }
 
     /** 
-     * Checks if multiple targets are veiwable by the limelight.
+     * Checks if multiple targets are viewable by the limelight.
      * @return whether the LL sees multiple tags or not.
      * If the limelight is not attached, return false.*/
     public boolean multipleTagsInView() {
@@ -179,7 +179,7 @@ public class Limelight {
     }
 
     /** 
-     * Gets the amount of targets veiwable by the limelight using a robot pose estimate with getBotPoseEstimate() from LimelightHelpers.
+     * Gets the amount of targets viewable by the limelight using a robot pose estimate with getBotPoseEstimate() from LimelightHelpers.
      * @return whether the LL sees multiple tags or not.
      * If the limelight is not attached, return false.*/
     public double getTagCountInView() {
@@ -194,7 +194,7 @@ public class Limelight {
     }
 
     /**
-     * Gets the limelight tag at the centermost point of its veiw using getFiducialID() from the limelighthelpers class.
+     * Gets the limelight tag at the centermost point of its view using getFiducialID() from the limelighthelpers class.
      * @return the tag ID of the apriltag most centered in the LL's view (or based on different
      *     criteria set in LL dasbhoard)
      * If the limelight is not attahced, return zero.
@@ -210,11 +210,10 @@ public class Limelight {
      * Gets the target tag area using getTA() from the limelighthelpers class. The target tag area is the 
      * percentage of the window visible by the camera taken up by the tag, where 100% is the full window
      * and 0% means it cannot see a tag.
-     * @return the tag ID of the apriltag most centered in the LL's view (or based on different
-     *     criteria set in LL dasbhoard)
+     * @return the percentage of the limelight's window taken up by a tag
      * If the limelight is not attahced, return zero.
      */
-    public double getTargetSize() {
+    public double getTargetSize() { // 1-100
         if (!isAttached()) {
             return 0;
         }
@@ -226,7 +225,7 @@ public class Limelight {
     /** Gets the limelight pose by using the current robot pose and accounting for the limelight's
      * offset from the center of the robot. This uses getBotPose3d_wpiBlue() from the limelight helpers class.
      * @return the corresponding LL Pose3d (MEGATAG1) for the alliance in DriverStation.java 
-     * If no limelight is attached, return a Pose3d() object with no translatoin or rotation values.*/
+     * If no limelight is attached, return a Pose3d() object with no translation or rotation values.*/
     public Pose3d getRawPose3d() {
         if (!isAttached()) {
             return new Pose3d();
@@ -246,11 +245,9 @@ public class Limelight {
             return new Pose2d();
         }
         return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name).pose; // 2024: all alliances use blue as 0,0
-        
-        //TODO: see if starting blue alliance corrds have changed
     }
 
-    /** Leverages the limelight's veiw of multiple tags and their distance from the robot to check if the
+    /** Leverages the limelight's view of multiple tags and their distance from the robot to check if the
      * robot pose and/or limelight pose are more accurate than a basic pose update from the gyro/accelerometer.
      * @retrun If the position is "accurate".
      * If no limelight is attached, return false.
@@ -275,7 +272,7 @@ public class Limelight {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
-    /** Gets an array of the raw network table ouput (the raw april tag data)*/           //TODO: need more understanding
+    /** Gets an array of the raw network table ouput (the raw april tag data)*/
     public RawFiducial[] getRawFiducial() {
         return LimelightHelpers.getBotPoseEstimate_wpiBlue(config.name).rawFiducials;
     }
@@ -363,6 +360,15 @@ public class Limelight {
         return LimelightHelpers.getLatestResults(config.name);
     }
 
+    public enum IMUMode {
+        EXTERNAL,
+        FUSED,
+        INTERNAL
+    }
+    public void setIMUMode(IMUMode m) {
+        LimelightHelpers.SetIMUMode(config.name, m.ordinal());
+    }
+
     /** Sets the limelight target pipeline. Nothing happens if the limelight is not attached.
      * @param pipelineIndex use pipeline indexes in {@link VisionConfig} */
     public void setLimelightPipeline(int pipelineIndex) {
@@ -372,7 +378,6 @@ public class Limelight {
         LimelightHelpers.setPipelineIndex(config.name, pipelineIndex);
     }
 
-    //TODO: change Limelight calls for setting the swerve drivetrain
 
     public void setRobotOrientation(double degrees) {
         if (!isAttached()) {

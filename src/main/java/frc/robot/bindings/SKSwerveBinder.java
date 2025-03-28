@@ -6,6 +6,8 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
 import static frc.robot.Konstants.SwerveConstants.kSlowModePercentage;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
+import static frc.robot.Konstants.SwerveConstants.kSlowModePercentage;
+import static frc.robot.Ports.DriverPorts.kDriveFn;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
 //import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
 import static frc.robot.Ports.DriverPorts.kSlowMode;
@@ -24,7 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // Used for binding buttons to drive actions
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.TunerConstants;
+import frc.robot.Konstants.TunerConstants;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 import frc.robot.subsystems.SK25Elevator;
@@ -54,8 +56,8 @@ public class SKSwerveBinder implements CommandBinder{
                 });
 
     //Define the max speeds of the drivetrain
-    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    private double MaxSpeed = TunerConstants.MaxSpeed; // kSpeedAt12Volts desired top speed
+    private double MaxAngularRate = TunerConstants.MaxAngularRate; // 3/4 of a rotation per second max angular velocity
 
     // Driver Buttons
     //The function button enables button combinations which occur only when both the function and the other
@@ -68,10 +70,11 @@ public class SKSwerveBinder implements CommandBinder{
     private final Trigger slowmode = kSlowMode.button.and(fn);
     private final Trigger resetButton = kResetGyroPos.button;
 
+    public double desiredRotSpeed = 0.0; // The double to update for the driver's desired rotation speed
+
     //Create swerve drive request objects for applicatoin to the drivetrain
     private final SwerveRequest.FieldCentric feildCentricDrive = new SwerveRequest.FieldCentric()
-            .withDeadband(kJoystickDeadband).withRotationalDeadband(kJoystickDeadband)
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+                .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     
     final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric();
             // this.applyRequest(() ->
@@ -89,19 +92,19 @@ public class SKSwerveBinder implements CommandBinder{
         this.slowModeStatus = false;
 
         // // apply acceleration limits based on the elevator height if the elevator is present
-        // if(m_coral.isPresent())
+        // if(m_elevator.isPresent())
         // {
         //     this.translationXFilter = new DriveStickFilter(
         //         MaxSpeed, 
         //         elevatorHeightDriveScalar(
         //             driverTranslationSlewPref.get(), 
-        //             m_coral.get().getCurrentHeightMotorRotations()),
+        //             m_elevator.get().getCurrentHeightMotorRotations()),
         //         kJoystickDeadband);
         //     this.translationYFilter = new DriveStickFilter(
         //         MaxSpeed, 
         //         elevatorHeightDriveScalar(
         //             driverTranslationSlewPref.get(), 
-        //             m_coral.get().getCurrentHeightMotorRotations()), 
+        //             m_elevator.get().getCurrentHeightMotorRotations()), 
         //         kJoystickDeadband);
 
         //     //rotation filter dosnt need to be scaled by elevator height since it dosn't affect the
@@ -111,7 +114,7 @@ public class SKSwerveBinder implements CommandBinder{
         //         driverRotationSlewPref.get(), 
         //         kJoystickDeadband);
         // }
-        // //if the elevator is absent, apply the default slew rates
+        //if the elevator is absent, apply the default slew rates
         // else
         // {
             this.translationXFilter = new DriveStickFilter(
@@ -159,6 +162,21 @@ public class SKSwerveBinder implements CommandBinder{
     {
         SmartDashboard.putBoolean("slowModeStatus", status);
         slowModeStatus = status;
+
+        // //If slowMode is enabled, drive at the slowMode speed.
+        // if (slowModeStatus)
+        // {
+        //     this.translationXFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
+        //     this.translationYFilter.setMaxSpeed(MaxSpeed * kSlowModePercentage);
+        //     this.rotationFilter.setMaxSpeed(MaxAngularRate * kSlowModePercentage);
+        // }
+        // //If slow mode is not enabled, drive at the default speed.
+        // else
+        // {
+        //     this.translationXFilter.setMaxSpeed(MaxSpeed);
+        //     this.translationYFilter.setMaxSpeed(MaxSpeed);
+        //     this.rotationFilter.setMaxSpeed(MaxAngularRate);
+        // }
     }
 
     public double applyGains(double axis, double slowPercent)
@@ -168,6 +186,17 @@ public class SKSwerveBinder implements CommandBinder{
             return axis * slowPercent;
         }
         else
+            return axis;
+    }
+
+    public double applyRotationGains(double axis, double slowPercent) {
+        if (slowModeStatus)
+        {
+            desiredRotSpeed = axis * slowPercent;
+            return axis * slowPercent;
+        }
+        else
+            desiredRotSpeed = axis;
             return axis;
     }
 
@@ -195,7 +224,8 @@ public class SKSwerveBinder implements CommandBinder{
         slowmode.onFalse(new InstantCommand(() -> setSlowMode(false)));
         
         // Resets gyro angles / robot oreintation
-        resetButton.onTrue(new InstantCommand(() -> {drivetrain.seedFieldCentric();} ));
+        resetButton.onTrue(new InstantCommand(() -> {drivetrain.resetOrientation();} ));
+
 
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
