@@ -70,7 +70,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
                 ll.setLogStatus("Disabled");
             }
             else {
-                ll.setLogStatus("Idle");
+                //ll.setLogStatus("Idle");
             }
             ll.setIMUMode(IMUMode.EXTERNAL); // For Limelight 4s only; this makes sure that we're only using the external IMU for Megatag 2
             ll.setLEDMode(false); // Turns off LED lights on startup
@@ -166,7 +166,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             configTolerance(0.05);
             configProfile(TunerConstants.MaxSpeed * 0.40, TunerConstants.MaxSpeed * 0.60); //60% Max Speed; 1.75x Acceleration
             configMaxOutput(TunerConstants.MaxSpeed * 0.40);
-            configError(0.3);
+            configError(0.05);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
         }
@@ -201,7 +201,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         SmartDashboard.putString("ResetPoseToVisionStatus", resetPoseToVisionLog);
 
         for(Limelight ll : poseLimelights) {
-            ll.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
+            ll.setRobotOrientation(m_swerve.getRobotRotation().getDegrees());
         }
     }
 
@@ -214,7 +214,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
      */
     private void updatePoseMultiCam(Limelight ll) {
         // Sets the robot's yaw for use with MEGATAG2 right before integrating with estimator
-        ll.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
+        ll.setRobotOrientation(m_swerve.getRobotRotation().getDegrees());
 
         Pose3d botPose3d = ll.getRawPose3d(); // Gets the 3D pose of the limelight on the robot using the position offsets
         Pose2d megaPose2d = ll.getMegaPose2d(); // Gets the estimated pose of the robot using MegaTag2 objects
@@ -235,8 +235,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             if(!ll.targetInView()) {
                 continue;
             }
-
-            updatePoseMultiCam(ll);
+            // TODO: Change auto to multicam and create correct auto estimator when ready
+            updatePoseSingleCam(ll);
         }
     }
 
@@ -244,7 +244,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         try {
             isIntegrating = false;
             // Sets the robot's yaw for use with MEGATAG2 right before integrating with estimator
-            ll.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
+            ll.setRobotOrientation(m_swerve.getRobotRotation().getDegrees());
             addFilteredLimelightInput(ll);
             // A limelight's integrating status is determined by if it's received a valid status to integrate its pose
             isIntegrating |= ll.getConfig().isIntegrating();
@@ -277,7 +277,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         For each limelight that has a tag in view, send it to be aggregated into the current pose estimate, alongside other
         recent poses.
         */
-        // updatePoseAutonomous(); TODO: uncomment
+        updatePoseAutonomous();
 
         /*
         Teleop pose updater:
@@ -287,7 +287,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         into the pose estimator. The pose can still be rejected for being too erroneous, but scoring each camera significantly
         reduces the chances of a pose estimate being rejected.
         */
-         updatePoseTeleop();
+        updatePoseTeleop();
     }
 
     public boolean reefTargetClose(Limelight ll) { 
@@ -408,7 +408,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             return;
         }
 
-        ll.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
+        ll.setRobotOrientation(ll.getRawPose3d().toPose2d().getRotation().getDegrees());
         //TODO: if MT2 doesn't work, change it to the line below
         m_swerve.resetPose(ll.getRawPose3d().toPose2d());
         //m_swerve.resetPose(ll.getMegaPose2d());
@@ -510,7 +510,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
                             VisionConfig.VISION_STD_DEV_Y,
                             VisionConfig.VISION_STD_DEV_THETA));
 
-            Pose2d integratedPose = new Pose2d(botpose.getTranslation(), botpose.getRotation());
+            Pose2d integratedPose = new Pose2d(megaPose.getTranslation(), botpose.getRotation());
             m_swerve.addVisionMeasurement(integratedPose, poseTimestamp);
             // robotPose = m_swerve.getRobotPose(); // get updated pose
             resetPoseToVisionLog = ("ResetPoseToVision: SUCCESS");
@@ -530,7 +530,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             return;
         }
 
-        LL.setRobotOrientation(m_swerve.getGyroRotation().getDegrees());
+        LL.setRobotOrientation(m_swerve.getRobotRotation().getDegrees());
         boolean multiTags = LL.multipleTagsInView();
         double timeStamp = LL.getRawPoseTimestamp();
         double targetSize = LL.getTargetSize();
@@ -568,7 +568,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             // reject if pose is out of the field
             LL.sendInvalidStatus("bound rejection - pose OOB");
             return;
-        } else if (Math.abs(robotSpeed.omegaRadiansPerSecond) >= 0.5) {
+        } else if (Math.abs(robotSpeed.omegaRadiansPerSecond) >= 4 * Math.PI) {
             // reject if we are rotating more than 0.5 rad/s
             LL.sendInvalidStatus("rot speed rejection - too fast");
             return;

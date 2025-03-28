@@ -279,6 +279,11 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
         poseEstimator.update(getGyroRotation(), getState().ModulePositions);
         field.setRobotPose(getRobotPose());
         SmartDashboard.putNumber("SwerveRotRads", getGyroRotation().getRadians());
+        SmartDashboard.putNumber("PoseX", getRobotPose().getX());
+        SmartDashboard.putNumber("PoseY", getRobotPose().getY());
+        SmartDashboard.putNumber("PoseRad", getRobotPose().getRotation().getRadians());
+        SmartDashboard.putNumber("PoseDeg", getRobotPose().getRotation().getDegrees());
+
     }
 
     private void setupPoseEstimator() {

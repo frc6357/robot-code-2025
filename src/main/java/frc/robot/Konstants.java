@@ -497,35 +497,35 @@ public final class Konstants
             public static final HashMap<String, Pose2d> fieldPositions = new HashMap<String, Pose2d>() {{
               
             /* SOUTH (Face closest to driver station) */
-            put("reefA", new Pose2d(2.961, 3.868, new Rotation2d(0)));
-            put("reefB", new Pose2d(2.961, 4.198, new Rotation2d(0)));//
-            put("reefABAlgae", new Pose2d(3.125, 4.018, new Rotation2d(0)));//
+            put("reefA", new Pose2d(3.250, 4.332, new Rotation2d(0))); // Left branch
+            put("reefB", new Pose2d(3.243, 3.964, new Rotation2d(0))); // Right branch
+            put("reefABAlgae", new Pose2d(3.395, 4.167, new Rotation2d(0))); // Center
 
             /* SOUTHEAST */
-            put("reefC", (new Pose2d(3.573, 2.803, new Rotation2d(1.047))));
-            put("reefD", (new Pose2d(3.867, 2.624, new Rotation2d(1.047))));
-            put("reefCDAlgae", new Pose2d(3.809, 2.847, new Rotation2d(1.047)));
+            put("reefC", (new Pose2d(3.675, 2.945, new Rotation2d(1.047))));
+            put("reefD", (new Pose2d(3.972, 2.763, new Rotation2d(1.047))));
+            put("reefCDAlgae", new Pose2d(3.874, 2.927, new Rotation2d(1.047)));
 
             /* NORTHEAST */
-            put("reefE", new Pose2d(5.084, 2.636, new Rotation2d(2.0944)));
-            put("reefF", new Pose2d(5.389, 2.804, new Rotation2d(2.0944)));
-            put("reefEFAlgae", new Pose2d(5.171, 2.837, new Rotation2d(2.0944)));
+            put("reefE", new Pose2d(5.018, 2.782, new Rotation2d(2.0944)));
+            put("reefF", new Pose2d(5.328, 2.945, new Rotation2d(2.0944)));
+            put("reefEFAlgae", new Pose2d(5.136, 2.948, new Rotation2d(2.0944)));
 
 
             /* NORTH (Face furthest from driver station) */
-            put("reefG", new Pose2d(6.018, 3.868, new Rotation2d(3.1459)));
-            put("reefH", new Pose2d(6.018, 4.198, new Rotation2d(3.1459)));
-            put("reefGHAlgae", new Pose2d(5.841, 4.018, new Rotation2d(3.1459)));
+            put("reefG", new Pose2d(5.830, 3.859, new Rotation2d(3.1459)));
+            put("reefH", new Pose2d(5.846, 4.202, new Rotation2d(3.1459)));
+            put("reefGHAlgae", new Pose2d(5.754, 4.040, new Rotation2d(3.1459)));
 
             /* NORTHWEST */
-            put("reefI", new Pose2d(5.403, 5.247, new Rotation2d(-2.094)));
-            put("reefJ", new Pose2d(5.111, 5.416, new Rotation2d(-2.094)));
-            put("reefIJAlgae", new Pose2d(5.169, 5.206, new Rotation2d(-2.094)));
+            put("reefI", new Pose2d(5.315, 5.085, new Rotation2d(-2.094)));
+            put("reefJ", new Pose2d(4.989, 5.261, new Rotation2d(-2.094)));
+            put("reefIJAlgae", new Pose2d(5.025, 5.066, new Rotation2d(-2.094)));
 
             /* SOUTHWEST */
-            put("reefL", new Pose2d(3.867, 5.423, new Rotation2d(-1.047)));
-            put("reefK", new Pose2d(3.583, 5.261, new Rotation2d(-1.047)));
-            put("reefKLAlgae", new Pose2d(3.813, 5.206, new Rotation2d(-1.047)));
+            put("reefL", new Pose2d(4.005, 5.037, new Rotation2d(-1.047)));
+            put("reefK", new Pose2d(3.714, 4.803, new Rotation2d(-1.047)));
+            put("reefKLAlgae", new Pose2d(3.950, 4.847, new Rotation2d(-1.047)));
         
             /* EAST SOURCE */
             put("SourceA", new Pose2d(1.180, 6.944, new Rotation2d(2.20)));

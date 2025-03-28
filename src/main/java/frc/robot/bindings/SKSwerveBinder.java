@@ -71,6 +71,8 @@ public class SKSwerveBinder implements CommandBinder{
     private final Trigger slowmode = kSlowMode.button.and(fn);
     private final Trigger resetButton = kResetGyroPos.button;
 
+    public double desiredRotSpeed = 0.0; // The double to update for the driver's desired rotation speed
+
     //Create swerve drive request objects for applicatoin to the drivetrain
     private final SwerveRequest.FieldCentric feildCentricDrive = new SwerveRequest.FieldCentric()
                 .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
@@ -188,6 +190,17 @@ public class SKSwerveBinder implements CommandBinder{
             return axis;
     }
 
+    public double applyRotationGains(double axis, double slowPercent) {
+        if (slowModeStatus)
+        {
+            desiredRotSpeed = axis * slowPercent;
+            return axis * slowPercent;
+        }
+        else
+            desiredRotSpeed = axis;
+            return axis;
+    }
+
 
     @Override
     public void bindButtons()
@@ -213,6 +226,7 @@ public class SKSwerveBinder implements CommandBinder{
         
         // Resets gyro angles / robot oreintation
         resetButton.onTrue(new InstantCommand(() -> {drivetrain.resetOrientation();} ));
+
 
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically

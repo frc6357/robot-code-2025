@@ -19,7 +19,13 @@ import static frc.robot.Ports.DriverPorts.kLeftReef;
 import static frc.robot.Ports.DriverPorts.kRightReef;
 import static frc.robot.Ports.DriverPorts.kDriver;
 import static frc.robot.Ports.OperatorPorts.kOperator;
+import static frc.robot.Ports.DriverPorts.kSlowMode;
+import static frc.robot.Ports.DriverPorts.kDriveFn;
+import static frc.robot.Konstants.SwerveConstants.kSlowModePercentage;
+import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;
 
+
+import frc.robot.Konstants.TunerConstants;
 import frc.robot.Konstants.VisionConstants.PoseConstants;
 
 public class DriveToReefCommand extends Command{
@@ -28,7 +34,7 @@ public class DriveToReefCommand extends Command{
 
     Limelight[] limelights;
 
-    RotateToReef rotateController;
+    // RotateToReef rotateController;
     TranslateToReef driveController;
 
     Pose2d targetPose;
@@ -43,6 +49,9 @@ public class DriveToReefCommand extends Command{
 
     Trigger targetLeftSide = kLeftReef.button;
     Trigger targetRightSide = kRightReef.button;
+
+    Trigger slowMode = kSlowMode.button.and(kDriveFn.button);
+    boolean slowModeStatus = false;
 
     RawFiducial closestTag;
 
@@ -67,6 +76,20 @@ public class DriveToReefCommand extends Command{
             currentTarget = Target.RIGHT;
         }
     }
+
+    /* Methods for getting the driver's rotational input */
+    public double applyGains(double axis, double slowPercent)
+    {
+        slowModeStatus = slowMode.getAsBoolean();
+        if (slowModeStatus)
+        {
+            return axis * slowPercent;
+        }
+        else
+            return axis;
+    }
+
+
 
     /**
      * 
@@ -95,10 +118,9 @@ public class DriveToReefCommand extends Command{
 
         // Since we will be driving and rotating at the same time, the drive type will need to be field-centric
         this.driveCommand = new DriveCommand(
-            // TODO: Put the driveController outputs back
             () -> (driveController.getXOutput()), // driveController.getXOutput()
             () -> (driveController.getYOutput()), // driveController.getYOutput()
-            () -> (rotateController.getOutput() * rotateConfig.maxVelocity), 
+            () -> (applyGains(TunerConstants.MaxAngularRate * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercentage)), 
             () -> (true));
         
         // Drive config and rotate config both use the same limelights, so only need to call one config's array here
@@ -136,9 +158,8 @@ public class DriveToReefCommand extends Command{
                     Field.flipYifRed(targetPose.getY()),
                     Field.flipAngleIfRed(targetPose.getRotation()));
 
-        // TODO: uncomment
         driveController.initialize(targetPose);
-        rotateController.initialize(targetPose);
+        //rotateController.initialize(targetPose);
     }
 
     ArrayList<RawFiducial> reefTags;
@@ -178,7 +199,7 @@ public class DriveToReefCommand extends Command{
         }
 
 
-        this.rotateController = new RotateToReef(rotateConfig, m_swerve);
+        // this.rotateController = new RotateToReef(rotateConfig, m_swerve);
         // TODO: uncomment this
         this.driveController = new TranslateToReef(driveConfig, m_swerve);
 
@@ -198,7 +219,7 @@ public class DriveToReefCommand extends Command{
             if(DriverStation.isTeleopEnabled()) {
                 kDriver.setRumble(RumbleType.kBothRumble, 0.5);
 
-                if(rotateController.isFinished() && driveController.isFinished())  {
+                if(driveController.isFinished())  {
                     // This signals to the operator that vision is done aligning and is ready to score
                     kOperator.setRumble(RumbleType.kBothRumble, 0.5);
                 }
@@ -236,7 +257,7 @@ public class DriveToReefCommand extends Command{
         kOperator.setRumble(RumbleType.kBothRumble, 0.0);
         // TOOD: Uncomment
         driveController.end();  
-        rotateController.end();
+        //rotateController.end();
     }
 
 }
