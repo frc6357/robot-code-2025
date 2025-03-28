@@ -66,18 +66,12 @@ public class SubsystemControls
     }
     public boolean isCoralSubsystemPresent() 
     {
-        return climb;
+        return coralSubsystem;
     }
-    public boolean isEndEffectorPresent()
-    {
-        return endEffector;
-    } 
-    public boolean isClimbPresent() 
-    {
-        return climb;
+    public boolean isLightsPresent() {
+        return lights;
     }
-    public boolean isCoralSubsystemPresent() 
-    {
-        return climb;
+    public boolean isElevatorPresent() {
+        return elevator;
     }
 }

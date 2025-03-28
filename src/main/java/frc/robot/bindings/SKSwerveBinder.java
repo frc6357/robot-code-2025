@@ -1,12 +1,7 @@
 package frc.robot.bindings;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static frc.robot.Konstants.OIConstants.kSlowModePercent;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
-import static frc.robot.Konstants.SwerveConstants.kSlowModePercentage;
-import static frc.robot.Ports.DriverPorts.kDriveFn;
-import static frc.robot.Konstants.SwerveConstants.kSlowModePercentage;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
 //import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
@@ -230,9 +225,9 @@ public class SKSwerveBinder implements CommandBinder{
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> {
-                return feildCentricDrive.withVelocityX(applyGains(-MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercentage)) // Drive forward with negative Y (forward)
-                    .withVelocityY(applyGains(-MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercentage)) // Drive left with negative X (left)
-                    .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercentage)); // Drive counterclockwise with negative X (left)
+                return feildCentricDrive.withVelocityX(applyGains(-MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercent)) // Drive forward with negative Y (forward)
+                    .withVelocityY(applyGains(-MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercent)) // Drive left with negative X (left)
+                    .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercent)); // Drive counterclockwise with negative X (left)
             })
         );
     }

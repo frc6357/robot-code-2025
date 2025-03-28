@@ -161,12 +161,12 @@ public class Ports
         public static final CANPort kBackRightEncoderPort  = new CANPort(kBackRightEncoderID, kCANivoreName);
         
         // CAN ID for IMU
-        public static final CANPort kPigeonPort = new CANPort(kPigeonID, kCANivoreNameString);
+        public static final CANPort kPigeonPort = new CANPort(kPigeonID, kCANivoreName);
     }
     
     public static class ClimbPorts
     {
-        private static final String busName = kCANivoreNameString;
+        private static final String busName = kCANivoreName;
         public static final CANPort kClimbMotor = new CANPort(62, busName);
         
     }

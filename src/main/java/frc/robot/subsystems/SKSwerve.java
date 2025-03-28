@@ -4,25 +4,16 @@ import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Konstants.AutoConstants.pathConfig;
 import static frc.robot.Konstants.SwerveConstants.kChassisLength;
-
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
-import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.util.DriveFeedforwards;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.util.DriveFeedforwards;
-import com.pathplanner.lib.util.FlippingUtil;
-
 //import choreo.Choreo.TrajectoryLogger;
 //import choreo.auto.AutoFactory;
 //import choreo.trajectory.SwerveSample;
@@ -33,7 +24,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -64,9 +54,9 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     private Field2d field = new Field2d();
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
-    private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.kZero;
+    private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.k180deg;
     /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
-    private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.k180deg;
+    private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean m_hasAppliedOperatorPerspective = false;
 
@@ -280,8 +270,8 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
             DriverStation.getAlliance().ifPresent(allianceColor -> {
                 setOperatorPerspectiveForward(
                     allianceColor == Alliance.Blue
-                        ? Rotation2d.kZero
-                        : Rotation2d.k180deg
+                        ? kBlueAlliancePerspectiveRotation
+                        : kRedAlliancePerspectiveRotation
                 );
                 m_hasAppliedOperatorPerspective = true;
             });
@@ -383,11 +373,65 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
         poseEstimator.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
-    /* Odemetry Methods */
+    /* 
+     *
+     * Autonomous
+     * 
+     */
 
-    /** Keep the robot on the field using the feild length from Util by checking if the position is off 
+    private void configureAutoBuilder() {
+        try {
+            var config = RobotConfig.fromGUISettings();
+            AutoBuilder.configure(
+                this::getRobotPose,   // Supplier of current robot pose
+                this::resetPose,         // Consumer for seeding pose against auto
+                () -> getState().Speeds, // Supplier of current robot speeds
+                // Consumer of ChassisSpeeds and feedforwards to drive the robot
+                (speeds, feedforwards) -> setControl(
+                    m_pathApplyRobotSpeeds.withSpeeds(speeds)
+                        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+                ),
+                pathConfig,
+                config,
+                // Assume the path needs to be flipped for Red vs Blue, this is normally the case
+                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                this // Subsystem for requirements
+            );
+        } catch (Exception ex) {
+            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
+        }
+    }
+
+    /**
+    * Set chassis speeds of robot to drive it robot oreintedly.
+    * @param chassisSpeeds Chassis Speeds to set.
+    */
+    public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds, DriveFeedforwards ff)
+    {
+        SwerveRequest chassisSpeed = new SwerveRequest.ApplyRobotSpeeds().withSpeeds(chassisSpeeds);
+        this.setControl(chassisSpeed);
+    }
+
+    // public void robotRelativeDrive(ChassisSpeeds speeds)
+    // {
+    //     final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric();
+    //     this.applyRequest(() ->
+    //             robotCentricDrive.withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
+    //                 .withVelocityY(speeds.vyMetersPerSecond) // Drive left with negative X (left)
+    //                 .withRotationalRate(speeds.omegaRadiansPerSecond)); // Drive counterclockwise with negative X (left)
+    // }
+
+    /* 
+     *
+     * Odemetry Methods 
+     * 
+     */
+
+    /** 
+     * Keep the robot on the field using the field length from Util by checking if the position is off 
      * the field, then replacing it with the correct position
-     * @return The new pose after limiting out of feild possibilities.
+     * @return The new pose after limiting out of field possibilities.
      */
     private Pose2d keepPoseOnField(Pose2d pose) {
         double halfRobot = kChassisLength / 2;
@@ -413,54 +457,29 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
        // return pose;
     }
 
+    public SwerveModuleState[] getModuleStates() {
+        return getState().ModuleStates;
+    }
 
-//|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+    public Rotation2d getRobotRotation() {
+        return getRobotPose().getRotation();
+    }
 
+    public Rotation2d getGyroRotation() {
+        return getPigeon2().getRotation2d();
+    }
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return getKinematics().toChassisSpeeds(getModuleStates());
+    }
 
-    // public void robotRelativeDrive(ChassisSpeeds speeds)
-    // {
-    //     final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric();
-    //     this.applyRequest(() ->
-    //             robotCentricDrive.withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
-    //                 .withVelocityY(speeds.vyMetersPerSecond) // Drive left with negative X (left)
-    //                 .withRotationalRate(speeds.omegaRadiansPerSecond)); // Drive counterclockwise with negative X (left)
-    // }
-
-
-     private void configureAutoBuilder() {
-        try {
-            var config = RobotConfig.fromGUISettings();
-            AutoBuilder.configure(
-                this::getRobotPose,   // Supplier of current robot pose
-                this::resetPose,         // Consumer for seeding pose against auto
-                () -> getState().Speeds, // Supplier of current robot speeds
-                // Consumer of ChassisSpeeds and feedforwards to drive the robot
-                (speeds, feedforwards) -> setControl(
-                    m_pathApplyRobotSpeeds.withSpeeds(speeds)
-                        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
-                        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
-                ),
-                pathConfig,
-                config,
-                // Assume the path needs to be flipped for Red vs Blue, this is normally the case
-                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
-                this // Subsystem for requirements
-            );
-        } catch (Exception ex) {
-            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
+    public ChassisSpeeds getVelocity(boolean fieldRelative) {
+        if(fieldRelative) {
+            return ChassisSpeeds.fromRobotRelativeSpeeds(getRobotRelativeSpeeds(), getGyroRotation());
+        }
+        else {
+            return getRobotRelativeSpeeds();
         }
     }
-
-    /**
-   * Set chassis speeds of robot to drive it robot oreintedly.
-   * @param chassisSpeeds Chassis Speeds to set.
-   */
-    public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds, DriveFeedforwards ff)
-    {
-        SwerveRequest chassisSpeed = new SwerveRequest.ApplyRobotSpeeds().withSpeeds(chassisSpeeds);
-        this.setControl(chassisSpeed);
-    }
-
 
     public void resetOrientation() {
         boolean flip = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
@@ -472,102 +491,28 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     /** Resets odometry to the given pose.
-     * @param bluepose The pose to set the odometry to
+     * @param pose The pose to set the odometry to
      */
-    public void resetOdometry(Pose2d bluePose)
+    public void resetOdometry(Pose2d pose)
     {
-        boolean flip = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
-          if (flip) {
-            resetPose(FlippingUtil.flipFieldPose(bluePose));
-          } else {
-            resetPose(bluePose);
-          }
-
-        // this.seedFieldCentric();      //TODO: is resting pose same as odometry?
+        resetPose(pose);
     }
 
     public void resetPose(Pose2d pose) {
         super.resetPose(pose);
         poseEstimator.resetPose(pose);
     }
-    
-    public SwerveModuleState[] getModuleStates() {
-        return getState().ModuleStates;
-    }
 
-    public Rotation2d getRobotRotation() {
-        return getRobotPose().getRotation();
-    }
-
-
-//|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
-
-
-    // public void robotRelativeDrive(ChassisSpeeds speeds)
-    // {
-    //     final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric();
-    //     this.applyRequest(() ->
-    //             robotCentricDrive.withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
-    //                 .withVelocityY(speeds.vyMetersPerSecond) // Drive left with negative X (left)
-    //                 .withRotationalRate(speeds.omegaRadiansPerSecond)); // Drive counterclockwise with negative X (left)
-    // }
-
-
-     private void configureAutoBuilder() {
-        try {
-            var config = RobotConfig.fromGUISettings();
-            AutoBuilder.configure(
-                () -> getState().Pose,   // Supplier of current robot pose
-                this::resetPose,         // Consumer for seeding pose against auto
-                () -> getState().Speeds, // Supplier of current robot speeds
-                // Consumer of ChassisSpeeds and feedforwards to drive the robot
-                (speeds, feedforwards) -> setControl(
-                    m_pathApplyRobotSpeeds.withSpeeds(speeds)
-                        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
-                        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
-                ),
-                pathConfig,
-                config,
-                // Assume the path needs to be flipped for Red vs Blue, this is normally the case
-                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
-                this // Subsystem for requirements
-            );
-        } catch (Exception ex) {
-            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
-        }
-    }
-
-    /**
-   * Set chassis speeds of robot to drive it robot oreintedly.
-   * @param chassisSpeeds Chassis Speeds to set.
-   */
-    public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds, DriveFeedforwards ff)
-    {
-        SwerveRequest chassisSpeed = new SwerveRequest.ApplyRobotSpeeds().withSpeeds(chassisSpeeds);
-        this.setControl(chassisSpeed);
-    }
-
-
-   /** Resets odometry to the given pose.
-   * @param initalHolonomicPose The pose to set the odometry to
-   */
-  public void resetOdometry(Pose2d initalHolonomicPose)
-  {
-    this.seedFieldCentric();      //TODO: is resting pose same as odometry?
-  }
-
-
-
-    public ChassisSpeeds getRobotSpeeds()
-        {
-            SwerveDriveKinematics m_kinematics = this.getKinematics();
-            SwerveModule<TalonFX, TalonFX, CANcoder>[] modules = this.getModules();
-            SwerveModuleState[] currentStates = new SwerveModuleState[4];
-            for (int i = 0; i < 4; i++)
-            {
-                SwerveModuleState phoenixModuleState = modules[i].getCurrentState();
-                currentStates[i] = phoenixModuleState;
-            }
-            return m_kinematics.toChassisSpeeds(currentStates);
-        }
+    // public ChassisSpeeds getRobotSpeeds()
+    //     {
+    //         SwerveDriveKinematics m_kinematics = this.getKinematics();
+    //         SwerveModule<TalonFX, TalonFX, CANcoder>[] modules = this.getModules();
+    //         SwerveModuleState[] currentStates = new SwerveModuleState[4];
+    //         for (int i = 0; i < 4; i++)
+    //         {
+    //             SwerveModuleState phoenixModuleState = modules[i].getCurrentState();
+    //             currentStates[i] = phoenixModuleState;
+    //         }
+    //         return m_kinematics.toChassisSpeeds(currentStates);
+    //     }
 }

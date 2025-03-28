@@ -21,7 +21,7 @@ import static frc.robot.Ports.DriverPorts.kDriver;
 import static frc.robot.Ports.OperatorPorts.kOperator;
 import static frc.robot.Ports.DriverPorts.kSlowMode;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
-import static frc.robot.Konstants.SwerveConstants.kSlowModePercentage;
+import static frc.robot.Konstants.OIConstants.kSlowModePercent;
 import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;
 
 
@@ -120,7 +120,7 @@ public class DriveToReefCommand extends Command{
         this.driveCommand = new DriveCommand(
             () -> (driveController.getXOutput()), // driveController.getXOutput()
             () -> (driveController.getYOutput()), // driveController.getYOutput()
-            () -> (applyGains(TunerConstants.MaxAngularRate * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercentage)), 
+            () -> (applyGains(TunerConstants.MaxAngularRate * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercent)), 
             () -> (true));
         
         // Drive config and rotate config both use the same limelights, so only need to call one config's array here

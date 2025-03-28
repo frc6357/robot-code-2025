@@ -49,10 +49,11 @@ import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
 //import frc.robot.subsystems.Configs.CoralSubsystem;
 import frc.robot.subsystems.SK25Climb;
+import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.vision.SK25Vision;
 
 import frc.robot.subsystems.SK25EndEffector;
-import frc.robot.Konstants.TunerConstants;
+import frc.robot.subsystems.SK25Lights;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.files.Elastic;
@@ -80,17 +81,19 @@ public class RobotContainer extends Robot{
 
   private Optional<SKSwerve> m_swerveContainer = Optional.empty();
   private Optional<SK25Vision> m_visionContainer = Optional.empty();
+  private Optional<SK25Elevator> m_elevatorContainer = Optional.empty();
+  private Optional<CoralSubsystem> m_coralContainer = Optional.empty();
+  private Optional<SK25Lights> m_lightsContainer = Optional.empty();
+  private Optional<SK25Climb> m_climbContainer = Optional.empty();
+  private Optional<SK25EndEffector> m_endEffectorContainer = Optional.empty();
 
   public static SK25Vision m_vision;
   public static SKSwerve m_swerve;
-
-  public Optional<SK25Elevator> m_elevator = Optional.empty();
-  public Optional<CoralSubsystem> m_coral = Optional.empty();
-  public Optional<SK25Lights> m_lights = Optional.empty();
-  public Optional<SKSwerve> m_swerve = Optional.empty();
-  // private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
-  public Optional <SK25Climb> m_Climb = Optional.empty();
-  public Optional<SK25EndEffector> m_endEffector = Optional.empty();
+  public static SK25Elevator m_elevator;
+  public static CoralSubsystem m_coral;
+  public static SK25Lights m_lights;
+  public static SK25Climb m_climb;
+  public static SK25EndEffector m_endEffector;
 
   // The list containing all the command binding classes
   public List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -144,11 +147,13 @@ public class RobotContainer extends Robot{
 
             if(subsystems.isLightsPresent())
             {
-                m_lights = Optional.of(new SK25Lights());
+                m_lightsContainer = Optional.of(new SK25Lights());
+                m_lights = m_lightsContainer.get();
             }
             if(subsystems.isElevatorPresent())
             {
-                m_elevator = Optional.of(new SK25Elevator());
+                m_elevatorContainer = Optional.of(new SK25Elevator());
+                m_elevator = m_elevatorContainer.get();
             }
             if(subsystems.isSwervePresent()) {
                 m_swerveContainer = Optional.of(Konstants.TunerConstants.createDrivetrain());
@@ -160,13 +165,16 @@ public class RobotContainer extends Robot{
             }
             if(subsystems.isEndEffectorPresent())
             {
-                m_endEffector = Optional.of(new SK25EndEffector());
+                m_endEffectorContainer = Optional.of(new SK25EndEffector());
+                m_endEffector = m_endEffectorContainer.get();
             }
             if(subsystems.isClimbPresent()) {
-                m_Climb = Optional.of(new SK25Climb());
+                m_climbContainer = Optional.of(new SK25Climb());
+                m_climb = m_climbContainer.get();
             }
             if(subsystems.isCoralSubsystemPresent()) {
-                m_coral = Optional.of(new CoralSubsystem());
+                m_coralContainer = Optional.of(new CoralSubsystem());
+                m_coral = m_coralContainer.get();
             }
         }
         catch (IOException e)
@@ -183,14 +191,14 @@ public class RobotContainer extends Robot{
      */
     private void configureButtonBindings()
     {
-        buttonBinders.add(new SKSwerveBinder(m_swerve, m_elevator));
-        buttonBinders.add(new SK25ElevatorBinder(m_elevator));
-        buttonBinders.add(new SK25LightsBinder(m_lights));
-        buttonBinders.add(new RevBindings(m_coral));
+        buttonBinders.add(new SKSwerveBinder(m_swerveContainer, m_elevatorContainer));
+        buttonBinders.add(new SK25ElevatorBinder(m_elevatorContainer));
+        buttonBinders.add(new SK25LightsBinder(m_lightsContainer));
+        buttonBinders.add(new RevBindings(m_coralContainer));
 
         // Adding all the binding classes to the list
-        buttonBinders.add(new ClimbBinder(m_Climb));
-        buttonBinders.add(new SK25EndEffectorBinder(m_endEffector));
+        buttonBinders.add(new ClimbBinder(m_climbContainer));
+        buttonBinders.add(new SK25EndEffectorBinder(m_endEffectorContainer));
         // buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
         buttonBinders.add(new SK25VisionBinder(m_visionContainer, m_swerveContainer));
 
@@ -205,11 +213,11 @@ public class RobotContainer extends Robot{
 
     public void configurePathPlannerCommands()
     {
-        if (m_swerve.isPresent())
+        if (m_swerveContainer.isPresent())
         {
-            if (m_endEffector.isPresent())
+            if (m_endEffectorContainer.isPresent())
             {
-                SK25EndEffector effector = m_endEffector.get();
+                SK25EndEffector effector = m_endEffectorContainer.get();
 
 
                 //Roller Commands
@@ -221,9 +229,9 @@ public class RobotContainer extends Robot{
                     new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),
                     effector.runRollerCommand(-kRollerSpeed)));
 
-                if(m_coral.isPresent())
+                if(m_coralContainer.isPresent())
                 {
-                    CoralSubsystem elevator = m_coral.get();
+                    CoralSubsystem elevator = m_coralContainer.get();
 
                     
 
@@ -333,17 +341,17 @@ public class RobotContainer extends Robot{
 
     public void testPeriodic()
     {
-        if(m_lights.isPresent())
+        if(m_lightsContainer.isPresent())
         {
-            m_lights.get().testPeriodic();
+            m_lightsContainer.get().testPeriodic();
         }
-        if(m_elevator.isPresent())
+        if(m_elevatorContainer.isPresent())
         {
-            m_elevator.get().testPeriodic();
+            m_elevatorContainer.get().testPeriodic();
         }
-        if(m_endEffector.isPresent())
+        if(m_endEffectorContainer.isPresent())
         {
-            m_endEffector.get().testPeriodic();
+            m_endEffectorContainer.get().testPeriodic();
         }
         // if(m_coral.isPresent())
         // {
@@ -351,18 +359,18 @@ public class RobotContainer extends Robot{
         // }
     }
     public void testInit(){
-        if(m_lights.isPresent())
+        if(m_lightsContainer.isPresent())
         {
-            m_lights.get().testInit();
+            m_lightsContainer.get().testInit();
         }
-        if(m_elevator.isPresent())
+        if(m_elevatorContainer.isPresent())
         {
-            m_elevator.get().testInit();
+            m_elevatorContainer.get().testInit();
         }
-        if(m_endEffector.isPresent())
+        if(m_endEffectorContainer.isPresent())
         {
-            m_endEffector.get().testInit();
-            m_endEffector.get().resetEncoder();
+            m_endEffectorContainer.get().testInit();
+            m_endEffectorContainer.get().resetEncoder();
         }
     }
 
@@ -408,7 +416,7 @@ public class RobotContainer extends Robot{
             kOperator.setRumble(RumbleType.kBothRumble, 0.5);
 
             //raise the climb to the ready position
-            m_Climb.get().readyTheClimb(kKrakenSpeed);
+            m_climbContainer.get().readyTheClimb(kKrakenSpeed);
 
             rumbling = true;
         }
@@ -432,9 +440,9 @@ public class RobotContainer extends Robot{
 
     public void autonomousInit()
     {
-        if(m_endEffector.isPresent())
+        if(m_endEffectorContainer.isPresent())
         {
-            m_endEffector.get().leave();
+            m_endEffectorContainer.get().leave();
         }
 
     } 

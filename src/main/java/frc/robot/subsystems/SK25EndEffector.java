@@ -126,7 +126,7 @@ public class SK25EndEffector extends SubsystemBase
             .p(.3)
             //.i(.0002)
             //.d(2.1)
-            .outputRange(-1, 1); //TODO: Add a velocityFF in order to provide a feedforwards to counteract gravity and maintain the arm at a set point
+            .outputRange(-1, 1);
             //.p(0, ClosedLoopSlot.kSlot1)
             //.i(0, ClosedLoopSlot.kSlot1)
             //.d(0, ClosedLoopSlot.kSlot1)
@@ -140,7 +140,7 @@ public class SK25EndEffector extends SubsystemBase
 
         armConfig
             .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(80); // TODO: Consider adding a .voltageCompensation(double nominalVoltage) in order to limit maximum volts to the motor
+            .smartCurrentLimit(80);
 
         mPID = armMotor.getClosedLoopController();
         mEncoder = armMotor.getEncoder();

@@ -1,7 +1,7 @@
 package frc.robot.subsystems.unusedSwerve;
 
 import static edu.wpi.first.units.Units.Rotation;
-import static frc.robot.Konstants.SwerveConstants.kCANivoreNameString;
+import static frc.robot.Konstants.kCANivoreName;
 import static frc.robot.Konstants.SwerveConstants.kChassisLength;
 import static frc.robot.Konstants.SwerveConstants.kChassisWidth;
 import static frc.robot.Konstants.SwerveConstants.kDriveD;
@@ -50,11 +50,11 @@ public class SK25SwerveModule {
     public SK25SwerveModule(int driveMotorID, int turnMotorID, int encoderID, double encoderOffset, double inverted)
     {
         //the drive motor to use for this module
-        driveMotor = new TalonFX(driveMotorID, kCANivoreNameString);
+        driveMotor = new TalonFX(driveMotorID, kCANivoreName);
         //the turn motor to use for this module
-        turnMotor = new TalonFX(turnMotorID, kCANivoreNameString);
+        turnMotor = new TalonFX(turnMotorID, kCANivoreName);
         //the encoder to use for this module
-        encoder = new CoreCANcoder(encoderID, kCANivoreNameString);
+        encoder = new CoreCANcoder(encoderID, kCANivoreName);
         //the Phoenix PID controller to use for this module
         turnPID = new PhoenixPIDController(kDriveP, kDriveI, kDriveD);
         //makes a new SlewrateLimiter to limit the velocity of the module

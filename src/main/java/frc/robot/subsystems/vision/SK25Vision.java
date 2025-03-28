@@ -38,8 +38,6 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     private static final int[] blueReefTagIDs = {17, 18, 19, 20, 21, 22};
     private static final int[] redReefTagIDs = {6, 7, 8, 9, 10, 11};
 
-    //TODO: Add logging/telemetry for both limelights
-
     public final Limelight[] allLimelights = {frontLL}; // List of all limelights
     public final Limelight[] poseLimelights = {frontLL}; // Limelights specifically used for estimating pose
     public final Limelight[] reefLimelights = {frontLL}; // Effectively used for pose estimating, 

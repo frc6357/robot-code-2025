@@ -362,6 +362,9 @@ public final class Konstants
     }
 }
 
+    /*
+     * These are primarily unused and almost all of it is taken care of in TunerConstants
+     */
     public static final class SwerveConstants
     {
         //Device Settings and Default States
@@ -427,7 +430,7 @@ public final class Konstants
         public static final double kLeftToRightEncoderDistInches = 21.625;
 
         // Module positions for kinematics, distances between encoders divided by two
-        // Front left                                                                      //TODO: decide on module position in x and y or translation 2ds
+        // Front left
         public static final double kFrontLeftXPos = kLeftToRightEncoderDistInches / 2;
         public static final double kFrontLeftYPos = kFrontToBackEncoderDistInches / 2;
         // Front right
@@ -441,7 +444,7 @@ public final class Konstants
         public static final double kBackRightYPos = -kFrontToBackEncoderDistInches / 2;
 
         //radius of the wheels in inches
-        public static final Double kWheelRadiusInches = 2.0;   //inches   //TODO: value in orignial spectrum code was 4 inches, was it mistaken for diameter?
+        public static final Double kWheelRadiusInches = 2.0;   //inches
         //radius of the wheels in meters. One meter is equal to 39.37 inches.
         private static final Double kWheelRadiusMeters = kWheelRadiusInches  / 39.37;   //meters
         /**Circumference of the swerve wheels for the drive conversion 
@@ -453,20 +456,9 @@ public final class Konstants
         public static final double kWheelErrorMargin = 0.0; //inches
         public static final double kWheelRadius = ((kWheelRadiusInches + kWheelErrorMargin) / 2); //inches
 
-        // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
-        // This may need to be tuned to your individual robot
-        //TODO: Tune CoupleRatio
-        public static final double kCoupleGearRatio = 3.5714285714285716;
-
         //The gear ratios of the drive and turn motors
-        //TODO: Check these values
         public static final double kDriveGearRatio = 6.746031746031747;
         public static final double kTurnGearRatio = 21.428571428571427;
-
-
-
-        //PID values
-
 
 
         //PID Constants for wheels from manual tunning
@@ -477,52 +469,12 @@ public final class Konstants
         public static final double kDriveV = 0.12;
         public static final double kDriveA = 0.01;
 
-
-        //rotation controller PID values
-        public static final double kPRotationController = 8.0;
-        public static final double kIRotationController = 0.0;
-        public static final double kDRotationController = 0.2;
-
-        //hold controller PID values
-        public static final double kPHoldController = 12.0;
-        public static final double kIHoldController = 0.0;
-        public static final double kDHoldController = 0.0;
-
-        // The steer motor uses any SwerveModule.SteerRequestType control request with the
-        // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
-        public static final Slot0Configs kSteerGains = new Slot0Configs() //TODO - tune steering gains drive
-        .withKP(100.0).withKI(0).withKD(0.5)
-        .withKS(0.1).withKV(2.66).withKA(0.0);
-
-        // When using closed-loop control, the drive motor uses the control
-        // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
-        //TODO: THIS IS 2024 TUNING!!!! PLEASE UPDATE ME!!!!
-        public static final Slot0Configs kDriveGains = new Slot0Configs() //TODO - tune driving gains drive
-        .withKP(0.1).withKI(0).withKD(0)
-        .withKS(0).withKV(0.124).withKA(0);
-
-         // The closed-loop output type to use for the steer motors;
-        // This affects the PID/FF gains for the steer motors
-        //Closed loop control uses feeback to control outputs of a dynamic system.
-        public static final ClosedLoopOutputType kTurnClosedLoopOutput = ClosedLoopOutputType.Voltage;
-
-        // The closed-loop output type to use for the drive motors;
-        // This affects the PID/FF gains for the drive motors
-        //Closed loop control uses feeback to control outputs of a dynamic system.
-        public static final ClosedLoopOutputType kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
-
         /**
          * The error tolerance for the PID controllers of the wheels in radians
          */
         public static final double kPIDControllerToleranceDegrees = 6.0;   //TODO: change this to radians?
 
         public static final double kRotationToleranceRadians = (Math.PI / 360); // rads
-
-
-
-        //Robot Speed and Position Measurements
-        
-
 
         /**The velocity limit for the swerve drive modules.*/
         public static final double kMaxVelocityMetersPerSecond = 1.0;  // m/s
@@ -549,16 +501,6 @@ public final class Konstants
         public static final double kSteerInertia = 0.00001;
         public static final double kDriveInertia = 0.001;
 
-        //Starting positions of the robot when facing toward the opposing alliance's direver station. 
-        public static final Rotation2d kBlueAlliancePerspective = Rotation2d.fromDegrees(0);
-        public static final Rotation2d kRedAlliancePerspective = Rotation2d.fromDegrees(180);
-     
-
-        
-        //Current Limits
-
-
-
         /**The current limit of the turning motors. This number should be relativley low in comparison 
         to the drive motor amperage since rotaing dosn't require nearly as much voltage as driving.*/
         public static final Current kTurningCurrentLimitAmps = Amps.of(60);
@@ -573,26 +515,6 @@ public final class Konstants
         // Simulated voltage necessary to overcome friction
         public static final double kTurnFrictionVoltage = 0.25;
         public static final double kDriveFrictionVoltage = 0.25;
-
-
-
-        //Other Constants
-
-
-
-        //Object containing all the neccessary coonstant values for the Swerve subsystem
-        //public static final SwerveConstantsConfigurator config = new SwerveConstantsConfigurator();
-
-        //the deadzone on the controller's joysticks
-        public static final double kJoystickDeadband = 0.2;   //TODO: find approperiate deaband
-        
-        //CANivore name in Phoneix Tuner X for assigning CANbus names
-        public static final String kCANivoreNameString = "SwerveCANivore";
-        public static final CANBus kCANivoreNameCANBus = new CANBus(kCANivoreNameString);
-
-        /** The length of the simulation loop for telemetry/logging. 
-         * Affects the steering and driving inertia.*/
-        public static final double kSimulationLoopPeriod = 0.005;
     }
 
 
@@ -616,8 +538,6 @@ public final class Konstants
         /** Heights for the different elevator positions */
         public static enum ElevatorPosition
         {
-            //TODO FIX DURING TESTING - Measure Elevator Heights
-
             /** Set the height to reach the top branch (L4) */ // 12.5
             kNetPosition(14), // 13.5 rotations of hex shaft
             /** Set the height to reach the top branch (L4) */ // 12.5
