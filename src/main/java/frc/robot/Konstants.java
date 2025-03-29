@@ -1,6 +1,7 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
@@ -58,7 +59,7 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.MomentOfInertia;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.subsystems.SKSwerve;
-
+import frc.robot.utils.Field;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Pose2d;
 // import edu.wpi.first.math.util.Units;
@@ -693,6 +694,10 @@ public final class Konstants
         }
 
         public static final class PoseConstants {
+            private static final Pose2d southWestLeft = new Pose2d(3.994, 5.251, new Rotation2d(-1.047));
+            private static final Pose2d southWestRight = new Pose2d(3.705, 5.077, new Rotation2d(-1.047));
+            private static final Pose2d southWestCenter = new Pose2d(3.856, 5.119, new Rotation2d(-1.047));
+
             public static final HashMap<String, Pose2d> fieldPositions = new HashMap<String, Pose2d>() {{
               
             /* SOUTH (Face closest to driver station) */
@@ -717,9 +722,9 @@ public final class Konstants
             put("reefGHAlgae", new Pose2d(5.754, 4.040, new Rotation2d(3.1459)));
 
             /* NORTHWEST */
-            put("reefI", new Pose2d(5.315, 5.085, new Rotation2d(-2.094)));
-            put("reefJ", new Pose2d(4.989, 5.261, new Rotation2d(-2.094)));
-            put("reefIJAlgae", new Pose2d(5.025, 5.066, new Rotation2d(-2.094)));
+            put("reefI", southWestLeft.rotateAround(Field.Reef.center, new Rotation2d(Degrees.of(60)))); // new Pose2d(5.315, 5.085, new Rotation2d(-2.094))
+            put("reefJ", southWestRight.rotateAround(Field.Reef.center, new Rotation2d(Degrees.of(60)))); // new Pose2d(4.989, 5.261, new Rotation2d(-2.094))
+            put("reefIJAlgae", southWestCenter.rotateAround(Field.Reef.center, new Rotation2d(Degrees.of(60)))); // new Pose2d(5.025, 5.066, new Rotation2d(-2.094))
 
             /* SOUTHWEST */
             // Use this to determine all other faces
