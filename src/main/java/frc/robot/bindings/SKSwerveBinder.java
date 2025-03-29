@@ -4,7 +4,7 @@ import static frc.robot.Konstants.OIConstants.kSlowModePercent;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
-//import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
+import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
 import static frc.robot.Ports.DriverPorts.kSlowMode;
 import static frc.robot.Ports.DriverPorts.kTranslationXPort;
 import static frc.robot.Ports.DriverPorts.kTranslationYPort;
@@ -61,8 +61,8 @@ public class SKSwerveBinder implements CommandBinder{
     public final Trigger noFn = fn.negate();
 
     //Other driver buttons
-    //private final Trigger robotCentric = kRobotCentricMode.button.and(fn);
-    private final Trigger slowmode = kSlowMode.button.and(fn);
+    private final Trigger robotCentric = kRobotCentricMode.button;
+    private final Trigger slowmode = kSlowMode.button;
     private final Trigger resetButton = kResetGyroPos.button;
 
     public double desiredRotSpeed = 0.0; // The double to update for the driver's desired rotation speed
@@ -213,6 +213,14 @@ public class SKSwerveBinder implements CommandBinder{
         kTranslationXPort.setFilter(translationXFilter);
         kTranslationYPort.setFilter(translationYFilter);
         kVelocityOmegaPort.setFilter(rotationFilter);
+
+        robotCentric.whileTrue(
+            drivetrain.applyRequest(() -> {
+                return robotCentricDrive.withVelocityX(applyGains(-MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercent)) // Drive forward with negative Y (forward)
+                    .withVelocityY(applyGains(-MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercent)) // Drive left with negative X (left)
+                    .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercent)); // Drive counterclockwise with negative X (left)
+            })
+        );
 
         //Apply slow mode if activated
         slowmode.onTrue(new InstantCommand(() -> setSlowMode(true)));

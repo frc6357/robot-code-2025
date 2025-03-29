@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommand;
+import frc.robot.preferences.Pref;
+import frc.robot.preferences.SKPreferences;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
 import frc.robot.subsystems.vision.SK25Vision.MultiLimelightCommandConfig;
@@ -34,7 +39,7 @@ public class DriveToReefCommand extends Command{
 
     Limelight[] limelights;
 
-    // RotateToReef rotateController;
+    RotateToReef rotateController;
     TranslateToReef driveController;
 
     Pose2d targetPose;
@@ -45,7 +50,6 @@ public class DriveToReefCommand extends Command{
     DriveCommand driveCommand;
 
     boolean valid;
-
 
     Trigger targetLeftSide = kLeftReef.button;
     Trigger targetRightSide = kRightReef.button;
@@ -89,8 +93,6 @@ public class DriveToReefCommand extends Command{
             return axis;
     }
 
-
-
     /**
      * 
      * @param driveConfig The specific profiled PID and limelight config to use for translating the robot
@@ -120,7 +122,7 @@ public class DriveToReefCommand extends Command{
         this.driveCommand = new DriveCommand(
             () -> (driveController.getXOutput()), // driveController.getXOutput()
             () -> (driveController.getYOutput()), // driveController.getYOutput()
-            () -> (applyGains(TunerConstants.MaxAngularRate * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercent)), 
+            () -> (rotateController.getOutput()), // applyGains(TunerConstants.MaxAngularRate * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercent)
             () -> (true));
         
         // Drive config and rotate config both use the same limelights, so only need to call one config's array here
@@ -153,13 +155,21 @@ public class DriveToReefCommand extends Command{
 
         targetPose = PoseConstants.fieldPositions.get(targetPosition);
 
-        targetPose = new Pose2d(
+
+        if(DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) { // Should we flip pose? 
+            targetPose = new Pose2d(
                     Field.flipXifRed(targetPose.getX()),
                     Field.flipYifRed(targetPose.getY()),
-                    Field.flipAngleIfRed(targetPose.getRotation()));
+                    targetPose.getRotation().plus(Rotation2d.kPi));
+        }
+        
+        
+        SmartDashboard.putNumber("LastTargetPoseX", targetPose.getX());
+        SmartDashboard.putNumber("LastTargetPoseY", targetPose.getY());
+
 
         driveController.initialize(targetPose);
-        //rotateController.initialize(targetPose);
+        rotateController.initialize(targetPose);
     }
 
     ArrayList<RawFiducial> reefTags;
@@ -199,8 +209,7 @@ public class DriveToReefCommand extends Command{
         }
 
 
-        // this.rotateController = new RotateToReef(rotateConfig, m_swerve);
-        // TODO: uncomment this
+        this.rotateController = new RotateToReef(rotateConfig, m_swerve);
         this.driveController = new TranslateToReef(driveConfig, m_swerve);
 
         if(valid) {
@@ -233,6 +242,10 @@ public class DriveToReefCommand extends Command{
             driveCommand.run();
 
             prevTarget = currentTarget;
+
+            SmartDashboard.putNumber("PIDx", driveController.getXGoal());
+            SmartDashboard.putNumber("PIDy", driveController.getYGoal());
+            SmartDashboard.putNumber("PIDtheta", rotateController.getGoal());
         }
         else {
             kOperator.setRumble(RumbleType.kBothRumble, 0.0);
@@ -255,9 +268,8 @@ public class DriveToReefCommand extends Command{
         m_vision.reefDriveTarget = "OFF";
         kDriver.setRumble(RumbleType.kBothRumble, 0.0);
         kOperator.setRumble(RumbleType.kBothRumble, 0.0);
-        // TOOD: Uncomment
         driveController.end();  
-        //rotateController.end();
+        rotateController.end();
     }
 
 }

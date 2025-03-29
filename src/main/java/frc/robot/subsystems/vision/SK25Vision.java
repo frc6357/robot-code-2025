@@ -275,7 +275,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         For each limelight that has a tag in view, send it to be aggregated into the current pose estimate, alongside other
         recent poses.
         */
-        updatePoseAutonomous();
+        //TODO: Reenable auto pose updater when ready
+        // updatePoseAutonomous();
 
         /*
         Teleop pose updater:
@@ -405,11 +406,14 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         if(ll == null) {
             return;
         }
+        if(!ll.targetInView()) {
+            return;
+        }
 
         ll.setRobotOrientation(ll.getRawPose3d().toPose2d().getRotation().getDegrees());
         //TODO: if MT2 doesn't work, change it to the line below
-        m_swerve.resetPose(ll.getRawPose3d().toPose2d());
-        //m_swerve.resetPose(ll.getMegaPose2d());
+        // m_swerve.resetPose(ll.getRawPose3d().toPose2d());
+        m_swerve.resetPose(ll.getMegaPose2d());
     }
 
     public void autonResetPoseToVision() {
@@ -454,8 +458,14 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public void resetPoseToVision() { // Calls resetPoseToVision by passing in Limelight measurements
         Limelight ll = getBestLimelight();
+        if(!ll.targetInView()) {
+            return;
+        }
+
+        Pose3d botPose3d = ll.getRawPose3d();
+        ll.setRobotOrientation(botPose3d.toPose2d().getRotation().getDegrees());
         resetPoseToVision(
-                ll.targetInView(), ll.getRawPose3d(), ll.getMegaPose2d(), ll.getRawPoseTimestamp());
+                ll.targetInView(), botPose3d, ll.getMegaPose2d(), ll.getRawPoseTimestamp());
     }
 
     private String resetPoseToVisionLog = "Not executed yet..."; // Provides an updatable string for smartdashboard
@@ -508,7 +518,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
                             VisionConfig.VISION_STD_DEV_Y,
                             VisionConfig.VISION_STD_DEV_THETA));
 
-            Pose2d integratedPose = new Pose2d(megaPose.getTranslation(), botpose.getRotation());
+            Pose2d integratedPose = new Pose2d(megaPose.getTranslation(), megaPose.getRotation());
             m_swerve.addVisionMeasurement(integratedPose, poseTimestamp);
             // robotPose = m_swerve.getRobotPose(); // get updated pose
             resetPoseToVisionLog = ("ResetPoseToVision: SUCCESS");

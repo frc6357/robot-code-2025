@@ -23,7 +23,7 @@ public class RotateToReef {
     
     private ProfiledPIDController rotPID;
 
-    private Supplier<Double> targetHeading;
+    private double targetHeading;
 
     private Supplier<Double> currentHeading;
 
@@ -41,29 +41,31 @@ public class RotateToReef {
         rotPID = new ProfiledPIDController(config.kp, config.ki, config.kd, constraints);
 
         rotPID.enableContinuousInput(-Math.PI, Math.PI);
-        rotPID.setTolerance(0); // TODO: Change back to config.tolerance
+        rotPID.setTolerance(config.tolerance);
 
-        this.currentHeading = () -> (m_swerve.getRobotRotation().getRadians());
+        currentHeading = () -> (m_swerve.getRobotRotation().getRadians());
 
         outputting = true;
     }
 
     public void initialize(Pose2d targetPose) {
-        this.targetHeading = () -> (targetPose.getRotation().getRadians());
+        this.targetHeading = targetPose.getRotation().getRadians();
 
-        rotPID.setGoal(targetHeading.get());
-        rotPID.reset(currentHeading.get(), m_swerve.getVelocity(false).omegaRadiansPerSecond); // Position, velocity
+        rotPID.reset(currentHeading.get(), m_swerve.getVelocity(true).omegaRadiansPerSecond); // Position, velocity
+    }
+
+    public double getGoal() {
+        return rotPID.getGoal().position;
     }
 
     public double getOutput() {
 
-        outputting = (rotPID.getPositionError() > 0); //TODO: Change 0 back to config.error
+        outputting = !(rotPID.atGoal());
         if(!outputting) {
             return 0;
         }
-        else {
-            return rotPID.calculate(currentHeading.get(), targetHeading.get());
-        }
+            return rotPID.calculate(currentHeading.get(), targetHeading);
+        
     }
 
     public void end() {

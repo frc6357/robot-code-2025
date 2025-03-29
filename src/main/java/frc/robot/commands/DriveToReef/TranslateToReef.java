@@ -6,6 +6,8 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision.CommandConfig;
 
@@ -26,7 +28,6 @@ public class TranslateToReef{
 
     private double targetX;
     private double targetY;
-
 
     private Supplier<Double> currentX;
     private Supplier<Double> currentY;
@@ -57,6 +58,16 @@ public class TranslateToReef{
         this.targetX = targetPose.getX();
         this.targetY = targetPose.getY();
         reset();
+
+        xPID.setGoal(targetX);
+        yPID.setGoal(targetY);
+    }
+
+    public double getXGoal() {
+        return xPID.getGoal().position;
+    }
+    public double getYGoal() {
+        return yPID.getGoal().position;
     }
 
     public double getXOutput() {
@@ -66,7 +77,10 @@ public class TranslateToReef{
             return 0;
         }
         else {
-            return xPID.calculate(currentX.get(), targetX);
+            if(!(DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red)) {
+                return xPID.calculate(currentX.get(), targetX);
+            }
+            return xPID.calculate(currentX.get(), targetX) * -1;
         }
     }
 
@@ -77,7 +91,10 @@ public class TranslateToReef{
             return 0;
         }
         else {
-            return yPID.calculate(currentY.get(), targetY);
+            if(!(DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red)) {
+                return yPID.calculate(currentY.get(), targetY);
+            }
+            return yPID.calculate(currentY.get(), targetY) * -1;
         }
     }
 
