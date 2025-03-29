@@ -430,8 +430,7 @@ public class RobotContainer extends Robot{
 
     public void teleopInit()
     {
-        //ensure this value is reset before thirty seconds can ever be reached
-        thirtySecondsReached = false;
+
     }
 
     public void autonomousInit()
