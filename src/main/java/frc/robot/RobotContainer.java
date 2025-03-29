@@ -79,13 +79,13 @@ public class RobotContainer extends Robot{
 
   // The robot's subsystems and commands are defined here...
 
-  private Optional<SKSwerve> m_swerveContainer = Optional.empty();
-  private Optional<SK25Vision> m_visionContainer = Optional.empty();
-  private Optional<SK25Elevator> m_elevatorContainer = Optional.empty();
-  private Optional<CoralSubsystem> m_coralContainer = Optional.empty();
-  private Optional<SK25Lights> m_lightsContainer = Optional.empty();
-  private Optional<SK25Climb> m_climbContainer = Optional.empty();
-  private Optional<SK25EndEffector> m_endEffectorContainer = Optional.empty();
+  public Optional<SKSwerve> m_swerveContainer = Optional.empty();
+  public Optional<SK25Vision> m_visionContainer = Optional.empty();
+  public Optional<SK25Elevator> m_elevatorContainer = Optional.empty();
+  public Optional<CoralSubsystem> m_coralContainer = Optional.empty();
+  public Optional<SK25Lights> m_lightsContainer = Optional.empty();
+  public Optional<SK25Climb> m_climbContainer = Optional.empty();
+  public Optional<SK25EndEffector> m_endEffectorContainer = Optional.empty();
 
   public static SK25Vision m_vision;
   public static SKSwerve m_swerve;

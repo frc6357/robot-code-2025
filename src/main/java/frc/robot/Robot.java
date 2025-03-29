@@ -160,7 +160,7 @@ public class Robot extends LoggedRobot
             kOperator.setRumble(RumbleType.kBothRumble, 0.5);
 
             //raise the climb to the ready position
-            m_robotContainer.m_Climb.get().readyTheClimb(kKrakenSpeed);
+            m_robotContainer.m_climbContainer.get().readyTheClimb(kKrakenSpeed);
 
             rumbling = true;
         }
@@ -201,7 +201,7 @@ public class Robot extends LoggedRobot
             kOperator.setRumble(RumbleType.kBothRumble, 0.5);
 
             //raise the climb to the ready position
-            m_robotContainer.m_Climb.get().readyTheClimb(kKrakenSpeed);
+            m_robotContainer.m_climbContainer.get().readyTheClimb(kKrakenSpeed);
 
             rumbling = true;
         }
@@ -236,7 +236,7 @@ public class Robot extends LoggedRobot
     {
         m_robotContainer.matchInit();
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-        m_robotContainer.m_Climb.get().readyTheClimb(kKrakenSpeed);
+        m_robotContainer.m_climbContainer.get().readyTheClimb(kKrakenSpeed);
 
         /*
          * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
