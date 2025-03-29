@@ -25,8 +25,8 @@ public class ClimbBinder implements CommandBinder {
         subsystem = climbSys;
         raise = climbRaiseButton.button;
         lower = climbLowerButton.button;
-        stop = climbStopButton.button;
-        slow = climbSlowButton.button;
+        // stop = climbStopButton.button;
+        // slow = climbSlowButton.button;
     }
 
     public void bindButtons() 
