@@ -16,18 +16,26 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.ctre.phoenix6.Utils;
 import com.pathplanner.lib.commands.FollowPathCommand;
 
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
+
+import static frc.robot.Konstants.ClimbConstants.kKrakenSpeed;
+import static frc.robot.Ports.DriverPorts.kDriver;
+import static frc.robot.Ports.OperatorPorts.kOperator;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.preferences.SKPreferences;
-
+import frc.robot.utils.files.Elastic;
+import frc.robot.utils.files.Elastic.Notification.NotificationLevel;
 // To Be Commented?
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -52,6 +60,12 @@ public class Robot extends LoggedRobot
     private RobotContainer m_robotContainer;
 
     SendableChooser<Command> autoCommandSelector = new SendableChooser<Command>();
+
+    boolean thirtySecondsReached = false;
+
+    boolean rumbling = false;
+
+    double time;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -112,9 +126,99 @@ public class Robot extends LoggedRobot
 
         //display real time memory consumption
         SmartDashboard.putNumber("Memory", Runtime.getRuntime().freeMemory());
-        
+
         // display match time
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+
+        // checkIfThirtySecondsLeft();
+
+        SmartDashboard.putNumber("StatusSingalTime", ((Double)DriverStation.getMatchTime()).intValue());
+
+
+
+
+        if ((((Double)DriverStation.getMatchTime()).intValue() <= 30) && thirtySecondsReached == false)  //previously match time
+        {
+            
+            DriverStation.reportError("CONDITION MET", false);
+
+            time = System.currentTimeMillis();
+
+            //dont let the notification send more than once
+            thirtySecondsReached = true;
+
+            //send elastic notification that thirty seconds are left
+            Elastic.Notification timeToClimbNotification = new Elastic.Notification(
+                NotificationLevel.INFO, 
+                "Time to Climb!", 
+                "There are thirty seconds left in the match."
+            );
+            //make the notification take up more of the screen
+            Elastic.sendNotification(timeToClimbNotification
+                .withDisplaySeconds(5.0)
+                .withWidth(2.0)
+                .withHeight(2.0)
+            );
+
+            //controller rumble to alert driver and operator
+            kDriver.setRumble(RumbleType.kBothRumble, 0.5);
+            kOperator.setRumble(RumbleType.kBothRumble, 0.5);
+
+            //raise the climb to the ready position
+            m_robotContainer.m_Climb.get().readyTheClimb(kKrakenSpeed);
+
+            rumbling = true;
+        }
+
+        if (DriverStation.getMatchTime() <= 29 && rumbling == true)
+            {
+                //stop rumble after 1 second
+                kDriver.setRumble(RumbleType.kBothRumble, 0.0);
+                kOperator.setRumble(RumbleType.kBothRumble, 0.0);
+
+                rumbling = false;
+            }
+    }
+
+    public void checkIfThirtySecondsLeft()
+    {
+        if (DriverStation.getMatchTime() <= 30 && thirtySecondsReached == false)  //previously match time
+        {
+            
+            //dont let the notification send more than once
+            thirtySecondsReached = true;
+
+            //send elastic notification that thirty seconds are left
+            Elastic.Notification timeToClimbNotification = new Elastic.Notification(
+                NotificationLevel.INFO, 
+                "Time to Climb!", 
+                "There are thirty seconds left in the match."
+            );
+            //make the notification take up more of the screen
+            Elastic.sendNotification(timeToClimbNotification
+                .withDisplaySeconds(5.0)
+                .withWidth(2.0)
+                .withHeight(2.0)
+            );
+
+            //controller rumble to alert driver and operator
+            kDriver.setRumble(RumbleType.kBothRumble, 0.5);
+            kOperator.setRumble(RumbleType.kBothRumble, 0.5);
+
+            //raise the climb to the ready position
+            m_robotContainer.m_Climb.get().readyTheClimb(kKrakenSpeed);
+
+            rumbling = true;
+        }
+
+        if (DriverStation.getMatchTime() <= 29 && rumbling == true)
+            {
+                //stop rumble after 1 second
+                kDriver.setRumble(RumbleType.kBothRumble, 0.0);
+                kOperator.setRumble(RumbleType.kBothRumble, 0.0);
+
+                rumbling = false;
+            }
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
@@ -137,6 +241,7 @@ public class Robot extends LoggedRobot
     {
         m_robotContainer.matchInit();
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        m_robotContainer.m_Climb.get().readyTheClimb(kKrakenSpeed);
 
         /*
          * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
