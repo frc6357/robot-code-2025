@@ -61,7 +61,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     public boolean enabled;
 
     public SK25Vision(Optional<SKSwerve> m_swerveContainer) {
-        enabled = false;
+        enabled = true;
 
         this.m_swerve = m_swerveContainer.get();
         df.setMaximumFractionDigits(2);
@@ -292,7 +292,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         recent poses.
         */
         //TODO: Reenable auto pose updater when ready
-        // updatePoseAutonomous();
+        updatePoseAutonomous();
 
         /*
         Teleop pose updater:
