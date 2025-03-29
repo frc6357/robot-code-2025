@@ -202,6 +202,9 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         for(Limelight ll : poseLimelights) {
             ll.setRobotOrientation(m_swerve.getRobotRotation().getDegrees());
         }
+
+        /* The secret sauce: */
+        estimatePose();
     }
 
     /**
