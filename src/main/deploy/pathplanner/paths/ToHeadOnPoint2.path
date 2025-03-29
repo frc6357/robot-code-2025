@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 5.826024590163935,
-        "y": 4.18
+        "y": 4.25
       },
       "prevControl": null,
       "nextControl": {
         "x": 5.814636270491803,
-        "y": 5.649774357302532
+        "y": 5.719774357302533
       },
       "isLocked": false,
       "linkedName": "HeadOnPoint1"

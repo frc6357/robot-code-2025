@@ -125,7 +125,7 @@ public class Robot extends LoggedRobot
         SKPreferences.refreshIfNeeded();
 
         //display real time memory consumption
-        SmartDashboard.putNumber("Memory", Runtime.getRuntime().freeMemory());
+        SmartDashboard.putNumber("Memory", Runtime.getRuntime().freeMemory() / 1000000);
 
         // display match time
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
@@ -134,10 +134,12 @@ public class Robot extends LoggedRobot
 
         SmartDashboard.putNumber("StatusSingalTime", ((Double)DriverStation.getMatchTime()).intValue());
 
-        if((((Double)DriverStation.getMatchTime()).intValue() <= 120) && thirtySecondsReached == false)
-        {
-            kDriver.setRumble(RumbleType.kBothRumble, 0.5);
-        }
+        // if((((Double)DriverStation.getMatchTime()).intValue() <= 120) && thirtySecondsReached == false)
+        // {
+        //     kDriver.setRumble(RumbleType.kBothRumble, 0.5);
+        // }
+
+        kDriver.setRumble(RumbleType.kBothRumble, 0.0);
 
 
 
@@ -246,7 +248,7 @@ public class Robot extends LoggedRobot
     {
         m_robotContainer.matchInit();
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-        m_robotContainer.m_Climb.get().readyTheClimb(kKrakenSpeed);
+        // m_robotContainer.m_Climb.get().readyTheClimb(kKrakenSpeed);
 
         /*
          * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
