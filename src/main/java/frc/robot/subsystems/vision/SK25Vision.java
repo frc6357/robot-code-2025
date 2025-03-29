@@ -26,6 +26,7 @@ import frc.robot.utils.vision.Limelight.IMUMode;
 import frc.robot.utils.vision.LimelightHelpers.RawFiducial;
 import frc.robot.utils.Trio;
 import frc.robot.utils.Field;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.Konstants.TunerConstants;
 import frc.robot.subsystems.SKSwerve;
@@ -402,6 +403,9 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     }
 
     public void forcePoseToVision() {
+        if(Robot.isSimulation()) {
+            return;
+        }
         Limelight ll = getBestLimelight();
         if(ll == null) {
             return;
