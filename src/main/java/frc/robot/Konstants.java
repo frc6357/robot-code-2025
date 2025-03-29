@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
@@ -61,6 +62,7 @@ import edu.wpi.first.units.measure.Voltage;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.utils.Field;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Pose2d;
 // import edu.wpi.first.math.util.Units;
 // import edu.wpi.first.units.measure.Angle;
@@ -694,42 +696,54 @@ public final class Konstants
         }
 
         public static final class PoseConstants {
+            public static final Translation2d center =
+                new Translation2d(Units.inchesToMeters(176.746), Units.inchesToMeters(158.501));
             private static final Pose2d southWestLeft = new Pose2d(3.994, 5.251, new Rotation2d(-1.047));
             private static final Pose2d southWestRight = new Pose2d(3.705, 5.077, new Rotation2d(-1.047));
             private static final Pose2d southWestCenter = new Pose2d(3.856, 5.119, new Rotation2d(-1.047));
 
+            private static Pose2d rotateLeftAroundCenter(Angle angle) {
+                return southWestLeft.rotateAround(center, new Rotation2d(angle));
+            }
+            private static Pose2d rotateRightAroundCenter(Angle angle) {
+                return southWestRight.rotateAround(center, new Rotation2d(angle));
+            }
+            private static Pose2d rotateCenterAroundCenter(Angle angle) {
+                return southWestCenter.rotateAround(center, new Rotation2d(angle));
+            }
+
             public static final HashMap<String, Pose2d> fieldPositions = new HashMap<String, Pose2d>() {{
               
             /* SOUTH (Face closest to driver station) */
-            put("reefA", new Pose2d(3.250, 4.332, new Rotation2d(0))); // Left branch
-            put("reefB", new Pose2d(3.243, 3.964, new Rotation2d(0))); // Right branch
-            put("reefABAlgae", new Pose2d(3.395, 4.167, new Rotation2d(0))); // Center
+            put("reefA", rotateLeftAroundCenter(Degrees.of(60))); // Left branch
+            put("reefB", rotateRightAroundCenter(Degrees.of(60))); // Right branch
+            put("reefABAlgae", rotateCenterAroundCenter(Degrees.of(60))); // Center
 
             /* SOUTHEAST */
-            put("reefC", (new Pose2d(3.675, 2.945, new Rotation2d(1.047))));
-            put("reefD", (new Pose2d(3.972, 2.763, new Rotation2d(1.047))));
-            put("reefCDAlgae", new Pose2d(3.874, 2.927, new Rotation2d(1.047)));
+            put("reefC", rotateLeftAroundCenter(Degrees.of(120)));
+            put("reefD", rotateRightAroundCenter(Degrees.of(120)));
+            put("reefCDAlgae", rotateCenterAroundCenter(Degrees.of(120)));
 
             /* NORTHEAST */
-            put("reefE", new Pose2d(5.018, 2.782, new Rotation2d(2.0944)));
-            put("reefF", new Pose2d(5.328, 2.945, new Rotation2d(2.0944)));
-            put("reefEFAlgae", new Pose2d(5.136, 2.948, new Rotation2d(2.0944)));
+            put("reefE", rotateRightAroundCenter(Radians.of(Math.PI))); // Don't ask why this is flipped...
+            put("reefF", rotateLeftAroundCenter(Radians.of(Math.PI))); // It just works
+            put("reefEFAlgae", rotateCenterAroundCenter(Radians.of(Math.PI)));
 
 
             /* NORTH (Face furthest from driver station) */
-            put("reefG", new Pose2d(5.830, 3.859, new Rotation2d(3.1459)));
-            put("reefH", new Pose2d(5.846, 4.202, new Rotation2d(3.1459)));
-            put("reefGHAlgae", new Pose2d(5.754, 4.040, new Rotation2d(3.1459)));
+            put("reefG", rotateRightAroundCenter(Degrees.of(-120)));
+            put("reefH", rotateLeftAroundCenter(Degrees.of(-120)));
+            put("reefGHAlgae", rotateCenterAroundCenter(Degrees.of(-120)));
 
             /* NORTHWEST */
-            put("reefI", southWestLeft.rotateAround(Field.Reef.center, new Rotation2d(Degrees.of(60)))); // new Pose2d(5.315, 5.085, new Rotation2d(-2.094))
-            put("reefJ", southWestRight.rotateAround(Field.Reef.center, new Rotation2d(Degrees.of(60)))); // new Pose2d(4.989, 5.261, new Rotation2d(-2.094))
-            put("reefIJAlgae", southWestCenter.rotateAround(Field.Reef.center, new Rotation2d(Degrees.of(60)))); // new Pose2d(5.025, 5.066, new Rotation2d(-2.094))
+            put("reefI", rotateLeftAroundCenter(Degrees.of(-60))); // new Pose2d(5.315, 5.085, new Rotation2d(-2.094))
+            put("reefJ", rotateRightAroundCenter(Degrees.of(-60))); // new Pose2d(4.989, 5.261, new Rotation2d(-2.094))
+            put("reefIJAlgae", rotateCenterAroundCenter(Degrees.of(-60))); // new Pose2d(5.025, 5.066, new Rotation2d(-2.094))
 
             /* SOUTHWEST */
             // Use this to determine all other faces
-            put("reefL", new Pose2d(3.994, 5.251, new Rotation2d(-1.047)));
-            put("reefK", new Pose2d(3.705, 5.077, new Rotation2d(-1.047)));
+            put("reefL", new Pose2d(3.705, 5.077, new Rotation2d(-1.047))); // Don't ask why this is flipped...
+            put("reefK", new Pose2d(3.994, 5.251, new Rotation2d(-1.047))); // It just works
             put("reefKLAlgae", new Pose2d(3.856, 5.119, new Rotation2d(-1.047)));
         
             /* EAST SOURCE */
@@ -768,7 +782,7 @@ public final class Konstants
         public static final double kDriveCoeff       = 1;
         public static final double kRotationCoeff    = 1;
         public static final double kJoystickDeadband = 0.15;
-        public static final double kSlowModePercent  = 0.05;
+        public static final double kSlowModePercent  = 0.3;
         
         public static final double kAccelLimit = 2;
 

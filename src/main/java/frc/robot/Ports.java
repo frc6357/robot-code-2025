@@ -52,7 +52,12 @@ public class Ports
         public static final SKTrigger climbStopButton = new SKTrigger(kDriver, 90, POV);
         public static final SKTrigger climbSlowButton = new SKTrigger(kDriver, 270, POV);
         
+        // Vision subsystem enable/disable
+        public static final SKTrigger kVisionOff = new SKTrigger(kDriver, 180, POV);
+        public static final SKTrigger kVisionOn = new SKTrigger(kDriver, 0, POV);
+
         // Vision Driving buttons
+        public static final SKTrigger kResetPoseToVision = new SKTrigger(kDriver, kB.value, BUTTON);
         public static final SKTrigger kForceResetPoseToVision = new SKTrigger(kDriver, kY.value, BUTTON);
         public static final SKTrigger kDriveToClosestReef = new SKTrigger(kDriver, kX.value, BUTTON);
         public static final SKTrigger kLeftReef = new SKTrigger(kDriver, kLeftTrigger.value, AXIS);

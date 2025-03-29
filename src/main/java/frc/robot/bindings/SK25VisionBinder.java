@@ -12,7 +12,10 @@ import frc.robot.subsystems.vision.SK25Vision;
 
 import static frc.robot.Ports.DriverPorts.kDriveToClosestReef;
 import static frc.robot.Ports.DriverPorts.kLeftReef;
+import static frc.robot.Ports.DriverPorts.kResetPoseToVision;
 import static frc.robot.Ports.DriverPorts.kRightReef;
+import static frc.robot.Ports.DriverPorts.kVisionOff;
+import static frc.robot.Ports.DriverPorts.kVisionOn;
 import static frc.robot.Ports.DriverPorts.kForceResetPoseToVision;
 
 
@@ -24,6 +27,10 @@ public class SK25VisionBinder implements CommandBinder {
     Trigger driveToLeftReef;
     Trigger driveToRightReef;
     Trigger forceResetPoseToVision;
+    Trigger resetPoseToVision;
+    Trigger visionOff;
+    Trigger visionOn;
+    Trigger visionEnabled;
 
     public SK25VisionBinder(Optional<SK25Vision> m_visionContainer, Optional<SKSwerve> m_swerveContainer) {
         this.m_visionContainer = m_visionContainer;
@@ -33,6 +40,9 @@ public class SK25VisionBinder implements CommandBinder {
         this.driveToLeftReef = kLeftReef.button;
         this.driveToRightReef = kRightReef.button;
         this.forceResetPoseToVision = kForceResetPoseToVision.button;
+        this.resetPoseToVision = kResetPoseToVision.button;
+        this.visionOff = kVisionOff.button;
+        this.visionOn = kVisionOn.button;
     }
 
     public void bindButtons() {
@@ -44,14 +54,20 @@ public class SK25VisionBinder implements CommandBinder {
             SKSwerve m_swerve = m_swerveContainer.get();
             SK25Vision m_vision = m_visionContainer.get();
 
-            forceResetPoseToVision.onTrue(new InstantCommand(() -> m_vision.forcePoseToVision()));
+            visionEnabled = new Trigger(() -> m_vision.enabled);
+
+            forceResetPoseToVision.and(visionEnabled).onTrue(new InstantCommand(() -> m_vision.forcePoseToVision()));
+            resetPoseToVision.and(visionEnabled).onTrue(new InstantCommand(() -> m_vision.resetPoseToVision()));
+
+            visionOff.onTrue(new InstantCommand(() -> m_vision.killVision()));
+            visionOn.onTrue(new InstantCommand(() -> m_vision.enableVision()));
 
             /* 
              * This command feeds triggers into its constructor in order for it to switch 
              * targetting the left and right side of the reef face without needing to redetermine
              * which face is closest every time.
              */
-            driveToClosestReef.whileTrue(
+            driveToClosestReef.and(visionEnabled).whileTrue(
                 new DriveToReefCommand(
                     SK25Vision.DriveToPose.getConfig(),
                     SK25Vision.RotateToPose.getConfig(), 

@@ -58,8 +58,11 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     // Creates an ArrayList to store estimated vision poses during autonomous 
     public ArrayList<Trio<Pose3d, Pose2d, Double>> autonPoses = new ArrayList<Trio<Pose3d, Pose2d, Double>>();
 
+    public boolean enabled;
 
     public SK25Vision(Optional<SKSwerve> m_swerveContainer) {
+        enabled = false;
+
         this.m_swerve = m_swerveContainer.get();
         df.setMaximumFractionDigits(2);
 
@@ -191,6 +194,13 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         }
     }
 
+    public void killVision() {
+        enabled = false;
+    }
+    public void enableVision() {
+        enabled = true;
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("VisionDriving", isDriving);
@@ -199,12 +209,14 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         SmartDashboard.putString("FrontLLStatus", frontLL.getLogStatus());
         SmartDashboard.putString("ResetPoseToVisionStatus", resetPoseToVisionLog);
 
+        if(enabled) {
         for(Limelight ll : poseLimelights) {
             ll.setRobotOrientation(m_swerve.getRobotRotation().getDegrees());
         }
 
-        /* The secret sauce: */
-        estimatePose();
+            /* The secret sauce: */
+            estimatePose();
+        }
     }
 
     /**
