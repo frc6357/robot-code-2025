@@ -99,10 +99,6 @@ public class RobotContainer extends Robot{
   public List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
 
   SendableChooser<Command> autoCommandSelector;
-  
-  boolean thirtySecondsReached = false;
-
-  boolean rumbling = false;
 
 
 
