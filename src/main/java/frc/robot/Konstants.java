@@ -468,7 +468,7 @@ public final class Konstants
             kNetAngle(-90),
             kHighAlgae(-140), //-145
             kMiddleAngle(-173), //-190
-            kLowAlgae(-160), //-165
+            kLowAlgae(-180), //-173
             kIntake(-70);  //not used for station
 
             public final double angle;
