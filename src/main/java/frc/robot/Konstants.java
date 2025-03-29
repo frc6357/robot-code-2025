@@ -722,9 +722,10 @@ public final class Konstants
             put("reefIJAlgae", new Pose2d(5.025, 5.066, new Rotation2d(-2.094)));
 
             /* SOUTHWEST */
-            put("reefL", new Pose2d(4.005, 5.037, new Rotation2d(-1.047)));
-            put("reefK", new Pose2d(3.714, 4.803, new Rotation2d(-1.047)));
-            put("reefKLAlgae", new Pose2d(3.950, 4.847, new Rotation2d(-1.047)));
+            // Use this to determine all other faces
+            put("reefL", new Pose2d(3.994, 5.251, new Rotation2d(-1.047)));
+            put("reefK", new Pose2d(3.705, 5.077, new Rotation2d(-1.047)));
+            put("reefKLAlgae", new Pose2d(3.856, 5.119, new Rotation2d(-1.047)));
         
             /* EAST SOURCE */
             put("SourceA", new Pose2d(1.180, 6.944, new Rotation2d(2.20)));
