@@ -87,10 +87,6 @@ public class RobotContainer extends Robot{
   public List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
 
   SendableChooser<Command> autoCommandSelector;
-  
-  boolean thirtySecondsReached = false;
-
-  boolean rumbling = false;
 
 
 
@@ -370,42 +366,7 @@ public class RobotContainer extends Robot{
     @Override
     public void teleopPeriodic()
     {
-        if (DriverStation.getMatchTime() <= 30 && thirtySecondsReached == false)  //previously match time
-        {
-            //dont let the notification send more than once
-            thirtySecondsReached = true;
-
-            //send elastic notification that thirty seconds are left
-            Elastic.Notification timeToClimbNotification = new Elastic.Notification(
-                NotificationLevel.INFO, 
-                "Time to Climb!", 
-                "There are thirty seconds left in the match."
-            );
-            //make the notification take up more of the screen
-            Elastic.sendNotification(timeToClimbNotification
-                .withDisplaySeconds(5.0)
-                .withWidth(2.0)
-                .withHeight(2.0)
-            );
-
-            //controller rumble to alert driver and operator
-            kDriver.setRumble(RumbleType.kBothRumble, 0.5);
-            kOperator.setRumble(RumbleType.kBothRumble, 0.5);
-
-            //raise the climb to the ready position
-            m_Climb.get().readyTheClimb(kKrakenSpeed);
-
-            rumbling = true;
-        }
-
-        if (DriverStation.getMatchTime() <= 29 && rumbling == true)
-            {
-                //stop rumble after 1 second
-                kDriver.setRumble(RumbleType.kBothRumble, 0.0);
-                kOperator.setRumble(RumbleType.kBothRumble, 0.0);
-
-                rumbling = false;
-            }
+        
     }
 
 

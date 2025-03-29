@@ -139,7 +139,9 @@ public class SK25Climb extends SubsystemBase
 
    public void readyTheClimb(double speed)
    {
-      motor.setPosition(Units.Rotations.of(kClimbReadyPos));
+      //motor.setPosition(Units.Rotations.of(kClimbReadyPos));
+      motor.setControl(new DutyCycleOut(speed));
+
    }
 
    public double getMotorSpeed() {
