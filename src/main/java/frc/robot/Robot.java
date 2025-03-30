@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.preferences.SKPreferences;
 import frc.robot.utils.files.Elastic;
 import frc.robot.utils.files.Elastic.Notification.NotificationLevel;
+import lombok.Getter;
 // To Be Commented?
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -57,7 +58,7 @@ public class Robot extends LoggedRobot
 
     private Command m_autonomousCommand;
 
-    private RobotContainer m_robotContainer;
+    public RobotContainer m_robotContainer;
 
     SendableChooser<Command> autoCommandSelector = new SendableChooser<Command>();
 
