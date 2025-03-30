@@ -2,18 +2,16 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
+import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Konstants.AutoConstants.kIntakeAutoDurationSeconds;
 //import static frc.robot.Konstants.AutoConstants.kIntakeAutoSpeed;
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
-import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
-import static frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition.kZeroPositionAngle;
+//import static frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
 //import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 //import static frc.robot.Konstants.EndEffectorConstants.kCoralToLaserCanDistance;
 import static frc.robot.Ports.EndEffectorPorts.kLaserCanEndEffector;
-
-import java.util.function.BooleanSupplier;
 
 import com.revrobotics.RelativeEncoder;
 //import au.grapplerobotics.LaserCan;
@@ -44,7 +42,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
@@ -75,8 +72,6 @@ public class SK25EndEffector extends SubsystemBase
     double armTargetAngle;
 
     public boolean isRunning;
-
-    private CoralSubsystem m_coral;
 
     Pref<Integer> lidarTargetDistMm = SKPreferences.attach("lidarTargetDistMm", 75);
     Pref<Integer> lidarThreshold = SKPreferences.attach("lidarThreshold", 5);
@@ -118,10 +113,8 @@ public class SK25EndEffector extends SubsystemBase
 
     //LaserCan laserCanSensor;
 
-    public SK25EndEffector(CoralSubsystem m_coral)
+    public SK25EndEffector()
     {
-        this.m_coral = m_coral;
-
         //initialize the new motor object with its motor ID and type
         rollerMotor = new SparkFlex(kEndEffectorRollerMotor.ID, MotorType.kBrushless);
         armMotor = new SparkFlex(kEndEffectorArmMotor.ID, MotorType.kBrushless);
@@ -200,8 +193,6 @@ public class SK25EndEffector extends SubsystemBase
         //double armFF = armFeedforward.calculate(targetAngleRadians, 0);
         mPID.setReference(motorRotations, ControlType.kPosition,ClosedLoopSlot.kSlot0);
     }
-
-    
 
     /**
      * Arm position in degrees
@@ -326,38 +317,9 @@ public class SK25EndEffector extends SubsystemBase
         armMotor.stopMotor();
     }
 
-
-
-    private BooleanSupplier targetReached = () -> false;
-
-    public Command controlArmMovement()
-    {
-        return this.runOnce(() -> {
-
-        if(m_coral.getPosition() < 14.0 && getTargetArmPosition() < kZeroPositionAngle.angle)  //14.0 is one less then trough height: our lowest elevator height besides zero pos
-        {
-            setTargetAngle(kZeroPositionAngle.angle);
-        }
-        else if(isRunning) {
-            setTargetAngle(degrees);
-        }
-        })
-            .repeatedly().until(targetReached);
-    }
-
     public void periodic()
     {
 
-        if (getArmPosition() < (getTargetArmPosition() + 1) && getArmPosition() < (getTargetArmPosition() + 1))
-        {
-            targetReached = () -> true;
-        }
-        else
-        {
-            targetReached = () -> false;
-        }
-        
-    
         
         /*if (SmartDashboard.getBoolean("Control Mode", false)) 
         {

@@ -56,7 +56,6 @@ import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.files.Elastic;
 import frc.robot.utils.files.Elastic.Notification.NotificationLevel;
 import frc.robot.utils.filters.FilteredJoystick;
-import lombok.Getter;
 
 
 /**
@@ -83,7 +82,6 @@ public class RobotContainer extends Robot{
   // private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
   public Optional <SK25Climb> m_Climb = Optional.empty();
   public Optional<SK25EndEffector> m_endEffector = Optional.empty();
-
 
   // The list containing all the command binding classes
   public List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
@@ -142,9 +140,9 @@ public class RobotContainer extends Robot{
             if(subsystems.isSwervePresent()) {
                 m_swerve = Optional.of(TunerConstants.createDrivetrain()); // Returns new SKSwerve
             }
-            if(subsystems.isEndEffectorPresent() && subsystems.isCoralSubsystemPresent())
+            if(subsystems.isEndEffectorPresent())
             {
-                m_endEffector = Optional.of(new SK25EndEffector(m_coral.get()));
+                m_endEffector = Optional.of(new SK25EndEffector());
             }
             if(subsystems.isClimbPresent()) {
                 m_Climb = Optional.of(new SK25Climb());

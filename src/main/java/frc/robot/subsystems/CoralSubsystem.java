@@ -192,8 +192,4 @@ public class CoralSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Coral/Elevator/Actual Position", elevatorEncoder.getPosition());
 
   }
-
-  public double getPosition() {
-      return elevatorEncoder.getPosition();
-  }
 }
