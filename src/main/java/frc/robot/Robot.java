@@ -127,7 +127,7 @@ public class Robot extends LoggedRobot
         if (((Double)DriverStation.getMatchTime()).intValue() <= 30 && thirtySecondsReached == false)  //previously match time
         {
             
-            DriverStation.reportError("CONDITION REACHED", false);
+            // DriverStation.reportError("CONDITION REACHED", false);
 
             //dont let the notification send more than once
             thirtySecondsReached = true;
@@ -160,7 +160,7 @@ public class Robot extends LoggedRobot
 
                 rumbling = false;
 
-                DriverStation.reportError("RUMBLE STOPPED", false);
+                // DriverStation.reportError("RUMBLE STOPPED", false);
             }
     }
 
