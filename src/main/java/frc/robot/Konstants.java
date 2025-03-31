@@ -546,7 +546,7 @@ public final class Konstants
         public static final double kClimbMinPosition = -1000;
         public static final double kClimbPositionTolerance = 0.2;
 
-        public static final Double kClimbReadyPos = 7.7;
+        public static final Double kClimbReadyPos = 200.0;  //7.7
 
     }
 
