@@ -700,12 +700,12 @@ public final class Konstants
                 // TODO: Find vision align constants via web interface
                 public static double kRotSetpoint = 0.0;
 
-                public static double kCloseXSetpoint = 0.0;
-                public static double kFarXSetpoint = 0.0;
+                public static double kCloseXSetpoint = -0.27;
+                public static double kFarXSetpoint = -0.57;
 
-                public static double kLeftYSetpoint = 0.0;
-                public static double kRightYSetpoint = 0.0;
-                public static double kCenterYSetpoint = 0.0;
+                public static double kLeftYSetpoint = -0.43;
+                public static double kRightYSetpoint = -0.11;
+                public static double kCenterYSetpoint = -0.27;
             }
             public static class RightLimelight {
                 public static double kRotSetpoint = 0.0;
