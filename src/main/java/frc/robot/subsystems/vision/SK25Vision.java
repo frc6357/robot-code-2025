@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.vision.Limelight;
 import frc.robot.utils.vision.Limelight.IMUMode;
 import frc.robot.utils.vision.LimelightHelpers.RawFiducial;
+import frc.robot.utils.vision.LimelightHelpers;
 import frc.robot.utils.Trio;
 import frc.robot.utils.Field;
 import frc.robot.Robot;
@@ -32,20 +33,20 @@ import frc.robot.Konstants.TunerConstants;
 import frc.robot.subsystems.SKSwerve;
 
 public class SK25Vision extends SubsystemBase implements NTSendable {
-    public final Limelight backLL = new Limelight(VisionConfig.BACK_CONFIG); // limelight-alpha
-    public final Limelight frontLL = new Limelight(VisionConfig.FRONT_CONFIG); // limelight-beta
+    public final Limelight rightLL = new Limelight(VisionConfig.RIGHT_CONFIG); // limelight-alpha
+    public final Limelight leftLL = new Limelight(VisionConfig.LEFT_CONFIG); // limelight-beta
     private SKSwerve m_swerve;
 
     private static final int[] blueReefTagIDs = {17, 18, 19, 20, 21, 22};
     private static final int[] redReefTagIDs = {6, 7, 8, 9, 10, 11};
 
-    public final Limelight[] allLimelights = {frontLL}; // List of all limelights
-    public final Limelight[] poseLimelights = {frontLL}; // Limelights specifically used for estimating pose
-    public final Limelight[] reefLimelights = {frontLL}; // Effectively used for pose estimating, 
+    public final Limelight[] allLimelights = {leftLL}; // List of all limelights
+    public final Limelight[] poseLimelights = {leftLL}; // Limelights specifically used for estimating pose
+    public final Limelight[] reefLimelights = {leftLL}; // Effectively used for pose estimating, 
                                                         // but are specifically for use with the reef
 
-    public boolean frontLLEnabled = frontLL.isAttached();
-    public boolean backLLEnabled = backLL.isAttached();
+    public boolean leftLLEnabled = leftLL.isAttached();
+    public boolean rightLLEnabled = rightLL.isAttached();
 
 
     private final DecimalFormat df = new DecimalFormat();
@@ -56,7 +57,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     public String reefDriveTarget;
 
     // Creates an ArrayList to store estimated vision poses during autonomous 
-    public ArrayList<Trio<Pose3d, Pose2d, Double>> autonPoses = new ArrayList<Trio<Pose3d, Pose2d, Double>>();
+    public ArrayList<Trio<Pose3d, Pose2d, Double>> multiCamPoses = new ArrayList<Trio<Pose3d, Pose2d, Double>>();
 
     public boolean enabled;
 
@@ -89,8 +90,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             public void initSendable(SendableBuilder builder) {
                 builder.setSmartDashboardType("Limelights");
 
-                builder.addStringProperty("BackLLStatus", () -> backLL.getLogStatus(), null);
-                builder.addStringProperty("FrontLLStatus", () -> frontLL.getLogStatus(), null);
+                builder.addStringProperty("RightLLStatus", () -> rightLL.getLogStatus(), null);
+                builder.addStringProperty("LeftLLStatus", () -> leftLL.getLogStatus(), null);
                 builder.addStringProperty("ResetPoseToVisionStatus", () -> resetPoseToVisionLog, null);
             }
         });
@@ -124,7 +125,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             configMaxOutput(TunerConstants.MaxSpeed * 0.6);
             configError(0.3);
             configPipelineIndex(kAprilTagPipeline);
-            configLimelight(RobotContainer.m_vision.frontLL);
+            configLimelight(RobotContainer.m_vision.leftLL);
         }
 
         public static AlignToReefTag getConfig() {
@@ -166,8 +167,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         private DriveToPose() {
             configKpid(6, 0, 0);
             configTolerance(0.05);
-            configProfile(TunerConstants.MaxSpeed * 0.40, TunerConstants.MaxSpeed * 0.60); //60% Max Speed; 1.75x Acceleration
-            configMaxOutput(TunerConstants.MaxSpeed * 0.40);
+            configProfile(TunerConstants.MaxSpeed * 0.25, (TunerConstants.MaxSpeed * 0.25) * 2); //25% Max Speed; 2x Acceleration
+            configMaxOutput(TunerConstants.MaxSpeed * 0.25);
             configError(0.05);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
@@ -182,8 +183,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         private RotateToPose() {
             configKpid(6, 0.4, 0);
             configTolerance(0.01);
-            configProfile((100) * TunerConstants.MaxAngularRate * 0.9, TunerConstants.MaxAngularRate * 1.5); // 90% Angular speed; 1.5x acceleration
-            configMaxOutput((100)* TunerConstants.MaxAngularRate * 0.9);
+            configProfile((100) * TunerConstants.MaxAngularRate * 0.5, (TunerConstants.MaxAngularRate * 0.5) * 1.5); // 50% Angular speed; 1.5x acceleration
+            configMaxOutput((100)* TunerConstants.MaxAngularRate * 0.5);
             configError(0.01);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
@@ -203,10 +204,12 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     @Override
     public void periodic() {
+        
+
         SmartDashboard.putBoolean("VisionDriving", isDriving);
         SmartDashboard.putString("ReefDriveTarget", reefDriveTarget);
-        SmartDashboard.putString("BackLLStatus", backLL.getLogStatus());
-        SmartDashboard.putString("FrontLLStatus", frontLL.getLogStatus());
+        SmartDashboard.putString("RightLLStatus", rightLL.getLogStatus());
+        SmartDashboard.putString("LeftLLStatus", leftLL.getLogStatus());
         SmartDashboard.putString("ResetPoseToVisionStatus", resetPoseToVisionLog);
 
         if(enabled) {
@@ -237,7 +240,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         Pose2d estimatedRobotPose = // Uses limelight (effectively swerve) rotation value instead of estimated rotation value
             new Pose2d(megaPose2d.getTranslation(), megaPose2d.getRotation()); 
         
-        autonPoses.add(Trio.of(botPose3d, estimatedRobotPose, timestamp)); // Adds both poses into the auto pose feeder
+        multiCamPoses.add(Trio.of(botPose3d, estimatedRobotPose, timestamp)); // Adds both poses into the auto pose feeder
 
     }
 
@@ -249,7 +252,6 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             if(!ll.targetInView()) {
                 continue;
             }
-            // TODO: Change auto to multicam and create correct auto estimator when ready
             updatePoseSingleCam(ll);
         }
     }
@@ -284,14 +286,13 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     }
 
     public void estimatePose() {
-        // Make sure robot orientation is correct
-        /*
+        // Make sure robot orientation is correct and applied to all pose limelights before updating pose
+        /**
         Autonomous pose updater:
         
         For each limelight that has a tag in view, send it to be aggregated into the current pose estimate, alongside other
-        recent poses.
+        recent poses. To update the drivetrain's pose to the vision measurements, use the command for autonResetPoseToVision().
         */
-        //TODO: Reenable auto pose updater when ready
         updatePoseAutonomous();
 
         /*
@@ -306,6 +307,10 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     }
 
     public boolean reefTargetClose(Limelight ll) { 
+        if(!ll.targetInView()) {
+            return false;
+        }
+
         // RawFiducial[] tags = ll.getRawFiducial(); // Assuming we're on blue alliance
         int[] targetIDs = blueReefTagIDs;
 
@@ -401,7 +406,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     }
 
     public Limelight getBestLimelight() {
-        Limelight bestLimelight = frontLL; // Default limelight to consider "best". Front limelight often has best view of tag
+        Limelight bestLimelight = leftLL; // Default limelight to consider "best". Front limelight often has best view of tag
         double bestScore = 0;
         for(Limelight LL : poseLimelights) {
             double score = 0;
@@ -443,17 +448,17 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         /* Starting at the most recent auton pose estimation, analyze the next [batchSize]
         poses and see if they can be succesfully added to the robot's pose estimator
         */ 
-        for (int i = autonPoses.size() - 1; i > (autonPoses.size() - batchSize) - 1; i--) {
-            Trio<Pose3d, Pose2d, Double> poseInfo = autonPoses.get(i);
+        for (int i = multiCamPoses.size() - 1; i > (multiCamPoses.size() - batchSize) - 1; i--) {
+            Trio<Pose3d, Pose2d, Double> poseInfo = multiCamPoses.get(i);
             boolean success =
                     resetPoseToVision(
                             true, poseInfo.getFirst(), poseInfo.getSecond(), poseInfo.getThird());
             if (success) {
-                if (i == autonPoses.size() - 1) {
+                if (i == multiCamPoses.size() - 1) {
                     firstSuccess = true;
                 }
                 reject = false;
-                System.out.println("AutonResetPoseToVision succeeded on " + (autonPoses.size() - i) + " try");
+                System.out.println("AutonResetPoseToVision succeeded on " + (multiCamPoses.size() - i) + " try");
                 break;
             }
         }
@@ -463,7 +468,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
                     "AutonResetPoseToVision failed after "
                             + batchSize
                             + " of "
-                            + autonPoses.size()
+                            + multiCamPoses.size()
                             + " possible tries");
             
             // Flash LEDs Red?

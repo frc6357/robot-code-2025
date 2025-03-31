@@ -695,6 +695,31 @@ public final class Konstants
             public static final boolean kAttached = true;
         }
 
+        public static final class AlignmentConstants {
+            public static class LeftLimelight {
+                // TODO: Find vision align constants via web interface
+                public static double kRotSetpoint = 0.0;
+
+                public static double kCloseXSetpoint = 0.0;
+                public static double kFarXSetpoint = 0.0;
+
+                public static double kLeftYSetpoint = 0.0;
+                public static double kRightYSetpoint = 0.0;
+                public static double kCenterYSetpoint = 0.0;
+            }
+            public static class RightLimelight {
+                public static double kRotSetpoint = 0.0;
+
+                public static double kCloseXSetpoint = 0.0;
+                public static double kFarXSetpoint = 0.0;
+
+                public static double kLeftYSetpoint = 0.0;
+                public static double kRightYSetpoint = 0.0;
+                public static double kCenterYSetpoint = 0.0;
+            }
+
+        }
+
         public static final class PoseConstants {
             public static final Translation2d center =
                 new Translation2d(Units.inchesToMeters(176.746), Units.inchesToMeters(158.501));

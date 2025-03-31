@@ -33,14 +33,14 @@ import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;
 import frc.robot.Konstants.TunerConstants;
 import frc.robot.Konstants.VisionConstants.PoseConstants;
 
-public class DriveToReefCommand extends Command{
+public class DriveToReefPoseCommand extends Command{
     MultiLimelightCommandConfig driveConfig;
     MultiLimelightCommandConfig rotateConfig;
 
     Limelight[] limelights;
 
-    RotateToReef rotateController;
-    TranslateToReef driveController;
+    RotateToPose rotateController;
+    TranslateToPose driveController;
 
     Pose2d targetPose;
 
@@ -103,7 +103,7 @@ public class DriveToReefCommand extends Command{
      * @return A command to override the swerve's default command and use PID loops to move the robot
      * chassis to a known position on the reef based on the tags the pose limelights see.
      */
-    public DriveToReefCommand(
+    public DriveToReefPoseCommand(
                 MultiLimelightCommandConfig driveConfig,
                 MultiLimelightCommandConfig rotateConfig, 
                 SK25Vision m_vision, 
@@ -209,8 +209,8 @@ public class DriveToReefCommand extends Command{
         }
 
 
-        this.rotateController = new RotateToReef(rotateConfig, m_swerve);
-        this.driveController = new TranslateToReef(driveConfig, m_swerve);
+        this.rotateController = new RotateToPose(rotateConfig, m_swerve);
+        this.driveController = new TranslateToPose(driveConfig, m_swerve);
 
         if(valid) {
             m_vision.resetPoseToVision();

@@ -10,18 +10,18 @@ import static frc.robot.Konstants.VisionConstants.*;
 import frc.robot.utils.vision.Limelight.LimelightConfig;
 
 public final class VisionConfig {
-    public static final String BACK_LL = limelightAlpha.kName;
-    public static final int BACK_TAG_PIPELINE = kAprilTagPipeline;
-    public static final LimelightConfig BACK_CONFIG = 
+    public static final String RIGHT_LL = limelightAlpha.kName;
+    public static final int RIGHT_TAG_PIPELINE = kAprilTagPipeline;
+    public static final LimelightConfig RIGHT_CONFIG = 
                                         new LimelightConfig(limelightAlpha.kName) // Yes, it's the same value as [NAME]_LL. Just left it like this to see constructor layout
                                         .withTranslation(limelightAlpha.kForward, limelightAlpha.kRight, limelightAlpha.kUp) // Feeds in the position of the limelight on the bot
                                         .withRotation(limelightAlpha.kRoll, limelightAlpha.kPitch, limelightAlpha.kYaw) // Feeds in rotation of limelight
                                         .withAttached(limelightAlpha.kAttached); // Whether or not the limelight is attached to the robot; if false, effectively disables limelight
 
 
-    public static final String FRONT_LL = limelightBeta.kName;
-    public static final int FRONT_TAG_PIPELINE = kAprilTagPipeline;
-    public static final LimelightConfig FRONT_CONFIG = 
+    public static final String LEFT_LL = limelightBeta.kName;
+    public static final int LEFT_TAG_PIPELINE = kAprilTagPipeline;
+    public static final LimelightConfig LEFT_CONFIG = 
                                         new LimelightConfig(limelightBeta.kName)
                                         .withTranslation(limelightBeta.kForward, limelightBeta.kRight, limelightBeta.kUp)
                                         .withRotation(limelightBeta.kRoll, limelightBeta.kPitch, limelightBeta.kYaw)

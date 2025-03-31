@@ -247,6 +247,20 @@ public class Limelight {
         return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name).pose; // 2024: all alliances use blue as 0,0
     }
 
+    /**
+     * Gets the camera pose3d by using the offset of the camera to the tag, but creates the pose 
+     * centered around the tag. Aligning via these values instead of robot pose is often more robust
+     * to discrepancies in field setup.
+     * @return the camera's pose with the origin at the tag
+     */
+    public Pose3d getCameraPoseTS3d() {
+        if(!isAttached()) {
+            return new Pose3d();
+        }
+        LimelightHelpers.getCameraPose_TargetSpace(config.name);
+        return LimelightHelpers.getCameraPose3d_TargetSpace(config.name);
+    }
+
     /** Leverages the limelight's view of multiple tags and their distance from the robot to check if the
      * robot pose and/or limelight pose are more accurate than a basic pose update from the gyro/accelerometer.
      * @retrun If the position is "accurate".
@@ -286,6 +300,7 @@ public class Limelight {
         if (!isAttached()) {
             return 0;
         }
+        // TODO: Is this synchronized with the RoboRio? If not, how/where to synchronize?
         return LimelightHelpers.getBotPoseEstimate_wpiBlue(config.getName()).timestampSeconds;
     }
 

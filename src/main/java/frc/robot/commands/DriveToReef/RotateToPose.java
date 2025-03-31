@@ -14,9 +14,9 @@ import frc.robot.subsystems.vision.SK25Vision.MultiLimelightCommandConfig;
  * body mostly contained within the getOutput() method since that's where the 
  * PID controller updates. This is intended to be used within a command and not as a 
  * standalone class.
- * @see TranslateToReef
+ * @see TranslateToPose
  */
-public class RotateToReef {
+public class RotateToPose {
     private MultiLimelightCommandConfig config;
 
     private SKSwerve m_swerve;
@@ -32,7 +32,7 @@ public class RotateToReef {
     private boolean outputting;
 
 
-    public RotateToReef(MultiLimelightCommandConfig c, SKSwerve m_swerve) {
+    public RotateToPose(MultiLimelightCommandConfig c, SKSwerve m_swerve) {
         this.config = c;
         this.m_swerve = m_swerve;
 

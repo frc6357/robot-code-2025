@@ -348,7 +348,8 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
      */
     @Override
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
-        poseEstimator.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
+        // TODO: Which timestamp format to use? Which do we use? FPGA? Current time? Seconds, milliseconds, etc.
+        poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
     }
 
     /**

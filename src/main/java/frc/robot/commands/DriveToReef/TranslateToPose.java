@@ -16,9 +16,9 @@ import frc.robot.subsystems.vision.SK25Vision.CommandConfig;
  * body mostly contained within the getOutput() method since that's where the 
  * PID controller updates. This is intended to be used within a command and not as a 
  * standalone class.
- * @see RotateToReef
+ * @see RotateToPose
  */
-public class TranslateToReef{
+public class TranslateToPose{
     private CommandConfig config;
     
     private SKSwerve m_swerve;
@@ -35,7 +35,7 @@ public class TranslateToReef{
     private boolean outputtingX;
     private boolean outputtingY;
     
-    public TranslateToReef(CommandConfig c, SKSwerve m_swerve) {
+    public TranslateToPose(CommandConfig c, SKSwerve m_swerve) {
         this.config = c;
         this.m_swerve = m_swerve;
 

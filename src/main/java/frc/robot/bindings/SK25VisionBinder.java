@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DriveToReef.DriveToReefCommand;
+import frc.robot.commands.DriveToReef.DriveToReefPoseCommand;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
 
@@ -38,7 +38,7 @@ public class SK25VisionBinder implements CommandBinder {
 
         this.driveToClosestReef = kDriveToClosestReef.button;
         this.driveToLeftReef = kLeftReef.button;
-        this.driveToRightReef = kRightReef.button;
+        this.driveToRightReef = kRightReef.button.and(driveToClosestReef);
         this.forceResetPoseToVision = kForceResetPoseToVision.button;
         this.resetPoseToVision = kResetPoseToVision.button;
         this.visionOff = kVisionOff.button;
@@ -68,7 +68,7 @@ public class SK25VisionBinder implements CommandBinder {
              * which face is closest every time.
              */
             driveToClosestReef.and(visionEnabled).whileTrue(
-                new DriveToReefCommand(
+                new DriveToReefPoseCommand(
                     SK25Vision.DriveToPose.getConfig(),
                     SK25Vision.RotateToPose.getConfig(), 
                     m_vision, 
