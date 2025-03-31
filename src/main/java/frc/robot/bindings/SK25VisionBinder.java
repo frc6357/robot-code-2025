@@ -7,10 +7,16 @@ import java.util.Optional;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveToReef.DriveToReefPoseCommand;
+import frc.robot.commands.AlignToReefTag;
+import frc.robot.commands.commandGroups.AlignToReefCombo;
+import static frc.robot.commands.AlignToReefTag.Target;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
+import static frc.robot.subsystems.vision.SK25Vision.DriveToPose;
+import static frc.robot.subsystems.vision.SK25Vision.RotateToPose;
 
-import static frc.robot.Ports.DriverPorts.kDriveToClosestReef;
+
+import static frc.robot.Ports.DriverPorts.kAlignToReef;
 import static frc.robot.Ports.DriverPorts.kLeftReef;
 import static frc.robot.Ports.DriverPorts.kResetPoseToVision;
 import static frc.robot.Ports.DriverPorts.kRightReef;
@@ -23,9 +29,9 @@ public class SK25VisionBinder implements CommandBinder {
     Optional<SK25Vision> m_visionContainer;
     Optional<SKSwerve> m_swerveContainer;
 
-    Trigger driveToClosestReef;
-    Trigger driveToLeftReef;
-    Trigger driveToRightReef;
+    Trigger alignToReef;
+    Trigger leftReef;
+    Trigger rightReef;
     Trigger forceResetPoseToVision;
     Trigger resetPoseToVision;
     Trigger visionOff;
@@ -36,13 +42,13 @@ public class SK25VisionBinder implements CommandBinder {
         this.m_visionContainer = m_visionContainer;
         this.m_swerveContainer = m_swerveContainer;
 
-        this.driveToClosestReef = kDriveToClosestReef.button;
-        this.driveToLeftReef = kLeftReef.button;
-        this.driveToRightReef = kRightReef.button.and(driveToClosestReef);
-        this.forceResetPoseToVision = kForceResetPoseToVision.button;
-        this.resetPoseToVision = kResetPoseToVision.button;
         this.visionOff = kVisionOff.button;
         this.visionOn = kVisionOn.button;
+        this.alignToReef = kAlignToReef.button;
+        this.leftReef = kLeftReef.button;
+        this.rightReef = kRightReef.button;
+        this.forceResetPoseToVision = kForceResetPoseToVision.button;
+        this.resetPoseToVision = kResetPoseToVision.button;
     }
 
     public void bindButtons() {
@@ -62,18 +68,31 @@ public class SK25VisionBinder implements CommandBinder {
             visionOff.onTrue(new InstantCommand(() -> m_vision.killVision()));
             visionOn.onTrue(new InstantCommand(() -> m_vision.enableVision()));
 
-            /* 
-             * This command feeds triggers into its constructor in order for it to switch 
-             * targetting the left and right side of the reef face without needing to redetermine
-             * which face is closest every time.
-             */
-            driveToClosestReef.and(visionEnabled).whileTrue(
-                new DriveToReefPoseCommand(
-                    SK25Vision.DriveToPose.getConfig(),
-                    SK25Vision.RotateToPose.getConfig(), 
+            // If just alignToReef held and not the other buttons
+            alignToReef.and(visionEnabled).whileTrue(
+                new AlignToReefCombo(
+                    Target.CENTER, 
+                    DriveToPose.getConfig(),
+                    RotateToPose.getConfig(),
+                    m_vision,
+                    m_swerve)
+            );
+            leftReef.and(visionEnabled).whileTrue(
+                new AlignToReefCombo(
+                    Target.LEFT, 
+                    DriveToPose.getConfig(), 
+                    RotateToPose.getConfig(), 
                     m_vision, 
-                    m_swerve
-                    ));
+                    m_swerve)
+            );
+            rightReef.and(visionEnabled).whileTrue(
+                new AlignToReefCombo(
+                    Target.RIGHT, 
+                    DriveToPose.getConfig(), 
+                    RotateToPose.getConfig(), 
+                    m_vision, 
+                    m_swerve)
+            );
         }
     }
 }

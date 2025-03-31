@@ -38,7 +38,7 @@ public class AlignToReefTag extends Command {
     private double yOut;
     private double rotOut;
 
-    static enum Target {
+    public static enum Target {
         CENTER,
         LEFT,
         RIGHT,
@@ -97,7 +97,7 @@ public class AlignToReefTag extends Command {
     public void execute() {
         if(valid) {
             calculateSpeeds();
-            
+
             m_vision.isDriving = true;
 
             if(DriverStation.isTeleopEnabled()) {

@@ -183,8 +183,8 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         private RotateToPose() {
             configKpid(6, 0.4, 0);
             configTolerance(0.01);
-            configProfile((100) * TunerConstants.MaxAngularRate * 0.5, (TunerConstants.MaxAngularRate * 0.5) * 1.5); // 50% Angular speed; 1.5x acceleration
-            configMaxOutput((100)* TunerConstants.MaxAngularRate * 0.5);
+            configProfile(TunerConstants.MaxAngularRate * 0.5, (TunerConstants.MaxAngularRate * 0.5) * 1.5); // 50% Angular speed; 1.5x acceleration
+            configMaxOutput(TunerConstants.MaxAngularRate * 0.5);
             configError(0.01);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
