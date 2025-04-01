@@ -490,10 +490,11 @@ public final class Konstants
     //    public static final double kHortizontalAngle = -60;     
 
        /* PID values for arm motion control */
-       public static final double kArmP = 1.9;
-       public static final double kArmI = .0002;
-       public static final double kArmD = 2.1;
-       public static final double kArmV = 0.000173400381; // 1/5767
+       public static final double kArmP = 0.3;  //1.9
+       public static final double kArmI = 0.0; //0.0002
+       public static final double kArmD = 0.0; //2.1
+       public static final double kArmV = 0.0; // 1/5767
+       public static final double kArmFF = 0.0;
 
        /* Maximum motion limits for motion control */
        public static final double kArmCruiseVel = .15; // rot/sec

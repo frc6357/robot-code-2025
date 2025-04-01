@@ -2,10 +2,15 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
-import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Konstants.AutoConstants.kIntakeAutoDurationSeconds;
 //import static frc.robot.Konstants.AutoConstants.kIntakeAutoSpeed;
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
+import static frc.robot.Konstants.EndEffectorConstants.kArmD;
+import static frc.robot.Konstants.EndEffectorConstants.kArmFF;
+import static frc.robot.Konstants.EndEffectorConstants.kArmI;
+import static frc.robot.Konstants.EndEffectorConstants.kArmP;
+import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
+import static frc.robot.Konstants.EndEffectorConstants.kArmV;
 //import static frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
@@ -85,24 +90,26 @@ public class SK25EndEffector extends SubsystemBase
             setTargetAngle(newValue);
         });
     
-    final Pref<Double> endEffectorKp = SKPreferences.attach("elevatorKi", 0.0) //0.0
+    
+        
+    final Pref<Double> endEffectorKp = SKPreferences.attach("endEffectorKp", kArmP) //0.0
     .onChange((newValue) -> reconfigureEndEffector());
 
-    final Pref<Double> endEffectorKi = SKPreferences.attach("elevatorKd", 0.0) //0.0015
+    final Pref<Double> endEffectorKi = SKPreferences.attach("endEffectorKi", kArmI) //0.0015
     .onChange((newValue) -> reconfigureEndEffector());
 
-    final Pref<Double> endEffectorKd = SKPreferences.attach("elevatorKpFF", 0.0) //0.001
+    final Pref<Double> endEffectorKd = SKPreferences.attach("endEffectorKd", kArmD) //0.001
     .onChange((newValue) -> reconfigureEndEffector());
 
-    final Pref<Double> endEffectorKpFF = SKPreferences.attach("elevatorKpFF", 0.0) //0.001
+    final Pref<Double> endEffectorKFF = SKPreferences.attach("endEffectorKFF", kArmFF) //0.001
     .onChange((newValue) -> reconfigureEndEffector());
 
-    final Pref<Double> endEffectorVelocity = SKPreferences.attach("elevatorKpFF", 0.0) //0.001
+    final Pref<Double> endEffectorVelocity = SKPreferences.attach("endEffectorVelocity", kArmV) //0.001
     .onChange((newValue) -> reconfigureEndEffector());
 
     private void reconfigureEndEffector() {
-      elevatorConfig.closedLoop.pidf(endEffectorKp.get(), endEffectorKi.get(), endEffectorKd.get(), endEffectorKpFF.get());   //dFilter(.0003)
-      elevatorConfig.closedLoop.maxMotion
+      armConfig.closedLoop.pidf(endEffectorKp.get(), endEffectorKi.get(), endEffectorKd.get(), endEffectorKFF.get());   //dFilter(.0003)
+      armConfig.closedLoop.maxMotion
         .maxVelocity(endEffectorVelocity.get());
       armMotor.configure(
         armConfig,
@@ -123,14 +130,15 @@ public class SK25EndEffector extends SubsystemBase
         
         armConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .p(.3)
-            //.i(.0002)
-            //.d(2.1)
-            .outputRange(-1, 1); //TODO: Add a velocityFF in order to provide a feedforwards to counteract gravity and maintain the arm at a set point
+            .p(kArmP)
+            .i(kArmI)
+            .d(kArmD)
+            .outputRange(-1, 1) //TODO: Add a velocityFF in order to provide a feedforwards to counteract gravity and maintain the arm at a set point
             //.p(0, ClosedLoopSlot.kSlot1)
             //.i(0, ClosedLoopSlot.kSlot1)
             //.d(0, ClosedLoopSlot.kSlot1)
-            //.velocityFF(1.0/5767, ClosedLoopSlot.kSlot1);
+            .velocityFF(kArmFF)
+            .maxMotion.maxVelocity(kArmV);
             //.outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
             armConfig.closedLoop.maxMotion
