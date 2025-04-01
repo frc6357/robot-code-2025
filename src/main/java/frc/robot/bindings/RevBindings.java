@@ -1,6 +1,6 @@
 package frc.robot.bindings;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
-import static frc.robot.Konstants.SwerveConstants.kJoystickDeadband;
+import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
 import static frc.robot.Ports.OperatorPorts.kElevatorAxis;
 //import static frc.robot.Ports.OperatorPorts.kLowBranch;
 //import static frc.robot.Ports.OperatorPorts.kTrough;

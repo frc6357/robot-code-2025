@@ -95,7 +95,7 @@ public class Robot extends LoggedRobot
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
 
-        climb = m_robotContainer.m_Climb.get();
+        climb = RobotContainer.m_climb;
 
 
         //get the saved elastic dashboard layout
