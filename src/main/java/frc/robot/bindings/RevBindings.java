@@ -1,17 +1,31 @@
 package frc.robot.bindings;
-import static frc.robot.Ports.OperatorPorts.kLowAlgae;
-import static frc.robot.Ports.OperatorPorts.kElevatorOverride;
-import static frc.robot.Ports.OperatorPorts.kHighAlgae;
+import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
+import static frc.robot.Konstants.SwerveConstants.kJoystickDeadband;
+import static frc.robot.Ports.OperatorPorts.kElevatorAxis;
 //import static frc.robot.Ports.OperatorPorts.kLowBranch;
-import static frc.robot.Ports.OperatorPorts.kResetElevatorPos;
 //import static frc.robot.Ports.OperatorPorts.kTrough;
-import static frc.robot.Ports.OperatorPorts.*;
+import static frc.robot.Ports.OperatorPorts.kElevatorOverride;
+import static frc.robot.Ports.OperatorPorts.kEndEffectorAxis;
+import static frc.robot.Ports.OperatorPorts.kHighAlgae;
+import static frc.robot.Ports.OperatorPorts.kIntakePos;
+import static frc.robot.Ports.OperatorPorts.kLowAlgae;
+import static frc.robot.Ports.OperatorPorts.kLowBranchEffector;
+import static frc.robot.Ports.OperatorPorts.kMiddleBranchEffector;
+import static frc.robot.Ports.OperatorPorts.kNetPos;
+import static frc.robot.Ports.OperatorPorts.kResetElevatorPos;
+import static frc.robot.Ports.OperatorPorts.kTopBranchEffector;
+import static frc.robot.Ports.OperatorPorts.kTroughEffector;
+import static frc.robot.Ports.OperatorPorts.kZeroPositionOperator;
 
 import java.util.Optional;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.CoralElevatorJoystickCommand;
+import frc.robot.commands.EndEffectorJoystickCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
+import frc.robot.utils.filters.DeadbandFilter;
 
 public class RevBindings implements CommandBinder
 {
@@ -51,22 +65,13 @@ public class RevBindings implements CommandBinder
         {
             CoralSubsystem elevator = elevatorSubsystem.get();
 
-            // double joystickGain = kJoystickReversed ? -kJoystickChange : kJoystickChange;
+
+            // double joystickGain = kJoystickReversed ? -1 : 1;
             // kElevatorAxis.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
 
-            // elevatorOverride.whileTrue(new ElevatorJoystickCommand(
-            //     () -> {return kElevatorAxis.getFilteredAxis();},
-            //     () -> {return kElevatorOverride.button.getAsBoolean();},
-            //     elevator));
-
             // elevator.setDefaultCommand(
-            //              // Vertical movement of the elevator is controlled by the Y axis of the left stick.
-            //              // Up on the joystick moves elevator up, and down on stick moves th++e elevator down.
-            //              new ElevatorJoystickCommand(
-            //                  () -> {return kElevatorAxis.getFilteredAxis();},
-            //                  () -> {return kElevatorOverride.button.getAsBoolean();},
-            //                  elevator));
-            
+            //     new CoralElevatorJoystickCommand(() -> {return kElevatorAxis.getFilteredAxis();}, elevator));
+                
             // Elevator Position Buttons
             zeroPositionButton.onTrue(elevator.setSetpointCommand(Setpoint.kZero));
             TroughButton.onTrue(elevator.setSetpointCommand(Setpoint.kLevel1));

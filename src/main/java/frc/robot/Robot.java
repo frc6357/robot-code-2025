@@ -87,6 +87,7 @@ public class Robot extends LoggedRobot
         WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
 
         kDriver.setRumble(RumbleType.kBothRumble, 0.0);
+        kOperator.setRumble(RumbleType.kBothRumble, 0.0);
     }
 
     /**
@@ -207,6 +208,7 @@ public class Robot extends LoggedRobot
     @Override
     public void autonomousPeriodic()
     {
+        //stop at the climb position
         if (climb.getMotorPosition() >= kClimbReadyPos)
         climb.stop();
     }

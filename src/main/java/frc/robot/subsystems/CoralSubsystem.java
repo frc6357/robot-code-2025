@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
 
+import com.google.flatbuffers.Constants;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.sim.SparkFlexSim;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -10,7 +12,9 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -44,6 +48,24 @@ public class CoralSubsystem extends SubsystemBase {
   private RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
 
 
+  //simulation
+  private DCMotor elevatorMotorGearbox = DCMotor.getNeoVortex(1);  //gearbox for sparkflex motor
+  private SparkFlexSim elevatorSimMotor = new SparkFlexSim(elevatorMotor, elevatorMotorGearbox);
+
+  // private final ElevatorSim m_elevatorSim =
+  //     new ElevatorSim(
+  //         elevatorMotorGearbox,  //gearbox
+  //         Constants.kElevatorGearing,   //elevator gearing
+  //         Constants.kCarriageMass,
+  //         Constants.kElevatorDrumRadius,
+  //         Constants.kMinElevatorHeightMeters,
+  //         Constants.kMaxElevatorHeightMeters,
+  //         true,
+  //         0,
+  //         0.01,
+  //         0.0);
+
+
   // Member variables for subsystem state management
   private boolean wasResetByButton = false;
   private boolean wasResetByLimit = false;
@@ -51,8 +73,8 @@ public class CoralSubsystem extends SubsystemBase {
 
   
 
-  final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.115) //0.12
-  .onChange((newValue) -> reconfigureElevator());
+    final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.115) //0.12
+    .onChange((newValue) -> reconfigureElevator());
 
     final Pref<Double> elevatorKi = SKPreferences.attach("elevatorKi", 0.0) //0.0
     .onChange((newValue) -> reconfigureElevator());
@@ -66,11 +88,15 @@ public class CoralSubsystem extends SubsystemBase {
 
     final Pref<Double> elevatorVelocity = SKPreferences.attach("elevatorVelocity", 4500.0) //2500.0
       .onChange((unused) -> reconfigureElevator());
+
+    final Pref<Double> elevatorAcceleration = SKPreferences.attach("elevatorAcceleration", 6000.0) //6000
+    .onChange((newValue) -> reconfigureElevator());
   
     private void reconfigureElevator() {
       elevatorConfig.closedLoop.pidf(elevatorKp.get(), elevatorKi.get(), elevatorKd.get(), elevatorKpFF.get());   //dFilter(.0003)
       elevatorConfig.closedLoop.maxMotion
-        .maxVelocity(elevatorVelocity.get());
+        .maxVelocity(elevatorVelocity.get())
+        .maxAcceleration(elevatorAcceleration.get());
       elevatorMotor.configure(
         elevatorConfig,
         ResetMode.kResetSafeParameters,
@@ -180,6 +206,19 @@ public class CoralSubsystem extends SubsystemBase {
           }
         });
   }
+
+  // public Command setManualSetpointCommand(double speed)
+  // {
+  //   return this.runOnce(
+  //       () -> {
+  //         elevatorClosedLoopController.setReference(
+  //           speed,  //RPM
+  //           ControlType.kMAXMotionVelocityControl  //this is how the method knows that the previous 
+  //           //argument should be used for velocity
+  //         );
+  //       }
+  //   );
+  // }
 
   @Override
   public void periodic() {

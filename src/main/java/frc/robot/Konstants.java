@@ -320,6 +320,9 @@ public final class Konstants
             public static final class CoralSubsystem {
                 public static final SparkFlexConfig elevatorConfig = new SparkFlexConfig();
 
+                /**Max elevator speed in RPM.*/
+                public static final double kMaxElevatorSpeed = 4500;
+
                 static {
 
                     // Configure basic settings of the elevator motor
@@ -350,7 +353,7 @@ public final class Konstants
                      .outputRange(-1, 1)
                     .maxMotion
                     // Set MAXMotion parameters for position control
-                    .maxVelocity(4500)
+                    .maxVelocity(kMaxElevatorSpeed)
                     .maxAcceleration(6000)
                     .allowedClosedLoopError(0.1);
                 }
@@ -546,7 +549,7 @@ public final class Konstants
         public static final double kClimbMinPosition = -1000;
         public static final double kClimbPositionTolerance = 0.2;
 
-        public static final Double kClimbReadyPos = 200.0;  //7.7
+        public static final Double kClimbReadyPos = 105.0;  
 
     }
 
