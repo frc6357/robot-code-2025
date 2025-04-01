@@ -13,7 +13,6 @@ import static frc.robot.Konstants.ClimbConstants.kClimbMaxPosition;
 import static frc.robot.Konstants.ClimbConstants.kClimbMinPosition;
 import static frc.robot.Konstants.ClimbConstants.kClimbP;
 import static frc.robot.Konstants.ClimbConstants.kClimbPositionTolerance;
-import static frc.robot.Konstants.ClimbConstants.kClimbReadyPos;
 import static frc.robot.Ports.ClimbPorts.kClimbMotor;
 
 //import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -33,10 +32,14 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 //import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.Units;
 //import edu.wpi.first.units.Units;
 //import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 //SmartDashboard Import
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -137,12 +140,39 @@ public class SK25Climb extends SubsystemBase
 
    }
 
-   public void readyTheClimb(double speed)
-   {
-      //motor.setPosition(Units.Rotations.of(kClimbReadyPos));
-      motor.setControl(new DutyCycleOut(speed));
+   //Simmulation
 
-   }
+   private static final double kGearRatio = 10.0;
+
+   private final DCMotorSim m_motorSimModel = new DCMotorSim(
+   LinearSystemId.createDCMotorSystem(
+      DCMotor.getKrakenX60Foc(1), 
+      0.001, 
+      kGearRatio),
+   DCMotor.getKrakenX60Foc(1)
+   );
+
+@Override
+public void simulationPeriodic() {
+   var talonFXSim = motor.getSimState();
+
+   // set the supply voltage of the TalonFX
+   talonFXSim.setSupplyVoltage(RobotController.getBatteryVoltage());
+
+   // get the motor voltage of the TalonFX
+   var motorVoltage = talonFXSim.getMotorVoltageMeasure();
+
+   // use the motor voltage to calculate new position and velocity
+   // using WPILib's DCMotorSim class for physics simulation
+   m_motorSimModel.setInputVoltage(motorVoltage.in(Units.Volts));
+   m_motorSimModel.update(0.020); // assume 20 ms loop time
+
+   // apply the new rotor position and velocity to the TalonFX;
+   // note that this is rotor position/velocity (before gear ratio), but
+   // DCMotorSim returns mechanism position/velocity (after gear ratio)
+   talonFXSim.setRawRotorPosition(m_motorSimModel.getAngularPosition().times(kGearRatio));
+   talonFXSim.setRotorVelocity(m_motorSimModel.getAngularVelocity().times(kGearRatio));
+}
 
    public double getMotorSpeed() {
       return motor.getVelocity().getValueAsDouble(); // Rotations / sec

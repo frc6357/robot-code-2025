@@ -13,7 +13,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.55
+            "waitTime": 0.85
           }
         },
         {
@@ -44,6 +44,12 @@
           "type": "path",
           "data": {
             "pathName": "ToHeadOnPoint3"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.75
           }
         },
         {

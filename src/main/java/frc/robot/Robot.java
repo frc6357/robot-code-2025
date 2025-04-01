@@ -3,8 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-import au.grapplerobotics.CanBridge;
-import org.littletonrobotics.junction.LogFileUtil;
+import static frc.robot.Konstants.ClimbConstants.kClimbReadyPos;
+import static frc.robot.Konstants.ClimbConstants.kKrakenSpeed;
+import static frc.robot.Ports.DriverPorts.kDriver;
+import static frc.robot.Ports.OperatorPorts.kOperator;
+
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -12,6 +15,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+
+import au.grapplerobotics.CanBridge;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -26,14 +31,13 @@ import static frc.robot.Konstants.ClimbConstants.kKrakenSpeed;
 import static frc.robot.Ports.DriverPorts.kDriver;
 import static frc.robot.Ports.OperatorPorts.kOperator;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.preferences.SKPreferences;
+import frc.robot.subsystems.SK25Climb;
 import frc.robot.utils.files.Elastic;
 import frc.robot.utils.files.Elastic.Notification.NotificationLevel;
-// To Be Commented?
-import edu.wpi.first.net.WebServer;
-import edu.wpi.first.wpilibj.Filesystem;
 
 // Unused Imports
 //import edu.wpi.first.wpilibj.TimedRobot;
@@ -53,6 +57,8 @@ public class Robot extends LoggedRobot
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
+
+    private SK25Climb climb;
 
     SendableChooser<Command> autoCommandSelector = new SendableChooser<Command>();
 
@@ -89,13 +95,14 @@ public class Robot extends LoggedRobot
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
 
-        //Schedule a warmup command to prevent delay at the begenning of auto. This helps aleviate a 
-        //java specific isssue of the auto starting late.
-        //FollowPathCommand.warmupCommand().schedule();
+        climb = m_robotContainer.m_Climb.get();
 
 
         //get the saved elastic dashboard layout
         WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
+
+        kDriver.setRumble(RumbleType.kBothRumble, 0.0);
+        kOperator.setRumble(RumbleType.kBothRumble, 0.0);
     }
 
     /**
@@ -125,90 +132,38 @@ public class Robot extends LoggedRobot
         // display match time
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
 
-        // checkIfThirtySecondsLeft();
-
-        SmartDashboard.putNumber("StatusSingalTime", ((Double)DriverStation.getMatchTime()).intValue());
-
-        // if((((Double)DriverStation.getMatchTime()).intValue() <= 120) && thirtySecondsReached == false)
-        // {
-        //     kDriver.setRumble(RumbleType.kBothRumble, 0.5);
-        // }
-
-        kDriver.setRumble(RumbleType.kBothRumble, 0.0);
-
-
-
-
-        // if ((((Double)DriverStation.getMatchTime()).intValue() <= 30) && thirtySecondsReached == false)  //previously match time
-        // {
-            
-        //     DriverStation.reportError("CONDITION MET", false);
-
-        //     time = System.currentTimeMillis();
-
-        //     //dont let the notification send more than once
-        //     thirtySecondsReached = true;
-
-        //     //send elastic notification that thirty seconds are left
-        //     Elastic.Notification timeToClimbNotification = new Elastic.Notification(
-        //         NotificationLevel.INFO, 
-        //         "Time to Climb!", 
-        //         "There are thirty seconds left in the match."
-        //     );
-        //     //make the notification take up more of the screen
-        //     Elastic.sendNotification(timeToClimbNotification
-        //         .withDisplaySeconds(5.0)
-        //         .withWidth(2.0)
-        //         .withHeight(2.0)
-        //     );
-
-        //     //controller rumble to alert driver and operator
-        //     kDriver.setRumble(RumbleType.kBothRumble, 0.5);
-        //     kOperator.setRumble(RumbleType.kBothRumble, 0.5);
-
-        //     //raise the climb to the ready position
-        //     m_robotContainer.m_Climb.get().readyTheClimb(kKrakenSpeed);
-
-        //     rumbling = true;
-        // }
-
-        // if (DriverStation.getMatchTime() <= 29 && rumbling == true)
-        //     {
-        //         //stop rumble after 1 second
-        //         kDriver.setRumble(RumbleType.kBothRumble, 0.0);
-        //         kOperator.setRumble(RumbleType.kBothRumble, 0.0);
-
-        //         rumbling = false;
-        //     }
+        SmartDashboard.putNumber("IntMatchTime", ((Double)DriverStation.getMatchTime()).intValue());
     }
 
     public void checkIfThirtySecondsLeft()
     {
-        if (DriverStation.getMatchTime() <= 30 && thirtySecondsReached == false)  //previously match time
+        // DriverStation.reportError(String.valueOf(((Double)DriverStation.getMatchTime()).intValue()), false);
+
+        //time will be -1 if enabled in teleop directly. Works in practice mode on DS.
+        if (((Double)DriverStation.getMatchTime()).intValue() <= 30 && thirtySecondsReached == false)  //previously match time
         {
             
+            // DriverStation.reportError("CONDITION REACHED", false);
+
             //dont let the notification send more than once
             thirtySecondsReached = true;
 
             //send elastic notification that thirty seconds are left
             Elastic.Notification timeToClimbNotification = new Elastic.Notification(
-                NotificationLevel.INFO, 
+                NotificationLevel.WARNING, 
                 "Time to Climb!", 
                 "There are thirty seconds left in the match."
             );
             //make the notification take up more of the screen
             Elastic.sendNotification(timeToClimbNotification
                 .withDisplaySeconds(5.0)
-                .withWidth(2.0)
-                .withHeight(2.0)
+                .withWidth(500.0)
+                .withHeight(200.0)
             );
 
             //controller rumble to alert driver and operator
             kDriver.setRumble(RumbleType.kBothRumble, 0.5);
             kOperator.setRumble(RumbleType.kBothRumble, 0.5);
-
-            //raise the climb to the ready position
-            m_robotContainer.m_climbContainer.get().readyTheClimb(kKrakenSpeed);
 
             rumbling = true;
         }
@@ -220,6 +175,8 @@ public class Robot extends LoggedRobot
                 kOperator.setRumble(RumbleType.kBothRumble, 0.0);
 
                 rumbling = false;
+
+                // DriverStation.reportError("RUMBLE STOPPED", false);
             }
     }
 
@@ -243,7 +200,8 @@ public class Robot extends LoggedRobot
     {
         m_robotContainer.matchInit();
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-        // m_robotContainer.m_Climb.get().readyTheClimb(kKrakenSpeed);
+
+        climb.runMotor(kKrakenSpeed);
 
         /*
          * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -265,6 +223,9 @@ public class Robot extends LoggedRobot
     @Override
     public void autonomousPeriodic()
     {
+        //stop at the climb position
+        if (climb.getMotorPosition() >= kClimbReadyPos)
+        climb.stop();
     }
 
     @Override
@@ -289,7 +250,7 @@ public class Robot extends LoggedRobot
     @Override
     public void teleopPeriodic()
     {
-        //SmartDashboard.putNumber("Matchtime", DriverStation.getMatchTime());
+        checkIfThirtySecondsLeft();
     }
 
     @Override

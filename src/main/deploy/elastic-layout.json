@@ -8,65 +8,6 @@
         "layouts": [],
         "containers": [
           {
-            "title": "Elevator at Setpoint",
-            "x": 1024.0,
-            "y": 256.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/SmartDashboard/Elevator at Setpoint",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
-            }
-          },
-          {
-            "title": "MatchTime",
-            "x": 384.0,
-            "y": 0.0,
-            "width": 640.0,
-            "height": 512.0,
-            "type": "Match Time",
-            "properties": {
-              "topic": "/AdvantageKit/DriverStation/MatchTime",
-              "period": 0.06,
-              "data_type": "double",
-              "time_display_mode": "Minutes and Seconds",
-              "red_start_time": 15,
-              "yellow_start_time": 30
-            }
-          },
-          {
-            "title": "Current Elevator Position",
-            "x": 1024.0,
-            "y": 128.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Large Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Current Estimated Position",
-              "period": 0.06,
-              "data_type": "double"
-            }
-          },
-          {
-            "title": "Target Elevator Position",
-            "x": 1024.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Large Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Target Position",
-              "period": 0.06,
-              "data_type": "double"
-            }
-          },
-          {
             "title": "BatteryCurrent",
             "x": 0.0,
             "y": 256.0,
@@ -164,6 +105,67 @@
               "topic": "/SmartDashboard/Select an Auto",
               "period": 0.06,
               "sort_options": false
+            }
+          },
+          {
+            "title": "Match Time",
+            "x": 384.0,
+            "y": 0.0,
+            "width": 640.0,
+            "height": 512.0,
+            "type": "Match Time",
+            "properties": {
+              "topic": "/SmartDashboard/Match Time",
+              "period": 0.06,
+              "data_type": "double",
+              "time_display_mode": "Minutes and Seconds",
+              "red_start_time": 15,
+              "yellow_start_time": 30
+            }
+          },
+          {
+            "title": "Actual Position",
+            "x": 1024.0,
+            "y": 128.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Coral/Elevator/Actual Position",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Target Position",
+            "x": 1024.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Coral/Elevator/Target Position",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "slowModeStatus",
+            "x": 1024.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/slowModeStatus",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           }
         ]
@@ -580,6 +582,20 @@
               "topic": "/SmartDashboard/ElevatorCurrentPos",
               "period": 0.06,
               "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "RawClimbPos",
+            "x": 1024.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/RawClimbPos",
+              "period": 0.06,
+              "data_type": "string",
               "show_submit_button": false
             }
           }
