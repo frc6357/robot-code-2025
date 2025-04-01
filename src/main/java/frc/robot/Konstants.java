@@ -570,22 +570,26 @@ public final class Konstants
             public static final class ElevatorSetpoints {
               public static final double kZero = 0;
               public static final double kLevel1 = 15;
-              public static final double kLevel2 = 32.5;  //40
-              public static final double kLevel3 = 50; //-215
-              public static final double kLevel4 = 79.5; //-190
-              public static final double kLowAlgae = 25;  //-22
-              public static final double kHighAlgae = 37;  //-173
-              public static final double kNet = 75; //angle -90
+              public static final double kLevel2 = 32.5;//40
+              public static final double kLevel3 = 50; 
+              public static final double kLevel4 = 77; //79.5
+              public static final double kLowAlgae = 25;  
+              public static final double kHighAlgae = 37;  
+              public static final double kNet = 75; 
               public static final double kIntake = 30;
             }
 
             public static final class CoralSubsystem {
                 public static final SparkFlexConfig elevatorConfig = new SparkFlexConfig();
 
+                /**Max elevator speed in RPM.*/
+                public static final double kMaxElevatorSpeed = 4500;
+
                 static {
 
                     // Configure basic settings of the elevator motor
                     elevatorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80).voltageCompensation(12);
+                    // elevatorConfig.idleMode(IdleMode.kBrake).secondaryCurrentLimit(80).voltageCompensation(12);
 
                     /*
                     * Configure the reverse limit switch for the elevator. By enabling the limit switch, this
@@ -612,7 +616,7 @@ public final class Konstants
                      .outputRange(-1, 1)
                     .maxMotion
                     // Set MAXMotion parameters for position control
-                    .maxVelocity(4500)
+                    .maxVelocity(kMaxElevatorSpeed)
                     .maxAcceleration(6000)
                     .allowedClosedLoopError(0.1);
                 }
@@ -826,7 +830,7 @@ public final class Konstants
             /** Set the angle to reach the middle & low branch (L3) */
             kLowPositionAngle(-175), // Angle -210
             /** Set the angle to reach the trough (L2) */
-            kTroughPositionAngle(-125), // Angle -195
+            kTroughPositionAngle(-143), // Angle -125
             /** Set the height to reach the station (L1) */
             kIntakePositionAngle(-80), // Angle -95
             /** Set the height to reach the bottom */
@@ -853,10 +857,11 @@ public final class Konstants
     //    public static final double kHortizontalAngle = -60;     
 
        /* PID values for arm motion control */
-       public static final double kArmP = 1.9;
-       public static final double kArmI = .0002;
-       public static final double kArmD = 2.1;
-       public static final double kArmV = 0.000173400381; // 1/5767
+       public static final double kArmP = 0.1;  //0.3
+       public static final double kArmI = 0.0; //0.0002
+       public static final double kArmD = 0.0; //2.1
+       public static final double kArmV = 0.0; // 1/5767
+       public static final double kArmFF = 0.0;
 
        /* Maximum motion limits for motion control */
        public static final double kArmCruiseVel = .15; // rot/sec
@@ -906,13 +911,13 @@ public final class Konstants
         public static final double kClimbI = 0.0;
         public static final double kClimbD = 0.0;
       //  public static final double kClimbSetpoint = 5.0;
-        public static final double kKrakenSpeed = .6 ;
+        public static final double kKrakenSpeed = 1.0 ;  //previouslty 0.6
         public static final int kClimbCurrentLimit = 50;
         public static final double kClimbMaxPosition = 1000;
         public static final double kClimbMinPosition = -1000;
         public static final double kClimbPositionTolerance = 0.2;
 
-        public static final Double kClimbReadyPos = 7.7;
+        public static final Double kClimbReadyPos = 105.0;  
 
     }
 
