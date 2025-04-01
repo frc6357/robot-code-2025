@@ -308,12 +308,12 @@ public final class Konstants
             public static final class ElevatorSetpoints {
               public static final double kZero = 0;
               public static final double kLevel1 = 15;
-              public static final double kLevel2 = 32.5;  //40
-              public static final double kLevel3 = 50; //-215
-              public static final double kLevel4 = 79.5; //-190
-              public static final double kLowAlgae = 25;  //-22
-              public static final double kHighAlgae = 37;  //-173
-              public static final double kNet = 75; //angle -90
+              public static final double kLevel2 = 32.5;//40
+              public static final double kLevel3 = 50; 
+              public static final double kLevel4 = 77; //79.5
+              public static final double kLowAlgae = 25;  
+              public static final double kHighAlgae = 37;  
+              public static final double kNet = 75; 
               public static final double kIntake = 30;
             }
 
@@ -327,6 +327,7 @@ public final class Konstants
 
                     // Configure basic settings of the elevator motor
                     elevatorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80).voltageCompensation(12);
+                    // elevatorConfig.idleMode(IdleMode.kBrake).secondaryCurrentLimit(80).voltageCompensation(12);
 
                     /*
                     * Configure the reverse limit switch for the elevator. By enabling the limit switch, this
@@ -490,7 +491,7 @@ public final class Konstants
     //    public static final double kHortizontalAngle = -60;     
 
        /* PID values for arm motion control */
-       public static final double kArmP = 0.3;  //1.9
+       public static final double kArmP = 0.1;  //0.3
        public static final double kArmI = 0.0; //0.0002
        public static final double kArmD = 0.0; //2.1
        public static final double kArmV = 0.0; // 1/5767
