@@ -13,6 +13,42 @@
         {
           "type": "named",
           "data": {
+            "name": "AlignToRightReefCommandAuto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GoToBargeSourceFromNW"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeSideVisionToPoint3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "AlignToLeftReefCommandAuto"
           }
         },
@@ -47,51 +83,15 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "AlignToRightReefCommandAuto"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ExtakeAutoCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StationPickupCombo"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "GoToBargeSourceFromSW"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BargeSideVisionToPoint5"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AlignToLeftReefCommandAuto"
           }
         },
         {

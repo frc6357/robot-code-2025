@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P1_VisionToBargePoint1"
+            "pathName": "P2_VisionToHeadOnPoint1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
           }
         },
         {
@@ -17,9 +23,39 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ZeroPositionCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GoToBargeSourceFromN"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeSideVisionToPoint3"
+          }
+        },
+        {
           "type": "wait",
           "data": {
             "waitTime": 0.15
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToLeftReefCommandAuto"
           }
         },
         {
@@ -37,7 +73,7 @@
         {
           "type": "named",
           "data": {
-            "name": "GoToBargeSourceFromNW"
+            "name": "GoToBargeSourceFromSW"
           }
         },
         {
@@ -47,15 +83,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "AlignToLeftReefCommandAuto"
-          }
-        },
-        {
           "type": "wait",
           "data": {
             "waitTime": 0.15
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToRightReefCommandAuto"
           }
         },
         {
@@ -74,6 +110,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "BargeSide(P1)",
+  "folder": "HeadOn(P2)",
   "choreoAuto": false
 }

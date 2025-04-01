@@ -45,8 +45,12 @@ import frc.robot.bindings.SK25LightsBinder;
 // import frc.robot.bindings.SK25ScoringBinder;
 import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.commands.AlignToReefTag.Target;
+import frc.robot.commands.GoToSource.GoToBargeSourceFromN;
+import frc.robot.commands.GoToSource.GoToBargeSourceFromNW;
+import frc.robot.commands.GoToSource.GoToBargeSourceFromS;
 import frc.robot.commands.GoToSource.GoToBargeSourceFromSW;
 import frc.robot.commands.GoToSource.GoToProcessorSourceFromNE;
+import frc.robot.commands.GoToSource.GoToProcessorSourceFromS;
 import frc.robot.commands.GoToSource.GoToProcessorSourceFromSE;
 import frc.robot.commands.EndEffectorButtonCommand;
 import frc.robot.commands.commandGroups.AlignToReefComboAuton;
@@ -256,8 +260,14 @@ public class RobotContainer extends Robot{
                                 m_vision, 
                                 m_swerve));
                 NamedCommands.registerCommand("GoToBargeSourceFromSW", new GoToBargeSourceFromSW());
+                NamedCommands.registerCommand("GoToBargeSourceFromN", new GoToBargeSourceFromN());
+                NamedCommands.registerCommand("GoToBargeSourceFromNW", new GoToBargeSourceFromNW());
+                NamedCommands.registerCommand("GoToBargeSourceFromS", new GoToBargeSourceFromS());
+
                 NamedCommands.registerCommand("GoToProcessorSourceFromNE", new GoToProcessorSourceFromNE());
                 NamedCommands.registerCommand("GoToProcessorSourceFromSE", new GoToProcessorSourceFromSE());
+                NamedCommands.registerCommand("GoToProcessorSourceFromS", new GoToProcessorSourceFromS());
+
             }
             if (m_endEffectorContainer.isPresent())
             {
