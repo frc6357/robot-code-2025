@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveToReef.DriveToReefPoseCommand;
 import frc.robot.commands.AlignToReefTag;
-import frc.robot.commands.commandGroups.AlignToReefCombo;
+import frc.robot.commands.commandGroups.AlignToReefComboTeleop;
 import static frc.robot.commands.AlignToReefTag.Target;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
@@ -70,7 +70,7 @@ public class SK25VisionBinder implements CommandBinder {
 
             // If just alignToReef held and not the other buttons
             alignToReef.and(visionEnabled).whileTrue(
-                new AlignToReefCombo(
+                new AlignToReefComboTeleop(
                     Target.CENTER, 
                     DriveToPose.getConfig(),
                     RotateToPose.getConfig(),
@@ -78,7 +78,7 @@ public class SK25VisionBinder implements CommandBinder {
                     m_swerve)
             );
             leftReef.and(visionEnabled).whileTrue(
-                new AlignToReefCombo(
+                new AlignToReefComboTeleop(
                     Target.LEFT, 
                     DriveToPose.getConfig(), 
                     RotateToPose.getConfig(), 
@@ -86,7 +86,7 @@ public class SK25VisionBinder implements CommandBinder {
                     m_swerve)
             );
             rightReef.and(visionEnabled).whileTrue(
-                new AlignToReefCombo(
+                new AlignToReefComboTeleop(
                     Target.RIGHT, 
                     DriveToPose.getConfig(), 
                     RotateToPose.getConfig(), 

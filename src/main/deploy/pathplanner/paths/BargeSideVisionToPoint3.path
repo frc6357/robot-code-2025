@@ -1,0 +1,66 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.899,
+        "y": 6.98
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.0434931506849314,
+        "y": 6.571853595890412
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.456,
+        "y": 5.745
+      },
+      "prevControl": {
+        "x": 2.3504649140512983,
+        "y": 6.1122671469992245
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "L4ScoreCombo",
+      "waypointRelativePos": 0.9666666666666665,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "L4ScoreCombo"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -59.99999999999999
+  },
+  "reversed": false,
+  "folder": "ScoreFromStation",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": 126.86999999999999
+  },
+  "useDefaultConstraints": true
+}

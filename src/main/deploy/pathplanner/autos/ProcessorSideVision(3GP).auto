@@ -1,0 +1,115 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P3_VisionToProcessorPoint1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToLeftReefCommandAuto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GoToProcessorSourceFromNE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ProcessorSideVisionToPoint3"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToRightReefCommandAuto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GoToProcessorSourceFromSE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ProcessorSideVisionToPoint3"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToLeftReefCommandAuto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "ProcessorSide(P3)",
+  "choreoAuto": false
+}

@@ -18,6 +18,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import static frc.robot.Ports.DriverPorts.kDriver;
 import static frc.robot.Ports.OperatorPorts.kOperator;
 
@@ -42,7 +44,12 @@ import frc.robot.bindings.SK25EndEffectorBinder;
 import frc.robot.bindings.SK25LightsBinder;
 // import frc.robot.bindings.SK25ScoringBinder;
 import frc.robot.bindings.SKSwerveBinder;
+import frc.robot.commands.AlignToReefTag.Target;
+import frc.robot.commands.GoToSource.GoToBargeSourceFromSW;
+import frc.robot.commands.GoToSource.GoToProcessorSourceFromNE;
+import frc.robot.commands.GoToSource.GoToProcessorSourceFromSE;
 import frc.robot.commands.EndEffectorButtonCommand;
+import frc.robot.commands.commandGroups.AlignToReefComboAuton;
 import frc.robot.commands.commandGroups.LineupCombo;
 import frc.robot.commands.commandGroups.StationCombo;
 import frc.robot.subsystems.CoralSubsystem;
@@ -211,6 +218,47 @@ public class RobotContainer extends Robot{
     {
         if (m_swerveContainer.isPresent())
         {
+            if(m_visionContainer.isPresent()) {
+                NamedCommands.registerCommand("AlignToLeftReefCommandAuto", new AlignToReefComboAuton(
+                                Target.LEFT, 
+                                SK25Vision.DriveToPose.getConfig(), 
+                                SK25Vision.RotateToPose.getConfig(), 
+                                m_vision, 
+                                m_swerve));
+                NamedCommands.registerCommand("AlignToRightReefCommandAuto", new AlignToReefComboAuton(
+                                Target.RIGHT, 
+                                SK25Vision.DriveToPose.getConfig(), 
+                                SK25Vision.RotateToPose.getConfig(), 
+                                m_vision, 
+                                m_swerve));
+                NamedCommands.registerCommand("AlignToCenterReefCommandAuto", new AlignToReefComboAuton(
+                                Target.CENTER, 
+                                SK25Vision.DriveToPose.getConfig(), 
+                                SK25Vision.RotateToPose.getConfig(), 
+                                m_vision, 
+                                m_swerve));
+                NamedCommands.registerCommand("AlignToLeftReefCommandAuton", new AlignToReefComboAuton(
+                                Target.LEFT, 
+                                SK25Vision.DriveToPose.getConfig(), 
+                                SK25Vision.RotateToPose.getConfig(), 
+                                m_vision, 
+                                m_swerve));
+                NamedCommands.registerCommand("AlignToRightReefCommandAuton", new AlignToReefComboAuton(
+                                Target.RIGHT, 
+                                SK25Vision.DriveToPose.getConfig(), 
+                                SK25Vision.RotateToPose.getConfig(), 
+                                m_vision, 
+                                m_swerve));
+                NamedCommands.registerCommand("AlignToCenterReefCommandAuton", new AlignToReefComboAuton(
+                                Target.CENTER, 
+                                SK25Vision.DriveToPose.getConfig(), 
+                                SK25Vision.RotateToPose.getConfig(), 
+                                m_vision, 
+                                m_swerve));
+                NamedCommands.registerCommand("GoToBargeSourceFromSW", new GoToBargeSourceFromSW());
+                NamedCommands.registerCommand("GoToProcessorSourceFromNE", new GoToProcessorSourceFromNE());
+                NamedCommands.registerCommand("GoToProcessorSourceFromSE", new GoToProcessorSourceFromSE());
+            }
             if (m_endEffectorContainer.isPresent())
             {
                 SK25EndEffector effector = m_endEffectorContainer.get();

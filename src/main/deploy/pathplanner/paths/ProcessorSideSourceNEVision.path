@@ -1,0 +1,73 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.424272260273973,
+        "y": 2.409738869863014
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.604580479452055,
+        "y": 2.1092251712328767
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5776969178082192,
+        "y": 0.8019905821917803
+      },
+      "prevControl": {
+        "x": 1.7346223800880822,
+        "y": 1.0697232888490045
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "StationWaitCombo",
+      "waypointRelativePos": 0.6,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "StationPickupCombo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -127.3
+  },
+  "reversed": false,
+  "folder": "CollectCoral",
+  "idealStartingState": {
+    "velocity": 1.0,
+    "rotation": 119.99999999999999
+  },
+  "useDefaultConstraints": true
+}

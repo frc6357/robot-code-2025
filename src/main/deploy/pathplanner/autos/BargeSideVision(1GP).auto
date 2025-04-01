@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P1_VisionToBargePoint1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToLeftReefCommandAuto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "BargeSide(P1)",
+  "choreoAuto": false
+}
