@@ -2,7 +2,7 @@
   {
     "name": "/Preferences/elevatorKp",
     "type": "double",
-    "value": 0.12,
+    "value": 0.115,
     "properties": {
       "persistent": true
     }
@@ -131,6 +131,46 @@
     "name": "/Preferences/lidarThreshold",
     "type": "double",
     "value": 5.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/endEffectorVelocity",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/endEffectorKp",
+    "type": "double",
+    "value": 0.1,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/endEffectorKi",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/endEffectorKd",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/endEffectorKFF",
+    "type": "double",
+    "value": 0.0,
     "properties": {
       "persistent": true
     }
