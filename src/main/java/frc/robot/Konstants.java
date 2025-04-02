@@ -318,7 +318,7 @@ public final class Konstants
             public static final int kElevatorMotorCanId = 41;
         
             public static final class ElevatorSetpoints {
-              public static final double kZero = 0;
+              public static final double kZero = 2; //0
               public static final double kLevel1 = 15;
               public static final double kLevel2 = 32.5;//40
               public static final double kLevel3 = 50; 
@@ -471,20 +471,26 @@ public final class Konstants
         /** Heights for the different elevator positions */
         public static enum EndEffectorPosition
         {
-            /** Set the angle to reach the top branch (L4) */ // 12.5
-            kTopPositionAngle(-190), // Angle -190
-            /** Set the angle to reach the middle & low branch (L3) */
-            kLowPositionAngle(-175), // Angle -210
-            /** Set the angle to reach the trough (L2) */
-            kTroughPositionAngle(-143), // Angle -125
-            /** Set the height to reach the station (L1) */
-            kIntakePositionAngle(-80), // Angle -95
+            /** Set the angle to reach the top branch (L4) */
+            kTopPositionAngle(-190), 
+            /** Set the angle to reach the low branch (L2) */
+            kLowPositionAngle(-175),
+            /** Set the angle to reach the trough (L1) */
+            kTroughPositionAngle(-143), 
+            /** Set the height to reach the station (Station) */
+            kIntakePositionAngle(-80), 
             /** Set the height to reach the bottom */
-            kZeroPositionAngle(-95), // Angle
+            kZeroPositionAngle(-95), // Angle was -95, ADJUSTED WITH 2.0 AS ELEVATOR HEIGHT!
+            /** Set the height to reach the net (Net) */
             kNetAngle(-90),
-            kHighAlgae(-140), //-145
-            kMiddleAngle(-173), //-190
-            kLowAlgae(-180), //-173
+            /** Set the height to reach the high algae (High Algae) */
+            kHighAlgae(-140), 
+            /** Set the height to reach the middle branch (L3) */
+            kMiddleAngle(-173),
+            /** Set the height to reach the low algae (Low Algae) */
+            kLowAlgae(-180),
+
+
             kIntake(-70);  //not used for station
 
             public final double angle;
