@@ -35,7 +35,7 @@ import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.bindings.ClimbBinder;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.bindings.RevBindings;
-import frc.robot.bindings.SK25ElevatorBinder;
+// import frc.robot.bindings.SK25ElevatorBinder;
 //import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.bindings.SK25EndEffectorBinder;
 import frc.robot.bindings.SK25LightsBinder;
@@ -166,7 +166,7 @@ public class RobotContainer extends Robot{
     private void configureButtonBindings()
     {
         buttonBinders.add(new SKSwerveBinder(m_swerve, m_elevator));
-        buttonBinders.add(new SK25ElevatorBinder(m_elevator));
+        // buttonBinders.add(new SK25ElevatorBinder(m_elevator));
         buttonBinders.add(new SK25LightsBinder(m_lights));
         buttonBinders.add(new RevBindings(m_coral));
 
