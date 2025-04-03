@@ -100,10 +100,10 @@ public class CoralSubsystem extends SubsystemBase {
     .onChange((newValue) -> reconfigureElevator());
 
 
-    final Pref<Double> elevatorVelocity = SKPreferences.attach("elevatorVelocity", 4500.0) //2500.0
+    final Pref<Double> elevatorVelocity = SKPreferences.attach("elevatorVelocity", 4000.0) //2500.0
       .onChange((unused) -> reconfigureElevator());
 
-    final Pref<Double> elevatorAcceleration = SKPreferences.attach("elevatorAcceleration", 6000.0) //6000
+    final Pref<Double> elevatorAcceleration = SKPreferences.attach("elevatorAcceleration", 3000.0) //6000
     .onChange((newValue) -> reconfigureElevator());
   
     private void reconfigureElevator() {
