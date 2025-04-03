@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.179545454545455,
-        "y": 4.18
+        "x": 7.156500000000001,
+        "y": 4.2005
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.92954613092509,
-        "y": 4.179418459493981
+        "x": 6.906500676379636,
+        "y": 4.199918459493981
       },
       "isLocked": false,
-      "linkedName": "P2"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.9219262295081965,
-        "y": 4.18
+        "x": 5.928,
+        "y": 4.2005
       },
       "prevControl": {
-        "x": 6.322529539072127,
-        "y": 4.18453041371303
+        "x": 6.32860330956393,
+        "y": 4.20503041371303
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "DriftlessHeadOnPoint1"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -54,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -179.20885114320797
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,

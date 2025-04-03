@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.928,
-        "y": 4.2
+        "x": 5.3625,
+        "y": 5.204749999999999
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.222672131147542,
-        "y": 5.141875000000001
+        "x": 6.657172131147542,
+        "y": 6.146624999999999
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "DriftlessHeadOnPoint1"
     },
     {
       "anchor": {
@@ -20,7 +20,7 @@
         "y": 7.262
       },
       "prevControl": {
-        "x": 3.145471311475409,
+        "x": 3.1454713114754087,
         "y": 7.151088114754098
       },
       "nextControl": null,
@@ -71,7 +71,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -119.93151184050777
   },
   "useDefaultConstraints": true
 }

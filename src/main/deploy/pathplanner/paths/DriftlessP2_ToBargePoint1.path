@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.928,
-        "y": 4.2
+        "x": 7.16625,
+        "y": 7.4765
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.222672131147542,
-        "y": 5.141875000000001
+        "x": 6.916250676379635,
+        "y": 7.475918459493981
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "P2"
     },
     {
       "anchor": {
-        "x": 1.51125,
-        "y": 7.262
+        "x": 5.3625,
+        "y": 5.204749999999999
       },
       "prevControl": {
-        "x": 3.145471311475409,
-        "y": 7.151088114754098
+        "x": 5.76310330956393,
+        "y": 5.209280413713029
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "DriftlessHeadOnPoint2"
+      "linkedName": "DriftlessHeadOnPoint1"
     }
   ],
   "rotationTargets": [],
@@ -33,24 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "StationPickupCombo",
-      "waypointRelativePos": 0.14044564483459726,
+      "name": "L4ScoreCombo",
+      "waypointRelativePos": 0.01620526671168114,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "StationPickupCombo"
-        }
-      }
-    },
-    {
-      "name": "StationWaitCombo",
-      "waypointRelativePos": 0.8723835246455117,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "StationWaitCombo"
+          "name": "L4ScoreCombo"
         }
       }
     }
@@ -65,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 124.91018261738395
+    "rotation": -119.93151184050777
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

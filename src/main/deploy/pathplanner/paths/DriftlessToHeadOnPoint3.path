@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.5823770491803275,
-        "y": 7.219723360655737
+        "x": 1.51125,
+        "y": 7.262
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2656762295081965,
-        "y": 6.704252049180327
+        "x": 2.194549180327869,
+        "y": 6.746528688524589
       },
       "isLocked": false,
       "linkedName": "DriftlessHeadOnPoint2"
