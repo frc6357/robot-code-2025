@@ -89,8 +89,8 @@ public class AlignToReefTag extends Command {
 
     @Override
     public void initialize() {
-        resetAll();
         setTarget();
+        resetAll();
     }
 
     @Override
@@ -132,9 +132,10 @@ public class AlignToReefTag extends Command {
     }
 
     private void calculateSpeeds() {
-        xOut = xyConfig.maxVelocity * xPID.calculate(targetLimelight.getCameraPoseTS3d().toPose2d().getX());
-        yOut = xyConfig.maxVelocity * -yPID.calculate(targetLimelight.getCameraPoseTS3d().toPose2d().getY());
-        rotOut = rotConfig.maxVelocity * -rotPID.calculate(targetLimelight.getCameraPoseTS3d().toPose2d().getRotation().getDegrees());
+        double[] positions = targetLimelight.getRobotPoseTS();
+        xOut = xyConfig.maxVelocity * xPID.calculate(positions[2]);
+        yOut = xyConfig.maxVelocity * -yPID.calculate(positions[0]);
+        rotOut = rotConfig.maxVelocity * -rotPID.calculate(positions[4]);
     }
 
     private Limelight findGoodLimelight() {
@@ -149,19 +150,19 @@ public class AlignToReefTag extends Command {
     private boolean setTargetLimelight(Target t) {
         switch(t) {
             case LEFT:
-                if(!m_vision.reefTargetClose(limelights[0])) {
-                    break;
-                }
-                targetLimelight = limelights[0];
-                break;
-            case RIGHT:
                 if(!m_vision.reefTargetClose(limelights[1])) {
                     break;
                 }
                 targetLimelight = limelights[1];
                 break;
+            case RIGHT:
+                if(!m_vision.reefTargetClose(limelights[0])) {
+                    break;
+                }
+                targetLimelight = limelights[0];
+                break;
             case CENTER:
-                targetLimelight = findGoodLimelight();
+                targetLimelight = limelights[0];
                 break;
             case BACK:
                 targetLimelight = findGoodLimelight();
@@ -186,17 +187,17 @@ public class AlignToReefTag extends Command {
                 if(!setTargetLimelight(target)) {
                     break;
                 }
-                xPID.setGoal(LeftLimelight.kCloseXSetpoint);
-                yPID.setGoal(LeftLimelight.kLeftYSetpoint);
-                rotPID.setGoal(LeftLimelight.kRotSetpoint);
+                xPID.setGoal(RightLimelight.kCloseXSetpoint);
+                yPID.setGoal(RightLimelight.kLeftYSetpoint);
+                rotPID.setGoal(RightLimelight.kRotSetpoint);
                 break;
             case RIGHT:
                 if(!setTargetLimelight(target)) {
                     break;
                 }
-                xPID.setGoal(RightLimelight.kCloseXSetpoint);
-                yPID.setGoal(RightLimelight.kRightYSetpoint);
-                rotPID.setGoal(RightLimelight.kRotSetpoint);
+                xPID.setGoal(LeftLimelight.kCloseXSetpoint);
+                yPID.setGoal(LeftLimelight.kRightYSetpoint);
+                rotPID.setGoal(LeftLimelight.kRotSetpoint);
                 break;
             case CENTER:
                 if(!setTargetLimelight(target)) {
@@ -243,22 +244,26 @@ public class AlignToReefTag extends Command {
 
 
     private void resetAll() {
-        xPID.reset(targetLimelight.getCameraPoseTS3d().toPose2d().getX(), getSpeeds().vxMetersPerSecond);
-        yPID.reset(targetLimelight.getCameraPoseTS3d().toPose2d().getY(), getSpeeds().vyMetersPerSecond);
-        rotPID.reset(targetLimelight.getCameraPoseTS3d().toPose2d().getRotation().getDegrees(), getSpeeds().omegaRadiansPerSecond);
+        double[] positions = targetLimelight.getRobotPoseTS();
+        xPID.reset(positions[2], getSpeeds().vxMetersPerSecond);
+        yPID.reset(positions[0], getSpeeds().vyMetersPerSecond);
+        rotPID.reset(positions[4], getSpeeds().omegaRadiansPerSecond);
 
     }
     private void shutdownAll() {
         shutdownX(); shutdownY(); shutdownRot();
     }
     private void shutdownX() {
-        xPID.setGoal(targetLimelight.getCameraPoseTS3d().toPose2d().getX());
+        double[] positions = targetLimelight.getRobotPoseTS();
+        xPID.setGoal(positions[2]);
     }
     private void shutdownY() {
-        yPID.setGoal(targetLimelight.getCameraPoseTS3d().toPose2d().getY());
+        double[] positions = targetLimelight.getRobotPoseTS();
+        yPID.setGoal(positions[0]);
     }
     private void shutdownRot() {
-        rotPID.setGoal(targetLimelight.getCameraPoseTS3d().toPose2d().getRotation().getDegrees());
+        double[] positions = targetLimelight.getRobotPoseTS();
+        rotPID.setGoal(positions[4]);
     }
 
     private ChassisSpeeds getSpeeds() {

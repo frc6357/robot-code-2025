@@ -665,7 +665,6 @@ public final class Konstants
         public static final double kLeftSideReefAlignOffset = 0.0; // Degrees of tx to align to a reef apriltag to score on its left side
         public static final double kRightSideReefAlignOffset = 0.0; // Degrees of tx to align to a reef april to score on its right side
 
-        //TODO: UPDATE ALL LIMELIGHT POSE CONSTANTS IN WEB INTERFACE
         public static final class limelightAlpha {
             // Network/pipeline values
             public static final String kName = "limelight-alpha";
@@ -694,7 +693,6 @@ public final class Konstants
             // Rotation of limelight (in degrees and yaw)
             public static final double kRoll = 0; // (roll) degrees tilted clockwise/ccw from 0° level [think plane wings tilting cw/ccw]
             public static final double kPitch = 1.9; // (pitch) degrees tilted up/down from 0° level [think plane nose tilting up/down]
-            // TODO: Update in Web Interface too
             public static final double kYaw = -23; // (yaw) yaw rotated clockwise/ccw from 0° North [think of a compass facing cw/ccw]
             
             public static final boolean kAttached = true;
@@ -702,25 +700,24 @@ public final class Konstants
 
         public static final class AlignmentConstants {
             public static class LeftLimelight {
-                // TODO: Find vision align constants via web interface
-                public static double kRotSetpoint = 0.0;
+                public static double kRotSetpoint = 0;
 
-                public static double kCloseXSetpoint = -0.27;
-                public static double kFarXSetpoint = -0.57;
+                public static double kCloseXSetpoint = -0.41;
+                public static double kFarXSetpoint = -0.99;
 
-                public static double kLeftYSetpoint = -0.43;
-                public static double kRightYSetpoint = -0.11;
-                public static double kCenterYSetpoint = -0.27;
+                public static double kLeftYSetpoint = 0.0; //unused
+                public static double kRightYSetpoint = 0.18; 
+                public static double kCenterYSetpoint = 0.02;
             }
             public static class RightLimelight {
-                public static double kRotSetpoint = 0.0;
+                public static double kRotSetpoint = 0;
 
-                public static double kCloseXSetpoint = 0.0;
-                public static double kFarXSetpoint = 0.0;
+                public static double kCloseXSetpoint = -0.45;
+                public static double kFarXSetpoint = -0.78;
 
-                public static double kLeftYSetpoint = 0.0;
-                public static double kRightYSetpoint = 0.0;
-                public static double kCenterYSetpoint = 0.0;
+                public static double kLeftYSetpoint = -0.19;
+                public static double kRightYSetpoint = 0.0; //unused
+                public static double kCenterYSetpoint = 0.0; //unused
             }
 
         }

@@ -257,8 +257,14 @@ public class Limelight {
         if(!isAttached()) {
             return new Pose3d();
         }
-        LimelightHelpers.getCameraPose_TargetSpace(config.name);
         return LimelightHelpers.getCameraPose3d_TargetSpace(config.name);
+    }
+
+    public double[] getRobotPoseTS() {
+        if(!isAttached()) {
+            return new double[0];
+        }
+        return LimelightHelpers.getBotPose_TargetSpace(config.name);
     }
 
     /** Leverages the limelight's view of multiple tags and their distance from the robot to check if the
