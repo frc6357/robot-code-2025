@@ -13,7 +13,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.75
+            "waitTime": 2.0
           }
         },
         {
@@ -26,6 +26,12 @@
           "type": "named",
           "data": {
             "name": "ZeroPositionCommand"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 15.0
           }
         },
         {
