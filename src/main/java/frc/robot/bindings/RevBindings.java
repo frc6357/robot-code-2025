@@ -82,6 +82,7 @@ public class RevBindings implements CommandBinder
             HighAlgae.onTrue(elevator.setSetpointCommand(Setpoint.kHighAlgae));
             Net.onTrue(elevator.setSetpointCommand(Setpoint.kLevel4));
             Intake.onTrue(elevator.setSetpointCommand(Setpoint.kIntake));
+            resetPos.onTrue(new InstantCommand(() -> elevator.setNewZero()));
         }
     }
 }
