@@ -53,11 +53,11 @@ public class Ports
         // public static final SKTrigger climbSlowButton = new SKTrigger(kDriver, 270, POV);
         
         // Driver Function Button (Activates secondary control scheme when held)
-        public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kLeftBumper.value, BUTTON);
+        public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kRightBumper.value, BUTTON);
 
         // Switch modes
         public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, 180, POV); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
-        public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kRightBumper.value, BUTTON); // Function Controlscheme
+        public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kLeftBumper.value, BUTTON); // Function Controlscheme
 
         
 
