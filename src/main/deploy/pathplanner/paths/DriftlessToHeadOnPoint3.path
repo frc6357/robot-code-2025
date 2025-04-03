@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.16625,
-        "y": 7.4765
+        "x": 1.51125,
+        "y": 7.262
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.91625,
-        "y": 7.4765
+        "x": 2.194549180327869,
+        "y": 6.746528688524589
       },
       "isLocked": false,
-      "linkedName": "P2"
+      "linkedName": "DriftlessHeadOnPoint2"
     },
     {
       "anchor": {
-        "x": 6.305532786885245,
-        "y": 4.019006147540983
+        "x": 3.884016393442623,
+        "y": 5.361629098360655
       },
       "prevControl": {
-        "x": 6.555532786885245,
-        "y": 4.019006147540983
+        "x": 3.428483606557377,
+        "y": 5.793186475409836
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "DriftlessHeadOnPoint3"
     }
   ],
   "rotationTargets": [],
@@ -34,19 +34,12 @@
   "eventMarkers": [
     {
       "name": "L4ScoreCombo",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0.29979743416609234,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "sequential",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "L4ScoreCombo"
-              }
-            }
-          ]
+          "name": "L4ScoreCombo"
         }
       }
     }
@@ -61,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -59.53445508054006
   },
   "reversed": false,
-  "folder": "P2",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 124.91018261738395
   },
   "useDefaultConstraints": true
 }

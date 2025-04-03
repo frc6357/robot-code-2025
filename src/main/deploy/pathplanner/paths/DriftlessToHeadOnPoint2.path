@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.16625,
-        "y": 7.4765
+        "x": 5.928,
+        "y": 4.2
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.91625,
-        "y": 7.4765
+        "x": 7.222672131147542,
+        "y": 5.141875000000001
       },
       "isLocked": false,
-      "linkedName": "P2"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.305532786885245,
-        "y": 4.019006147540983
+        "x": 1.51125,
+        "y": 7.262
       },
       "prevControl": {
-        "x": 6.555532786885245,
-        "y": 4.019006147540983
+        "x": 3.145471311475409,
+        "y": 7.151088114754098
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "DriftlessHeadOnPoint2"
     }
   ],
   "rotationTargets": [],
@@ -33,20 +33,24 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L4ScoreCombo",
-      "waypointRelativePos": 0.0,
+      "name": "StationPickupCombo",
+      "waypointRelativePos": 0.14044564483459726,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "sequential",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "L4ScoreCombo"
-              }
-            }
-          ]
+          "name": "StationPickupCombo"
+        }
+      }
+    },
+    {
+      "name": "StationWaitCombo",
+      "waypointRelativePos": 0.8723835246455117,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "StationWaitCombo"
         }
       }
     }
@@ -61,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 124.91018261738395
   },
   "reversed": false,
-  "folder": "P2",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
