@@ -53,12 +53,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "IntakeAutoCommand"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "ToHeadOnScoreNet1"
@@ -67,7 +61,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.5
+            "waitTime": 1.0
           }
         },
         {
@@ -101,12 +95,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "IntakeAutoCommand"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "ToHeadOnScoreNet2"
@@ -115,7 +103,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.0
           }
         },
         {

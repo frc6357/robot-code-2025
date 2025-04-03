@@ -333,7 +333,7 @@ public final class Konstants
                 public static final SparkFlexConfig elevatorConfig = new SparkFlexConfig();
 
                 /**Max elevator speed in RPM.*/
-                public static final double kMaxElevatorSpeed = 4500;
+                public static final double kMaxElevatorSpeed = 4000;
 
                 static {
 
@@ -367,7 +367,7 @@ public final class Konstants
                     .maxMotion
                     // Set MAXMotion parameters for position control
                     .maxVelocity(kMaxElevatorSpeed)
-                    .maxAcceleration(6000)
+                    .maxAcceleration(3500)
                     .allowedClosedLoopError(0.1);
                 }
             }
