@@ -367,7 +367,7 @@ public final class Konstants
                     .maxMotion
                     // Set MAXMotion parameters for position control
                     .maxVelocity(kMaxElevatorSpeed)
-                    .maxAcceleration(3500)
+                    .maxAcceleration(5000)
                     .allowedClosedLoopError(0.1);
                 }
             }
