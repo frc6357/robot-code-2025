@@ -83,7 +83,7 @@ public class CoralSubsystem extends SubsystemBase {
   // Member variables for subsystem state management
   private boolean wasResetByButton = false;
   private boolean wasResetByLimit = false;
-  private double elevatorCurrentTarget = 0.0;  //ElevatorSetpoints.kZero;
+  public double elevatorCurrentTarget = 0.0;  //ElevatorSetpoints.kZero;
 
   
 

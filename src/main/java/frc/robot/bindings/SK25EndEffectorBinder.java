@@ -47,12 +47,14 @@ import frc.robot.commands.EndEffectorJoystickCommand;
 import frc.robot.commands.EndEffectorRollerIntakeCommand;
 import frc.robot.commands.EndEffectorRollerOutputCommand;
 import frc.robot.commands.EndEffectorRollerStopCommand;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.SK25EndEffector;
 import frc.robot.utils.filters.DeadbandFilter;
 
 public class SK25EndEffectorBinder implements CommandBinder {
 
     Optional<SK25EndEffector> endEffectorSubsystem;
+    Optional<CoralSubsystem> elevator;
 
     Trigger LowButton;
     Trigger MiddleButton;
@@ -73,9 +75,10 @@ public class SK25EndEffectorBinder implements CommandBinder {
 
     RelativeEncoder mEncoder;
 
-    public SK25EndEffectorBinder(Optional<SK25EndEffector> endEffectorSubsystem)
+    public SK25EndEffectorBinder(Optional<SK25EndEffector> endEffectorSubsystem, Optional<CoralSubsystem> elevator)
     {
         this.endEffectorSubsystem   = endEffectorSubsystem;
+        this.elevator = elevator;
         this.ResetEncoderButton     = resetencoder.button;
         this.RollerIntake           = kIntake.button;
         this.RollerOutPut           = kShoot.button;
@@ -97,6 +100,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
         if (endEffectorSubsystem.isPresent())
         {
             SK25EndEffector endEffector = endEffectorSubsystem.get();
+            CoralSubsystem m_elevator = elevator.get();
 
             double joystickGain = kJoystickReversed ? -1 : 1;
             kEndEffectorAxis.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
@@ -117,7 +121,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
             
             //RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
             RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
-            RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector));
+            RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector, m_elevator));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
             RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
 
