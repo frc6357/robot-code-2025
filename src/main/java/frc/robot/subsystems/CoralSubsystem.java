@@ -239,12 +239,6 @@ public class CoralSubsystem extends SubsystemBase {
   //   );
   // }
 
-  public void setNewZero()
-  {
-    elevatorCurrentTarget = 0.0;
-    elevatorEncoder.setPosition(0);
-  }
-
   @Override
   public void periodic()
   {
