@@ -172,7 +172,7 @@ public class RobotContainer extends Robot{
 
         // Adding all the binding classes to the list
         buttonBinders.add(new ClimbBinder(m_Climb));
-        buttonBinders.add(new SK25EndEffectorBinder(m_endEffector));
+        buttonBinders.add(new SK25EndEffectorBinder(m_endEffector, m_coral));
         // buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
 
         // Traversing through all the binding classes to actually bind the buttons
