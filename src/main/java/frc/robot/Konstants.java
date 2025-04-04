@@ -699,27 +699,14 @@ public final class Konstants
         }
 
         public static final class AlignmentConstants {
-            public static class LeftLimelight {
                 public static double kRotSetpoint = 0;
 
-                public static double kCloseXSetpoint = -0.41;
-                public static double kFarXSetpoint = -0.99;
-
-                public static double kLeftYSetpoint = 0.0; //unused
-                public static double kRightYSetpoint = 0.18; 
+                public static double kRightYSetpoint = 0.185; 
                 public static double kCenterYSetpoint = 0.02;
-            }
-            public static class RightLimelight {
-                public static double kRotSetpoint = 0;
+                public static double kLeftYSetpoint = -0.145;
 
                 public static double kCloseXSetpoint = -0.45;
-                public static double kFarXSetpoint = -0.78;
-
-                public static double kLeftYSetpoint = -0.19;
-                public static double kRightYSetpoint = 0.0; //unused
-                public static double kCenterYSetpoint = 0.0; //unused
-            }
-
+                public static double kFarXSetpoint = -0.99;
         }
 
         public static final class PoseConstants {

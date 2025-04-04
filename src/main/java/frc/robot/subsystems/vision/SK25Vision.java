@@ -166,10 +166,10 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     public static final class DriveToPose extends MultiLimelightCommandConfig {
         private DriveToPose() {
             configKpid(1, 0, 0);
-            configTolerance(0.1);
+            configTolerance(0.02);
             configProfile(TunerConstants.MaxSpeed * 0.25, (TunerConstants.MaxSpeed * 0.25) * 2); //25% Max Speed; 2x Acceleration
             configMaxOutput(TunerConstants.MaxSpeed * 0.25);
-            configError(0.1);
+            configError(0.02);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
         }
