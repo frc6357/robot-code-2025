@@ -334,6 +334,8 @@ public final class Konstants
 
                 /**Max elevator speed in RPM.*/
                 public static final double kMaxElevatorSpeed = 4000;
+                /**Max elevator speed in RPM.*/
+                public static final double kMaxElevatorAcceleration = 5000;
 
                 static {
 
@@ -367,7 +369,7 @@ public final class Konstants
                     .maxMotion
                     // Set MAXMotion parameters for position control
                     .maxVelocity(kMaxElevatorSpeed)
-                    .maxAcceleration(3500)
+                    .maxAcceleration(kMaxElevatorAcceleration)
                     .allowedClosedLoopError(0.1);
                 }
             }
