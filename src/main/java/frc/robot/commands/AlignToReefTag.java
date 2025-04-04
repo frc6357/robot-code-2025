@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -233,7 +234,7 @@ public class AlignToReefTag extends Command {
                 }
                 break;
         }
-        return targetLimelight == null;
+        return targetLimelight != null;
     }
 
     private double getXOutput() {
@@ -252,9 +253,9 @@ public class AlignToReefTag extends Command {
                 if(!setTargetLimelight(target)) {
                     break;
                 }
-                xPID.setGoal(kCloseXSetpoint);
-                yPID.setGoal(kLeftYSetpoint);
-                rotPID.setGoal(kRotSetpoint);
+                xPID.setGoal(new State(kCloseXSetpoint, 0.0));
+                yPID.setGoal(new State(kLeftYSetpoint, 0.0));
+                rotPID.setGoal(new State(kRotSetpoint, 0.0));
                 outputtingX = true; outputtingY = true; outputtingRot = true;
                 break;
             case RIGHT:
@@ -324,7 +325,7 @@ public class AlignToReefTag extends Command {
 
     }
     private void shutdownAll() {
-        shutdownX(); shutdownY(); shutdownRot();
+        // shutdownX(); shutdownY(); shutdownRot();
     }
     private void shutdownX() {
         double[] positions = targetLimelight.getRobotPoseTS();
