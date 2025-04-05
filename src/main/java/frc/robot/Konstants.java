@@ -482,7 +482,7 @@ public final class Konstants
             /** Set the height to reach the bottom */
             kZeroPositionAngle(-115), // Angle was -95, ADJUSTED WITH 2.0 AS ELEVATOR HEIGHT!
             /** Set the height to reach the net (Net) */
-            kNetAngle(-90),
+            kNetAngle(-80), //-90
             /** Set the height to reach the high algae (High Algae) */
             kHighAlgae(-140), 
             /** Set the height to reach the middle branch (L3) */
@@ -570,7 +570,7 @@ public final class Konstants
         public static final double kClimbMinPosition = -1000;
         public static final double kClimbPositionTolerance = 0.2;
 
-        public static final Double kClimbReadyPos = 105.0;  
+        public static final Double kClimbReadyPos = 150.0;  
 
     }
 

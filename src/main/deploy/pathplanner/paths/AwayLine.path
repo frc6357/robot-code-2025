@@ -8,32 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.732479508196721,
-        "y": 5.133862704918031
+        "x": 6.773053278688525,
+        "y": 4.762243852459016
       },
       "isLocked": false,
       "linkedName": "HeadOnScoreNet1"
     },
     {
       "anchor": {
-        "x": 4.925,
-        "y": 4.944
+        "x": 6.389446721311475,
+        "y": 4.73826844262295
       },
       "prevControl": {
-        "x": 5.307817302845874,
-        "y": 6.089781519803359
+        "x": 6.880942622950819,
+        "y": 4.714293032786885
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HeadOnRemoveAlgae2"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.7489004398240668,
-      "rotationDegrees": -119.99999999999999
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.2913621709842
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "RemoveAlgae",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

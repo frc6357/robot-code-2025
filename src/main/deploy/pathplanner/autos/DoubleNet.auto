@@ -61,7 +61,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.7
           }
         },
         {
@@ -113,15 +113,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ZeroPositionCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "AwayFromStart"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ZeroPositionCommand"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "AwayFromStart"
+                }
+              }
+            ]
           }
         }
       ]
