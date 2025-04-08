@@ -5,6 +5,7 @@ import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
 //import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 import static frc.robot.Ports.OperatorPorts.kEndEffectorAxis;
+import static frc.robot.Ports.OperatorPorts.kFloorAlgae;
 import static frc.robot.Ports.OperatorPorts.kHighAlgae;
 import static frc.robot.Ports.OperatorPorts.kIntakePos;
 import static frc.robot.Ports.OperatorPorts.kLowAlgae;
@@ -71,7 +72,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
     Trigger Net;
     Trigger HighAlgae;
     Trigger LowAlgae;
-    Trigger Processor;
+    Trigger floorAlgae;
 
     RelativeEncoder mEncoder;
 
@@ -91,7 +92,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
         this.LowAlgae = kLowAlgae.button;
         this.HighAlgae = kHighAlgae.button;
         this.Net = kNetPos.button;
-        //this.processor = kProcessor.button;
+        this.floorAlgae = kFloorAlgae.button;
     }
 
     public void bindButtons()
@@ -116,7 +117,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
             Net.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kNetAngle, endEffector));
             HighAlgae.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kHighAlgae, endEffector));
             LowAlgae.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kLowAlgae, endEffector));
-           // Processor.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, endEffector));
+            floorAlgae.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kFloorAngle, endEffector));
             
             
             //RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));

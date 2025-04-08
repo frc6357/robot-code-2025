@@ -103,6 +103,7 @@ public class Ports
         // public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
         // public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
         // Algae:
+        public static final SKTrigger kFloorAlgae = new SKTrigger(kOperator, kA.value, BUTTON);
         public static final SKTrigger kLowAlgae = new SKTrigger(kOperator, kB.value, BUTTON);
         public static final SKTrigger kHighAlgae = new SKTrigger(kOperator, kY.value, BUTTON);
         public static final SKTrigger kNetPos = new SKTrigger(kOperator, kRightBumper.value, BUTTON);

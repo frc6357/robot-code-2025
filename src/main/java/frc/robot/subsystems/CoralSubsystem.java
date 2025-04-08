@@ -38,7 +38,8 @@ public class CoralSubsystem extends SubsystemBase {
     kLowAlgae,
     kHighAlgae,
     kNet,
-    kIntake;
+    kIntake,
+    kFloor;
   }
 
 
@@ -219,9 +220,9 @@ public class CoralSubsystem extends SubsystemBase {
             case kIntake:
               elevatorCurrentTarget = ElevatorSetpoints.kIntake;
               break;
-            // case kProcessor:
-            //   elevatorCurrentTarget = ElevatorSetpoints.kProcessor;
-            //   break;
+            case kFloor:
+              elevatorCurrentTarget = ElevatorSetpoints.kFloor;
+              break;
           }
         });
   }

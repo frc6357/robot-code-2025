@@ -1,11 +1,8 @@
 package frc.robot.bindings;
-import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
-import static frc.robot.Konstants.SwerveConstants.kJoystickDeadband;
-import static frc.robot.Ports.OperatorPorts.kElevatorAxis;
 //import static frc.robot.Ports.OperatorPorts.kLowBranch;
 //import static frc.robot.Ports.OperatorPorts.kTrough;
 import static frc.robot.Ports.OperatorPorts.kElevatorOverride;
-import static frc.robot.Ports.OperatorPorts.kEndEffectorAxis;
+import static frc.robot.Ports.OperatorPorts.kFloorAlgae;
 import static frc.robot.Ports.OperatorPorts.kHighAlgae;
 import static frc.robot.Ports.OperatorPorts.kIntakePos;
 import static frc.robot.Ports.OperatorPorts.kLowAlgae;
@@ -21,11 +18,8 @@ import java.util.Optional;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.CoralElevatorJoystickCommand;
-import frc.robot.commands.EndEffectorJoystickCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
-import frc.robot.utils.filters.DeadbandFilter;
 
 public class RevBindings implements CommandBinder
 {
@@ -41,6 +35,7 @@ public class RevBindings implements CommandBinder
     Trigger HighAlgae;
     Trigger Net;
     Trigger Intake;
+    Trigger floorButton;
 
     public RevBindings(Optional<CoralSubsystem> elevatorSubsystem)
     {
@@ -56,6 +51,7 @@ public class RevBindings implements CommandBinder
         this.HighAlgae = kHighAlgae.button;
         this.Net = kNetPos.button;
         this.Intake = kIntakePos.button;
+        this.floorButton = kFloorAlgae.button;
     }
 
     public void bindButtons()
@@ -82,6 +78,7 @@ public class RevBindings implements CommandBinder
             HighAlgae.onTrue(elevator.setSetpointCommand(Setpoint.kHighAlgae));
             Net.onTrue(elevator.setSetpointCommand(Setpoint.kLevel4));
             Intake.onTrue(elevator.setSetpointCommand(Setpoint.kIntake));
+            floorButton.onTrue(elevator.setSetpointCommand(Setpoint.kFloor));
             resetPos.onTrue(new InstantCommand(() -> elevator.forceResetZero()));
         }
     }

@@ -327,6 +327,7 @@ public final class Konstants
               public static final double kHighAlgae = 37;  
               public static final double kNet = 75; 
               public static final double kIntake = 30;
+              public static final double kFloor = 7.5;
             }
 
             public static final class CoralSubsystem {
@@ -489,6 +490,8 @@ public final class Konstants
             kMiddleAngle(-173),
             /** Set the height to reach the low algae (Low Algae) */
             kLowAlgae(-180),
+            /** Set the height to reach the floor algae (Floor) */
+            kFloorAngle(-260.5),
 
 
             kIntake(-70);  //not used for station
