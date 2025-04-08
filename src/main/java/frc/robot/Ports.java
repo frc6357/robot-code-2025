@@ -129,6 +129,12 @@ public class Ports
         public static final SKTrigger kElevatorOverride = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
         public static final SKTrigger resetencoder = new SKTrigger(kOperator, kRightStick.value, BUTTON);
 
+        public static final SKTrigger kOperatorA = new SKTrigger(kOperator, kA.value, BUTTON);
+        public static final SKTrigger kOperatorB = new SKTrigger(kOperator, kB.value, BUTTON);
+        public static final SKTrigger kOperatorX = new SKTrigger(kOperator, kX.value, BUTTON);
+        public static final SKTrigger kOperatorY = new SKTrigger(kOperator, kY.value, BUTTON);
+        public static final SKTrigger kOperatorLeftTrigger = kIntake;
+        public static final SKTrigger kOperatorRightTrigger = kShoot;
         //public static final SKTrigger kProcessor = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
         
     }

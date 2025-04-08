@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.bindings.ClimbBinder;
 import frc.robot.bindings.CommandBinder;
+import frc.robot.bindings.CoralSubsystemSysIdBinder;
 import frc.robot.bindings.RevBindings;
 // import frc.robot.bindings.SK25ElevatorBinder;
 //import frc.robot.utils.SK25AutoBuilder;
@@ -165,22 +166,22 @@ public class RobotContainer extends Robot{
      */
     private void configureButtonBindings()
     {
-        buttonBinders.add(new SKSwerveBinder(m_swerve, m_elevator));
-        // buttonBinders.add(new SK25ElevatorBinder(m_elevator));
-        buttonBinders.add(new SK25LightsBinder(m_lights));
-        buttonBinders.add(new RevBindings(m_coral));
+        buttonBinders.add(new CoralSubsystemSysIdBinder(m_coral));
+        // buttonBinders.add(new SKSwerveBinder(m_swerve, m_elevator));
+        // // buttonBinders.add(new SK25ElevatorBinder(m_elevator));
+        // buttonBinders.add(new SK25LightsBinder(m_lights));
+        // buttonBinders.add(new RevBindings(m_coral));
 
-        // Adding all the binding classes to the list
-        buttonBinders.add(new ClimbBinder(m_Climb));
-        buttonBinders.add(new SK25EndEffectorBinder(m_endEffector, m_coral));
-        // buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
+        // // Adding all the binding classes to the list
+        // buttonBinders.add(new ClimbBinder(m_Climb));
+        // buttonBinders.add(new SK25EndEffectorBinder(m_endEffector, m_coral));
+        // // buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
 
-        // Traversing through all the binding classes to actually bind the buttons
-        for (CommandBinder subsystemGroup : buttonBinders)
-        {
-            subsystemGroup.bindButtons();
-        }
-
+        // // Traversing through all the binding classes to actually bind the buttons
+        // for (CommandBinder subsystemGroup : buttonBinders)
+        // {
+        //     subsystemGroup.bindButtons();
+        // }
     }
 
 

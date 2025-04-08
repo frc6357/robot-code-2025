@@ -1,7 +1,14 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
 
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.sim.SparkFlexSim;
 import com.revrobotics.sim.SparkLimitSwitchSim;
@@ -13,6 +20,9 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.MutAngle;
+import edu.wpi.first.units.measure.MutAngularVelocity;
+import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
@@ -21,6 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants;
 import frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.ElevatorSetpoints;
 import frc.robot.Konstants.SimulationRobotConstants;
@@ -85,8 +96,43 @@ public class CoralSubsystem extends SubsystemBase {
   private boolean wasResetByButton = false;
   private boolean wasResetByLimit = false;
   public double elevatorCurrentTarget = 0.0;  //ElevatorSetpoints.kZero;
-
   
+  private final VoltageOut m_voltReq = new VoltageOut(0.0);
+  private final MutVoltage m_appliedVoltage = Volts.mutable(0);
+  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+  private final MutAngle m_angle = Radians.mutable(0);
+  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+  private final MutAngularVelocity m_velocity = RadiansPerSecond.mutable(0);
+
+  private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
+    new SysIdRoutine.Config(
+        Volts.of(0.2).per(Second), // Voltage ramp rate for static test
+        Volts.of(1.4), // Dynamic step voltage
+        null // Use default timeout (10 s)
+    ),
+    new SysIdRoutine.Mechanism(
+        elevatorMotor::setVoltage,
+        log -> {
+          // Record a frame for the shooter motor.
+          log.motor("shooter-wheel")
+              .voltage(
+                  m_appliedVoltage.mut_replace(
+                      elevatorMotor.get() * RobotController.getBatteryVoltage(), Volts))
+              .angularPosition(m_angle.mut_replace(elevatorEncoder.getPosition(), Rotations))
+              .angularVelocity(
+                  m_velocity.mut_replace(elevatorEncoder.getVelocity(), RotationsPerSecond));
+        },
+        this
+    )
+  );
+
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return m_sysIdRoutine.quasistatic(direction);
+  }
+  
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return m_sysIdRoutine.dynamic(direction);
+  }
 
     final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.115) //0.12
     .onChange((newValue) -> reconfigureElevator());
