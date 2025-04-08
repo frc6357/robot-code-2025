@@ -12,9 +12,13 @@ import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
 import frc.robot.subsystems.vision.SK25Vision.MultiLimelightCommandConfig;
 import frc.robot.utils.vision.Limelight;
+import frc.robot.utils.vision.LimelightHelpers;
 import frc.robot.utils.vision.LimelightHelpers.RawFiducial;
 import static frc.robot.Konstants.VisionConstants.AlignmentConstants.*;
 import static frc.robot.Ports.DriverPorts.kDriver;
+
+import java.util.Optional;
+
 import static frc.robot.Konstants.VisionConstants.limelightAlpha;
 import static frc.robot.Konstants.VisionConstants.limelightBeta;
 
@@ -25,7 +29,6 @@ public class AlignToReefTag extends Command {
     private MultiLimelightCommandConfig xyConfig;
     private MultiLimelightCommandConfig rotConfig;
     private Constraints xyConstraints, rotConstraints;
-    private RawFiducial closestTag;
     private DriveCommand driveCommand;
     private SK25Vision m_vision;
     private Limelight[] limelights;
@@ -150,7 +153,9 @@ public class AlignToReefTag extends Command {
     @Override
     public boolean isFinished() {
         if(valid) {
-            return xPID.atGoal() && yPID.atGoal() && rotPID.atGoal();
+            boolean isAtTargetPose = xPID.atGoal() && yPID.atGoal() && rotPID.atGoal();
+            boolean canNoLongerSeeTarget = !targetLimelight.targetInView();
+            return isAtTargetPose || canNoLongerSeeTarget;
         }
         return !valid;
     }
@@ -165,7 +170,7 @@ public class AlignToReefTag extends Command {
     
             if(outputtingX) {
                 xOut = xyConfig.maxVelocity * xPID.calculate(positions[2]);
-                if(xOut < 0.2) {
+                if(Math.abs(xOut) < 0.2) {
                     xOut = Math.signum(xOut) * .2;
                 }
             }
@@ -175,7 +180,7 @@ public class AlignToReefTag extends Command {
     
             if(outputtingY) {
                 yOut = xyConfig.maxVelocity * -yPID.calculate(positions[0]);
-                if(yOut < 0.2) {
+                if(Math.abs(yOut) < 0.2) {
                     yOut = Math.signum(yOut) * .2;
                 }
             }
@@ -185,7 +190,7 @@ public class AlignToReefTag extends Command {
     
             if(outputtingRot) {
                 rotOut = rotConfig.maxVelocity * -rotPID.calculate(positions[4]);
-                if(rotOut < 0.2) {
+                if(Math.abs(rotOut) < 0.05) {
                     rotOut = Math.signum(rotOut) * .05;
                 }
             }
@@ -204,36 +209,42 @@ public class AlignToReefTag extends Command {
         return null;
     }
 
-    private boolean setTargetLimelight(Target t) {
+    private Optional<Limelight> getTargetLimelight(Target t) {
         switch(t) {
             case LEFT:
                 if(!m_vision.reefTargetClose(limelights[1])) {
                     break;
                 }
-                targetLimelight = limelights[1];
-                tagID = targetLimelight.getClosestTagID();
-                break;
+                return Optional.of(limelights[1]);
             case RIGHT:
                 if(!m_vision.reefTargetClose(limelights[0])) {
                     break;
                 }
-                targetLimelight = limelights[0];
-                tagID = targetLimelight.getClosestTagID();
-                break;
+                return Optional.of(limelights[0]);
             case CENTER:
                 if(!m_vision.reefTargetClose(limelights[0])) {
                     break;
                 }
-                targetLimelight = limelights[0];
-                tagID = targetLimelight.getClosestTagID();
-                break;
+                return Optional.of(limelights[0]);
             case BACK:
-                targetLimelight = findGoodLimelight();
-                if(targetLimelight != null) {
-                    tagID = targetLimelight.getClosestTagID();
-                }
-                break;
+                return Optional.of(findGoodLimelight());
         }
+        return Optional.empty();
+
+    }
+
+    private boolean setTargetLimelight(Target t) {
+        getTargetLimelight(t).ifPresentOrElse(
+            (ll) -> {
+                targetLimelight = ll;
+                tagID = targetLimelight.getClosestTagID();
+            },
+            () -> {
+                targetLimelight = null;
+                tagID = -1;
+            }
+        );
+        
         return targetLimelight != null;
     }
 
@@ -310,7 +321,7 @@ public class AlignToReefTag extends Command {
             valid = false;
         }
         else {
-            valid = true;
+            valid = targetLimelight != null;
         }
     }
 

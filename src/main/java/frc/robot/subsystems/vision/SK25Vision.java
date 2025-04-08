@@ -319,6 +319,9 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         }
 
         double closestTagID = ll.getClosestTagID();
+        if (closestTagID == 0) {
+            return false;
+        }
 
         /*Since all reef tags are sequential, just check upper
         and lower bound of reef tag sequence. If seen tag's id
