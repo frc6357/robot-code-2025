@@ -7,18 +7,18 @@ import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
 import static frc.robot.Ports.OperatorPorts.kEndEffectorAxis;
 import static frc.robot.Ports.OperatorPorts.kFloorAlgae;
 import static frc.robot.Ports.OperatorPorts.kHighAlgae;
+// Operator ports
+import static frc.robot.Ports.OperatorPorts.kIntake;
 import static frc.robot.Ports.OperatorPorts.kIntakePos;
 import static frc.robot.Ports.OperatorPorts.kLowAlgae;
 import static frc.robot.Ports.OperatorPorts.kLowBranchEffector;
 import static frc.robot.Ports.OperatorPorts.kMiddleBranchEffector;
 import static frc.robot.Ports.OperatorPorts.kNetPos;
+import static frc.robot.Ports.OperatorPorts.kShoot;
 import static frc.robot.Ports.OperatorPorts.kTopBranchEffector;
 import static frc.robot.Ports.OperatorPorts.kTroughEffector;
 import static frc.robot.Ports.OperatorPorts.kZeroPositionOperator;
 import static frc.robot.Ports.OperatorPorts.resetencoder;
-// Operator ports
-import static frc.robot.Ports.OperatorPorts.kIntake;
-import static frc.robot.Ports.OperatorPorts.kShoot;
 
 // Misc.
 import java.util.Optional;
@@ -26,6 +26,8 @@ import java.util.Optional;
 // Relative encoder (REV)
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -117,7 +119,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
             Net.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kNetAngle, endEffector));
             HighAlgae.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kHighAlgae, endEffector));
             LowAlgae.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kLowAlgae, endEffector));
-            floorAlgae.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kFloorAngle, endEffector));
+            floorAlgae.onTrue(Commands.sequence(new WaitCommand(0.5), new EndEffectorButtonCommand(EndEffectorPosition.kFloorAngle, endEffector)));
             
             
             //RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
