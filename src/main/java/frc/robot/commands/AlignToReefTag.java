@@ -108,15 +108,6 @@ public class AlignToReefTag extends Command {
     @Override
     public void execute() {
         if(valid) {
-            if(xPID.atSetpoint()) {
-                outputtingX = false;
-            }
-            if(yPID.atSetpoint()) {
-                outputtingY = false;
-            }
-            if(rotPID.atSetpoint()) {
-                outputtingRot = false;
-            }
             calculateSpeeds();
 
             m_vision.isDriving = true;
