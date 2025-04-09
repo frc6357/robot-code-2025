@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.Rotations;
 import static frc.robot.Konstants.AutoConstants.kIntakeAutoDurationSeconds;
 //import static frc.robot.Konstants.AutoConstants.kIntakeAutoSpeed;
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
@@ -41,6 +42,7 @@ import au.grapplerobotics.interfaces.LaserCanInterface.RegionOfInterest;
 import edu.wpi.first.math.MathUtil;
 //import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -225,7 +227,11 @@ public class SK25EndEffector extends SubsystemBase
         //System.out.println(la);
         //System.out.println(getTargetArmPosition());
         //System.out.println(getArmPosition());
-        return Math.abs( getTargetArmPosition() -getArmPosition()) < kArmTolerance;
+        if (DriverStation.isTeleop()) {
+            return Math.abs(getTargetArmPosition() - getArmPosition()) < kArmTolerance;
+        } else {
+            return Math.abs(getTargetArmPosition() - getArmPosition()) < Rotations.of(0.1).in(Degrees);
+        }
     }
 
     public void hold()

@@ -81,6 +81,12 @@
           "data": {
             "name": "ZeroPositionCommand"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AwayLine"
+          }
         }
       ]
     }

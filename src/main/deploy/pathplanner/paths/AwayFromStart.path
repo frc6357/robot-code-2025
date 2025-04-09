@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.0,
-        "y": 6.562769886363636
+        "x": 7.432377049180327,
+        "y": 5.853125
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.804088365146554,
-        "y": 6.562769886363636
+        "x": 6.856967213114754,
+        "y": 5.841137295081967
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "HeadOnScoreNet2"
     },
     {
       "anchor": {
-        "x": 5.0,
-        "y": 6.562769886363636
+        "x": 5.33452868852459,
+        "y": 5.853125
       },
       "prevControl": {
-        "x": 6.195483897733535,
-        "y": 6.562769886363636
+        "x": 6.089754098360655,
+        "y": 5.865112704918032
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "OtherPaths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

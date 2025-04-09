@@ -1,10 +1,14 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
+import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.kElevatorHeightBottomLimit;
+import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.kElevatorHeightTopLimit;
+import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.kMaxElevatorAcceleration;
+import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.kMaxElevatorSpeed;
 
-import com.google.flatbuffers.Constants;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.sim.SparkFlexSim;
+import com.revrobotics.sim.SparkLimitSwitchSim;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -13,13 +17,18 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants;
 import frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.ElevatorSetpoints;
+import frc.robot.Konstants.SimulationRobotConstants;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 
@@ -34,8 +43,8 @@ public class CoralSubsystem extends SubsystemBase {
     kLowAlgae,
     kHighAlgae,
     kNet,
-    kIntake;
-    //kProcessor; This is just zero position
+    kIntake,
+    kFloor;
   }
 
 
@@ -45,35 +54,46 @@ public class CoralSubsystem extends SubsystemBase {
       new SparkFlex(CoralSubsystemConstants.kElevatorMotorCanId, MotorType.kBrushless);
   private SparkClosedLoopController elevatorClosedLoopController =
       elevatorMotor.getClosedLoopController();
-  private RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
+  public RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
 
 
   //simulation
-  private DCMotor elevatorMotorGearbox = DCMotor.getNeoVortex(1);  //gearbox for sparkflex motor
-  private SparkFlexSim elevatorSimMotor = new SparkFlexSim(elevatorMotor, elevatorMotorGearbox);
+  private DCMotor elevatorMotorModel = DCMotor.getNeoVortex(1);
+  private SparkFlexSim elevatorMotorSim;
+  private SparkLimitSwitchSim elevatorLimitSwitchSim;
+  private final ElevatorSim m_elevatorSim =
+      new ElevatorSim(
+          elevatorMotorModel,
+          SimulationRobotConstants.kElevatorGearing,
+          SimulationRobotConstants.kCarriageMass,
+          SimulationRobotConstants.kElevatorDrumRadius,
+          SimulationRobotConstants.kMinElevatorHeightMeters,
+          SimulationRobotConstants.kMaxElevatorHeightMeters,
+          true,
+          SimulationRobotConstants.kMinElevatorHeightMeters,
+          0.0,
+          0.0);
 
-  // private final ElevatorSim m_elevatorSim =
-  //     new ElevatorSim(
-  //         elevatorMotorGearbox,  //gearbox
-  //         Constants.kElevatorGearing,   //elevator gearing
-  //         Constants.kCarriageMass,
-  //         Constants.kElevatorDrumRadius,
-  //         Constants.kMinElevatorHeightMeters,
-  //         Constants.kMaxElevatorHeightMeters,
-  //         true,
-  //         0,
-  //         0.01,
-  //         0.0);
+  private final Mechanism2d m_mech2d = new Mechanism2d(50, 50);
+  private final MechanismRoot2d m_mech2dRoot = m_mech2d.getRoot("ElevatorArm Root", 25, 0);
+  private final MechanismLigament2d m_elevatorMech2d =
+    m_mech2dRoot.append(
+      new MechanismLigament2d(
+        "Elevator",
+        SimulationRobotConstants.kMinElevatorHeightMeters
+        * SimulationRobotConstants.kPixelsPerMeter,
+        90)
+  );
 
 
   // Member variables for subsystem state management
   private boolean wasResetByButton = false;
   private boolean wasResetByLimit = false;
-  private double elevatorCurrentTarget = ElevatorSetpoints.kZero;
+  public double elevatorCurrentTarget = 0.0;  //ElevatorSetpoints.kZero;
 
   
 
-    final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.115) //0.12
+    final Pref<Double> elevatorKp = SKPreferences.attach("elevatorKp", 0.13) //0.12
     .onChange((newValue) -> reconfigureElevator());
 
     final Pref<Double> elevatorKi = SKPreferences.attach("elevatorKi", 0.0) //0.0
@@ -86,10 +106,10 @@ public class CoralSubsystem extends SubsystemBase {
     .onChange((newValue) -> reconfigureElevator());
 
 
-    final Pref<Double> elevatorVelocity = SKPreferences.attach("elevatorVelocity", 4500.0) //2500.0
+    final Pref<Double> elevatorVelocity = SKPreferences.attach("elevatorVelocity", kMaxElevatorSpeed) //4000.0
       .onChange((unused) -> reconfigureElevator());
 
-    final Pref<Double> elevatorAcceleration = SKPreferences.attach("elevatorAcceleration", 6000.0) //6000
+    final Pref<Double> elevatorAcceleration = SKPreferences.attach("elevatorAcceleration", kMaxElevatorAcceleration) //5000.0
     .onChange((newValue) -> reconfigureElevator());
   
     private void reconfigureElevator() {
@@ -123,6 +143,11 @@ public class CoralSubsystem extends SubsystemBase {
 
     // Zero arm and elevator encoders on initialization
     elevatorEncoder.setPosition(0);
+
+
+    //initialize sims
+    elevatorMotorSim = new SparkFlexSim(elevatorMotor, elevatorMotorModel);
+    elevatorLimitSwitchSim = new SparkLimitSwitchSim(elevatorMotor, false);
 
   }
 
@@ -200,35 +225,70 @@ public class CoralSubsystem extends SubsystemBase {
             case kIntake:
               elevatorCurrentTarget = ElevatorSetpoints.kIntake;
               break;
-            // case kProcessor:
-            //   elevatorCurrentTarget = ElevatorSetpoints.kProcessor;
-            //   break;
+            case kFloor:
+              elevatorCurrentTarget = ElevatorSetpoints.kFloor;
+              break;
           }
         });
   }
 
-  // public Command setManualSetpointCommand(double speed)
-  // {
-  //   return this.runOnce(
-  //       () -> {
-  //         elevatorClosedLoopController.setReference(
-  //           speed,  //RPM
-  //           ControlType.kMAXMotionVelocityControl  //this is how the method knows that the previous 
-  //           //argument should be used for velocity
-  //         );
-  //       }
-  //   );
-  // }
+  public void setTargetHeight(double newHeight)
+  {
+    // DriverStation.reportError("NEW TARGET SET", false);
+    elevatorCurrentTarget = newHeight;
+  }
+
+  public void forceResetZero()
+  {
+    elevatorEncoder.setPosition(0.0);
+    elevatorCurrentTarget = 0.0;
+  }
 
   @Override
-  public void periodic() {
+  public void periodic()
+  {
     moveToSetpoint();
     zeroElevatorOnLimitSwitch();
     zeroOnUserButton();
+
+    m_elevatorMech2d.setLength(
+        SimulationRobotConstants.kPixelsPerMeter * SimulationRobotConstants.kMinElevatorHeightMeters
+            + SimulationRobotConstants.kPixelsPerMeter
+                * (elevatorEncoder.getPosition() / SimulationRobotConstants.kElevatorGearing)
+                * (SimulationRobotConstants.kElevatorDrumRadius * 2.0 * Math.PI));
 
     // Display subsystem values
     SmartDashboard.putNumber("Coral/Elevator/Target Position", elevatorCurrentTarget);
     SmartDashboard.putNumber("Coral/Elevator/Actual Position", elevatorEncoder.getPosition());
 
+    //see coral joystick command for more on not having a bottom limit
+    // if (elevatorCurrentTarget < kElevatorHeightBottomLimit)
+    //   elevatorCurrentTarget = kElevatorHeightBottomLimit;   //min height
+    if (elevatorCurrentTarget > kElevatorHeightTopLimit)
+      elevatorCurrentTarget = kElevatorHeightTopLimit;  //max height
+  }
+
+  @Override
+  public void simulationPeriodic()
+  {
+    // In this method, we update our simulation of what our elevator is doing
+    // First, we set our "inputs" (voltages)
+    m_elevatorSim.setInput(elevatorMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
+
+    // Update sim limit switch
+    elevatorLimitSwitchSim.setPressed(m_elevatorSim.getPositionMeters() == 0);
+
+    // Next, we update it. The standard loop time is 20ms.
+    m_elevatorSim.update(0.020);
+
+    // Iterate the elevator and arm SPARK simulations
+    elevatorMotorSim.iterate(
+        ((m_elevatorSim.getVelocityMetersPerSecond()
+                    / (SimulationRobotConstants.kElevatorDrumRadius * 2.0 * Math.PI))
+                * SimulationRobotConstants.kElevatorGearing)
+            * 60.0,
+        RobotController.getBatteryVoltage(),
+        0.02);
+    // SimBattery is updated in Robot.java
   }
 }

@@ -64,7 +64,7 @@ public class Ports
         public static final SKTrigger kRightReef = new SKTrigger(kDriver, kRightTrigger.value, AXIS);
 
         // Driver Function Button (Activates secondary control scheme when held)
-        public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kLeftBumper.value, BUTTON);
+        public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kRightBumper.value, BUTTON);
 
         // Switch modes
         public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, kRightBumper.value, BUTTON); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
@@ -112,6 +112,7 @@ public class Ports
         // public static final SKTrigger kMiddleBranch = new SKTrigger(kOperator, kB.value, BUTTON);
         // public static final SKTrigger kTopBranch = new SKTrigger(kOperator, kY.value, BUTTON);
         // Algae:
+        public static final SKTrigger kFloorAlgae = new SKTrigger(kOperator, kA.value, BUTTON);
         public static final SKTrigger kLowAlgae = new SKTrigger(kOperator, kB.value, BUTTON);
         public static final SKTrigger kHighAlgae = new SKTrigger(kOperator, kY.value, BUTTON);
         public static final SKTrigger kNetPos = new SKTrigger(kOperator, kRightBumper.value, BUTTON);

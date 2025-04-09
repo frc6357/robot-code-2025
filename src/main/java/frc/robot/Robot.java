@@ -127,7 +127,7 @@ public class Robot extends LoggedRobot
         SKPreferences.refreshIfNeeded();
 
         //display real time memory consumption
-        SmartDashboard.putNumber("Memory", Runtime.getRuntime().freeMemory() / 1000000);
+        SmartDashboard.putNumber("Memory", Runtime.getRuntime().freeMemory() / 1000000); //bytes to mb
 
         // display match time
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
@@ -201,6 +201,7 @@ public class Robot extends LoggedRobot
         m_robotContainer.matchInit();
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+        //deploy climb to save time at the end of match (stopped in autonomousPeriodic()).
         climb.runMotor(kKrakenSpeed);
 
         /*

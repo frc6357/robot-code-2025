@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.8,
-        "y": 4.25
+        "x": 5.826024590163935,
+        "y": 4.18
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.805913934427248,
-        "y": 3.998258196721312
+        "x": 6.029815573770492,
+        "y": 4.558452868852458
       },
       "isLocked": false,
       "linkedName": "HeadOnPoint1"
     },
     {
       "anchor": {
-        "x": 5.574282786885245,
-        "y": 3.899129098360655
+        "x": 5.574,
+        "y": 3.95
       },
       "prevControl": {
-        "x": 6.36547131147541,
-        "y": 3.9590676229508195
+        "x": 7.192622950819672,
+        "y": 3.9470799180327862
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "RemoveAlgae",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -176.8107665865603
+    "rotation": -179.42717517640048
   },
   "useDefaultConstraints": true
 }

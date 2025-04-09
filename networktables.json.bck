@@ -1,32 +1,16 @@
 [
   {
-    "name": "/Preferences/elevatorKp",
+    "name": "/Preferences/lidarTargetDistMm",
     "type": "double",
-    "value": 0.12,
+    "value": 75.0,
     "properties": {
       "persistent": true
     }
   },
   {
-    "name": "/Preferences/elevatorKi",
+    "name": "/Preferences/lidarThreshold",
     "type": "double",
-    "value": 0.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/elevatorkD",
-    "type": "double",
-    "value": 0.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/elevatorkFF",
-    "type": "double",
-    "value": 0.00196078431,
+    "value": 5.0,
     "properties": {
       "persistent": true
     }
@@ -41,6 +25,30 @@
   },
   {
     "name": "/Preferences/armAngleDeg",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorKi",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorKd",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorKpFF",
     "type": "double",
     "value": 0.0,
     "properties": {
@@ -72,9 +80,9 @@
     }
   },
   {
-    "name": "/Preferences/elevatorKd",
+    "name": "/Preferences/elevatorKp",
     "type": "double",
-    "value": 0.0,
+    "value": 0.115,
     "properties": {
       "persistent": true
     }
@@ -82,7 +90,7 @@
   {
     "name": "/Preferences/elevatorVelocity",
     "type": "double",
-    "value": 4500.0,
+    "value": 4000.0,
     "properties": {
       "persistent": true
     }
@@ -112,7 +120,15 @@
     }
   },
   {
-    "name": "/Preferences/elevatorKpFF",
+    "name": "/Preferences/endEffectorKp",
+    "type": "double",
+    "value": 0.1,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/endEffectorKi",
     "type": "double",
     "value": 0.0,
     "properties": {
@@ -120,17 +136,33 @@
     }
   },
   {
-    "name": "/Preferences/lidarTargetDistMm",
+    "name": "/Preferences/endEffectorKd",
     "type": "double",
-    "value": 75.0,
+    "value": 0.0,
     "properties": {
       "persistent": true
     }
   },
   {
-    "name": "/Preferences/lidarThreshold",
+    "name": "/Preferences/endEffectorKFF",
     "type": "double",
-    "value": 5.0,
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/endEffectorVelocity",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorAcceleration",
+    "type": "double",
+    "value": 3500.0,
     "properties": {
       "persistent": true
     }

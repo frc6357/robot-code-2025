@@ -536,6 +536,18 @@ public final class Konstants
         public static final PPHolonomicDriveController pathConfig = new PPHolonomicDriveController(kTranslationPIDConstants, kRotationPIDConstants);
     }
 
+    public static final class SimulationRobotConstants
+    {
+        public static final double kPixelsPerMeter = 20;
+    
+        public static final double kElevatorGearing = 25; // 25:1
+        public static final double kCarriageMass =
+            4.3 + 3.15 + 0.151; // Kg, arm + elevator stage + chain
+        public static final double kElevatorDrumRadius = 0.0328 / 2.0; // m
+        public static final double kMinElevatorHeightMeters = 0.922; // m
+        public static final double kMaxElevatorHeightMeters = 1.62; // m
+    }
+
     public static final class ElevatorConstants
     {
         /** Heights for the different elevator positions */
@@ -568,22 +580,34 @@ public final class Konstants
             public static final int kElevatorMotorCanId = 41;
         
             public static final class ElevatorSetpoints {
-              public static final double kZero = 0;
+              public static final double kZero = 2; //0
               public static final double kLevel1 = 15;
               public static final double kLevel2 = 32.5;//40
               public static final double kLevel3 = 50; 
-              public static final double kLevel4 = 77; //79.5
+              public static final double kLevel4 = 78; //79.5
               public static final double kLowAlgae = 25;  
               public static final double kHighAlgae = 37;  
-              public static final double kNet = 75; 
+              public static final double kNet = 78; //75
               public static final double kIntake = 30;
+              public static final double kFloor = 7.5;
             }
 
             public static final class CoralSubsystem {
                 public static final SparkFlexConfig elevatorConfig = new SparkFlexConfig();
 
                 /**Max elevator speed in RPM.*/
-                public static final double kMaxElevatorSpeed = 4000; //4500
+                public static final double kMaxElevatorSpeed = 5000;
+                /**Max elevator accleration in RPM / s.*/
+                public static final double kMaxElevatorAcceleration = 6000;
+                /** The max height of the elevator.*/
+                public static final double kElevatorHeightTopLimit = 79.0;
+                /** The min height of the elevator.*/
+                public static final double kElevatorHeightBottomLimit = 0.0;
+
+                /** The deadband for the elevator joystick command. */
+                public static final double kManualElevatorDeadband = 0.25;
+                /** The scalar value which converts joystick input to elevator speed.*/
+                public static final double kManualElevatorSpeedScalar = 2.0;
 
                 static {
 
@@ -610,14 +634,14 @@ public final class Konstants
                     .closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // Set PID values for position control
-                    .p(0.12)
+                    .p(0.13)
                     //.i(0.0)
                     //.d(0.0008).dFilter(0.3)
                      .outputRange(-1, 1)
                     .maxMotion
                     // Set MAXMotion parameters for position control
                     .maxVelocity(kMaxElevatorSpeed)
-                    .maxAcceleration(3000) //6000
+                    .maxAcceleration(kMaxElevatorAcceleration)
                     .allowedClosedLoopError(0.1);
                 }
             }
@@ -810,20 +834,28 @@ public final class Konstants
         /** Heights for the different elevator positions */
         public static enum EndEffectorPosition
         {
-            /** Set the angle to reach the top branch (L4) */ // 12.5
-            kTopPositionAngle(-190), // Angle -190
-            /** Set the angle to reach the middle & low branch (L3) */
-            kLowPositionAngle(-175), // Angle -210
-            /** Set the angle to reach the trough (L2) */
-            kTroughPositionAngle(-143), // Angle -125
-            /** Set the height to reach the station (L1) */
-            kIntakePositionAngle(-80), // Angle -95
+            /** Set the angle to reach the top branch (L4) */
+            kTopPositionAngle(-180), //previusly -190
+            /** Set the angle to reach the low branch (L2) */
+            kLowPositionAngle(-175),
+            /** Set the angle to reach the trough (L1) */
+            kTroughPositionAngle(-140),  //-152
+            /** Set the height to reach the station (Station) */
+            kIntakePositionAngle(-80), 
             /** Set the height to reach the bottom */
-            kZeroPositionAngle(-95), // Angle
-            kNetAngle(-90),
-            kHighAlgae(-140), //-145
-            kMiddleAngle(-173), //-190
-            kLowAlgae(-180), //-173
+            kZeroPositionAngle(-115), // Angle was -95, ADJUSTED WITH 2.0 AS ELEVATOR HEIGHT!
+            /** Set the height to reach the net (Net) */
+            kNetAngle(-80), //-90
+            /** Set the height to reach the high algae (High Algae) */
+            kHighAlgae(-140), 
+            /** Set the height to reach the middle branch (L3) */
+            kMiddleAngle(-173),
+            /** Set the height to reach the low algae (Low Algae) */
+            kLowAlgae(-180),
+            /** Set the height to reach the floor algae (Floor) */
+            kFloorAngle(-260.5),
+
+
             kIntake(-70);  //not used for station
 
             public final double angle;
@@ -856,6 +888,8 @@ public final class Konstants
        /* Values for default motor speed*/
        public static final double kArmSpeed = 0.1; // rot/sec; often only used in Joystick control; Button control uses PID
        public static final double kRollerSpeed = 0.7;
+       public static final double kRollerSlowSpeed = 0.35;
+       public static final double kRollerSuperSpeed = 1.0;
        public static final double kRollerStop = 0;
 
        /* Current Limits */
@@ -902,7 +936,7 @@ public final class Konstants
         public static final double kClimbMinPosition = -1000;
         public static final double kClimbPositionTolerance = 0.2;
 
-        public static final Double kClimbReadyPos = 105.0;  
+        public static final Double kClimbReadyPos = 150.0;  
 
     }
 
