@@ -325,7 +325,7 @@ public final class Konstants
               public static final double kLevel4 = 78; //79.5
               public static final double kLowAlgae = 25;  
               public static final double kHighAlgae = 37;  
-              public static final double kNet = 75; 
+              public static final double kNet = 78; //75
               public static final double kIntake = 30;
               public static final double kFloor = 7.5;
             }
@@ -334,9 +334,9 @@ public final class Konstants
                 public static final SparkFlexConfig elevatorConfig = new SparkFlexConfig();
 
                 /**Max elevator speed in RPM.*/
-                public static final double kMaxElevatorSpeed = 4000;
+                public static final double kMaxElevatorSpeed = 5000;
                 /**Max elevator accleration in RPM / s.*/
-                public static final double kMaxElevatorAcceleration = 5000;
+                public static final double kMaxElevatorAcceleration = 6000;
                 /** The max height of the elevator.*/
                 public static final double kElevatorHeightTopLimit = 79.0;
                 /** The min height of the elevator.*/
@@ -372,7 +372,7 @@ public final class Konstants
                     .closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // Set PID values for position control
-                    .p(0.12)
+                    .p(0.13)
                     //.i(0.0)
                     //.d(0.0008).dFilter(0.3)
                      .outputRange(-1, 1)
@@ -538,6 +538,7 @@ public final class Konstants
        public static final double kArmSpeed = 0.1; // rot/sec; often only used in Joystick control; Button control uses PID
        public static final double kRollerSpeed = 0.7;
        public static final double kRollerSlowSpeed = 0.35;
+       public static final double kRollerSuperSpeed = 1.0;
        public static final double kRollerStop = 0;
 
        /* Current Limits */
