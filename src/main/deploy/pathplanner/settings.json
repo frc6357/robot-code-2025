@@ -2,22 +2,8 @@
   "robotWidth": 0.7111,
   "robotLength": 0.711,
   "holonomicMode": true,
-  "pathFolders": [
-    "CollectCoral",
-    "OtherPaths",
-    "NothingButNet",
-    "P1",
-    "P2",
-    "P3",
-    "RemoveAlgae",
-    "ScoreFromStation"
-  ],
-  "autoFolders": [
-    "BargeSide(P1)",
-    "HeadOn(P2)",
-    "OtherAutos",
-    "ProcessorSide(P3)"
-  ],
+  "pathFolders": [],
+  "autoFolders": [],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,

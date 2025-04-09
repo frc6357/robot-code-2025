@@ -43,7 +43,7 @@ public class Robot extends LoggedRobot
 
     private RobotContainer m_robotContainer;
 
-    private SK25Climb climb;
+    //private SK25Climb climb;
 
     SendableChooser<Command> autoCommandSelector = new SendableChooser<Command>();
 
@@ -80,7 +80,7 @@ public class Robot extends LoggedRobot
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
 
-        climb = m_robotContainer.m_Climb.get();
+        //climb = m_robotContainer.m_Climb.get();
 
 
         //get the saved elastic dashboard layout
@@ -187,7 +187,7 @@ public class Robot extends LoggedRobot
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
         //deploy climb to save time at the end of match (stopped in autonomousPeriodic()).
-        climb.runMotor(kKrakenSpeed);
+        //climb.runMotor(kKrakenSpeed);
 
         /*
          * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -210,8 +210,8 @@ public class Robot extends LoggedRobot
     public void autonomousPeriodic()
     {
         //stop at the climb position
-        if (climb.getMotorPosition() >= kClimbReadyPos)
-        climb.stop();
+        // if (climb.getMotorPosition() >= kClimbReadyPos)
+        // climb.stop();
     }
 
     @Override
