@@ -46,12 +46,20 @@ public class CoralElevatorJoystickCommand extends Command {
 
             // DriverStation.reportError("NEW HEIGHT: " + String.valueOf(joystickInput.get()), false);
 
-            if (newTargetHeight >= kElevatorHeightBottomLimit && newTargetHeight <= kElevatorHeightTopLimit + 1.0) //1 motor rotation tollerance
-                elevator.setTargetHeight(newTargetHeight);  //elevator in bounds
-            else if (newTargetHeight < kElevatorHeightBottomLimit)
-                elevator.setTargetHeight(kElevatorHeightBottomLimit);  //min elevator height
+            // if (newTargetHeight >= kElevatorHeightBottomLimit && newTargetHeight <= kElevatorHeightTopLimit + 1.0) //1 motor rotation tollerance
+            //     elevator.setTargetHeight(newTargetHeight);  //elevator in bounds
+            // else if (newTargetHeight < kElevatorHeightBottomLimit)
+            //     elevator.setTargetHeight(kElevatorHeightBottomLimit);  //min elevator height
+            // else 
+            //     elevator.setTargetHeight(kElevatorHeightTopLimit);   //max elevator height
+
+            if (newTargetHeight > kElevatorHeightTopLimit)
+                elevator.setTargetHeight(kElevatorHeightTopLimit);  //min elevator height
             else 
-                elevator.setTargetHeight(kElevatorHeightTopLimit);   //max elevator height
+                elevator.setTargetHeight(newTargetHeight);   //max elevator height
+                //new code ignores the lower elevator limit incase the chain skips and offsets the bottom, this
+                //way the elevator can be manually ran down passed the incorrect zero position to reset the
+                //zero position to its correct value.
         }
     }
 

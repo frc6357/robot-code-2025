@@ -260,8 +260,9 @@ public class CoralSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Coral/Elevator/Target Position", elevatorCurrentTarget);
     SmartDashboard.putNumber("Coral/Elevator/Actual Position", elevatorEncoder.getPosition());
 
-    if (elevatorCurrentTarget < kElevatorHeightBottomLimit)
-      elevatorCurrentTarget = kElevatorHeightBottomLimit;   //min height
+    //see coral joystick command for more on not having a bottom limit
+    // if (elevatorCurrentTarget < kElevatorHeightBottomLimit)
+    //   elevatorCurrentTarget = kElevatorHeightBottomLimit;   //min height
     if (elevatorCurrentTarget > kElevatorHeightTopLimit)
       elevatorCurrentTarget = kElevatorHeightTopLimit;  //max height
   }
