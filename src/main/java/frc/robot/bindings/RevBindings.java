@@ -1,4 +1,7 @@
 package frc.robot.bindings;
+import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
+import static frc.robot.Konstants.SwerveConstants.kJoystickDeadband;
+import static frc.robot.Ports.OperatorPorts.kElevatorAxis;
 //import static frc.robot.Ports.OperatorPorts.kLowBranch;
 //import static frc.robot.Ports.OperatorPorts.kTrough;
 import static frc.robot.Ports.OperatorPorts.kElevatorOverride;
@@ -18,8 +21,10 @@ import java.util.Optional;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.CoralElevatorJoystickCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
+import frc.robot.utils.filters.DeadbandFilter;
 
 public class RevBindings implements CommandBinder
 {

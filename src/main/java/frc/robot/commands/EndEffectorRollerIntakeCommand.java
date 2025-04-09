@@ -27,6 +27,8 @@ public class EndEffectorRollerIntakeCommand extends Command {
             Subsystem.runRoller(-kRollerSlowSpeed);
         else if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kLevel2 - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kLevel2 + 0.4))
             Subsystem.runRoller(-kRollerSlowSpeed);
+        else if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kLevel1 - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kLevel1 + 0.4))
+            Subsystem.runRoller(-kRollerSlowSpeed);
         else
             Subsystem.runRoller(-kRollerSpeed);
     }
