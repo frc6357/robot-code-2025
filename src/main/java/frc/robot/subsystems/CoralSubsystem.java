@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
+import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.kElevatorHeightBottomLimit;
+import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.kElevatorHeightTopLimit;
+import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.kMaxElevatorAcceleration;
+import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.kMaxElevatorSpeed;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.sim.SparkFlexSim;
@@ -13,6 +17,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
@@ -49,7 +54,7 @@ public class CoralSubsystem extends SubsystemBase {
       new SparkFlex(CoralSubsystemConstants.kElevatorMotorCanId, MotorType.kBrushless);
   private SparkClosedLoopController elevatorClosedLoopController =
       elevatorMotor.getClosedLoopController();
-  private RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
+  public RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
 
 
   //simulation
@@ -101,10 +106,10 @@ public class CoralSubsystem extends SubsystemBase {
     .onChange((newValue) -> reconfigureElevator());
 
 
-    final Pref<Double> elevatorVelocity = SKPreferences.attach("elevatorVelocity", 4000.0) //2500.0
+    final Pref<Double> elevatorVelocity = SKPreferences.attach("elevatorVelocity", kMaxElevatorSpeed) //4000.0
       .onChange((unused) -> reconfigureElevator());
 
-    final Pref<Double> elevatorAcceleration = SKPreferences.attach("elevatorAcceleration", 5000.0) //6000
+    final Pref<Double> elevatorAcceleration = SKPreferences.attach("elevatorAcceleration", kMaxElevatorAcceleration) //5000.0
     .onChange((newValue) -> reconfigureElevator());
   
     private void reconfigureElevator() {
@@ -227,20 +232,14 @@ public class CoralSubsystem extends SubsystemBase {
         });
   }
 
-  // public Command setManualSetpointCommand(double speed)
-  // {
-  //   return this.runOnce(
-  //       () -> {
-  //         elevatorClosedLoopController.setReference(
-  //           speed,  //RPM
-  //           ControlType.kMAXMotionVelocityControl  //this is how the method knows that the previous 
-  //           //argument should be used for velocity
-  //         );
-  //       }
-  //   );
-  // }
+  public void setTargetHeight(double newHeight)
+  {
+    // DriverStation.reportError("NEW TARGET SET", false);
+    elevatorCurrentTarget = newHeight;
+  }
 
-  public void forceResetZero() {
+  public void forceResetZero()
+  {
     elevatorEncoder.setPosition(0.0);
     elevatorCurrentTarget = 0.0;
   }
@@ -262,6 +261,11 @@ public class CoralSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Coral/Elevator/Target Position", elevatorCurrentTarget);
     SmartDashboard.putNumber("Coral/Elevator/Actual Position", elevatorEncoder.getPosition());
 
+    //see coral joystick command for more on not having a bottom limit
+    // if (elevatorCurrentTarget < kElevatorHeightBottomLimit)
+    //   elevatorCurrentTarget = kElevatorHeightBottomLimit;   //min height
+    if (elevatorCurrentTarget > kElevatorHeightTopLimit)
+      elevatorCurrentTarget = kElevatorHeightTopLimit;  //max height
   }
 
   @Override

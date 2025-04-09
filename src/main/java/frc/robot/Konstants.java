@@ -335,6 +335,17 @@ public final class Konstants
 
                 /**Max elevator speed in RPM.*/
                 public static final double kMaxElevatorSpeed = 4000;
+                /**Max elevator accleration in RPM / s.*/
+                public static final double kMaxElevatorAcceleration = 5000;
+                /** The max height of the elevator.*/
+                public static final double kElevatorHeightTopLimit = 79.0;
+                /** The min height of the elevator.*/
+                public static final double kElevatorHeightBottomLimit = 0.0;
+
+                /** The deadband for the elevator joystick command. */
+                public static final double kManualElevatorDeadband = 0.25;
+                /** The scalar value which converts joystick input to elevator speed.*/
+                public static final double kManualElevatorSpeedScalar = 2.0;
 
                 static {
 
@@ -368,7 +379,7 @@ public final class Konstants
                     .maxMotion
                     // Set MAXMotion parameters for position control
                     .maxVelocity(kMaxElevatorSpeed)
-                    .maxAcceleration(5000)
+                    .maxAcceleration(kMaxElevatorAcceleration)
                     .allowedClosedLoopError(0.1);
                 }
             }
@@ -477,7 +488,7 @@ public final class Konstants
             /** Set the angle to reach the low branch (L2) */
             kLowPositionAngle(-175),
             /** Set the angle to reach the trough (L1) */
-            kTroughPositionAngle(-145),  //-143
+            kTroughPositionAngle(-140),  //-152
             /** Set the height to reach the station (Station) */
             kIntakePositionAngle(-80), 
             /** Set the height to reach the bottom */

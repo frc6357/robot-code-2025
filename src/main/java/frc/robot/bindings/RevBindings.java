@@ -61,12 +61,11 @@ public class RevBindings implements CommandBinder
         {
             CoralSubsystem elevator = elevatorSubsystem.get();
 
+            double joystickGain = kJoystickReversed ? -1 : 1;
+            kElevatorAxis.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
 
-            // double joystickGain = kJoystickReversed ? -1 : 1;
-            // kElevatorAxis.setFilter(new DeadbandFilter(kJoystickDeadband, joystickGain));
-
-            // elevator.setDefaultCommand(
-            //     new CoralElevatorJoystickCommand(() -> {return kElevatorAxis.getFilteredAxis();}, elevator));
+            elevator.setDefaultCommand(
+                new CoralElevatorJoystickCommand(() -> {return kElevatorAxis.getFilteredAxis();}, elevator));
                 
             // Elevator Position Buttons
             zeroPositionButton.onTrue(elevator.setSetpointCommand(Setpoint.kZero));
