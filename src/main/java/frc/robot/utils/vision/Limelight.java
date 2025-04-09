@@ -186,7 +186,12 @@ public class Limelight {
         if (!isAttached()) {
             return 0;
         }
-        return LimelightHelpers.getBotPoseEstimate_wpiBlue(config.getName()).tagCount;
+        try {
+            return LimelightHelpers.getBotPoseEstimate_wpiBlue(config.getName()).tagCount;
+        }
+        catch(Exception e) {
+            return 0;
+        }
 
         // if (retrieveJSON() == null) return 0;
 
@@ -217,7 +222,12 @@ public class Limelight {
         if (!isAttached()) {
             return 0;
         }
-        return LimelightHelpers.getTA(config.getName());
+        try {
+            return LimelightHelpers.getTA(config.getName());
+        }
+        catch(Exception e) {
+            return 0;
+        }
     }
 
     /* ::: Pose Retrieval ::: */

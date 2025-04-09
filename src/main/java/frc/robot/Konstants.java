@@ -699,13 +699,14 @@ public final class Konstants
         }
 
         public static final class AlignmentConstants {
-                public static double kRotSetpoint = 0;
+                public static double kRotSetpoint = 0.0;
 
                 public static double kRightYSetpoint = 0.185; 
                 public static double kCenterYSetpoint = 0.02;
-                public static double kLeftYSetpoint = -0.145;
+                public static double kLeftYSetpoint = -0.1958;
 
-                public static double kCloseXSetpoint = -0.45;
+                public static double kCoralXSetpoint = -0.5516;
+                public static double kAlgaeXSetpoint = -0.45;
                 public static double kFarXSetpoint = -0.99;
         }
 

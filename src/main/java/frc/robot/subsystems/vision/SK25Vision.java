@@ -29,6 +29,8 @@ import frc.robot.utils.Trio;
 import frc.robot.utils.Field;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.preferences.Pref;
+import frc.robot.preferences.SKPreferences;
 import frc.robot.Konstants.TunerConstants;
 import frc.robot.subsystems.SKSwerve;
 
@@ -165,10 +167,10 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public static final class DriveToPose extends MultiLimelightCommandConfig {
         private DriveToPose() {
-            configKpid(1, 0, 0.04);
+            configKpid(1, 0, 0.001);
             configTolerance(0.02);
-            configProfile(TunerConstants.MaxSpeed * 0.25, (TunerConstants.MaxSpeed * 0.25) * 2); //25% Max Speed; 2x Acceleration
-            configMaxOutput(TunerConstants.MaxSpeed * 0.25);
+            configProfile(TunerConstants.MaxSpeed * 0.35, (TunerConstants.MaxSpeed * 0.25) * 2); //25% Max Speed; 2x Acceleration
+            configMaxOutput(TunerConstants.MaxSpeed * 0.35);
             configError(0.02);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
@@ -181,7 +183,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public static final class RotateToPose extends MultiLimelightCommandConfig {
         private RotateToPose() {
-            configKpid(0.01, 0, 0);
+            configKpid(0.0, 0.00, 0);
             configTolerance(1);
             configProfile(TunerConstants.MaxAngularRate * 0.5, (TunerConstants.MaxAngularRate * 0.5) * 1.5); // 50% Angular speed; 1.5x acceleration
             configMaxOutput(TunerConstants.MaxAngularRate * 0.5);
@@ -725,6 +727,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         public double kp = 0;
         public double ki = 0;
         public double kd = 0;
+        public double kIZone = 0;
         public double maxVelocity;
         public double maxAcceleration;
         public double tolerance;
@@ -770,6 +773,10 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
          */
         public void configKi(double ki) {
             this.ki = ki;
+        }
+
+        public void configKiZone(double kIZone) {
+            this.kIZone = kIZone;
         }
 
         /**

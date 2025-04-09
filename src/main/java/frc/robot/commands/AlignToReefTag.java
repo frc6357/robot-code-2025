@@ -36,13 +36,13 @@ public class AlignToReefTag extends Command {
     private Target target;
     private boolean valid;
 
-    private boolean outputtingX = true;
-    private boolean outputtingY = true;
-    private boolean outputtingRot = true;
-
     private double xOut;
     private double yOut;
     private double rotOut;
+
+    private boolean xDone = false;
+    private boolean yDone = false;
+    private boolean rotDone = false;
 
     private double tagID = -1;
 
@@ -103,9 +103,6 @@ public class AlignToReefTag extends Command {
     public void initialize() {
         setTarget();
         resetAll();
-        outputtingX = true;
-        outputtingY = true;
-        outputtingRot = true;
     }
 
     @Override
@@ -138,15 +135,18 @@ public class AlignToReefTag extends Command {
         m_vision.reefDriveTarget = "OFF";
         m_vision.isDriving = false;
         
-        shutdownAll();
+        if(valid) {
+            shutdownAll();
+        }
     }
 
     @Override
     public boolean isFinished() {
         if(valid) {
-            boolean isAtTargetPose = xPID.atGoal() && yPID.atGoal() && rotPID.atGoal();
+            boolean isAtTargetPose = xDone && yDone && rotDone;
             boolean canNoLongerSeeTarget = !targetLimelight.targetInView();
-            return isAtTargetPose || canNoLongerSeeTarget;
+            boolean seesWrongTarget = targetLimelight.getClosestTagID() != tagID;
+            return isAtTargetPose || canNoLongerSeeTarget || seesWrongTarget;
         }
         return !valid;
     }
@@ -159,35 +159,40 @@ public class AlignToReefTag extends Command {
             SmartDashboard.putNumber("Align/Y", positions[0]);
             SmartDashboard.putNumber("Align/RotDeg", positions[4]);
     
-            if(outputtingX) {
-                xOut = xyConfig.maxVelocity * xPID.calculate(positions[2]);
-                if(Math.abs(xOut) < 0.2) {
-                    xOut = Math.signum(xOut) * .2;
-                }
-            }
-            else {
-                xOut = 0;
-            }
+            // if(outputtingX) {
+                 xOut = xyConfig.maxVelocity * xPID.calculate(positions[2]);
+                 xDone = (Math.abs(positions[2] - xPID.getGoal().position) <= xyConfig.tolerance);
+            //     if(Math.abs(xOut) < 0.2) {
+            //         xOut = Math.signum(xOut) * .2;
+            //     }
+            // }
+            // else {
+            //     xOut = 0;
+            // }
     
-            if(outputtingY) {
-                yOut = xyConfig.maxVelocity * -yPID.calculate(positions[0]);
-                if(Math.abs(yOut) < 0.2) {
-                    yOut = Math.signum(yOut) * .2;
-                }
-            }
-            else {
-                yOut = 0;
-            }
+            // if(outputtingY) {
+                 yOut = xyConfig.maxVelocity * -yPID.calculate(positions[0]);
+                 yDone = (Math.abs(positions[0] - yPID.getGoal().position) <= xyConfig.tolerance);
+
+            //     if(Math.abs(yOut) < 0.2) {
+            //         yOut = Math.signum(yOut) * .2;
+            //     }
+            // }
+            // else {
+            //     yOut = 0;
+            // }
     
-            if(outputtingRot) {
-                rotOut = rotConfig.maxVelocity * -rotPID.calculate(positions[4]);
-                if(Math.abs(rotOut) < 0.05) {
-                    rotOut = Math.signum(rotOut) * .05;
-                }
-            }
-            else {
-                rotOut = 0;
-            }
+            // if(outputtingRot) {
+                 rotOut = rotConfig.maxVelocity * -rotPID.calculate(positions[4]);
+                 rotDone = (Math.abs(positions[4] - rotPID.getGoal().position) <= rotConfig.tolerance);
+
+            //     if(Math.abs(rotOut) < 0.05) {
+            //         rotOut = Math.signum(rotOut) * .05;
+            //     }
+            // }
+            // else {
+            //     rotOut = 0;
+            // }
         }
     }
 
@@ -255,19 +260,17 @@ public class AlignToReefTag extends Command {
                 if(!setTargetLimelight(target)) {
                     break;
                 }
-                xPID.setGoal(new State(kCloseXSetpoint, 0.0));
+                xPID.setGoal(new State(kCoralXSetpoint, 0.0));
                 yPID.setGoal(new State(kLeftYSetpoint, 0.0));
                 rotPID.setGoal(new State(kRotSetpoint, 0.0));
-                outputtingX = true; outputtingY = true; outputtingRot = true;
                 break;
             case RIGHT:
                 if(!setTargetLimelight(target)) {
                     break;
                 }
-                xPID.setGoal(kCloseXSetpoint);
+                xPID.setGoal(kCoralXSetpoint);
                 yPID.setGoal(kRightYSetpoint);
                 rotPID.setGoal(kRotSetpoint);
-                outputtingX = true; outputtingY = true; outputtingRot = true;
                 break;
             case CENTER:
                 if(!setTargetLimelight(target)) {
@@ -275,16 +278,14 @@ public class AlignToReefTag extends Command {
                 }
                 // If the good limelight is the left one
                 if(targetLimelight.getName().equals(limelightBeta.kName)) {
-                    xPID.setGoal(kCloseXSetpoint);
+                    xPID.setGoal(kAlgaeXSetpoint);
                     yPID.setGoal(kCenterYSetpoint);
                     rotPID.setGoal(kRotSetpoint);
-                    outputtingX = true; outputtingY = true; outputtingRot = true;
                 }
                 else if(targetLimelight.getName().equals(limelightAlpha.kName)) {
-                    xPID.setGoal(kCloseXSetpoint);
+                    xPID.setGoal(kAlgaeXSetpoint);
                     yPID.setGoal(kCenterYSetpoint);
                     rotPID.setGoal(kRotSetpoint);
-                    outputtingX = true; outputtingY = true; outputtingRot = true;
                 }
                 break;
             case BACK:
@@ -296,13 +297,11 @@ public class AlignToReefTag extends Command {
                     xPID.setGoal(kFarXSetpoint);
                     yPID.setGoal(kCenterYSetpoint);
                     rotPID.setGoal(kRotSetpoint);
-                    outputtingX = true; outputtingY = true; outputtingRot = true;
                 }
                 else if(targetLimelight.getName().equals(limelightAlpha.kName)) {
                     xPID.setGoal(kFarXSetpoint);
                     yPID.setGoal(kCenterYSetpoint);
                     rotPID.setGoal(kRotSetpoint);
-                    outputtingX = true; outputtingY = true; outputtingRot = true;
                 }
                 break;
             }
@@ -327,7 +326,7 @@ public class AlignToReefTag extends Command {
 
     }
     private void shutdownAll() {
-        // shutdownX(); shutdownY(); shutdownRot();
+        shutdownX(); shutdownY(); shutdownRot();
     }
     private void shutdownX() {
         double[] positions = targetLimelight.getRobotPoseTS();
