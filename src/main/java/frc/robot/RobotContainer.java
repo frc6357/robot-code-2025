@@ -198,14 +198,14 @@ public class RobotContainer extends Robot{
      */
     private void configureButtonBindings()
     {
-        buttonBinders.add(new SKSwerveBinder(m_swerve, m_elevator));
+        buttonBinders.add(new SKSwerveBinder(m_swerveContainer, m_elevatorContainer));
         // buttonBinders.add(new SK25ElevatorBinder(m_elevator));
-        buttonBinders.add(new SK25LightsBinder(m_lights));
-        buttonBinders.add(new RevBindings(m_coral));
+        buttonBinders.add(new SK25LightsBinder(m_lightsContainer));
+        buttonBinders.add(new RevBindings(m_coralContainer));
 
         // Adding all the binding classes to the list
-        buttonBinders.add(new ClimbBinder(m_Climb));
-        buttonBinders.add(new SK25EndEffectorBinder(m_endEffector, m_coral));
+        buttonBinders.add(new ClimbBinder(m_climbContainer));
+        buttonBinders.add(new SK25EndEffectorBinder(m_endEffectorContainer, m_coralContainer));
         // buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
         buttonBinders.add(new SK25VisionBinder(m_visionContainer, m_swerveContainer));
 
