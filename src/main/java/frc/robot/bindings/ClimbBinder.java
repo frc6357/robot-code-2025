@@ -34,8 +34,8 @@ public class ClimbBinder implements CommandBinder {
         if (subsystem.isPresent()) 
         {
             SK25Climb subsys = subsystem.get();
-            raise.whileTrue(new ClimbCommand1(subsys));
-            lower.whileTrue(new ClimbCommandReturn(subsys));
+            raise.whileTrue(new ClimbCommandReturn(subsys));
+            lower.whileTrue(new ClimbCommand1(subsys));
            // stop.whileTrue(new ClimbCommandStop(subsys));
             // slow.whileTrue(new ClimbCommandSlow(subsys));
             // slow.onFalse(new InstantCommand(() -> subsys.runMotor(kVolts)));
