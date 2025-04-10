@@ -90,6 +90,8 @@ public class AlignToReefTag extends Command {
         xPID.setTolerance(xyConfig.tolerance);
         yPID.setTolerance(xyConfig.tolerance);
         rotPID.setTolerance(rotConfig.tolerance);
+
+        rotPID.enableContinuousInput(-180, 180);
         
         this.driveCommand = new DriveCommand(
             () -> getXOutput(), 
@@ -164,7 +166,10 @@ public class AlignToReefTag extends Command {
     
             // if(outputtingX) {
                  xOut = xyConfig.maxVelocity * xPID.calculate(positions[2]);
-                 if(Math.abs(positions[2] - xPID.getGoal().position) < 0.05 && xOut < 0.1) {
+                if(Math.abs(positions[2] - xPID.getGoal().position) <= xyConfig.tolerance) {
+                    xOut = 0;
+                }
+                else if(Math.abs(positions[2] - xPID.getGoal().position) < 0.05 && xOut < 0.1) {
                     xOut = 0.1 * Math.signum(xOut);
                 }
                  xDone = (Math.abs(positions[2] - xPID.getGoal().position) <= xyConfig.tolerance);
@@ -178,10 +183,13 @@ public class AlignToReefTag extends Command {
             // }
             // if(outputtingY) {
                  yOut = xyConfig.maxVelocity * -yPID.calculate(positions[0]);
-                 if(Math.abs(positions[2] - yPID.getGoal().position) < 0.05 && yOut < 0.1) {
+                 if(Math.abs(positions[0] - yPID.getGoal().position) <= xyConfig.tolerance) {
+                    yOut = 0;
+                }
+                 if(Math.abs(positions[0] - yPID.getGoal().position) < 0.05 && yOut < 0.1) {
                        yOut = 0.1 * Math.signum(yOut);
                  }
-                 yDone = (Math.abs(positions[2] - yPID.getGoal().position) <= xyConfig.tolerance);
+                 yDone = (Math.abs(positions[0] - yPID.getGoal().position) <= xyConfig.tolerance);
 
             //     if(Math.abs(yOut) < 0.2) {
             //         yOut = Math.signum(yOut) * .2;
@@ -192,13 +200,12 @@ public class AlignToReefTag extends Command {
             // }
     
             // if(outputtingRot) {
-                 if(rotDone) {
-                    rotOut = 0;
-                 }
-                 else {
-                     rotOut = rotConfig.maxVelocity * -rotPID.calculate(positions[4]);
-                 }
-                 rotDone = (Math.abs(positions[4] - rotPID.getGoal().position) <= rotConfig.tolerance);
+
+                rotOut = rotConfig.maxVelocity * -rotPID.calculate(positions[4]);
+                if(Math.abs(positions[4] - rotPID.getGoal().position) < 1 && rotOut < 0.1) {
+                   rotOut = 0.1 * Math.signum(rotOut);
+                }
+                rotDone = (Math.abs(positions[4] - rotPID.getGoal().position) <= rotConfig.tolerance);
 
             //     if(Math.abs(rotOut) < 0.05) {
             //         rotOut = Math.signum(rotOut) * .05;

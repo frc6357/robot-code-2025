@@ -1,16 +1,48 @@
 [
   {
-    "name": "/Preferences/lidarTargetDistMm",
+    "name": "/Preferences/elevatorKp",
     "type": "double",
-    "value": 75.0,
+    "value": 0.115,
     "properties": {
       "persistent": true
     }
   },
   {
-    "name": "/Preferences/lidarThreshold",
+    "name": "/Preferences/elevatorKi",
     "type": "double",
-    "value": 5.0,
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorkD",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorkFF",
+    "type": "double",
+    "value": 0.00196078431,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/driverTranslSlew",
+    "type": "double",
+    "value": 4.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/driverRotSlew",
+    "type": "double",
+    "value": 4.0,
     "properties": {
       "persistent": true
     }
@@ -25,30 +57,6 @@
   },
   {
     "name": "/Preferences/armAngleDeg",
-    "type": "double",
-    "value": 0.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/elevatorKi",
-    "type": "double",
-    "value": 0.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/elevatorKd",
-    "type": "double",
-    "value": 0.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/elevatorKpFF",
     "type": "double",
     "value": 0.0,
     "properties": {
@@ -80,17 +88,9 @@
     }
   },
   {
-    "name": "/Preferences/elevatorKp",
+    "name": "/Preferences/elevatorKd",
     "type": "double",
-    "value": 0.115,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/elevatorVelocity",
-    "type": "double",
-    "value": 4000.0,
+    "value": 0.0,
     "properties": {
       "persistent": true
     }
@@ -104,17 +104,41 @@
     }
   },
   {
-    "name": "/Preferences/driverTranslSlew",
+    "name": "/Preferences/elevatorVelocity",
     "type": "double",
-    "value": 4.0,
+    "value": 4500.0,
     "properties": {
       "persistent": true
     }
   },
   {
-    "name": "/Preferences/driverRotSlew",
+    "name": "/Preferences/lidarTargetDistMm",
     "type": "double",
-    "value": 4.0,
+    "value": 75.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/lidarThreshold",
+    "type": "double",
+    "value": 5.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorKpFF",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/SimulatedTagID",
+    "type": "double",
+    "value": 9.0,
     "properties": {
       "persistent": true
     }
@@ -162,7 +186,7 @@
   {
     "name": "/Preferences/elevatorAcceleration",
     "type": "double",
-    "value": 3500.0,
+    "value": 6000.0,
     "properties": {
       "persistent": true
     }

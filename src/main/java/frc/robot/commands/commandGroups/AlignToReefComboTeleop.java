@@ -32,7 +32,7 @@ public class AlignToReefComboTeleop extends SequentialCommandGroup {
         addCommands(
             // new AlignToReefTag(Target.BACK, xyConfig, rotConfig, m_vision, m_swerve),
             // new WaitCommand(0.15),
-            new AlignToReefTag(t, xyConfig, rotConfig, m_vision, m_swerve)
+            new AlignToReefTag(t, xyConfig, rotConfig, m_vision, m_swerve).withTimeout(3)
         );
     }
 }
