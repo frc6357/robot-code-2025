@@ -69,7 +69,7 @@ public class SK25VisionBinder implements CommandBinder {
             visionOn.onTrue(new InstantCommand(() -> m_vision.enableVision()));
 
             // If just alignToReef held and not the other buttons
-            alignToReef.and(visionEnabled).onTrue(
+            alignToReef.and(visionEnabled).whileTrue(
                 new AlignToReefComboTeleop(
                     Target.CENTER, 
                     DriveToPose.getConfig(),
@@ -77,7 +77,7 @@ public class SK25VisionBinder implements CommandBinder {
                     m_vision,
                     m_swerve)
             );
-            leftReef.and(visionEnabled).onTrue(
+            leftReef.and(visionEnabled).whileTrue(
                 new AlignToReefComboTeleop(
                     Target.LEFT, 
                     DriveToPose.getConfig(), 
@@ -85,7 +85,7 @@ public class SK25VisionBinder implements CommandBinder {
                     m_vision, 
                     m_swerve)
             );
-            rightReef.and(visionEnabled).onTrue(
+            rightReef.and(visionEnabled).whileTrue(
                 new AlignToReefComboTeleop(
                     Target.RIGHT, 
                     DriveToPose.getConfig(), 

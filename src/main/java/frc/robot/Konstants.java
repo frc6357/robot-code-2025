@@ -2,6 +2,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
@@ -157,6 +158,7 @@ public final class Konstants
 
     public static double MaxSpeed = kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     public static double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    public static double MaxAngularRateDeg = RadiansPerSecond.of(MaxAngularRate).in(DegreesPerSecond);
 
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
     // This may need to be tuned to your individual robot
@@ -583,7 +585,7 @@ public final class Konstants
               public static final double kZero = 2; //0
               public static final double kLevel1 = 15;
               public static final double kLevel2 = 32.5;//40
-              public static final double kLevel3 = 50; 
+              public static final double kLevel3 = 48; 
               public static final double kLevel4 = 78; //79.5
               public static final double kLowAlgae = 25;  
               public static final double kHighAlgae = 37;  
@@ -729,7 +731,7 @@ public final class Konstants
                 public static double kCenterYSetpoint = 0.02;
                 public static double kLeftYSetpoint = -0.1958;
 
-                public static double kCoralXSetpoint = -0.5516;
+                public static double kCoralXSetpoint = -0.5;
                 public static double kAlgaeXSetpoint = -0.45;
                 public static double kFarXSetpoint = -0.99;
         }

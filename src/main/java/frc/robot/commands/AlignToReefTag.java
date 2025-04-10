@@ -86,6 +86,7 @@ public class AlignToReefTag extends Command {
             xyConfig.kd,
             xyConstraints);
 
+        
         xPID.setTolerance(xyConfig.tolerance);
         yPID.setTolerance(xyConfig.tolerance);
         rotPID.setTolerance(rotConfig.tolerance);
@@ -113,7 +114,9 @@ public class AlignToReefTag extends Command {
             m_vision.isDriving = true;
 
             if(DriverStation.isTeleopEnabled()) {
-                kDriver.setRumble(RumbleType.kBothRumble, 0.5);
+                if(xDone && yDone){
+                    kDriver.setRumble(RumbleType.kBothRumble, 0.5);
+                }
             }
 
             driveCommand.run();
@@ -161,18 +164,24 @@ public class AlignToReefTag extends Command {
     
             // if(outputtingX) {
                  xOut = xyConfig.maxVelocity * xPID.calculate(positions[2]);
+                 if(Math.abs(positions[2] - xPID.getGoal().position) < 0.05 && xOut < 0.1) {
+                    xOut = 0.1 * Math.signum(xOut);
+                }
                  xDone = (Math.abs(positions[2] - xPID.getGoal().position) <= xyConfig.tolerance);
-            //     if(Math.abs(xOut) < 0.2) {
-            //         xOut = Math.signum(xOut) * .2;
-            //     }
-            // }
+                 //     if(Math.abs(xOut) < 0.2) {
+                    //         xOut = Math.signum(xOut) * .2;
+                    //     }
+                    // }
+
             // else {
             //     xOut = 0;
             // }
-    
             // if(outputtingY) {
                  yOut = xyConfig.maxVelocity * -yPID.calculate(positions[0]);
-                 yDone = (Math.abs(positions[0] - yPID.getGoal().position) <= xyConfig.tolerance);
+                 if(Math.abs(positions[2] - yPID.getGoal().position) < 0.05 && yOut < 0.1) {
+                       yOut = 0.1 * Math.signum(yOut);
+                 }
+                 yDone = (Math.abs(positions[2] - yPID.getGoal().position) <= xyConfig.tolerance);
 
             //     if(Math.abs(yOut) < 0.2) {
             //         yOut = Math.signum(yOut) * .2;
@@ -183,7 +192,12 @@ public class AlignToReefTag extends Command {
             // }
     
             // if(outputtingRot) {
-                 rotOut = rotConfig.maxVelocity * -rotPID.calculate(positions[4]);
+                 if(rotDone) {
+                    rotOut = 0;
+                 }
+                 else {
+                     rotOut = rotConfig.maxVelocity * -rotPID.calculate(positions[4]);
+                 }
                  rotDone = (Math.abs(positions[4] - rotPID.getGoal().position) <= rotConfig.tolerance);
 
             //     if(Math.abs(rotOut) < 0.05) {
@@ -260,6 +274,9 @@ public class AlignToReefTag extends Command {
                 if(!setTargetLimelight(target)) {
                     break;
                 }
+                if(targetLimelight.getDistanceToTagFromCamera() > 3.5) {
+                    break;
+                }
                 xPID.setGoal(new State(kCoralXSetpoint, 0.0));
                 yPID.setGoal(new State(kLeftYSetpoint, 0.0));
                 rotPID.setGoal(new State(kRotSetpoint, 0.0));
@@ -268,12 +285,18 @@ public class AlignToReefTag extends Command {
                 if(!setTargetLimelight(target)) {
                     break;
                 }
+                if(targetLimelight.getDistanceToTagFromCamera() > 3.5) {
+                    break;
+                }
                 xPID.setGoal(kCoralXSetpoint);
                 yPID.setGoal(kRightYSetpoint);
                 rotPID.setGoal(kRotSetpoint);
                 break;
             case CENTER:
                 if(!setTargetLimelight(target)) {
+                    break;
+                }
+                if(targetLimelight.getDistanceToTagFromCamera() > 3.5) {
                     break;
                 }
                 // If the good limelight is the left one
@@ -290,6 +313,9 @@ public class AlignToReefTag extends Command {
                 break;
             case BACK:
                 if(!setTargetLimelight(target)) {
+                    break;
+                }
+                if(targetLimelight.getDistanceToTagFromCamera() > 3.5) {
                     break;
                 }
                 // If the good limelight is the left one

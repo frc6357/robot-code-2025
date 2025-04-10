@@ -1,5 +1,8 @@
 package frc.robot.subsystems.vision;
 
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.Radian;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static frc.robot.Konstants.VisionConstants.kAprilTagPipeline;
 
 import java.text.DecimalFormat;
@@ -167,11 +170,11 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public static final class DriveToPose extends MultiLimelightCommandConfig {
         private DriveToPose() {
-            configKpid(1, 0, 0.001);
+            configKpid(0, 0, 0); //1, 0, .001
             configTolerance(0.02);
-            configProfile(TunerConstants.MaxSpeed * 0.35, (TunerConstants.MaxSpeed * 0.25) * 2); //25% Max Speed; 2x Acceleration
-            configMaxOutput(TunerConstants.MaxSpeed * 0.35);
-            configError(0.02);
+            configProfile(TunerConstants.MaxSpeed * 0.55, (TunerConstants.MaxSpeed * 0.55) * 2); //55% Max Speed; 2x Acceleration
+            configMaxOutput(TunerConstants.MaxSpeed * 0.55);
+            configError(0.01);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
         }
@@ -183,10 +186,12 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public static final class RotateToPose extends MultiLimelightCommandConfig {
         private RotateToPose() {
-            configKpid(0.0, 0.00, 0);
+            configKpid(0.1, 0.1, 0);
             configTolerance(1);
-            configProfile(TunerConstants.MaxAngularRate * 0.5, (TunerConstants.MaxAngularRate * 0.5) * 1.5); // 50% Angular speed; 1.5x acceleration
-            configMaxOutput(TunerConstants.MaxAngularRate * 0.5);
+            configProfile(
+                TunerConstants.MaxAngularRateDeg * 0.01, 
+                TunerConstants.MaxAngularRateDeg * 0.001 * 0.3); // 50% Angular speed; 1.5x acceleration
+            configMaxOutput(TunerConstants.MaxAngularRateDeg * 0.1);
             configError(1);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
