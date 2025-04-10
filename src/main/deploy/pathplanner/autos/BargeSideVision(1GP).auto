@@ -27,6 +27,12 @@
           "data": {
             "name": "StationPickupCombo"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GoToBargeSourceFromNW"
+          }
         }
       ]
     }

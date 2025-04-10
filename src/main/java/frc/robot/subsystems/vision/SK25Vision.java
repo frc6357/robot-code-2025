@@ -172,7 +172,10 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         private DriveToPose() {
             configKpid(1, 0, 0.001); //1, 0, .001
             configTolerance(0.02);
-            configProfile(TunerConstants.MaxSpeed * 0.55, (TunerConstants.MaxSpeed * 0.55) * 2); //55% Max Speed; 2x Acceleration
+            configProfile(
+                TunerConstants.MaxSpeed * 0.55, 
+                (TunerConstants.MaxSpeed * 0.55) * 2
+            ); //55% Max Speed; 2x Acceleration
             configMaxOutput(TunerConstants.MaxSpeed * 0.55);
             configError(0.01);
             configPipelineIndex(kAprilTagPipeline);
