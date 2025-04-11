@@ -17,12 +17,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "ExtakeAutoCommand"
@@ -35,9 +29,21 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.35
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "BargeSideSourceNWVision"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationWaitCombo"
           }
         },
         {
@@ -53,9 +59,45 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 0.15
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeSideSourceSWVision"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationWaitCombo"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeSideVisionToPoint3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToRightReefCommandAuto"
           }
         },
         {
@@ -74,6 +116,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "BargeSide(P1)",
+  "folder": null,
   "choreoAuto": false
 }
