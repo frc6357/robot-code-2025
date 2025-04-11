@@ -1,10 +1,11 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
 
@@ -108,19 +109,17 @@ public class CoralSubsystem extends SubsystemBase {
     new SysIdRoutine.Config(
         Volts.of(0.2).per(Second), // Voltage ramp rate for static test
         Volts.of(1.4), // Dynamic step voltage
-        null // Use default timeout (10 s)
+        Seconds.of(20) // Need a bit longer than default to fully extend the elevator
     ),
     new SysIdRoutine.Mechanism(
         elevatorMotor::setVoltage,
         log -> {
-          // Record a frame for the shooter motor.
-          log.motor("shooter-wheel")
+          log.motor("elevator")
               .voltage(
                   m_appliedVoltage.mut_replace(
-                      elevatorMotor.get() * RobotController.getBatteryVoltage(), Volts))
+                      elevatorMotor.getAppliedOutput() * RobotController.getBatteryVoltage(), Volts))
               .angularPosition(m_angle.mut_replace(elevatorEncoder.getPosition(), Rotations))
-              .angularVelocity(
-                  m_velocity.mut_replace(elevatorEncoder.getVelocity(), RotationsPerSecond));
+              .angularVelocity(m_velocity.mut_replace(RPM.of(elevatorEncoder.getVelocity())));
         },
         this
     )

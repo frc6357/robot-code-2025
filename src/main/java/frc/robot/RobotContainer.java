@@ -178,10 +178,10 @@ public class RobotContainer extends Robot{
         // // buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
 
         // // Traversing through all the binding classes to actually bind the buttons
-        // for (CommandBinder subsystemGroup : buttonBinders)
-        // {
-        //     subsystemGroup.bindButtons();
-        // }
+        for (CommandBinder subsystemGroup : buttonBinders)
+        {
+            subsystemGroup.bindButtons();
+        }
     }
 
 
