@@ -1,5 +1,6 @@
 package frc.robot.bindings;
 
+import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.ElevatorSetpoints.kLevel4;
 // Joystick constants
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
@@ -124,13 +125,17 @@ public class SK25EndEffectorBinder implements CommandBinder {
             
             
             RollerIntake.onTrue(new EndEffectorRollerScoreCommand(endEffector, m_elevator));
-            // RollerIntake.whileTrue(
-            //     Commands.parallel(
-            //         new EndEffectorRollerIntakeCommand(endEffector, m_elevator),
-            //         Commands.sequence(
-            //             Commands.waitSeconds(0.2),
-            //             new InstantCommand(() -> endEffector.setTargetAngle(EndEffectorPosition.kIntakePositionAngle.angle))
-            //         )
+            // RollerIntake.onTrue(
+            //     Commands.either(
+            //         Commands.parallel(
+            //             new EndEffectorRollerIntakeCommand(endEffector, m_elevator),
+            //             Commands.sequence(
+            //                 Commands.waitSeconds(0.2),
+            //                 new InstantCommand(() -> endEffector.setTargetAngle(EndEffectorPosition.kIntakePositionAngle.angle))
+            //             )
+            //         ),
+            //         new EndEffectorRollerScoreCommand(endEffector, m_elevator),
+            //         () -> (m_elevator.elevatorCurrentTarget == kLevel4)
             //     )
             // );
             RollerOutPut.whileTrue(new EndEffectorRollerIntakeCommand(endEffector, m_elevator));
