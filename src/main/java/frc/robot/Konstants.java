@@ -824,6 +824,7 @@ public final class Konstants
         public static final double kRotationCoeff    = 1;
         public static final double kJoystickDeadband = 0.15;
         public static final double kSlowModePercent  = 0.3;
+        public static final double kSlowModeRotationPercent = 0.5;
         
         public static final double kAccelLimit = 2;
 
