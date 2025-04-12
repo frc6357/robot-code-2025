@@ -190,7 +190,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     public static final class RotateToPose extends MultiLimelightCommandConfig {
         private RotateToPose() {
             configKpid(0.006, 0, 0.00015);
-            configTolerance(3);
+            configTolerance(1.5);
             configProfile(
                 TunerConstants.MaxAngularRateDeg * 0.1, 
                 TunerConstants.MaxAngularRateDeg * 0.1 * 5); // 10% Angular speed; 5x acceleration
