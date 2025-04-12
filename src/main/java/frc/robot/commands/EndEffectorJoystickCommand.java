@@ -39,7 +39,7 @@ public class EndEffectorJoystickCommand extends Command {
         armspeed = armspeed * armdividend;
          endEffector.runArm(armspeed);
          endEffector.isRunning = true;
-         endEffector.checkPositionUp();
+        //  endEffector.checkPositionUp();
          
        }
 
@@ -50,7 +50,7 @@ public class EndEffectorJoystickCommand extends Command {
         armspeed = armspeed * armdividend;
         endEffector.runArm(-armspeed);
         endEffector.isRunning = true;
-        endEffector.checkPositionDown();
+        // endEffector.checkPositionDown();
        }
 
        else

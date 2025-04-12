@@ -242,12 +242,9 @@ public class AlignToReefTag extends Command {
                 }
                 return Optional.of(limelights[0]);
             case CENTER:
-                if(!m_vision.reefTargetClose(limelights[0])) {
-                    break;
-                }
-                return Optional.of(limelights[0]);
+                return Optional.ofNullable(findGoodLimelight());
             case BACK:
-                return Optional.of(findGoodLimelight());
+                return Optional.ofNullable(findGoodLimelight());
         }
         return Optional.empty();
 
@@ -284,7 +281,7 @@ public class AlignToReefTag extends Command {
                 if(!setTargetLimelight(target)) {
                     break;
                 }
-                if(targetLimelight.getDistanceToTagFromCamera() > 3.5) {
+                if(targetLimelight.getDistanceToTagFromCamera() > kRejectDistance) {
                     break;
                 }
                 xPID.setGoal(new State(kCoralXSetpoint, 0.0));
@@ -295,7 +292,7 @@ public class AlignToReefTag extends Command {
                 if(!setTargetLimelight(target)) {
                     break;
                 }
-                if(targetLimelight.getDistanceToTagFromCamera() > 3.5) {
+                if(targetLimelight.getDistanceToTagFromCamera() > kRejectDistance) {
                     break;
                 }
                 xPID.setGoal(kCoralXSetpoint);
@@ -306,7 +303,7 @@ public class AlignToReefTag extends Command {
                 if(!setTargetLimelight(target)) {
                     break;
                 }
-                if(targetLimelight.getDistanceToTagFromCamera() > 3.5) {
+                if(targetLimelight.getDistanceToTagFromCamera() > kRejectDistance) {
                     break;
                 }
                 // If the good limelight is the left one
@@ -325,7 +322,7 @@ public class AlignToReefTag extends Command {
                 if(!setTargetLimelight(target)) {
                     break;
                 }
-                if(targetLimelight.getDistanceToTagFromCamera() > 3.5) {
+                if(targetLimelight.getDistanceToTagFromCamera() > kRejectDistance) {
                     break;
                 }
                 // If the good limelight is the left one

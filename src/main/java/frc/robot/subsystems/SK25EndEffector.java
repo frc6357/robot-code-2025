@@ -261,29 +261,29 @@ public class SK25EndEffector extends SubsystemBase
         return false;
     }
         
-    public void checkPositionUp()
-     {
+    // public void checkPositionUp()
+    //  {
     
-        double encoder = mEncoder.getPosition();
-        double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
+    //     double encoder = mEncoder.getPosition();
+    //     double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
 
-        if(angle > -10)
-        {
-            setTargetAngle(-10);
-            stopArm();
-        }
-     }
-     public void checkPositionDown()
-     {
-        double encoder = mEncoder.getPosition();
-        double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
+    //     if(angle > -10)
+    //     {
+    //         setTargetAngle(-10);
+    //         stopArm();
+    //     }
+    //  }
+    //  public void checkPositionDown()
+    //  {
+    //     double encoder = mEncoder.getPosition();
+    //     double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
 
-        if(angle < -180)
-        {
-            setTargetAngle(140);
-            stopArm();
-        }
-     }
+    //     if(angle < -180)
+    //     {
+    //         setTargetAngle(140);
+    //         stopArm();
+    //     }
+    //  }
 
 
             
