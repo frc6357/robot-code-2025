@@ -734,6 +734,8 @@ public final class Konstants
                 public static double kCoralXSetpoint = -0.5;
                 public static double kAlgaeXSetpoint = -0.45;
                 public static double kFarXSetpoint = -0.99;
+
+                public static double kRejectDistance = 1.75; // 1.75m
         }
 
         public static final class PoseConstants {

@@ -281,18 +281,18 @@ public class AlignToReefTag extends Command {
                 if(!setTargetLimelight(target)) {
                     break;
                 }
-                if(targetLimelight.getDistanceToTagFromCamera() > 3.5) {
+                if(targetLimelight.getDistanceToTagFromCamera() > kRejectDistance) {
                     break;
                 }
-                xPID.setGoal(new State(kCoralXSetpoint, 0.0));
-                yPID.setGoal(new State(kLeftYSetpoint, 0.0));
-                rotPID.setGoal(new State(kRotSetpoint, 0.0));
+                xPID.setGoal(kCoralXSetpoint);
+                yPID.setGoal(kLeftYSetpoint);
+                rotPID.setGoal(kRotSetpoint);
                 break;
             case RIGHT:
                 if(!setTargetLimelight(target)) {
                     break;
                 }
-                if(targetLimelight.getDistanceToTagFromCamera() > 3.5) {
+                if(targetLimelight.getDistanceToTagFromCamera() > kRejectDistance) {
                     break;
                 }
                 xPID.setGoal(kCoralXSetpoint);
@@ -303,39 +303,23 @@ public class AlignToReefTag extends Command {
                 if(!setTargetLimelight(target)) {
                     break;
                 }
-                if(targetLimelight.getDistanceToTagFromCamera() > 3.5) {
+                if(targetLimelight.getDistanceToTagFromCamera() > kRejectDistance) {
                     break;
                 }
-                // If the good limelight is the left one
-                if(targetLimelight.getName().equals(limelightBeta.kName)) {
-                    xPID.setGoal(kAlgaeXSetpoint);
-                    yPID.setGoal(kCenterYSetpoint);
-                    rotPID.setGoal(kRotSetpoint);
-                }
-                else if(targetLimelight.getName().equals(limelightAlpha.kName)) {
-                    xPID.setGoal(kAlgaeXSetpoint);
-                    yPID.setGoal(kCenterYSetpoint);
-                    rotPID.setGoal(kRotSetpoint);
-                }
+                xPID.setGoal(kAlgaeXSetpoint);
+                yPID.setGoal(kCenterYSetpoint);
+                rotPID.setGoal(kRotSetpoint);
                 break;
             case BACK:
                 if(!setTargetLimelight(target)) {
                     break;
                 }
-                if(targetLimelight.getDistanceToTagFromCamera() > 3.5) {
+                if(targetLimelight.getDistanceToTagFromCamera() > kRejectDistance) {
                     break;
                 }
-                // If the good limelight is the left one
-                if(targetLimelight.getName().equals(limelightBeta.kName)) {
-                    xPID.setGoal(kFarXSetpoint);
-                    yPID.setGoal(kCenterYSetpoint);
-                    rotPID.setGoal(kRotSetpoint);
-                }
-                else if(targetLimelight.getName().equals(limelightAlpha.kName)) {
-                    xPID.setGoal(kFarXSetpoint);
-                    yPID.setGoal(kCenterYSetpoint);
-                    rotPID.setGoal(kRotSetpoint);
-                }
+                xPID.setGoal(kFarXSetpoint);
+                yPID.setGoal(kCenterYSetpoint);
+                rotPID.setGoal(kRotSetpoint);
                 break;
             }
         
