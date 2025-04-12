@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.524385245901639,
-        "y": 5.649334016393442
+        "x": 7.108709016393442,
+        "y": 5.6613217213114755
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3163726723171774,
-        "y": 5.788009065449748
+        "x": 6.58125,
+        "y": 5.6613217213114755
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "VisionBargeStart"
     },
     {
       "anchor": {
-        "x": 0.9230532786885245,
-        "y": 6.80015368852459
+        "x": 5.4304303278688515,
+        "y": 5.6613217213114755
       },
       "prevControl": {
-        "x": 1.4385245901639343,
-        "y": 6.572387295081968
+        "x": 5.873975409836065,
+        "y": 5.673309426229508
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "VisionBargeSideSource"
+      "linkedName": "NWReefReady"
     }
   ],
   "rotationTargets": [],
@@ -33,15 +33,10 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "StationWaitCombo",
-      "waypointRelativePos": 0.7507122507122479,
+      "name": "L4ScoreCombo",
+      "waypointRelativePos": 0.4069325735992328,
       "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "StationWaitCombo"
-        }
-      }
+      "command": null
     }
   ],
   "globalConstraints": {
@@ -54,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 126.86999999999999
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "CollectCoral",
+  "folder": null,
   "idealStartingState": {
-    "velocity": 1.0,
-    "rotation": -59.99999999999999
+    "velocity": 0,
+    "rotation": -179.56223967715903
   },
   "useDefaultConstraints": true
 }
