@@ -7,13 +7,14 @@ import frc.robot.subsystems.SK25EndEffector;
 
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSlowSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
-import static frc.robot.Konstants.EndEffectorConstants.kRollerSuperSpeed;
+import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.ElevatorSetpoints.kLevel4;
 
 
 public class EndEffectorRollerIntakeCommand extends Command {
 
     private final SK25EndEffector Subsystem;
     private final CoralSubsystem elevator;
+
     public EndEffectorRollerIntakeCommand(SK25EndEffector Subsystem, CoralSubsystem elevator)
     {
         this.Subsystem = Subsystem;
@@ -22,24 +23,9 @@ public class EndEffectorRollerIntakeCommand extends Command {
 
     public void initialize()
     {
-        // Subsystem.runRoller(-kRollerSpeed);
-
-        if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kLevel3 - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kLevel3 + 0.4))
-            Subsystem.runRoller(-kRollerSlowSpeed);
-        else if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kLevel2 - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kLevel2 + 0.4))
-            Subsystem.runRoller(-kRollerSlowSpeed);
-        else if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kLevel1 - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kLevel1 + 0.4))
-            Subsystem.runRoller(-kRollerSlowSpeed);
-        // else if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kNet - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kNet + 0.4)) //TODO: remove and replace in auto
-        //     Subsystem.runRoller(-kRollerSuperSpeed);
-        else
-            Subsystem.runRoller(-kRollerSpeed);
+        Subsystem.runRoller(kRollerSpeed);
     }
 
-    // public void end(boolean interrupted)
-    // {
-    //     Subsystem.stopRoller();
-    // }
 
     public boolean isFinished()
     {

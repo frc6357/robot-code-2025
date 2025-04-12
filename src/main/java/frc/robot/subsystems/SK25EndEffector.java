@@ -261,29 +261,29 @@ public class SK25EndEffector extends SubsystemBase
         return false;
     }
         
-    public void checkPositionUp()
-     {
+    // public void checkPositionUp()
+    //  {
     
-        double encoder = mEncoder.getPosition();
-        double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
+    //     double encoder = mEncoder.getPosition();
+    //     double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
 
-        if(angle > -10)
-        {
-            setTargetAngle(-10);
-            stopArm();
-        }
-     }
-     public void checkPositionDown()
-     {
-        double encoder = mEncoder.getPosition();
-        double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
+    //     if(angle > -10)
+    //     {
+    //         setTargetAngle(-10);
+    //         stopArm();
+    //     }
+    //  }
+    //  public void checkPositionDown()
+    //  {
+    //     double encoder = mEncoder.getPosition();
+    //     double angle = (encoder * gear2Rotation * degrees) / motorRatio / gear1Rotation;
 
-        if(angle < -180)
-        {
-            setTargetAngle(140);
-            stopArm();
-        }
-     }
+    //     if(angle < -180)
+    //     {
+    //         setTargetAngle(140);
+    //         stopArm();
+    //     }
+    //  }
 
 
             
@@ -333,7 +333,8 @@ public class SK25EndEffector extends SubsystemBase
 
     public void periodic()
     {
-
+        SmartDashboard.putNumber("EndEffector/RollerSpd", rollerMotor.getEncoder().getVelocity());
+        SmartDashboard.putBoolean("EndEffector/RollerOn", rollerMotor.get() != 0.0);
         
         /*if (SmartDashboard.getBoolean("Control Mode", false)) 
         {

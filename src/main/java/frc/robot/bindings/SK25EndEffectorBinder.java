@@ -27,6 +27,7 @@ import java.util.Optional;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -47,8 +48,8 @@ import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.commands.EndEffectorButtonCommand;
 // Intake / eject commands
 import frc.robot.commands.EndEffectorJoystickCommand;
+import frc.robot.commands.EndEffectorRollerScoreCommand;
 import frc.robot.commands.EndEffectorRollerIntakeCommand;
-import frc.robot.commands.EndEffectorRollerOutputCommand;
 import frc.robot.commands.EndEffectorRollerStopCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.SK25EndEffector;
@@ -122,9 +123,17 @@ public class SK25EndEffectorBinder implements CommandBinder {
             floorAlgae.onTrue(Commands.sequence(new WaitCommand(0.5), new EndEffectorButtonCommand(EndEffectorPosition.kFloorAngle, endEffector)));
             
             
-            //RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
-            RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector, m_elevator));
-            RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector, m_elevator));
+            RollerIntake.onTrue(new EndEffectorRollerScoreCommand(endEffector, m_elevator));
+            // RollerIntake.whileTrue(
+            //     Commands.parallel(
+            //         new EndEffectorRollerIntakeCommand(endEffector, m_elevator),
+            //         Commands.sequence(
+            //             Commands.waitSeconds(0.2),
+            //             new InstantCommand(() -> endEffector.setTargetAngle(EndEffectorPosition.kIntakePositionAngle.angle))
+            //         )
+            //     )
+            // );
+            RollerOutPut.whileTrue(new EndEffectorRollerIntakeCommand(endEffector, m_elevator));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
             RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
 
