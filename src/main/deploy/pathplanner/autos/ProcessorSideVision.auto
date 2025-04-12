@@ -7,49 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DriftlessP2_ToHeadOnPoint1"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.75
+            "pathName": "P3_VisionToProcessorPoint1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ExtakeAutoCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ZeroPositionCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "DriftlessToHeadOnPoint2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StationWaitCombo"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "DriftlessToHeadOnPoint3"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.75
+            "name": "AlignToLeftReefCommandAuto"
           }
         },
         {
@@ -65,9 +29,15 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.35
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "DriftlessToHeadOnPoint4"
+            "pathName": "ProcessorSideSourceNEVision"
           }
         },
         {
@@ -79,7 +49,55 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DriftlessToHeadOnPoint5"
+            "pathName": "ProcessorSideVisionToPoint3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToRightReefCommandAuto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.35
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ProcessorSideSourceSEVision"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationWaitCombo"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ProcessorSideVisionToPoint3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToLeftReefCommandAuto"
           }
         },
         {
@@ -98,6 +116,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Driftless",
+  "folder": "VisionAutos",
   "choreoAuto": false
 }

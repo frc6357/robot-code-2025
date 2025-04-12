@@ -7,49 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DriftlessP2_ToHeadOnPoint1"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.75
+            "pathName": "P1_VisionToBargePoint1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ExtakeAutoCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ZeroPositionCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "DriftlessToHeadOnPoint2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StationWaitCombo"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "DriftlessToHeadOnPoint3"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.75
+            "name": "AlignToRightReefCommandAuto"
           }
         },
         {
@@ -65,9 +29,15 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.35
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "DriftlessToHeadOnPoint4"
+            "pathName": "BargeSideSourceNWVision"
           }
         },
         {
@@ -79,7 +49,55 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DriftlessToHeadOnPoint5"
+            "pathName": "BargeSideVisionToPoint3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToLeftReefCommandAuto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeSideSourceSWVision"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationWaitCombo"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeSideVisionToPoint3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToRightReefCommandAuto"
           }
         },
         {
@@ -98,6 +116,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Driftless",
+  "folder": "VisionAutos",
   "choreoAuto": false
 }

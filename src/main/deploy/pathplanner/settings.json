@@ -4,6 +4,7 @@
   "holonomicMode": true,
   "pathFolders": [
     "CollectCoral",
+    "Driftless",
     "NothingButNet",
     "OtherPaths",
     "P1",
@@ -15,8 +16,10 @@
   "autoFolders": [
     "BargeSide(P1)",
     "HeadOn(P2)",
+    "Driftless",
     "OtherAutos",
-    "ProcessorSide(P3)"
+    "ProcessorSide(P3)",
+    "VisionAutos"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

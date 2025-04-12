@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P1_VisionToBargePoint1"
+            "pathName": "P2_VisionToHeadOnPoint1"
           }
         },
         {
@@ -29,33 +29,81 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.35
+            "name": "LowAlgaePickupCombo"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSideSourceNWVision"
+            "pathName": "RemoveNorthAlgae"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StationWaitCombo"
+            "name": "AlignToCenterReefCommandAuto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeAutoCommand"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSideVisionToPoint3"
+            "pathName": "ToHeadOnScoreNet1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AlignToLeftReefCommandAuto"
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RemoveNWAlgae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LowAlgaePickupCombo"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToCenterReefCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeAutoCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToHeadOnScoreNet2"
           }
         },
         {
@@ -67,55 +115,19 @@
         {
           "type": "named",
           "data": {
-            "name": "StationPickupCombo"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "name": "ZeroPositionCommand"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BargeSideSourceSWVision"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StationWaitCombo"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BargeSideVisionToPoint3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AlignToRightReefCommandAuto"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ExtakeAutoCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StationPickupCombo"
+            "pathName": "AwayLine"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "VisionAutos",
   "choreoAuto": false
 }
