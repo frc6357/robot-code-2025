@@ -1,7 +1,8 @@
 package frc.robot.bindings;
 
-import static frc.robot.Konstants.OIConstants.kSlowModePercent;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
+import static frc.robot.Konstants.OIConstants.kSlowModePercent;
+import static frc.robot.Konstants.OIConstants.kSlowModeRotationPercent;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
 import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
@@ -235,7 +236,7 @@ public class SKSwerveBinder implements CommandBinder{
             drivetrain.applyRequest(() -> {
                 return feildCentricDrive.withVelocityX(applyGains(-MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercent)) // Drive forward with negative Y (forward)
                     .withVelocityY(applyGains(-MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercent)) // Drive left with negative X (left)
-                    .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercent)); // Drive counterclockwise with negative X (left)
+                    .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModeRotationPercent)); // Drive counterclockwise with negative X (left)
             })
         );
     }

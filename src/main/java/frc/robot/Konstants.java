@@ -727,15 +727,15 @@ public final class Konstants
         public static final class AlignmentConstants {
                 public static double kRotSetpoint = 0.0;
 
-                public static double kRightYSetpoint = 0.185; 
+                public static double kRightYSetpoint = 0.2;
                 public static double kCenterYSetpoint = 0.02;
                 public static double kLeftYSetpoint = -0.1958;
 
-                public static double kCoralXSetpoint = -0.5;
+                public static double kCoralXSetpoint = -0.54;
                 public static double kAlgaeXSetpoint = -0.45;
-                public static double kFarXSetpoint = -0.99;
+                public static double kFarXSetpoint = -1;
 
-                public static double kRejectDistance = 1.75; // 1.75m
+                public static double kRejectDistance = 1.4; // 1.4m
         }
 
         public static final class PoseConstants {
@@ -826,6 +826,7 @@ public final class Konstants
         public static final double kRotationCoeff    = 1;
         public static final double kJoystickDeadband = 0.15;
         public static final double kSlowModePercent  = 0.3;
+        public static final double kSlowModeRotationPercent = 0.5;
         
         public static final double kAccelLimit = 2;
 

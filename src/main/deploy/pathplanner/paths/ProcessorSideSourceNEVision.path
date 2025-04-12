@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.711168032786884,
-        "y": 2.424641393442623
+        "x": 4.996001300390116,
+        "y": 2.784525357607282
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.886641754414972,
-        "y": 2.2458924577074506
+        "x": 4.503998699609882,
+        "y": 2.4809492847854346
       },
       "isLocked": false,
       "linkedName": null
@@ -20,21 +20,26 @@
         "y": 0.8019905821917803
       },
       "prevControl": {
-        "x": 1.659886301552656,
-        "y": 1.0380941721681076
+        "x": 1.7927503250975285,
+        "y": 0.942132639791937
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "ProcessorSideSource"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.28227571115973443,
+      "rotationDegrees": 119.692813847604
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "StationWaitCombo",
-      "waypointRelativePos": 0.6,
+      "waypointRelativePos": 0.7557319223985974,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -43,7 +48,7 @@
             {
               "type": "named",
               "data": {
-                "name": "StationPickupCombo"
+                "name": "StationWaitCombo"
               }
             }
           ]

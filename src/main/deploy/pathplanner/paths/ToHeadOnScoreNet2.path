@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.925,
-        "y": 4.944
+        "x": 5.145340909090908,
+        "y": 5.156775568181818
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.800102459016394,
-        "y": 6.598303278688526
+        "x": 6.020443368107302,
+        "y": 6.811078846870344
       },
       "isLocked": false,
       "linkedName": "HeadOnRemoveAlgae2"
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.2546981207517049,
+      "waypointRelativePos": 0.13848396501458127,
       "rotationDegrees": -116.96100669859938
     }
   ],

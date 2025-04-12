@@ -169,9 +169,9 @@ public class AlignToReefTag extends Command {
                 if(Math.abs(positions[2] - xPID.getGoal().position) <= xyConfig.tolerance) {
                     xOut = 0;
                 }
-                else if(Math.abs(positions[2] - xPID.getGoal().position) < 0.05 && xOut < 0.1) {
-                    xOut = 0.1 * Math.signum(xOut);
-                }
+                // else if(Math.abs(positions[2] - xPID.getGoal().position) < 0.05 && xOut < 0.1) {
+                //     xOut = 0.1 * Math.signum(xOut);
+                // }
                  xDone = (Math.abs(positions[2] - xPID.getGoal().position) <= xyConfig.tolerance);
                  //     if(Math.abs(xOut) < 0.2) {
                     //         xOut = Math.signum(xOut) * .2;
@@ -186,9 +186,9 @@ public class AlignToReefTag extends Command {
                  if(Math.abs(positions[0] - yPID.getGoal().position) <= xyConfig.tolerance) {
                     yOut = 0;
                 }
-                 if(Math.abs(positions[0] - yPID.getGoal().position) < 0.05 && yOut < 0.1) {
-                       yOut = 0.1 * Math.signum(yOut);
-                 }
+                //  if(Math.abs(positions[0] - yPID.getGoal().position) < 0.05 && yOut < 0.1) {
+                //        yOut = 0.1 * Math.signum(yOut);
+                //  }
                  yDone = (Math.abs(positions[0] - yPID.getGoal().position) <= xyConfig.tolerance);
 
             //     if(Math.abs(yOut) < 0.2) {
@@ -202,8 +202,11 @@ public class AlignToReefTag extends Command {
             // if(outputtingRot) {
 
                 rotOut = rotConfig.maxVelocity * -rotPID.calculate(positions[4]);
-                if(Math.abs(positions[4] - rotPID.getGoal().position) < 1 && rotOut < 0.1) {
-                   rotOut = 0.1 * Math.signum(rotOut);
+                // if(Math.abs(positions[4] - rotPID.getGoal().position) < 1 && rotOut < 0.1) {
+                //    rotOut = 0.1 * Math.signum(rotOut);
+                // }
+                if(Math.abs(positions[4] - rotPID.getGoal().position) <= rotConfig.tolerance) {
+                    rotOut = 0;
                 }
                 rotDone = (Math.abs(positions[4] - rotPID.getGoal().position) <= rotConfig.tolerance);
 
@@ -239,12 +242,9 @@ public class AlignToReefTag extends Command {
                 }
                 return Optional.of(limelights[0]);
             case CENTER:
-                if(!m_vision.reefTargetClose(limelights[0])) {
-                    break;
-                }
-                return Optional.of(limelights[0]);
+                return Optional.ofNullable(findGoodLimelight());
             case BACK:
-                return Optional.of(findGoodLimelight());
+                return Optional.ofNullable(findGoodLimelight());
         }
         return Optional.empty();
 

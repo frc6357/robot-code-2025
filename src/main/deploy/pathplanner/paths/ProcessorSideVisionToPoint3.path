@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.578,
-        "y": 0.802
+        "x": 1.5776969178082192,
+        "y": 0.8019905821917803
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7975383648755423,
-        "y": 0.6824052411358539
+        "x": 1.7708809535615275,
+        "y": 0.960672428444162
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "ProcessorSideSource"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 2.349636130136986
       },
       "prevControl": {
-        "x": 3.518391130130752,
-        "y": 2.5917018242065564
+        "x": 3.275668714694945,
+        "y": 2.1763907321414404
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "L4ScoreCombo",
-      "waypointRelativePos": 0.9690476190476164,
+      "waypointRelativePos": 0.7151675485008792,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
