@@ -126,8 +126,8 @@ public class Ports
         public static final SKTrigger kLowBranchEffector = new SKTrigger(kOperator, 180, POV);
         public static final SKTrigger kTroughEffector = new SKTrigger(kOperator, 270, POV);
         // Rollers:
-        public static final SKTrigger kIntake = new SKTrigger(kOperator, kLeftTrigger.value, AXIS);
-        public static final SKTrigger kShoot = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
+        public static final SKTrigger kIntake = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
+        public static final SKTrigger kShoot = new SKTrigger(kOperator, kLeftTrigger.value, AXIS);
 
         // Manual Joystick Controls
         public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value), new DeadbandFilter(kJoystickDeadband));

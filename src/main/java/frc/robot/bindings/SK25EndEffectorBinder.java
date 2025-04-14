@@ -50,6 +50,7 @@ import frc.robot.commands.EndEffectorButtonCommand;
 // Intake / eject commands
 import frc.robot.commands.EndEffectorJoystickCommand;
 import frc.robot.commands.EndEffectorRollerIntakeCommand;
+import frc.robot.commands.EndEffectorRollerOutputCommand;
 import frc.robot.commands.EndEffectorRollerStopCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.SK25EndEffector;
@@ -124,7 +125,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
             
             
             // RollerIntake.onTrue(new EndEffectorRollerScoreCommand(endEffector, m_elevator));
-            RollerIntake.onTrue(
+            RollerOutPut.onTrue(
                 Commands.either(
                     Commands.parallel(
                         new EndEffectorRollerIntakeCommand(endEffector, m_elevator),
@@ -139,7 +140,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
                     }
                 )
             );
-            RollerOutPut.whileTrue(new EndEffectorRollerIntakeCommand(endEffector, m_elevator));
+            RollerIntake.whileTrue(new EndEffectorRollerOutputCommand(endEffector, m_elevator));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
             RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
 
