@@ -26,12 +26,13 @@ import java.util.Optional;
 // Relative encoder (REV)
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.ElevatorSetpoints;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 
 // Unused imports
@@ -49,7 +50,6 @@ import frc.robot.commands.EndEffectorButtonCommand;
 // Intake / eject commands
 import frc.robot.commands.EndEffectorJoystickCommand;
 import frc.robot.commands.EndEffectorRollerIntakeCommand;
-import frc.robot.commands.EndEffectorRollerOutputCommand;
 import frc.robot.commands.EndEffectorRollerStopCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.SK25EndEffector;
@@ -127,15 +127,15 @@ public class SK25EndEffectorBinder implements CommandBinder {
             RollerIntake.onTrue(
                 Commands.either(
                     Commands.parallel(
-                        new EndEffectorRollerScoreCommand(endEffector, m_elevator),
+                        new EndEffectorRollerIntakeCommand(endEffector, m_elevator),
                         Commands.sequence(
                             Commands.waitSeconds(0.25),
                             new InstantCommand(() -> endEffector.setTargetAngle(EndEffectorPosition.kIntakePositionAngle))
                         )
                     ),
-                    new EndEffectorRollerScoreCommand(endEffector, m_elevator),
+                    new EndEffectorRollerIntakeCommand(endEffector, m_elevator),
                     () -> {
-                        return (m_elevator.elevatorCurrentTarget == kLevel4 && endEffector.isL4());
+                        return (m_elevator.elevatorCurrentTarget == ElevatorSetpoints.kLevel4 && endEffector.isL4());
                     }
                 )
             );
