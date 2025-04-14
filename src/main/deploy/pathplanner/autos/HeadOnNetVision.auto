@@ -11,22 +11,15 @@
           }
         },
         {
-          "type": "race",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.5
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlignToRightReefCommandAuto"
-                }
-              }
-            ]
+            "name": "AlignToRightReefCommandAuto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.125
           }
         },
         {
@@ -54,9 +47,28 @@
           }
         },
         {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToCenterReefCommandAuto"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "AlignToCenterReefCommandAuto"
+            "name": "IntakeAutoCommand"
           }
         },
         {
@@ -86,7 +98,7 @@
         {
           "type": "named",
           "data": {
-            "name": "StationPickupCombo"
+            "name": "HighAlgaePickupCombo"
           }
         },
         {
@@ -96,15 +108,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "HighAlgaePickupCombo"
+            "waitTime": 0.125
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AlignToCenterReefCommandAuto"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToCenterReefCommandAuto"
+                }
+              }
+            ]
           }
         },
         {
