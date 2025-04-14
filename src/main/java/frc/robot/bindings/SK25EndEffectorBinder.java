@@ -139,7 +139,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
                     }
                 )
             );
-            RollerOutPut.whileTrue(new EndEffectorRollerIntakeCommand(endEffector, m_elevator));
+            RollerOutPut.whileTrue(new EndEffectorRollerScoreCommand(endEffector, m_elevator));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
             RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
 
