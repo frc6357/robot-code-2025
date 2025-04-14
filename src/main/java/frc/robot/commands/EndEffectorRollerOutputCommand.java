@@ -21,7 +21,7 @@ public class EndEffectorRollerOutputCommand extends Command {
 
     public void initialize()
     {
-        Subsystem.runRoller(-kRollerSpeed);
+        Subsystem.runRoller(kRollerSpeed);
     }
 
 

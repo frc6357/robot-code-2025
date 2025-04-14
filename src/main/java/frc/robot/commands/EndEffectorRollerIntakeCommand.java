@@ -25,15 +25,15 @@ public class EndEffectorRollerIntakeCommand extends Command {
         // Subsystem.runRoller(-kRollerSpeed);
 
         if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kLevel3 - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kLevel3 + 0.4))
-            Subsystem.runRoller(kRollerSlowSpeed);
+            Subsystem.runRoller(-kRollerSlowSpeed);
         else if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kLevel2 - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kLevel2 + 0.4))
-            Subsystem.runRoller(kRollerSlowSpeed);
+            Subsystem.runRoller(-kRollerSlowSpeed);
         else if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kLevel1 - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kLevel1 + 0.4))
-            Subsystem.runRoller(kRollerSlowSpeed);
+            Subsystem.runRoller(-kRollerSlowSpeed);
         // else if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kNet - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kNet + 0.4)) //TODO: remove and replace in auto
         //     Subsystem.runRoller(-kRollerSuperSpeed);
         else
-            Subsystem.runRoller(kRollerSpeed);
+            Subsystem.runRoller(-kRollerSpeed);
     }
 
     // public void end(boolean interrupted)
