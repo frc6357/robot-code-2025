@@ -1,0 +1,97 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P2_VisionToHeadOnPoint1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToRightReefCommandAuto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RemoveNorthAlgae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LowAlgaePickupCombo"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToCenterReefCommandAuto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeAutoCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToTrickshot1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RemoveNEAlgae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": null
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": null
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": null
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": null
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": null
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "VisionAutos",
+  "choreoAuto": false
+}

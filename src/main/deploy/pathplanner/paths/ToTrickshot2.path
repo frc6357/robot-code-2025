@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.1054545454545455,
+        "y": 2.943082386363636
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.2521875,
+        "y": 1.7165767045454539
+      },
+      "isLocked": false,
+      "linkedName": "HeadOnRemoveAlgae3"
+    },
+    {
+      "anchor": {
+        "x": 7.079829545454547,
+        "y": 4.3690198863636365
+      },
+      "prevControl": {
+        "x": 6.651051136363637,
+        "y": 3.601207386363636
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Trickshot2"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.053935860058312954,
+      "rotationDegrees": 119.51902804298247
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 15.945395900922797
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 119.24882633654701
+  },
+  "useDefaultConstraints": true
+}
