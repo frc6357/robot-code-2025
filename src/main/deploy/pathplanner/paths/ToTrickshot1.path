@@ -36,7 +36,19 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "NetScoreCombo",
+      "waypointRelativePos": 0.5955947136563827,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "NetScoreCombo"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -50,7 +62,7 @@
     "rotation": 29.197486046064544
   },
   "reversed": false,
-  "folder": null,
+  "folder": "NothingButNet",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 179.5488614532127

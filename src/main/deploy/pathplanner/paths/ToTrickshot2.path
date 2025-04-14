@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.2521875,
-        "y": 1.7165767045454539
+        "x": 5.693778409090909,
+        "y": 1.5969176136363625
       },
       "isLocked": false,
       "linkedName": "HeadOnRemoveAlgae3"
@@ -36,7 +36,19 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "NetScoreCombo",
+      "waypointRelativePos": 0.7083700440528596,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "NetScoreCombo"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -50,7 +62,7 @@
     "rotation": 15.945395900922797
   },
   "reversed": false,
-  "folder": null,
+  "folder": "NothingButNet",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 119.24882633654701

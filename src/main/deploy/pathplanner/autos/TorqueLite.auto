@@ -47,9 +47,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "IntakeAutoCommand"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "ToTrickshot1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
           }
         },
         {
@@ -59,33 +71,87 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": null
+            "name": "HighAlgaePickupCombo"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToCenterReefCommandAuto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeAutoCommand"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "ToTrickshot2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "RemoveNWAlgaeFor3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HighAlgaePickupCombo"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignToCenterReefCommandAuto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeAutoCommand"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "ToTrickshot3"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": null
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ZeroPositionCommand"
           }
         }
       ]
