@@ -26,6 +26,7 @@ import java.util.Optional;
 // Relative encoder (REV)
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -122,9 +123,23 @@ public class SK25EndEffectorBinder implements CommandBinder {
             floorAlgae.onTrue(Commands.sequence(new WaitCommand(0.5), new EndEffectorButtonCommand(EndEffectorPosition.kFloorAngle, endEffector)));
             
             
-            //RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector));
-            RollerIntake.onTrue(new EndEffectorRollerIntakeCommand(endEffector, m_elevator));
-            RollerOutPut.onTrue(new EndEffectorRollerOutputCommand(endEffector, m_elevator));
+            // RollerIntake.onTrue(new EndEffectorRollerScoreCommand(endEffector, m_elevator));
+            RollerIntake.onTrue(
+                Commands.either(
+                    Commands.parallel(
+                        new EndEffectorRollerScoreCommand(endEffector, m_elevator),
+                        Commands.sequence(
+                            Commands.waitSeconds(0.25),
+                            new InstantCommand(() -> endEffector.setTargetAngle(EndEffectorPosition.kIntakePositionAngle))
+                        )
+                    ),
+                    new EndEffectorRollerScoreCommand(endEffector, m_elevator),
+                    () -> {
+                        return (m_elevator.elevatorCurrentTarget == kLevel4 && endEffector.isL4());
+                    }
+                )
+            );
+            RollerOutPut.whileTrue(new EndEffectorRollerIntakeCommand(endEffector, m_elevator));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
             RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
 

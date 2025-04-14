@@ -732,7 +732,7 @@ public final class Konstants
                 public static double kLeftYSetpoint = -0.1958;
 
                 public static double kCoralXSetpoint = -0.54;
-                public static double kAlgaeXSetpoint = -0.45;
+                public static double kAlgaeXSetpoint = -0.41;
                 public static double kFarXSetpoint = -1;
 
                 public static double kRejectDistance = 1.4; // 1.4m

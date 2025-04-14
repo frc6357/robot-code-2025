@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.145340909090908,
-        "y": 5.156775568181818
+        "x": 5.070799180327868,
+        "y": 5.0499487704918025
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.020443368107302,
-        "y": 6.811078846870344
+        "x": 5.945901639344262,
+        "y": 6.704252049180329
       },
       "isLocked": false,
       "linkedName": "HeadOnRemoveAlgae2"
     },
     {
       "anchor": {
-        "x": 7.432377049180327,
-        "y": 5.853125
+        "x": 7.240573770491803,
+        "y": 5.841137295081967
       },
       "prevControl": {
-        "x": 6.24559426229508,
-        "y": 6.032940573770492
+        "x": 6.053790983606556,
+        "y": 6.020952868852459
       },
       "nextControl": null,
       "isLocked": false,
@@ -37,6 +37,17 @@
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
+    {
+      "name": "IntakeAutoCommand",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "IntakeAutoCommand"
+        }
+      }
+    },
     {
       "name": "NetScoreCombo",
       "waypointRelativePos": 0.46185010128292336,

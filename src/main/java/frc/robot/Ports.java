@@ -9,6 +9,7 @@ import static frc.robot.Konstants.SwerveConstants.kBackRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightTurnMotorID;
 import static frc.robot.Konstants.kCANivoreName;
+import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftTurnMotorID;
@@ -24,6 +25,7 @@ import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
 import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.utils.CANPort;
 import frc.robot.utils.SKTrigger;
+import frc.robot.utils.filters.DeadbandFilter;
 import frc.robot.utils.filters.FilteredAxis;
 import frc.robot.utils.filters.FilteredXboxController;
 
@@ -128,8 +130,8 @@ public class Ports
         public static final SKTrigger kShoot = new SKTrigger(kOperator, kRightTrigger.value, AXIS);
 
         // Manual Joystick Controls
-        public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value));
-        public static final FilteredAxis kEndEffectorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value));
+        public static final FilteredAxis kElevatorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kLeftY.value), new DeadbandFilter(kJoystickDeadband));
+        public static final FilteredAxis kEndEffectorAxis = new FilteredAxis(() -> kOperator.getRawAxis(kRightY.value), new DeadbandFilter(kJoystickDeadband));
 
         // Misc.
         public static final SKTrigger kZeroPositionOperator  = new SKTrigger(kOperator, kStart.value, BUTTON);

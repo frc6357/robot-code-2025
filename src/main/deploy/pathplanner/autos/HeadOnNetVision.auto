@@ -71,6 +71,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "RemoveNWAlgae"
@@ -79,13 +85,13 @@
         {
           "type": "named",
           "data": {
-            "name": "LowAlgaePickupCombo"
+            "name": "HighAlgaePickupCombo"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AlignToCenterReefCommand"
+            "name": "AlignToCenterReefCommandAuto"
           }
         },
         {
