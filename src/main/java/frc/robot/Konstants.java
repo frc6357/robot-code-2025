@@ -731,7 +731,7 @@ public final class Konstants
                 public static double kCenterYSetpoint = 0.02;
                 public static double kLeftYSetpoint = -0.1958;
 
-                public static double kCoralXSetpoint = -0.57; //-0.54
+                public static double kCoralXSetpoint = -0.56; //-0.54
                 public static double kAlgaeXSetpoint = -0.40; //-0.45
                 public static double kFarXSetpoint = -1;
 
