@@ -732,7 +732,7 @@ public final class Konstants
                 public static double kLeftYSetpoint = -0.1958;
 
                 public static double kCoralXSetpoint = -0.57; //-0.54
-                public static double kAlgaeXSetpoint = -0.45;
+                public static double kAlgaeXSetpoint = -0.40; //-0.45
                 public static double kFarXSetpoint = -1;
 
                 public static double kRejectDistance = 1.4; // 1.4m
@@ -852,7 +852,7 @@ public final class Konstants
             /** Set the height to reach the net (Net) */
             kNetAngle(-80), //-90
             /** Set the height to reach the high algae (High Algae) */
-            kHighAlgae(-140), 
+            kHighAlgae(-150), 
             /** Set the height to reach the middle branch (L3) */
             kMiddleAngle(-173),
             /** Set the height to reach the low algae (Low Algae) */
