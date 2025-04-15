@@ -53,7 +53,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.0
+                  "waitTime": 0.9
                 }
               }
             ]
@@ -108,7 +108,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.0
+                  "waitTime": 0.8
                 }
               }
             ]
@@ -145,12 +145,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "HighAlgaePickupCombo"
-          }
-        },
-        {
           "type": "race",
           "data": {
             "commands": [
@@ -163,7 +157,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.0
+                  "waitTime": 0.8
                 }
               }
             ]
@@ -173,30 +167,6 @@
           "type": "named",
           "data": {
             "name": "IntakeAlgaeAutoCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeAlgaeAutoCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ToTrickshot3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ExtakeAutoCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ZeroPositionCommand"
           }
         }
       ]

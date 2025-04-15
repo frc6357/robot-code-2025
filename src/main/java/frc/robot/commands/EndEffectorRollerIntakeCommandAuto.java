@@ -16,7 +16,7 @@ public class EndEffectorRollerIntakeCommandAuto extends Command {
 
     public void initialize()
     {
-        Subsystem.runRoller(-kRollerSpeed);
+        Subsystem.runRoller(kRollerSpeed);
     }
 
     public void end(boolean interrupted)

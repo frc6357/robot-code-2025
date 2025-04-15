@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 6.950198863636363,
-        "y": 5.545667613636364
+        "x": 6.904918032786885,
+        "y": 5.5414446721311466
       },
       "prevControl": {
-        "x": 6.192357954545455,
-        "y": 5.605497159090909
+        "x": 6.1470771236959765,
+        "y": 5.601274217585692
       },
       "nextControl": null,
       "isLocked": false,
@@ -67,6 +67,17 @@
         "type": "named",
         "data": {
           "name": "NetScoreCombo"
+        }
+      }
+    },
+    {
+      "name": "ExtakeAutoCommand",
+      "waypointRelativePos": 0.9453072248480674,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ExtakeAutoCommand"
         }
       }
     }

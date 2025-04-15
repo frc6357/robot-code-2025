@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.23653409090909,
-        "y": 4.020014204545454
+        "x": 7.624180327868852,
+        "y": 3.5754610655737706
       },
       "isLocked": false,
       "linkedName": "Trickshot1"
@@ -33,13 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "StationPickupCombo",
+      "name": "HighAlgaePickupCombo",
       "waypointRelativePos": 0.007048458149785962,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "StationPickupCombo"
+          "name": "HighAlgaePickupCombo"
         }
       }
     }
@@ -53,13 +53,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.4,
     "rotation": 120.2564371635292
   },
   "reversed": false,
   "folder": "RemoveAlgae",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 0.1,
     "rotation": 29.197486046064544
   },
   "useDefaultConstraints": true

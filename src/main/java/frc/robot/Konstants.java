@@ -587,8 +587,8 @@ public final class Konstants
               public static final double kLevel2 = 32.5;//40
               public static final double kLevel3 = 48; 
               public static final double kLevel4 = 78; //79.5
-              public static final double kLowAlgae = 25;  
-              public static final double kHighAlgae = 37;  
+              public static final double kLowAlgae = 26;  //25 
+              public static final double kHighAlgae = 38;    //37
               public static final double kNet = 78; //75
               public static final double kIntake = 30;
               public static final double kFloor = 7.5;
