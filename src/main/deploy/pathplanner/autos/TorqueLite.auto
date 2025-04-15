@@ -23,6 +23,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "RemoveNorthAlgae"
@@ -35,21 +41,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AlignToCenterReefCommandAuto"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToCenterReefCommandAuto"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeAutoCommand"
+            "name": "IntakeAlgaeAutoCommand"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeAutoCommand"
+            "name": "IntakeAlgaeAutoCommand"
           }
         },
         {
@@ -77,21 +96,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AlignToCenterReefCommandAuto"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToCenterReefCommandAuto"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeAutoCommand"
+            "name": "IntakeAlgaeAutoCommand"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeAutoCommand"
+            "name": "IntakeAlgaeAutoCommand"
           }
         },
         {
@@ -119,21 +151,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AlignToCenterReefCommandAuto"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToCenterReefCommandAuto"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeAutoCommand"
+            "name": "IntakeAlgaeAutoCommand"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeAutoCommand"
+            "name": "IntakeAlgaeAutoCommand"
           }
         },
         {
