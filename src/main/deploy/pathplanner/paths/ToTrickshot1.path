@@ -3,72 +3,70 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.070799180327868,
-        "y": 5.0499487704918025
+        "x": 5.743636363636364,
+        "y": 4.020014204545454
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.945901639344262,
-        "y": 6.704252049180329
+        "x": 6.312017045454545,
+        "y": 3.990099431818182
       },
       "isLocked": false,
-      "linkedName": "HeadOnRemoveAlgae2"
+      "linkedName": "HeadOnRemoveAlgae1"
     },
     {
       "anchor": {
-        "x": 7.240573770491803,
-        "y": 5.841137295081967
+        "x": 7.159602272727272,
+        "y": 4.339105113636363
       },
       "prevControl": {
-        "x": 6.053790983606556,
-        "y": 6.020952868852459
+        "x": 6.591221590909091,
+        "y": 4.598366477272727
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HeadOnScoreNet2"
+      "linkedName": "Trickshot1"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.13848396501458127,
-      "rotationDegrees": -116.96100669859938
+      "waypointRelativePos": 0.21720116618075969,
+      "rotationDegrees": -178.523087948849
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "IntakeAutoCommand",
-      "waypointRelativePos": 0,
+      "name": "IntakeAlgaeAutoCommand",
+      "waypointRelativePos": 0.008102633355841724,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "IntakeAutoCommand"
+          "name": "IntakeAlgaeAutoCommand"
+        }
+      }
+    },
+    {
+      "name": "IntakeAlgaeAutoCommand",
+      "waypointRelativePos": 0.08,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "IntakeAlgaeAutoCommand"
         }
       }
     },
     {
       "name": "NetScoreCombo",
-      "waypointRelativePos": 0.46185010128292336,
+      "waypointRelativePos": 0.5955947136563827,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "parallel",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "NetScoreCombo"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakeAutoCommand"
-              }
-            }
-          ]
+          "name": "NetScoreCombo"
         }
       }
     }
@@ -82,14 +80,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 0.0,
+    "rotation": 29.197486046064544
   },
   "reversed": false,
   "folder": "NothingButNet",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.2913621709842
+    "rotation": 179.5488614532127
   },
   "useDefaultConstraints": true
 }

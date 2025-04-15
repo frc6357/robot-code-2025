@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 6.305532786885245,
+        "x": 6.002897727272727,
         "y": 4.019006147540983
       },
       "prevControl": {
-        "x": 6.555532786885245,
+        "x": 6.252897727272727,
         "y": 4.019006147540983
       },
       "nextControl": null,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "L4ScoreCombo",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0.01,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -60,14 +60,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.6,
+    "velocity": 0.0,
     "rotation": 180.0
   },
   "reversed": false,
   "folder": "P2",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 179.896568035757
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

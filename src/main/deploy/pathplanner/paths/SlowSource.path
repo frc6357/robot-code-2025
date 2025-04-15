@@ -3,35 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.144672131147541,
-        "y": 5.073924180327869
+        "x": 5.763579545454545,
+        "y": 4.1695880681818185
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.815098267511177,
-        "y": 5.233169942250372
+        "x": 7.744057377049179,
+        "y": 6.296670081967212
       },
       "isLocked": false,
-      "linkedName": "HeadOnScoreNet1"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.255028409090909,
-        "y": 5.316321022727273
+        "x": 1.5823770491803275,
+        "y": 7.44748975409836
       },
       "prevControl": {
-        "x": 5.687893535767512,
-        "y": 5.08100782414307
+        "x": 2.096867548430093,
+        "y": 7.30884104881068
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "NWReefReady"
+      "linkedName": "SlowBargeSource"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "StationWaitCombo",
+      "waypointRelativePos": 0.6519823788546244,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "StationWaitCombo"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 126.86989764584403
   },
   "reversed": false,
-  "folder": "RemoveAlgae",
+  "folder": "CollectCoral",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -179.09061955080088
   },
   "useDefaultConstraints": true
 }

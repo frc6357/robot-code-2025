@@ -3,35 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.070799180327868,
-        "y": 5.0499487704918025
+        "x": 5.1054545454545455,
+        "y": 2.943082386363636
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.945901639344262,
-        "y": 6.704252049180329
+        "x": 5.693778409090909,
+        "y": 1.5969176136363625
       },
       "isLocked": false,
-      "linkedName": "HeadOnRemoveAlgae2"
+      "linkedName": "HeadOnRemoveAlgae3"
     },
     {
       "anchor": {
-        "x": 7.240573770491803,
-        "y": 5.841137295081967
+        "x": 6.940881147540983,
+        "y": 4.978022540983606
       },
       "prevControl": {
-        "x": 6.053790983606556,
-        "y": 6.020952868852459
+        "x": 7.3653548807749605,
+        "y": 4.01663585134128
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HeadOnScoreNet2"
+      "linkedName": "Trickshot2"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.13848396501458127,
-      "rotationDegrees": -116.96100669859938
+      "waypointRelativePos": 0.053935860058312954,
+      "rotationDegrees": 119.51902804298247
     }
   ],
   "constraintZones": [],
@@ -39,7 +39,18 @@
   "eventMarkers": [
     {
       "name": "IntakeAutoCommand",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.01,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "IntakeAutoCommand"
+        }
+      }
+    },
+    {
+      "name": "IntakeAutoCommand",
+      "waypointRelativePos": 0.09,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -50,25 +61,12 @@
     },
     {
       "name": "NetScoreCombo",
-      "waypointRelativePos": 0.46185010128292336,
+      "waypointRelativePos": 0.7083700440528596,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "parallel",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "NetScoreCombo"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakeAutoCommand"
-              }
-            }
-          ]
+          "name": "NetScoreCombo"
         }
       }
     }
@@ -82,14 +80,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 0.6,
+    "rotation": -0.3292389664604458
   },
   "reversed": false,
   "folder": "NothingButNet",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.2913621709842
+    "rotation": 119.24882633654701
   },
   "useDefaultConstraints": true
 }

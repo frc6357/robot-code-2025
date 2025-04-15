@@ -3,35 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.144672131147541,
-        "y": 5.073924180327869
+        "x": 1.5823770491803275,
+        "y": 7.44748975409836
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.815098267511177,
-        "y": 5.233169942250372
+        "x": 2.5396497764479764,
+        "y": 7.387660208646746
       },
       "isLocked": false,
-      "linkedName": "HeadOnScoreNet1"
+      "linkedName": "SlowBargeSource"
     },
     {
       "anchor": {
-        "x": 5.255028409090909,
-        "y": 5.316321022727273
+        "x": 6.002897727272727,
+        "y": 4.019006147540983
       },
       "prevControl": {
-        "x": 5.687893535767512,
-        "y": 5.08100782414307
+        "x": 8.037102272727275,
+        "y": 7.031434659090909
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "NWReefReady"
+      "linkedName": "NReefReady"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "L4ScoreCombo",
+      "waypointRelativePos": 0.7136563876651958,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "L4ScoreCombo"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "RemoveAlgae",
+  "folder": "ScoreFromStation",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 126.86989764584403
   },
   "useDefaultConstraints": true
 }

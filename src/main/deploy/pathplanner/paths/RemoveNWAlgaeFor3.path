@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.144672131147541,
-        "y": 5.073924180327869
+        "x": 6.940881147540983,
+        "y": 4.978022540983606
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.815098267511177,
-        "y": 5.233169942250372
+        "x": 6.773053278688524,
+        "y": 6.1648053278688515
       },
       "isLocked": false,
-      "linkedName": "HeadOnScoreNet1"
+      "linkedName": "Trickshot2"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 5.316321022727273
       },
       "prevControl": {
-        "x": 5.687893535767512,
-        "y": 5.08100782414307
+        "x": 5.857410581222058,
+        "y": 5.430013505961252
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,19 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "HighAlgaePickupCombo",
+      "waypointRelativePos": 0.012334801762115637,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "HighAlgaePickupCombo"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -47,8 +59,8 @@
   "reversed": false,
   "folder": "RemoveAlgae",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 0.6,
+    "rotation": -0.3292389664604458
   },
   "useDefaultConstraints": true
 }

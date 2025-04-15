@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.108709016393442,
-        "y": 5.6613217213114755
+        "x": 7.159602272727272,
+        "y": 4.339105113636363
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.58125,
-        "y": 5.6613217213114755
+        "x": 7.624180327868852,
+        "y": 3.5754610655737706
       },
       "isLocked": false,
-      "linkedName": "VisionBargeStart"
+      "linkedName": "Trickshot1"
     },
     {
       "anchor": {
-        "x": 5.255028409090909,
-        "y": 5.316321022727273
+        "x": 5.245056818181819,
+        "y": 2.713735795454545
       },
       "prevControl": {
-        "x": 5.698573491058123,
-        "y": 5.328308727645306
+        "x": 5.763579545454546,
+        "y": 2.6738494318181814
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "NWReefReady"
+      "linkedName": "NEReefReady"
     }
   ],
   "rotationTargets": [],
@@ -33,10 +33,15 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L4ScoreCombo",
-      "waypointRelativePos": 0.4069325735992328,
+      "name": "HighAlgaePickupCombo",
+      "waypointRelativePos": 0.007048458149785962,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "HighAlgaePickupCombo"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -48,14 +53,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -119.99999999999999
+    "velocity": 0.4,
+    "rotation": 120.2564371635292
   },
   "reversed": false,
-  "folder": null,
+  "folder": "RemoveAlgae",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": -179.56223967715903
+    "velocity": 0.1,
+    "rotation": 29.197486046064544
   },
   "useDefaultConstraints": true
 }

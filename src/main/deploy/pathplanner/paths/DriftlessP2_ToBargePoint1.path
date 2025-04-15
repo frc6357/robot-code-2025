@@ -60,7 +60,7 @@
   "folder": "Driftless",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 179.896568035757
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

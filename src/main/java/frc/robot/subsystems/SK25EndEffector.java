@@ -184,7 +184,12 @@ public class SK25EndEffector extends SubsystemBase
         mEncoder.setPosition(0);
     }
 
-    public void setTargetAngle(double angleDegrees)
+    public void setTargetAngle(EndEffectorPosition position) {
+        setTargetAngle(position.angle);
+        isL4 = position == EndEffectorPosition.kTopPositionAngle;
+    }
+
+    private void setTargetAngle(double angleDegrees)
     {
         mTargetAngle = angleDegrees;
         SmartDashboard.putNumber("EffectorTargetAngle", mTargetAngle);
@@ -213,6 +218,12 @@ public class SK25EndEffector extends SubsystemBase
         double motorRotations = mEncoder.getPosition();
         double angle = motorRotations / motorRatio * degrees;
         return angle;
+    }
+
+    private boolean isL4 = false;
+
+    public boolean isL4() {
+        return this.isL4;
     }
 
     public double getTargetArmPosition()

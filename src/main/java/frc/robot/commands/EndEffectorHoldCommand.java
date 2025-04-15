@@ -1,12 +1,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.subsystems.SK25EndEffector;
 
 public class EndEffectorHoldCommand extends Command{
     private final SK25EndEffector endeffector;
-    double position;
-    public EndEffectorHoldCommand(double position, SK25EndEffector endeffector)
+    EndEffectorPosition position;
+    public EndEffectorHoldCommand(EndEffectorPosition position, SK25EndEffector endeffector)
     {
         this.endeffector = endeffector;
         this.position = position;
@@ -19,7 +20,6 @@ public class EndEffectorHoldCommand extends Command{
     @Override
     public void execute()
     {
-
         endeffector.setTargetAngle(position);
     }
 

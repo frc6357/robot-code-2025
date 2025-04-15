@@ -587,8 +587,8 @@ public final class Konstants
               public static final double kLevel2 = 32.5;//40
               public static final double kLevel3 = 48; 
               public static final double kLevel4 = 78; //79.5
-              public static final double kLowAlgae = 25;  
-              public static final double kHighAlgae = 37;  
+              public static final double kLowAlgae = 26;  //25 
+              public static final double kHighAlgae = 38;    //37
               public static final double kNet = 78; //75
               public static final double kIntake = 30;
               public static final double kFloor = 7.5;
@@ -727,12 +727,12 @@ public final class Konstants
         public static final class AlignmentConstants {
                 public static double kRotSetpoint = 0.0;
 
-                public static double kRightYSetpoint = 0.2;
+                public static double kRightYSetpoint = 0.165; //0.2
                 public static double kCenterYSetpoint = 0.02;
                 public static double kLeftYSetpoint = -0.1958;
 
-                public static double kCoralXSetpoint = -0.54;
-                public static double kAlgaeXSetpoint = -0.45;
+                public static double kCoralXSetpoint = -0.56; //-0.54
+                public static double kAlgaeXSetpoint = -0.40; //-0.45
                 public static double kFarXSetpoint = -1;
 
                 public static double kRejectDistance = 1.4; // 1.4m
@@ -852,7 +852,7 @@ public final class Konstants
             /** Set the height to reach the net (Net) */
             kNetAngle(-80), //-90
             /** Set the height to reach the high algae (High Algae) */
-            kHighAlgae(-140), 
+            kHighAlgae(-150), 
             /** Set the height to reach the middle branch (L3) */
             kMiddleAngle(-173),
             /** Set the height to reach the low algae (Low Algae) */

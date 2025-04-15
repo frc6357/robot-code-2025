@@ -6,6 +6,7 @@ package frc.robot;
 
 import static frc.robot.Konstants.ClimbConstants.kKrakenSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
+import static frc.robot.Konstants.EndEffectorConstants.kRollerSuperSpeed;
 
 import java.io.File;
 import java.io.IOException;
@@ -278,6 +279,7 @@ public class RobotContainer extends Robot{
 
                 //NamedCommands.registerCommand("IntakeAutoCommand", new IntakeAutoCommand(EndEffectorPosition.kIntakePositionAngle, effector));
                 NamedCommands.registerCommand("IntakeAutoCommand", effector.runRollerCommand(kRollerSpeed));
+                NamedCommands.registerCommand("IntakeAlgaeAutoCommand", effector.runRollerCommand(kRollerSuperSpeed));
                 NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));
                 NamedCommands.registerCommand("L4ExtakeAutoCommand", Commands.parallel(
                     new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),

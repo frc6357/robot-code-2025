@@ -1,6 +1,5 @@
 package frc.robot.bindings;
 
-import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.ElevatorSetpoints.kLevel4;
 // Joystick constants
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
@@ -33,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.ElevatorSetpoints;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 
 // Unused imports
@@ -49,8 +49,8 @@ import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.commands.EndEffectorButtonCommand;
 // Intake / eject commands
 import frc.robot.commands.EndEffectorJoystickCommand;
-import frc.robot.commands.EndEffectorRollerScoreCommand;
 import frc.robot.commands.EndEffectorRollerIntakeCommand;
+import frc.robot.commands.EndEffectorRollerOutputCommand;
 import frc.robot.commands.EndEffectorRollerStopCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.SK25EndEffector;
@@ -124,21 +124,23 @@ public class SK25EndEffectorBinder implements CommandBinder {
             floorAlgae.onTrue(Commands.sequence(new WaitCommand(0.5), new EndEffectorButtonCommand(EndEffectorPosition.kFloorAngle, endEffector)));
             
             
-            RollerIntake.onTrue(new EndEffectorRollerScoreCommand(endEffector, m_elevator));
-            // RollerIntake.onTrue(
-            //     Commands.either(
-            //         Commands.parallel(
-            //             new EndEffectorRollerIntakeCommand(endEffector, m_elevator),
-            //             Commands.sequence(
-            //                 Commands.waitSeconds(0.2),
-            //                 new InstantCommand(() -> endEffector.setTargetAngle(EndEffectorPosition.kIntakePositionAngle.angle))
-            //             )
-            //         ),
-            //         new EndEffectorRollerScoreCommand(endEffector, m_elevator),
-            //         () -> (m_elevator.elevatorCurrentTarget == kLevel4)
-            //     )
-            // );
-            RollerOutPut.whileTrue(new EndEffectorRollerIntakeCommand(endEffector, m_elevator));
+            // RollerIntake.onTrue(new EndEffectorRollerScoreCommand(endEffector, m_elevator));
+            RollerOutPut.onTrue(
+                Commands.either(
+                    Commands.parallel(
+                        new EndEffectorRollerIntakeCommand(endEffector, m_elevator),
+                        Commands.sequence(
+                            Commands.waitSeconds(0.25),
+                            new InstantCommand(() -> endEffector.setTargetAngle(EndEffectorPosition.kIntakePositionAngle))
+                        )
+                    ),
+                    new EndEffectorRollerIntakeCommand(endEffector, m_elevator),
+                    () -> {
+                        return (m_elevator.elevatorCurrentTarget == ElevatorSetpoints.kLevel4 && endEffector.isL4());
+                    }
+                )
+            );
+            RollerIntake.whileTrue(new EndEffectorRollerOutputCommand(endEffector, m_elevator));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
             RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
 
