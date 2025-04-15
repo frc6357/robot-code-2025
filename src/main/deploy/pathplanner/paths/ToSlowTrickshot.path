@@ -1,0 +1,104 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.793494318181818,
+        "y": 4.159616477272727
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.509323770491802,
+        "y": 4.162858606557377
+      },
+      "isLocked": false,
+      "linkedName": "LeftNL4Scored"
+    },
+    {
+      "anchor": {
+        "x": 6.892930327868852,
+        "y": 4.882120901639344
+      },
+      "prevControl": {
+        "x": 6.677151639344262,
+        "y": 4.258760245901639
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "SlowTrickshot"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.15160349854227256,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "IntakeAutoCommand",
+      "waypointRelativePos": 0.01,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "IntakeAutoCommand"
+        }
+      }
+    },
+    {
+      "name": "IntakeAutoCommand",
+      "waypointRelativePos": 0.09,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "IntakeAutoCommand"
+        }
+      }
+    },
+    {
+      "name": "NetScoreCombo",
+      "waypointRelativePos": 0.25658338960162985,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "NetScoreCombo"
+        }
+      }
+    },
+    {
+      "name": "ExtakeAutoCommand",
+      "waypointRelativePos": 0.9020931802835759,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ExtakeAutoCommand"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "NothingButNet",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

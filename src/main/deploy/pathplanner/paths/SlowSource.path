@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.763579545454545,
-        "y": 4.1695880681818185
+        "x": 5.76608606557377,
+        "y": 3.87515368852459
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.744057377049179,
-        "y": 6.296670081967212
+        "x": 7.746563897168404,
+        "y": 6.002235702309983
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.5823770491803275,
-        "y": 7.44748975409836
+        "x": 1.4145491803278687,
+        "y": 7.195747950819672
       },
       "prevControl": {
-        "x": 2.096867548430093,
-        "y": 7.30884104881068
+        "x": 1.9290396795776346,
+        "y": 7.057099245531992
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "StationWaitCombo",
-      "waypointRelativePos": 0.6519823788546244,
+      "waypointRelativePos": 0.5941931127616523,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -45,7 +45,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -62,5 +62,5 @@
     "velocity": 0,
     "rotation": -179.09061955080088
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

@@ -12,16 +12,16 @@
         "y": 4.092705511326203
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LeftNL4Scored"
     },
     {
       "anchor": {
-        "x": 6.002897727272727,
-        "y": 4.019006147540983
+        "x": 6.149692622950819,
+        "y": 4.019
       },
       "prevControl": {
-        "x": 5.767054990074018,
-        "y": 4.1019410817401525
+        "x": 5.91384988575211,
+        "y": 4.1019349341991695
       },
       "nextControl": null,
       "isLocked": false,

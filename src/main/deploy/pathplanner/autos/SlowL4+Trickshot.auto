@@ -1,0 +1,154 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P2_VisionToHeadOnPoint1"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.9
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToLeftReefCommandAuto"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ZeroPositionCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SlowSource"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationWaitCombo"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ZeroPositionCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SlowScore"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.9
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToRightReefCommandAuto"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LowAlgaePickupCombo"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RemoveNorthAlgae"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.9
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToCenterReefCommandAuto"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeAlgaeAutoCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToSlowTrickshot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ZeroPositionCommand"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "VisionAutos",
+  "choreoAuto": false
+}

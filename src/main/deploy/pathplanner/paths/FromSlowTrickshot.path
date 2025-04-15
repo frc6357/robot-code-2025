@@ -3,69 +3,69 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4145491803278687,
-        "y": 7.195747950819672
+        "x": 6.892930327868852,
+        "y": 4.882120901639344
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3718219075955176,
-        "y": 7.135918405368058
+        "x": 7.732069672131147,
+        "y": 7.855071721311475
       },
       "isLocked": false,
-      "linkedName": "SlowBargeSource"
+      "linkedName": "SlowTrickshot"
     },
     {
       "anchor": {
-        "x": 6.149692622950819,
-        "y": 4.019
+        "x": 1.4145491803278687,
+        "y": 7.195747950819672
       },
       "prevControl": {
-        "x": 8.183897168405366,
-        "y": 7.031428511549925
+        "x": 2.19375,
+        "y": 7.075870901639344
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "NReefReady"
+      "linkedName": "SlowBargeSource"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.321961620469081,
-      "rotationDegrees": 180.0
+      "waypointRelativePos": 0.23880597014925659,
+      "rotationDegrees": 132.8230719486353
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L4ScoreCombo",
-      "waypointRelativePos": 0.7886563133018194,
+      "name": "StationWaitCombo",
+      "waypointRelativePos": 0.6671168129642226,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "L4ScoreCombo"
+          "name": "StationWaitCombo"
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.5,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 126.86989764584403
   },
   "reversed": false,
-  "folder": "ScoreFromStation",
+  "folder": "CollectCoral",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 126.86989764584403
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }
