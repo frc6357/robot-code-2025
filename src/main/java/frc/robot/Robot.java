@@ -95,7 +95,8 @@ public class Robot extends LoggedRobot
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
 
-        // climb = RobotContainer.m_climb;
+        if (m_robotContainer.m_climbContainer.isPresent())
+            climb = RobotContainer.m_climb;
 
 
         //get the saved elastic dashboard layout
@@ -202,7 +203,8 @@ public class Robot extends LoggedRobot
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
         //deploy climb to save time at the end of match (stopped in autonomousPeriodic()).
-        // climb.runMotor(kKrakenSpeed);
+        if (m_robotContainer.m_climbContainer.isPresent())
+            climb.runMotor(kKrakenSpeed);
 
         /*
          * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -225,8 +227,9 @@ public class Robot extends LoggedRobot
     public void autonomousPeriodic()
     {
         //stop at the climb position
-        // if (climb.getMotorPosition() >= kClimbReadyPos)
-        // climb.stop();
+        if (m_robotContainer.m_climbContainer.isPresent())
+            if (climb.getMotorPosition() >= kClimbReadyPos)
+                climb.stop();
     }
 
     @Override
