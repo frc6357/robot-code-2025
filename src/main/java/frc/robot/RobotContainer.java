@@ -389,7 +389,7 @@ public class RobotContainer extends Robot{
      */
     public Command getAutonomousCommand()
     {
-        return autoCommandSelector.getSelected();
+        return Commands.sequence(Commands.waitSeconds(0.01), autoCommandSelector.getSelected());
     }
 
     

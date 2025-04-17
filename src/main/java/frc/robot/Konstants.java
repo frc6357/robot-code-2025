@@ -591,7 +591,7 @@ public final class Konstants
               public static final double kHighAlgae = 38;    //37
               public static final double kNet = 78; //75
               public static final double kIntake = 30;
-              public static final double kFloor = 7.5;
+              public static final double kFloor = 7;
             }
 
             public static final class CoralSubsystem {
@@ -727,7 +727,7 @@ public final class Konstants
         public static final class AlignmentConstants {
                 public static double kRotSetpoint = 0.0;
 
-                public static double kRightYSetpoint = 0.165; //0.2
+                public static double kRightYSetpoint = 0.185; //0.2
                 public static double kCenterYSetpoint = 0.02;
                 public static double kLeftYSetpoint = -0.1958;
 
