@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.899,
-        "y": 6.98
+        "x": 0.9350409836065574,
+        "y": 6.872079918032787
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6183401639344261,
-        "y": 6.620338114754098
+        "x": 1.6543811475409835,
+        "y": 6.512418032786885
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "VisionBargeSideSource"
     },
     {
       "anchor": {
-        "x": 3.456,
-        "y": 5.745
+        "x": 3.65625,
+        "y": 5.42156762295082
       },
       "prevControl": {
-        "x": 2.9249999999999994,
-        "y": 5.98498975409836
+        "x": 3.1252499999999994,
+        "y": 5.6615573770491805
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "VisionBargePoint3"
     }
   ],
   "rotationTargets": [],
