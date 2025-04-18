@@ -894,7 +894,7 @@ public final class Konstants
        public static final double kArmSpeed = 0.1; // rot/sec; often only used in Joystick control; Button control uses PID
        public static final double kRollerSpeed = 0.7;
        public static final double kRollerSlowSpeed = 0.35;
-       public static final double kRollerSuperSpeed = 1.0;
+       public static final double kRollerSuperSpeed = 0.8;
        public static final double kRollerStop = 0;
 
        /* Current Limits */

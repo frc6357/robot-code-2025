@@ -104,6 +104,8 @@ public class Robot extends LoggedRobot
 
         kDriver.setRumble(RumbleType.kBothRumble, 0.0);
         kOperator.setRumble(RumbleType.kBothRumble, 0.0);
+
+        FollowPathCommand.warmupCommand().schedule();
     }
 
     /**
