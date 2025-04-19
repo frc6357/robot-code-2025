@@ -316,6 +316,26 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         updatePoseTeleop();
     }
 
+    public boolean reefTargetCloseIgnoreAlliance(Limelight ll) {
+        if(!ll.targetInView()) {
+            return false;
+        }
+
+        double closestTagID = ll.getClosestTagID();
+        if(closestTagID == 0) {
+            return false;
+        }
+
+        boolean redTagFound = closestTagID <= redReefTagIDs[5] && closestTagID >= redReefTagIDs[0];
+        boolean blueTagFound = closestTagID <= blueReefTagIDs[5] && closestTagID >= blueReefTagIDs[0];
+
+        if(redTagFound || blueTagFound) {
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean reefTargetClose(Limelight ll) { 
         if(!ll.targetInView()) {
             return false;

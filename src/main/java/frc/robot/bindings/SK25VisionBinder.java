@@ -8,8 +8,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveToReef.DriveToReefPoseCommand;
 import frc.robot.commands.AlignToReefTag;
+import frc.robot.commands.commandGroups.AlignToAnyReefComboTeleop;
 import frc.robot.commands.commandGroups.AlignToReefComboTeleop;
 import static frc.robot.commands.AlignToReefTag.Target;
+import static frc.robot.commands.AlignToAnyReefTag.AnyTarget;
+
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
 import static frc.robot.subsystems.vision.SK25Vision.DriveToPose;
@@ -23,6 +26,7 @@ import static frc.robot.Ports.DriverPorts.kRightReef;
 import static frc.robot.Ports.DriverPorts.kVisionOff;
 import static frc.robot.Ports.DriverPorts.kVisionOn;
 import static frc.robot.Ports.DriverPorts.kForceResetPoseToVision;
+import static frc.robot.Ports.DriverPorts.kAlignToAnyReef;
 
 
 public class SK25VisionBinder implements CommandBinder {
@@ -30,6 +34,7 @@ public class SK25VisionBinder implements CommandBinder {
     Optional<SKSwerve> m_swerveContainer;
 
     Trigger alignToReef;
+    Trigger alignToAnyReef;
     Trigger leftReef;
     Trigger rightReef;
     Trigger forceResetPoseToVision;
@@ -45,6 +50,7 @@ public class SK25VisionBinder implements CommandBinder {
         this.visionOff = kVisionOff.button;
         this.visionOn = kVisionOn.button;
         this.alignToReef = kAlignToReef.button;
+        this.alignToAnyReef = kAlignToAnyReef.button;
         this.leftReef = kLeftReef.button;
         this.rightReef = kRightReef.button;
         this.forceResetPoseToVision = kForceResetPoseToVision.button;
@@ -75,6 +81,14 @@ public class SK25VisionBinder implements CommandBinder {
                     DriveToPose.getConfig(),
                     RotateToPose.getConfig(),
                     m_vision,
+                    m_swerve)
+            );
+            alignToAnyReef.and(visionEnabled).whileTrue(
+                new AlignToAnyReefComboTeleop(
+                    AnyTarget.ANY_CENTER, 
+                    DriveToPose.getConfig(), 
+                    RotateToPose.getConfig(), 
+                    m_vision, 
                     m_swerve)
             );
             leftReef.and(visionEnabled).whileTrue(
