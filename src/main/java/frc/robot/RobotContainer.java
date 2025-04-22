@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import static frc.robot.Konstants.ClimbConstants.kKrakenSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSuperSpeed;
 
@@ -19,16 +18,12 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.PathPlannerPath;
 
-import static frc.robot.Ports.DriverPorts.kDriver;
-import static frc.robot.Ports.OperatorPorts.kOperator;
 
 //import choreo.auto.AutoChooser;
 //import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -68,8 +63,6 @@ import frc.robot.subsystems.SK25EndEffector;
 import frc.robot.subsystems.SK25Lights;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.utils.SubsystemControls;
-import frc.robot.utils.files.Elastic;
-import frc.robot.utils.files.Elastic.Notification.NotificationLevel;
 import frc.robot.utils.filters.FilteredJoystick;
 
 

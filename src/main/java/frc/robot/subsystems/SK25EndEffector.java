@@ -5,7 +5,6 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 import static frc.robot.Konstants.AutoConstants.kIntakeAutoDurationSeconds;
 //import static frc.robot.Konstants.AutoConstants.kIntakeAutoSpeed;
-import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.elevatorConfig;
 import static frc.robot.Konstants.EndEffectorConstants.kArmD;
 import static frc.robot.Konstants.EndEffectorConstants.kArmFF;
 import static frc.robot.Konstants.EndEffectorConstants.kArmI;

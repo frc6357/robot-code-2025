@@ -6,8 +6,6 @@ import java.util.Optional;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DriveToReef.DriveToReefPoseCommand;
-import frc.robot.commands.AlignToReefTag;
 import frc.robot.commands.commandGroups.AlignToReefComboTeleop;
 import static frc.robot.commands.AlignToReefTag.Target;
 import frc.robot.subsystems.SKSwerve;

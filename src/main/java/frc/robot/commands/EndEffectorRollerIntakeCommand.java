@@ -7,7 +7,6 @@ import frc.robot.subsystems.SK25EndEffector;
 
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSlowSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
-import static frc.robot.Konstants.EndEffectorConstants.kRollerSuperSpeed;
 
 
 public class EndEffectorRollerIntakeCommand extends Command {

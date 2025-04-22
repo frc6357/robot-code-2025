@@ -1,13 +1,11 @@
 package frc.robot.commands;
 
-import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.kElevatorHeightBottomLimit;
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.kElevatorHeightTopLimit;
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.kManualElevatorDeadband;
 import static frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.CoralSubsystem.kManualElevatorSpeedScalar;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralSubsystem;
 
