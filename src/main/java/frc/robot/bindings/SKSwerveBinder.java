@@ -82,7 +82,7 @@ public class SKSwerveBinder implements CommandBinder{
     //private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
 
-    public SKSwerveBinder(Optional<SKSwerve> m_drive, Optional<SK25Elevator> m_elevator) {
+    public SKSwerveBinder(Optional<SKSwerve> m_drive) {
         this.m_drive = m_drive;
         //slow mode is initialy deactivated
         this.slowModeStatus = false;
@@ -236,7 +236,8 @@ public class SKSwerveBinder implements CommandBinder{
             drivetrain.applyRequest(() -> {
                 return feildCentricDrive.withVelocityX(applyGains(-MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercent)) // Drive forward with negative Y (forward)
                     .withVelocityY(applyGains(-MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercent)) // Drive left with negative X (left)
-                    .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModeRotationPercent)); // Drive counterclockwise with negative X (left)
+                    //TODO: Manual driving with the rotation stick is capped at 50% specifically for 
+                    .withRotationalRate(0.5 * applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModeRotationPercent)); // Drive counterclockwise with negative X (left)
             })
         );
     }

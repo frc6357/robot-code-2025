@@ -76,6 +76,14 @@ public class Ports
         public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kRightStick.value, BUTTON);
 
         // Party mode
+
+        // Outreach-specific bindings
+        public static final SKTrigger kGroundAlgae = new SKTrigger(kDriver, kA.value, BUTTON);
+        public static final SKTrigger kIntakePos = new SKTrigger(kDriver, kB.value, BUTTON);
+        public static final SKTrigger kEject = new SKTrigger(kDriver, kY.value, BUTTON); // Eject at barge speed
+        public static final SKTrigger kAutoRotate = new SKTrigger(kDriver, kBack.value, BUTTON);
+        public static final SKTrigger kIntake = new SKTrigger(kDriver, kX.value, BUTTON);
+        public static final SKTrigger kZeroPosition = new SKTrigger(kDriver, kStart.value, BUTTON);
         
 
     }

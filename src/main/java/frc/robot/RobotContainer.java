@@ -38,6 +38,7 @@ import frc.robot.bindings.RevBindings;
 //import frc.robot.utils.SK25AutoBuilder;
 import frc.robot.bindings.SK25EndEffectorBinder;
 import frc.robot.bindings.SK25LightsBinder;
+import frc.robot.bindings.SK25OutreachBinder;
 // import frc.robot.bindings.SK25ScoringBinder;
 import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.commands.AlignToReefTag.Target;
@@ -192,18 +193,28 @@ public class RobotContainer extends Robot{
      */
     private void configureButtonBindings()
     {
-        buttonBinders.add(new SKSwerveBinder(m_swerveContainer, m_elevatorContainer));
-        // buttonBinders.add(new SK25ElevatorBinder(m_elevator));
-        buttonBinders.add(new SK25LightsBinder(m_lightsContainer));
-        buttonBinders.add(new RevBindings(m_coralContainer));
+        // buttonBinders.add(new SKSwerveBinder(m_swerveContainer));
+        // // buttonBinders.add(new SK25ElevatorBinder(m_elevator));
+        // buttonBinders.add(new SK25LightsBinder(m_lightsContainer));
+        // buttonBinders.add(new RevBindings(m_coralContainer));
 
-        // Adding all the binding classes to the list
-        buttonBinders.add(new ClimbBinder(m_climbContainer));
-        buttonBinders.add(new SK25EndEffectorBinder(m_endEffectorContainer, m_coralContainer));
-        // buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
-        buttonBinders.add(new SK25VisionBinder(m_visionContainer, m_swerveContainer));
+        // // Adding all the binding classes to the list
+        // buttonBinders.add(new ClimbBinder(m_climbContainer));
+        // buttonBinders.add(new SK25EndEffectorBinder(m_endEffectorContainer, m_coralContainer));
+        // // buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
+        // buttonBinders.add(new SK25VisionBinder(m_visionContainer, m_swerveContainer));
 
         // Traversing through all the binding classes to actually bind the buttons
+
+        buttonBinders.add(
+            new SK25OutreachBinder(
+                m_swerveContainer, 
+                m_visionContainer, 
+                m_coralContainer, 
+                m_endEffectorContainer, 
+                m_climbContainer)
+        );
+        
         for (CommandBinder subsystemGroup : buttonBinders)
         {
             subsystemGroup.bindButtons();
