@@ -156,9 +156,7 @@ public final class Konstants
     // This needs to be tuned to your individual robot
     public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.73);
 
-    //TODO: MaxSpeed has a 30% cap on it for outreach driving
-    public static double MaxSpeed = kSpeedAt12Volts.in(MetersPerSecond) * 0.3; // kSpeedAt12Volts desired top speed
-
+    public static double MaxSpeed = kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     public static double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
     public static double MaxAngularRateDeg = RadiansPerSecond.of(MaxAngularRate).in(DegreesPerSecond);
 
