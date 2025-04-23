@@ -1,6 +1,7 @@
 package frc.robot.commands.commandGroups;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import static frc.robot.commands.AlignToReefTag.Target;
 import frc.robot.subsystems.vision.SK25Vision.MultiLimelightCommandConfig;

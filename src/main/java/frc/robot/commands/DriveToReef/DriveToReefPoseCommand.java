@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommand;
+import frc.robot.preferences.Pref;
+import frc.robot.preferences.SKPreferences;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
 import frc.robot.subsystems.vision.SK25Vision.MultiLimelightCommandConfig;
@@ -24,8 +26,11 @@ import static frc.robot.Ports.DriverPorts.kDriver;
 import static frc.robot.Ports.OperatorPorts.kOperator;
 import static frc.robot.Ports.DriverPorts.kSlowMode;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
+import static frc.robot.Konstants.OIConstants.kSlowModePercent;
+import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;
 
 
+import frc.robot.Konstants.TunerConstants;
 import frc.robot.Konstants.VisionConstants.PoseConstants;
 
 public class DriveToReefPoseCommand extends Command{
