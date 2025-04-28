@@ -45,7 +45,7 @@ import frc.robot.bindings.SK25EndEffectorBinder;
 import frc.robot.bindings.SK25LightsBinder;
 // import frc.robot.bindings.SK25ScoringBinder;
 import frc.robot.bindings.SKSwerveBinder;
-import frc.robot.commands.AlignToReefTag.Target;
+import frc.robot.commands.VisionCommands.AlignToReefTag.Target;
 import frc.robot.commands.GoToSource.GoToBargeSourceFromN;
 import frc.robot.commands.GoToSource.GoToBargeSourceFromNW;
 import frc.robot.commands.GoToSource.GoToBargeSourceFromS;
