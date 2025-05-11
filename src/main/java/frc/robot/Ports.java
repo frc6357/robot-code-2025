@@ -50,17 +50,26 @@ public class Ports
         public static final FilteredAxis kVelocityOmegaPort = new FilteredAxis(() -> kDriver.getRawAxis(kRightX.value)); 
 
         public static final SKTrigger climbRaiseButton = new SKTrigger(kDriver, 270, POV);
-        public static final SKTrigger climbLowerButton = new SKTrigger(kDriver, 90, POV);
+        //public static final SKTrigger climbLowerButton = new SKTrigger(kDriver, 90, POV);
         // public static final SKTrigger climbStopButton = new SKTrigger(kDriver, 90, POV);
         // public static final SKTrigger climbSlowButton = new SKTrigger(kDriver, 270, POV);
+
+        // Extra driver controller additions
+        public static final SKTrigger kTopBranchEffectorDriver = new SKTrigger(kDriver, 0, POV);
+        public static final SKTrigger kMiddleBranchEffectorDriver = new SKTrigger(kDriver, 90, POV);
+        public static final SKTrigger kLowBranchEffectorDriver = new SKTrigger(kDriver, 180, POV);
+        public static final SKTrigger kLowAlgaeDriver = new SKTrigger(kDriver, kA.value, BUTTON);
+        public static final SKTrigger kIntakeDriver = new SKTrigger(kDriver, kB.value, BUTTON);
+        public static final SKTrigger kShootDriver = new SKTrigger(kDriver, kY.value, BUTTON);
+        public static final SKTrigger kZeroPositionDriver  = new SKTrigger(kDriver, kStart.value, BUTTON);
         
         // Vision subsystem enable/disable
-        public static final SKTrigger kVisionOff = new SKTrigger(kDriver, 180, POV);
-        public static final SKTrigger kVisionOn = new SKTrigger(kDriver, 0, POV);
+        //public static final SKTrigger kVisionOff = new SKTrigger(kDriver, 180, POV);
+        //public static final SKTrigger kVisionOn = new SKTrigger(kDriver, 0, POV);
 
         // Vision Driving buttons
-        public static final SKTrigger kResetPoseToVision = new SKTrigger(kDriver, kB.value, BUTTON);
-        public static final SKTrigger kForceResetPoseToVision = new SKTrigger(kDriver, kY.value, BUTTON);
+        //public static final SKTrigger kResetPoseToVision = new SKTrigger(kDriver, kB.value, BUTTON);
+        //public static final SKTrigger kForceResetPoseToVision = new SKTrigger(kDriver, kY.value, BUTTON);
         public static final SKTrigger kAlignToReef = new SKTrigger(kDriver, kX.value, BUTTON);
         public static final SKTrigger kLeftReef = new SKTrigger(kDriver, kLeftTrigger.value, AXIS);
         public static final SKTrigger kRightReef = new SKTrigger(kDriver, kRightTrigger.value, AXIS);

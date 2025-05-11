@@ -18,11 +18,11 @@ import static frc.robot.subsystems.vision.SK25Vision.RotateToPose;
 
 import static frc.robot.Ports.DriverPorts.kAlignToReef;
 import static frc.robot.Ports.DriverPorts.kLeftReef;
-import static frc.robot.Ports.DriverPorts.kResetPoseToVision;
+//import static frc.robot.Ports.DriverPorts.kResetPoseToVision;
 import static frc.robot.Ports.DriverPorts.kRightReef;
-import static frc.robot.Ports.DriverPorts.kVisionOff;
-import static frc.robot.Ports.DriverPorts.kVisionOn;
-import static frc.robot.Ports.DriverPorts.kForceResetPoseToVision;
+//import static frc.robot.Ports.DriverPorts.kVisionOff;
+//import static frc.robot.Ports.DriverPorts.kVisionOn;
+//import static frc.robot.Ports.DriverPorts.kForceResetPoseToVision;
 
 
 public class SK25VisionBinder implements CommandBinder {
@@ -42,13 +42,13 @@ public class SK25VisionBinder implements CommandBinder {
         this.m_visionContainer = m_visionContainer;
         this.m_swerveContainer = m_swerveContainer;
 
-        this.visionOff = kVisionOff.button;
-        this.visionOn = kVisionOn.button;
+        //this.visionOff = kVisionOff.button;
+        //this.visionOn = kVisionOn.button;
         this.alignToReef = kAlignToReef.button;
         this.leftReef = kLeftReef.button;
         this.rightReef = kRightReef.button;
-        this.forceResetPoseToVision = kForceResetPoseToVision.button;
-        this.resetPoseToVision = kResetPoseToVision.button;
+        //this.forceResetPoseToVision = kForceResetPoseToVision.button;
+        //this.resetPoseToVision = kResetPoseToVision.button;
     }
 
     public void bindButtons() {

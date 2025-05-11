@@ -24,7 +24,7 @@ public class ClimbBinder implements CommandBinder {
     public ClimbBinder(Optional<SK25Climb> climbSys) {
         subsystem = climbSys;
         raise = climbRaiseButton.button;
-        lower = climbLowerButton.button;
+        //lower = climbLowerButton.button;
         // stop = climbStopButton.button;
         // slow = climbSlowButton.button;
     }

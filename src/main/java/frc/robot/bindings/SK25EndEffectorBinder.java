@@ -3,6 +3,13 @@ package frc.robot.bindings;
 // Joystick constants
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
+import static frc.robot.Ports.DriverPorts.kIntakeDriver;
+import static frc.robot.Ports.DriverPorts.kLowAlgaeDriver;
+import static frc.robot.Ports.DriverPorts.kLowBranchEffectorDriver;
+import static frc.robot.Ports.DriverPorts.kMiddleBranchEffectorDriver;
+import static frc.robot.Ports.DriverPorts.kShootDriver;
+import static frc.robot.Ports.DriverPorts.kTopBranchEffectorDriver;
+import static frc.robot.Ports.DriverPorts.kZeroPositionDriver;
 //import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 import static frc.robot.Ports.OperatorPorts.kEndEffectorAxis;
 import static frc.robot.Ports.OperatorPorts.kFloorAlgae;
@@ -64,13 +71,21 @@ public class SK25EndEffectorBinder implements CommandBinder {
     Trigger LowButton;
     Trigger MiddleButton;
     Trigger TopButton;
+
+    Trigger LowButtonDriver;
+    Trigger MiddleButtonDriver;
+    Trigger TopButtonDriver;
+    Trigger LowAlgaeDriver;
+    Trigger RollerIntakeButtonDriver;
+    Trigger RollerOutPutButtonDriver;
+    Trigger zeroPositionButtonDriver;
+
     Trigger TroughButton;
     Trigger IntakeButton;
     Trigger ResetEncoderButton;
     Trigger RollerIntake;
     Trigger RollerOutPut;
     Trigger zeroPositionButton;
-    Trigger zeroPositionButtonDriver;
     Trigger resetPos;
     Trigger endEffectorAxis;
     Trigger Net;
@@ -82,6 +97,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
 
     public SK25EndEffectorBinder(Optional<SK25EndEffector> endEffectorSubsystem, Optional<CoralSubsystem> elevator)
     {
+        // Operator
         this.endEffectorSubsystem   = endEffectorSubsystem;
         this.elevator = elevator;
         this.ResetEncoderButton     = resetencoder.button;
@@ -97,6 +113,15 @@ public class SK25EndEffectorBinder implements CommandBinder {
         this.HighAlgae = kHighAlgae.button;
         this.Net = kNetPos.button;
         this.floorAlgae = kFloorAlgae.button;
+ 
+        // Driver
+        this.LowButtonDriver = kLowBranchEffectorDriver.button;
+        this.MiddleButtonDriver = kMiddleBranchEffectorDriver.button;
+        this.TopButtonDriver = kTopBranchEffectorDriver.button;
+        this.LowAlgaeDriver = kLowAlgaeDriver.button;
+        this.RollerIntakeButtonDriver = kIntakeDriver.button;
+        this.RollerOutPutButtonDriver = kShootDriver.button;
+        this.zeroPositionButtonDriver = kZeroPositionDriver.button;
     }
 
     public void bindButtons()
@@ -112,15 +137,20 @@ public class SK25EndEffectorBinder implements CommandBinder {
             
             // ResetEncoderButton.onTrue(new EndEffectorEncoderResetCommand(endEffector)); // TODO: Add back reset encoder command? This was originally for use with NEO Vortex pivot motor
             zeroPositionButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kZeroPositionAngle, endEffector));
+            zeroPositionButtonDriver.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kZeroPositionAngle, endEffector));
             TroughButton.onTrue(Commands.sequence(new WaitCommand(0.5), new EndEffectorButtonCommand(EndEffectorPosition.kTroughPositionAngle, endEffector)));
             LowButton.onTrue(Commands.sequence(new WaitCommand(0.5), new EndEffectorButtonCommand(EndEffectorPosition.kLowPositionAngle, endEffector)));
+            LowButtonDriver.onTrue(Commands.sequence(new WaitCommand(0.5), new EndEffectorButtonCommand(EndEffectorPosition.kLowPositionAngle, endEffector)));
             MiddleButton.onTrue(Commands.sequence(new WaitCommand(0.5), new EndEffectorButtonCommand(EndEffectorPosition.kMiddleAngle, endEffector)));
+            MiddleButtonDriver.onTrue(Commands.sequence(new WaitCommand(0.5), new EndEffectorButtonCommand(EndEffectorPosition.kMiddleAngle, endEffector)));
             IntakeButton.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, endEffector));
-            TopButton.onTrue(Commands.sequence(new WaitCommand(0.5), new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, endEffector)));   
+            TopButton.onTrue(Commands.sequence(new WaitCommand(0.5), new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, endEffector)));  
+            TopButtonDriver.onTrue(Commands.sequence(new WaitCommand(0.5), new EndEffectorButtonCommand(EndEffectorPosition.kTopPositionAngle, endEffector)));   
             
             Net.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kNetAngle, endEffector));
             HighAlgae.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kHighAlgae, endEffector));
             LowAlgae.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kLowAlgae, endEffector));
+            LowAlgaeDriver.onTrue(new EndEffectorButtonCommand(EndEffectorPosition.kLowAlgae, endEffector));
             floorAlgae.onTrue(Commands.sequence(new WaitCommand(0.5), new EndEffectorButtonCommand(EndEffectorPosition.kFloorAngle, endEffector)));
             
             
@@ -140,9 +170,27 @@ public class SK25EndEffectorBinder implements CommandBinder {
                     }
                 )
             );
+            RollerOutPutButtonDriver.onTrue(
+                Commands.either(
+                    Commands.parallel(
+                        new EndEffectorRollerIntakeCommand(endEffector, m_elevator),
+                        Commands.sequence(
+                            Commands.waitSeconds(0.25),
+                            new InstantCommand(() -> endEffector.setTargetAngle(EndEffectorPosition.kIntakePositionAngle))
+                        )
+                    ),
+                    new EndEffectorRollerIntakeCommand(endEffector, m_elevator),
+                    () -> {
+                        return (m_elevator.elevatorCurrentTarget == ElevatorSetpoints.kLevel4 && endEffector.isL4());
+                    }
+                )
+            );
             RollerIntake.whileTrue(new EndEffectorRollerOutputCommand(endEffector, m_elevator));
+            RollerIntakeButtonDriver.whileTrue(new EndEffectorRollerOutputCommand(endEffector, m_elevator));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
+            RollerIntakeButtonDriver.onFalse(new EndEffectorRollerStopCommand(endEffector));
             RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
+            RollerOutPutButtonDriver.onFalse(new EndEffectorRollerStopCommand(endEffector));
 
             /*
             RollerIntake.whileTrue(new WaitUntilCommand(endEffector::haveCoral)

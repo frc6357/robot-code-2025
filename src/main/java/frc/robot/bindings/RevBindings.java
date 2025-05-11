@@ -1,6 +1,13 @@
 package frc.robot.bindings;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickReversed;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
+import static frc.robot.Ports.DriverPorts.kIntakeDriver;
+import static frc.robot.Ports.DriverPorts.kLowAlgaeDriver;
+import static frc.robot.Ports.DriverPorts.kLowBranchEffectorDriver;
+import static frc.robot.Ports.DriverPorts.kMiddleBranchEffectorDriver;
+import static frc.robot.Ports.DriverPorts.kShootDriver;
+import static frc.robot.Ports.DriverPorts.kTopBranchEffectorDriver;
+import static frc.robot.Ports.DriverPorts.kZeroPositionDriver;
 import static frc.robot.Ports.OperatorPorts.kElevatorAxis;
 //import static frc.robot.Ports.OperatorPorts.kLowBranch;
 //import static frc.robot.Ports.OperatorPorts.kTrough;
@@ -42,8 +49,17 @@ public class RevBindings implements CommandBinder
     Trigger Intake;
     Trigger floorButton;
 
+    Trigger LowButtonDriver;
+    Trigger MiddleButtonDriver;
+    Trigger TopButtonDriver;
+    Trigger LowAlgaeDriver;
+    Trigger RollerIntakeButtonDriver;
+    Trigger RollerOutPutButtonDriver;
+    Trigger zeroPositionButtonDriver;
+
     public RevBindings(Optional<CoralSubsystem> elevatorSubsystem)
     {
+        // Operator
         this.elevatorSubsystem  = elevatorSubsystem;
         this.elevatorOverride   = kElevatorOverride.button;
         this.zeroPositionButton = kZeroPositionOperator.button;
@@ -57,6 +73,15 @@ public class RevBindings implements CommandBinder
         this.Net = kNetPos.button;
         this.Intake = kIntakePos.button;
         this.floorButton = kFloorAlgae.button;
+
+        // Driver
+        this.LowButtonDriver = kLowBranchEffectorDriver.button;
+        this.MiddleButtonDriver = kMiddleBranchEffectorDriver.button;
+        this.TopButtonDriver = kTopBranchEffectorDriver.button;
+        this.LowAlgaeDriver = kLowAlgaeDriver.button;
+        this.RollerIntakeButtonDriver = kIntakeDriver.button;
+        this.RollerOutPutButtonDriver = kShootDriver.button;
+        this.zeroPositionButtonDriver = kZeroPositionDriver.button;
     }
 
     public void bindButtons()
@@ -74,11 +99,16 @@ public class RevBindings implements CommandBinder
                 
             // Elevator Position Buttons
             zeroPositionButton.onTrue(elevator.setSetpointCommand(Setpoint.kZero));
+            zeroPositionButtonDriver.onTrue(elevator.setSetpointCommand(Setpoint.kZero));
             TroughButton.onTrue(elevator.setSetpointCommand(Setpoint.kLevel1));
             LowButton.onTrue(elevator.setSetpointCommand(Setpoint.kLevel2));
+            LowButtonDriver.onTrue(elevator.setSetpointCommand(Setpoint.kLevel2));
             MidButton.onTrue(elevator.setSetpointCommand(Setpoint.kLevel3));
+            MiddleButtonDriver.onTrue(elevator.setSetpointCommand(Setpoint.kLevel3));
             TopButton.onTrue(elevator.setSetpointCommand(Setpoint.kLevel4));
+            TopButtonDriver.onTrue(elevator.setSetpointCommand(Setpoint.kLevel4));
             LowAlgae.onTrue(elevator.setSetpointCommand(Setpoint.kLowAlgae));
+            LowAlgaeDriver.onTrue(elevator.setSetpointCommand(Setpoint.kLowAlgae));
             HighAlgae.onTrue(elevator.setSetpointCommand(Setpoint.kHighAlgae));
             Net.onTrue(elevator.setSetpointCommand(Setpoint.kNet));
             Intake.onTrue(elevator.setSetpointCommand(Setpoint.kIntake));
