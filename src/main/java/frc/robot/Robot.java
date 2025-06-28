@@ -206,7 +206,7 @@ public class Robot extends LoggedRobot
 
         //deploy climb to save time at the end of match (stopped in autonomousPeriodic()).
         if (m_robotContainer.m_climbContainer.isPresent())
-            climb.runMotor(kKrakenSpeed);
+            climb.runMotor(-kKrakenSpeed);
 
         /*
          * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -230,7 +230,7 @@ public class Robot extends LoggedRobot
     {
         //stop at the climb position
         if (m_robotContainer.m_climbContainer.isPresent())
-            if (climb.getMotorPosition() >= kClimbReadyPos)
+            if (climb.getMotorPosition() <= kClimbReadyPos)
                 climb.stop();
     }
 

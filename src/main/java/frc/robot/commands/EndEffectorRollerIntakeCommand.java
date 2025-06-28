@@ -8,6 +8,7 @@ import frc.robot.subsystems.SK25EndEffector;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSlowSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSuperSpeed;
+import static frc.robot.Konstants.EndEffectorConstants.kRollerSlowL2Speed;
 
 
 public class EndEffectorRollerIntakeCommand extends Command {
@@ -27,7 +28,7 @@ public class EndEffectorRollerIntakeCommand extends Command {
         if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kLevel3 - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kLevel3 + 0.4))
             Subsystem.runRoller(-kRollerSlowSpeed);
         else if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kLevel2 - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kLevel2 + 0.4))
-            Subsystem.runRoller(-kRollerSlowSpeed);
+            Subsystem.runRoller(-kRollerSlowL2Speed);
         else if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kLevel1 - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kLevel1 + 0.4))
             Subsystem.runRoller(-kRollerSlowSpeed);
         // else if ((elevator.elevatorCurrentTarget >= (ElevatorSetpoints.kNet - 0.4)) && (elevator.elevatorCurrentTarget <= ElevatorSetpoints.kNet + 0.4)) //TODO: remove and replace in auto
