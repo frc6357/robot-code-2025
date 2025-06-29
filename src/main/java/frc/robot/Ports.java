@@ -105,6 +105,7 @@ public class Ports
         // Party mode and Teal Lights
         public static final SKTrigger kPartyModeButton = new SKTrigger(kOperator, kStart.value, BUTTON);
 
+        public static final SKTrigger kAutoScoringToggle = new SKTrigger(kOperator, kX.value, BUTTON);
         
         // Elevator buttons
         // Coral:

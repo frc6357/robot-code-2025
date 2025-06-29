@@ -161,6 +161,10 @@ public class CoralSubsystem extends SubsystemBase {
         elevatorCurrentTarget, ControlType.kMAXMotionPositionControl);
   }
 
+  public boolean atSetpoint() {
+    return Math.abs(elevatorEncoder.getPosition() - elevatorCurrentTarget) < 0.1;
+  }
+
   /** Zero the elevator encoder when the limit switch is pressed. */
   private void zeroElevatorOnLimitSwitch() {
     if (!wasResetByLimit && elevatorMotor.getReverseLimitSwitch().isPressed()) {
