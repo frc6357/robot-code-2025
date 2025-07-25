@@ -23,6 +23,7 @@ import static frc.robot.utils.SKTrigger.INPUT_TYPE.BUTTON;
 import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.robot.utils.CANPort;
 import frc.robot.utils.SKTrigger;
 import frc.robot.utils.filters.DeadbandFilter;
@@ -42,13 +43,13 @@ public class Ports
         //public static final CommandXboxController kDriver = new CommandXboxController(0);
         //static CommandXboxController importedKDriver = frc.robot.bindings.SK25SwerveBinder.kDriver;
         //static GenericHID kUnderlyingDriverController = importedKDriver.getHID();
-        public static final GenericHID kDriver = new FilteredXboxController(0).getHID();
+        public static GenericHID kDriver = new FilteredXboxController(0).getHID();
         
         // Filtered axis (translation & rotation)
         public static final FilteredAxis kTranslationXPort = new FilteredAxis(() -> kDriver.getRawAxis(kLeftY.value));
         public static final FilteredAxis kTranslationYPort = new FilteredAxis(() -> kDriver.getRawAxis(kLeftX.value));
         public static final FilteredAxis kVelocityOmegaPort = new FilteredAxis(() -> kDriver.getRawAxis(kRightX.value)); 
-
+        
         public static final SKTrigger climbRaiseButton = new SKTrigger(kDriver, 270, POV);
         public static final SKTrigger climbLowerButton = new SKTrigger(kDriver, 90, POV);
         // public static final SKTrigger climbStopButton = new SKTrigger(kDriver, 90, POV);
@@ -57,27 +58,41 @@ public class Ports
         // Vision subsystem enable/disable
         public static final SKTrigger kVisionOff = new SKTrigger(kDriver, 180, POV);
         public static final SKTrigger kVisionOn = new SKTrigger(kDriver, 0, POV);
-
+        
         // Vision Driving buttons
         public static final SKTrigger kResetPoseToVision = new SKTrigger(kDriver, kB.value, BUTTON);
         public static final SKTrigger kForceResetPoseToVision = new SKTrigger(kDriver, kY.value, BUTTON);
         public static final SKTrigger kAlignToReef = new SKTrigger(kDriver, kX.value, BUTTON);
         public static final SKTrigger kLeftReef = new SKTrigger(kDriver, kLeftTrigger.value, AXIS);
         public static final SKTrigger kRightReef = new SKTrigger(kDriver, kRightTrigger.value, AXIS);
-
+        
         // Driver Function Button (Activates secondary control scheme when held)
         public static final SKTrigger kDriveFn = new SKTrigger(kDriver, kRightBumper.value, BUTTON);
-
+        
         // Switch modes
         public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, kRightBumper.value, BUTTON); // Function Controlscheme (NOTE: This button is meant to be impossible to accidentally press)
         public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kLeftBumper.value, BUTTON); // Function Controlscheme
-
+        
         // Reset gyro
         public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kRightStick.value, BUTTON);
-
-        // Party mode
         
+        // Controller swap
+        public static final SKTrigger kDSwapStart = new SKTrigger(kDriver, kStart.value, BUTTON);
+        public static final SKTrigger kDSwapBack = new SKTrigger(kDriver, kBack.value, BUTTON);
+        
+        public static void swapDriverController() {
+            kDriver.setRumble(RumbleType.kBothRumble, 0.5);
+            if(kDriver.getPort() == 0) {
+                kDriver = new FilteredXboxController(1).getHID();
+            }
+            else {
+                kDriver = new FilteredXboxController(0).getHID();
+            }
+        }
 
+        public static void killDriverRumble() {
+            kDriver.setRumble(RumbleType.kBothRumble, 0.0);
+        }
     }
     /**
      * Defines the button, controller, and axis IDs needed to get input from an external
@@ -87,9 +102,9 @@ public class Ports
     public static class OperatorPorts
     {
         // Operator Controller set to Xbox Controller
-        public static final GenericHID kOperator = new FilteredXboxController(1).getHID();
-
-
+        public static GenericHID kOperator = new FilteredXboxController(1).getHID();
+        
+        
         /**
         * Example of how to use POV buttons (D-pad)
         * public static final SKTrigger kExamplePOV = new SKTrigger(kOperator, 270, POV);
@@ -142,6 +157,23 @@ public class Ports
 
         //public static final SKTrigger kProcessor = new SKTrigger(kOperator, kLeftStick.value, BUTTON);
         
+        // Controller swap
+        public static final SKTrigger kOSwapStart = new SKTrigger(kOperator, kStart.value, BUTTON);
+        public static final SKTrigger kOSwapBack = new SKTrigger(kOperator, kBack.value, BUTTON);
+
+        public static void swapOperatorController() {
+            kOperator.setRumble(RumbleType.kBothRumble, 0.5);
+            if(kOperator.getPort() == 1) {
+                kOperator = new FilteredXboxController(0).getHID();
+            }
+            else {
+                kOperator = new FilteredXboxController(1).getHID();
+            }
+        }
+
+        public static void killOperatorRumble() {
+            kOperator.setRumble(RumbleType.kBothRumble, 0.0);
+        }
     }
 
     /*
