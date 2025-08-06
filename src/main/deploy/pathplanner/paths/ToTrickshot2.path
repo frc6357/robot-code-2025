@@ -49,6 +49,17 @@
       }
     },
     {
+      "name": "IntakeAutoCommand",
+      "waypointRelativePos": 0.09,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "IntakeAutoCommand"
+        }
+      }
+    },
+    {
       "name": "NetScoreCombo",
       "waypointRelativePos": 0.7083700440528596,
       "endWaypointRelativePos": null,
