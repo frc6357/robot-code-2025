@@ -49,17 +49,6 @@
       }
     },
     {
-      "name": "IntakeAlgaeAutoCommand",
-      "waypointRelativePos": 0.08,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "IntakeAlgaeAutoCommand"
-        }
-      }
-    },
-    {
       "name": "NetScoreCombo",
       "waypointRelativePos": 0.5955947136563827,
       "endWaypointRelativePos": null,
