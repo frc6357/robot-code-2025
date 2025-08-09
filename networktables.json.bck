@@ -2,7 +2,7 @@
   {
     "name": "/Preferences/elevatorKp",
     "type": "double",
-    "value": 0.115,
+    "value": 0.12,
     "properties": {
       "persistent": true
     }
@@ -104,14 +104,6 @@
     }
   },
   {
-    "name": "/Preferences/elevatorVelocity",
-    "type": "double",
-    "value": 4500.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
     "name": "/Preferences/lidarTargetDistMm",
     "type": "double",
     "value": 75.0,
@@ -136,9 +128,9 @@
     }
   },
   {
-    "name": "/Preferences/SimulatedTagID",
+    "name": "/Preferences/elevatorVelocity",
     "type": "double",
-    "value": 9.0,
+    "value": 4500.0,
     "properties": {
       "persistent": true
     }
@@ -179,14 +171,6 @@
     "name": "/Preferences/endEffectorVelocity",
     "type": "double",
     "value": 0.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/elevatorAcceleration",
-    "type": "double",
-    "value": 6000.0,
     "properties": {
       "persistent": true
     }
