@@ -12,6 +12,7 @@ import static frc.robot.Konstants.EndEffectorConstants.kArmI;
 import static frc.robot.Konstants.EndEffectorConstants.kArmP;
 import static frc.robot.Konstants.EndEffectorConstants.kArmTolerance;
 import static frc.robot.Konstants.EndEffectorConstants.kArmV;
+import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 //import static frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorArmMotor;
 import static frc.robot.Ports.EndEffectorPorts.kEndEffectorRollerMotor;
@@ -50,6 +51,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
+import frc.robot.commands.EndEffectorRollerIntakeCommand;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 
@@ -304,6 +306,16 @@ public class SK25EndEffector extends SubsystemBase
      public void runRoller(double rollerspeed)
     {
         rollerMotor.set(rollerspeed);
+    }
+
+    public Command scoreL4Command() {
+        return Commands.parallel(
+            new InstantCommand(() -> runRollerCommand(-kRollerSpeed)),
+            Commands.sequence(
+                Commands.waitSeconds(0.25),
+                new InstantCommand(() -> setTargetAngle(EndEffectorPosition.kIntakePositionAngle))
+            )
+        );
     }
 
     public Command runRollerCommand(double rollerSpeed)

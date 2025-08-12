@@ -280,6 +280,7 @@ public class RobotContainer extends Robot{
                 //NamedCommands.registerCommand("IntakeAutoCommand", new IntakeAutoCommand(EndEffectorPosition.kIntakePositionAngle, effector));
                 NamedCommands.registerCommand("IntakeAutoCommand", effector.runRollerCommand(kRollerSpeed));
                 NamedCommands.registerCommand("IntakeAlgaeAutoCommand", effector.runRollerCommand(kRollerSuperSpeed));
+                NamedCommands.registerCommand("NewL4ExtakeAutoCommand", effector.scoreL4Command());
                 NamedCommands.registerCommand("ExtakeAutoCommand", effector.runRollerCommand(-kRollerSpeed));
                 NamedCommands.registerCommand("L4ExtakeAutoCommand", Commands.parallel(
                     new EndEffectorButtonCommand(EndEffectorPosition.kIntakePositionAngle, effector),

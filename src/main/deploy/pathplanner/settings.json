@@ -15,8 +15,9 @@
   ],
   "autoFolders": [
     "BargeSide(P1)",
-    "HeadOn(P2)",
     "Driftless",
+    "HeadOn(P2)",
+    "BetterStartAutos",
     "OtherAutos",
     "ProcessorSide(P3)",
     "VisionAutos"

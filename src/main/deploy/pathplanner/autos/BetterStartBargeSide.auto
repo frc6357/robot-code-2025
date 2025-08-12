@@ -1,0 +1,160 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P1_VisionToBargePoint1"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToRightReefCommandAuto"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.35
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeSideSourceNWVision"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationWaitCombo"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeSideVisionToPoint3"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToLeftReefCommandAuto"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeSideSourceSWVision"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationWaitCombo"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeSideVisionToPoint3"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToRightReefCommandAuto"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeAutoCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationPickupCombo"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "BetterStartAutos",
+  "choreoAuto": false
+}
