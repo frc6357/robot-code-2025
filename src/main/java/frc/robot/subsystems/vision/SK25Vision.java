@@ -47,6 +47,7 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public final Limelight[] allLimelights = {leftLL, rightLL}; // List of all limelights
     public final Limelight[] poseLimelights = {leftLL, rightLL}; // Limelights specifically used for estimating pose
+    public final Limelight[] detectLimelights = {};
     public final Limelight[] reefLimelights = {leftLL, rightLL}; // Effectively used for pose estimating, 
                                                         // but are specifically for use with the reef
 

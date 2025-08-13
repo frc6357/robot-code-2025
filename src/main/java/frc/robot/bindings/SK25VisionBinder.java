@@ -7,6 +7,8 @@ import java.util.Optional;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveToReef.DriveToReefPoseCommand;
+import frc.robot.commands.ObjectFollowing.FollowVisionTarget;
+import frc.robot.commands.ObjectFollowing.FollowVisionTarget.VisionTarget;
 import frc.robot.commands.AlignToReefTag;
 import frc.robot.commands.commandGroups.AlignToReefComboTeleop;
 import static frc.robot.commands.AlignToReefTag.Target;
@@ -68,31 +70,35 @@ public class SK25VisionBinder implements CommandBinder {
             visionOff.onTrue(new InstantCommand(() -> m_vision.killVision()));
             visionOn.onTrue(new InstantCommand(() -> m_vision.enableVision()));
 
+            alignToReef.and(visionEnabled).toggleOnTrue(
+                new FollowVisionTarget(VisionTarget.APRIL_TAG, m_swerve, m_vision)
+            );
+
             // If just alignToReef held and not the other buttons
-            alignToReef.and(visionEnabled).whileTrue(
-                new AlignToReefComboTeleop(
-                    Target.CENTER, 
-                    DriveToPose.getConfig(),
-                    RotateToPose.getConfig(),
-                    m_vision,
-                    m_swerve)
-            );
-            leftReef.and(visionEnabled).whileTrue(
-                new AlignToReefComboTeleop(
-                    Target.LEFT, 
-                    DriveToPose.getConfig(), 
-                    RotateToPose.getConfig(), 
-                    m_vision, 
-                    m_swerve)
-            );
-            rightReef.and(visionEnabled).whileTrue(
-                new AlignToReefComboTeleop(
-                    Target.RIGHT, 
-                    DriveToPose.getConfig(), 
-                    RotateToPose.getConfig(), 
-                    m_vision, 
-                    m_swerve)
-            );
+            // alignToReef.and(visionEnabled).whileTrue(
+            //     new AlignToReefComboTeleop(
+            //         Target.CENTER, 
+            //         DriveToPose.getConfig(),
+            //         RotateToPose.getConfig(),
+            //         m_vision,
+            //         m_swerve)
+            // );
+            // leftReef.and(visionEnabled).whileTrue(
+            //     new AlignToReefComboTeleop(
+            //         Target.LEFT, 
+            //         DriveToPose.getConfig(), 
+            //         RotateToPose.getConfig(), 
+            //         m_vision, 
+            //         m_swerve)
+            // );
+            // rightReef.and(visionEnabled).whileTrue(
+            //     new AlignToReefComboTeleop(
+            //         Target.RIGHT, 
+            //         DriveToPose.getConfig(), 
+            //         RotateToPose.getConfig(), 
+            //         m_vision, 
+            //         m_swerve)
+            // );
         }
     }
 }
