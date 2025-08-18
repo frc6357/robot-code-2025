@@ -50,7 +50,7 @@ public class FollowVisionTarget extends Command{
 
         // All rotation values assumed to be degrees
         rotPID.setSetpoint(0);
-        rotPID.setTolerance(0.75);
+        rotPID.setTolerance(0.1);
         rotPID.reset();
     }
 
