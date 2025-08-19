@@ -7,6 +7,7 @@ import frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.ElevatorSet
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.commands.EndEffectorRollerIntakeCommand;
 import frc.robot.commands.EndEffectorRollerStopCommand;
+import frc.robot.commands.AlignToReefTag;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.SK25EndEffector;
 import frc.robot.subsystems.SKSwerve;
@@ -32,13 +33,14 @@ public class AutoScoreCombo extends SequentialCommandGroup {
         CoralSubsystem m_elevator, 
         SK25EndEffector m_endEffector) 
     {
+        addRequirements(m_swerve, m_elevator, m_endEffector);
         switch(scoreType) {
             // If manipulating Coral
             case CORAL:
                 addCommands(
                     // Align to Tag with a 1.5 second timeout
                     Commands.race(
-                        new AlignToReefComboTeleop(
+                        new AlignToReefTag(
                             target, 
                             DriveToPose.getConfig(), 
                             RotateToPose.getConfig(), 
@@ -79,7 +81,7 @@ public class AutoScoreCombo extends SequentialCommandGroup {
                             Commands.waitUntil(() -> m_elevator.atSetpoint())),
                             // Align to Tag with a 1.5 second timeout
                             Commands.race(
-                                new AlignToReefComboTeleop(
+                                new AlignToReefTag(
                                     target, 
                                     DriveToPose.getConfig(), 
                                     RotateToPose.getConfig(), 
