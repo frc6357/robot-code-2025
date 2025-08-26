@@ -30,6 +30,7 @@ import static frc.robot.Ports.DriverPorts.kForceResetPoseToVision;
 public class SK25VisionBinder implements CommandBinder {
     Optional<SK25Vision> m_visionContainer;
     Optional<SKSwerve> m_swerveContainer;
+    SKSwerveBinder m_swerveBinder;
 
     Trigger alignToReef;
     Trigger leftReef;
@@ -40,9 +41,10 @@ public class SK25VisionBinder implements CommandBinder {
     Trigger visionOn;
     Trigger visionEnabled;
 
-    public SK25VisionBinder(Optional<SK25Vision> m_visionContainer, Optional<SKSwerve> m_swerveContainer) {
+    public SK25VisionBinder(Optional<SK25Vision> m_visionContainer, Optional<SKSwerve> m_swerveContainer, SKSwerveBinder m_swerveBinder) {
         this.m_visionContainer = m_visionContainer;
         this.m_swerveContainer = m_swerveContainer;
+        this.m_swerveBinder = m_swerveBinder;
 
         this.visionOff = kVisionOff.button;
         this.visionOn = kVisionOn.button;
@@ -52,6 +54,7 @@ public class SK25VisionBinder implements CommandBinder {
         this.forceResetPoseToVision = kForceResetPoseToVision.button;
         this.resetPoseToVision = kResetPoseToVision.button;
     }
+    
 
     public void bindButtons() {
         if(m_visionContainer.isPresent() && m_swerveContainer.isPresent()) {
@@ -71,7 +74,13 @@ public class SK25VisionBinder implements CommandBinder {
             visionOn.onTrue(new InstantCommand(() -> m_vision.enableVision()));
 
             alignToReef.and(visionEnabled).toggleOnTrue(
-                new FollowVisionTarget(VisionTarget.APRIL_TAG, m_swerve, m_vision)
+                new FollowVisionTarget(
+                    VisionTarget.APRIL_TAG, 
+                    m_swerve, 
+                    () -> m_swerveBinder.getXSpeed(), 
+                    () -> m_swerveBinder.getYSpeed(), 
+                    true, 
+                    m_vision)
             );
 
             // If just alignToReef held and not the other buttons

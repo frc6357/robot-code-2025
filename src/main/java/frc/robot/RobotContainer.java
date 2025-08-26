@@ -199,7 +199,10 @@ public class RobotContainer extends Robot{
      */
     private void configureButtonBindings()
     {
-        buttonBinders.add(new SKSwerveBinder(m_swerveContainer, m_elevatorContainer));
+        // Separated in order to easily pass into VisionBinder
+        SKSwerveBinder m_swerveBinder = new SKSwerveBinder(m_swerveContainer, m_elevatorContainer);
+
+        buttonBinders.add(m_swerveBinder);
         // buttonBinders.add(new SK25ElevatorBinder(m_elevator));
         buttonBinders.add(new SK25LightsBinder(m_lightsContainer));
         buttonBinders.add(new RevBindings(m_coralContainer));
@@ -208,7 +211,7 @@ public class RobotContainer extends Robot{
         buttonBinders.add(new ClimbBinder(m_climbContainer));
         buttonBinders.add(new SK25EndEffectorBinder(m_endEffectorContainer, m_coralContainer));
         // buttonBinders.add(new SK25ScoringBinder(m_endEffector, m_elevator));
-        buttonBinders.add(new SK25VisionBinder(m_visionContainer, m_swerveContainer));
+        buttonBinders.add(new SK25VisionBinder(m_visionContainer, m_swerveContainer, m_swerveBinder));
 
         // Traversing through all the binding classes to actually bind the buttons
         for (CommandBinder subsystemGroup : buttonBinders)

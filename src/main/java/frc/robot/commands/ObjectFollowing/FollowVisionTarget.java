@@ -1,11 +1,14 @@
 package frc.robot.commands.ObjectFollowing;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.utils.vision.Limelight;
 import frc.robot.subsystems.vision.SK25Vision;
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.commands.DriveCommand;
+
 
 public class FollowVisionTarget extends Command{
     public static enum VisionTarget {
@@ -21,7 +24,17 @@ public class FollowVisionTarget extends Command{
     DriveCommand driveCommand;
     double rotOut;
 
-    public FollowVisionTarget(VisionTarget target, SKSwerve m_swerve, SK25Vision m_vision) {
+    /**
+     * Returns a Command that integrates vision to rotate the robot's heading to lock on to a vision
+     * target while still receiving x and y velocities from the joysticks.
+     * @param target The target type to use
+     * @param m_swerve The Swerve drive subsystem
+     * @param xSpeed The x speed supplier to feed
+     * @param ySpeed The y speed supplier to feed
+     * @param fieldCentric Whether or not to use field centric driving while rotating
+     * @param m_vision The vision subsystem
+     */
+    public FollowVisionTarget(VisionTarget target, SKSwerve m_swerve, Supplier<Double> xSpeed, Supplier<Double> ySpeed, boolean fieldCentric, SK25Vision m_vision) {
         this.target = target;
         this.m_swerve = m_swerve;
         this.m_vision = m_vision;
@@ -36,12 +49,10 @@ public class FollowVisionTarget extends Command{
         }
 
         this.driveCommand = new DriveCommand(
-            () -> 0.0, 
-            () -> 0.0, 
+            () -> xSpeed.get(), 
+            () -> ySpeed.get(), 
             () -> getOutput(), 
-            () -> false);
-
-        addRequirements(m_swerve);
+            () -> fieldCentric);
     }
 
     @Override
@@ -85,13 +96,19 @@ public class FollowVisionTarget extends Command{
 
     // Finds any limelight with a valid target in view
     private Limelight findGoodLimelight() {
+        Limelight bestLimelight = null;
+        double bestDistance = -1;
+
         for(Limelight ll : limelights) {
             if(ll.targetInView()) {
-                return ll;
+                if(ll.getTargetSize() > bestDistance) {
+                    bestDistance = ll.getTargetSize();
+                    bestLimelight = ll;
+                }
             }
         }
 
-        // Careful with this null return
-        return null;
+        // Be careful with this null return
+        return bestLimelight;
     }
 }

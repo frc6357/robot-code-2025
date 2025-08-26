@@ -52,8 +52,8 @@ public class SKSwerveBinder implements CommandBinder{
                 });
 
     //Define the max speeds of the drivetrain
-    private double MaxSpeed = TunerConstants.MaxSpeed; // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = TunerConstants.MaxAngularRate; // 3/4 of a rotation per second max angular velocity
+    private static double MaxSpeed = TunerConstants.MaxSpeed; // kSpeedAt12Volts desired top speed
+    private static double MaxAngularRate = TunerConstants.MaxAngularRate; // 3/4 of a rotation per second max angular velocity
 
     // Driver Buttons
     //The function button enables button combinations which occur only when both the function and the other
@@ -194,6 +194,16 @@ public class SKSwerveBinder implements CommandBinder{
         else
             desiredRotSpeed = axis;
             return axis;
+    }
+
+    public double getXSpeed() {
+        return applyGains(-MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercent);
+    }
+    public double getYSpeed() {
+        return applyGains(-MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercent);
+    }
+    public double getRotSpeed() {
+        return applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModeRotationPercent);
     }
 
 
