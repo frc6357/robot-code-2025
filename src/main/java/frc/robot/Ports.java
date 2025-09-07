@@ -55,14 +55,12 @@ public class Ports
         
         //ExampleButton
         public static final SKTrigger kExampleButton = new SKTrigger(kOperator, kY.value, BUTTON);
-
-        // Party mode
-        public static final SKTrigger kPartyMode = new SKTrigger(kOperator, kBack.value, BUTTON);
-        public static final SKTrigger kLightsOff = new SKTrigger(kOperator, 90, POV);
     }
 
     /**
      * Defines all the ports needed to create sensors and actuators for the drivetrain.
+     * NOTE: Leave busName as "" if the device is on the CAN loop plugged directly into the roboRIO.
+     * NOTE: Set busName to "[CANivore name in Phoenix Tuner]" if the device is on the CANivore loop (connected by USB to the roboRIO).
      */
 
     public static class DrivePorts
@@ -92,12 +90,12 @@ public class Ports
     }
 
 
-    public static class ExamplePorts
-    {
-        //bus name is null
-        private static final String busName = "";
+    // public static class ExamplePorts
+    // {
+    //     //bus name is null
+    //     private static final String busName = "";
 
-        //assign a motor ID of 49 to the example motor
-        public static final CANPort kExampleMotor = new CANPort(49, busName); 
-    }
+    //     //assign a motor ID of 49 to the example motor
+    //     public static final CANPort kExampleMotor = new CANPort(49, busName); 
+    // }
 }
