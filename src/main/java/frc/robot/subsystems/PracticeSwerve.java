@@ -1,3 +1,4 @@
+// // NOTE: THIS IS NOT TO BE USED FOR ACTUAL PROGRAMMING. THIS MERELY PROVIDES AN EXAMPLE OF WHAT A (NEARLY) FULLY PROGRAMMED SUBSYTEM LOOKS LIKE
 // package frc.robot.subsystems;
 
 // import static frc.robot.Konstants.PracticeSwerveConstants.*;
