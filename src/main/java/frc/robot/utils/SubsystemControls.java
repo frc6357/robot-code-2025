@@ -10,21 +10,36 @@ public class SubsystemControls
 {
 
     private final boolean swerve;
-    private final boolean example;
+    private final boolean lights;
+    private final boolean elevator;
+    private final boolean endEffector;
+    private final boolean climb;
+    private final boolean coralSubsystem;
+    private final boolean vision;
 
      /**  
      * @param swerve
      *            indicates if the swerve subsystem is present and should be enabled
-     * @param example
-     *            indicates if the example subsystem is present and should be enabled
+     * @param lights
+     *            indicates if the lights subsystem is present and should be enabled
      */
     public SubsystemControls(
         @JsonProperty(required = true, value = "swerve")      boolean swerve,
-        @JsonProperty(required = true, value = "swerve")      boolean example
+        @JsonProperty(required = true, value = "lights")      boolean lights,
+        @JsonProperty(required = true, value = "elevator")    boolean elevator,
+        @JsonProperty(required = true, value = "endeffector") boolean endeffector,
+        @JsonProperty(required = true, value = "climb") boolean climb,
+        @JsonProperty(required = true, value = "coralSubsystem") boolean coralSubsystem,
+        @JsonProperty(required = true, value = "vision")      boolean vision
     )
     {
         this.swerve = swerve;
-        this.example = example;
+        this.lights = lights;
+        this.elevator = elevator;
+        this.endEffector = endeffector;
+        this.climb = climb;
+        this.coralSubsystem = coralSubsystem;
+        this.vision = vision;
     }
 
 
@@ -38,8 +53,25 @@ public class SubsystemControls
     {
         return swerve;
     }
-    public boolean isExamplePresent()
+    public boolean isVisionPresent() {
+        return vision;
+    }
+    public boolean isEndEffectorPresent()
     {
-        return example;
+        return endEffector;
+    } 
+    public boolean isClimbPresent() 
+    {
+        return climb;
+    }
+    public boolean isCoralSubsystemPresent() 
+    {
+        return coralSubsystem;
+    }
+    public boolean isLightsPresent() {
+        return lights;
+    }
+    public boolean isElevatorPresent() {
+        return elevator;
     }
 }
