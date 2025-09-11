@@ -1,7 +1,7 @@
 {
   "robotWidth": 0.7111,
   "robotLength": 0.711,
-  "holonomicMode": false,
+  "holonomicMode": true,
   "pathFolders": [
     "CollectCoral",
     "Driftless",
