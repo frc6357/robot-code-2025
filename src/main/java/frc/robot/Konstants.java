@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static frc.robot.Ports.DrivePorts.kPigeonPort;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.LinearVelocity;
 
 public final class Konstants
@@ -44,6 +45,18 @@ public final class Konstants
         public static final double kMaxAngularSpeedDegrees = RadiansPerSecond.of(kMaxAngularSpeed).in(DegreesPerSecond);
 
         public static final int kPigeonID = kPigeonPort.ID;
+
+        // Locations of the wheels relative to the robot center. (In meters)
+        public static final Translation2d kFrontLeftLocation = new Translation2d(0.381, 0.381);
+        public static final Translation2d kFrontRightLocation = new Translation2d(0.381, -0.381);
+        public static final Translation2d kBackRightLocation = new Translation2d(-0.381, -0.381);
+        public static final Translation2d kBackLeftLocation = new Translation2d(-0.381, 0.381);
+    }
+
+    public static final class IOConstants {
+        public static final double kJoystickDeadband = 0.15;
+        public static final double kSlowModePercent  = 0.3;
+        public static final double kSlowModeRotationPercent = 0.5;
     }
 
     public static final class LightConstants
