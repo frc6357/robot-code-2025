@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Konstants.MecanumDriveConstants.kFrontLeftLocation;
@@ -54,7 +55,11 @@ public class SKMecanumDrive extends SubsystemBase {
      * @return
      */
     public void setControl(double vx, double vy, double omega) {
+        ChassisSpeeds speeds = new ChassisSpeeds(vx, vy, omega);
 
+        MecanumDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(speeds);
+
+        
     }
 
     /**
