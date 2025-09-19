@@ -3,11 +3,37 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import static frc.robot.Ports.DriverPorts.kDriver;
+import static frc.robot.Ports.OperatorPorts.kOperator;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+
+import au.grapplerobotics.CanBridge;
+import edu.wpi.first.net.WebServer;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.ctre.phoenix6.Utils;
+import com.pathplanner.lib.commands.FollowPathCommand;
+
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.preferences.SKPreferences;
+import frc.robot.utils.files.Elastic;
+import frc.robot.utils.files.Elastic.Notification.NotificationLevel;
+
+// Unused Imports
+//import edu.wpi.first.wpilibj.TimedRobot;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions
@@ -15,11 +41,23 @@ import frc.robot.preferences.SKPreferences;
  * the name of this class or the package after creating this project, you must also update
  * the build.gradle file in the project.
  */
-public class Robot extends TimedRobot
+public class Robot extends LoggedRobot
 {
+    public static double matchTime;
+
+    public static final double kDefaultPeriod = 0.2;
+
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
+
+    SendableChooser<Command> autoCommandSelector = new SendableChooser<Command>();
+
+    boolean thirtySecondsReached = false;
+
+    boolean rumbling = false;
+
+    double time;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -28,10 +66,33 @@ public class Robot extends TimedRobot
     @Override
     public void robotInit()
     {
+        CanBridge.runTCP();
+        // Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+        // Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);    //TODO: add this back, caused memory issue
+        // if (isReal()) {
+        //     Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+        //     Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+        //     new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+        // } else {
+        //     setUseTiming(false); // Run as fast as possible
+        //     String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
+        //     Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+        //     Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+        // }
+
+        // Logger.start();
         //DataLogManager.start(); TODO - look at data logs to see if they work with advantage scope
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
+
+        //get the saved elastic dashboard layout
+        WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
+
+        kDriver.setRumble(RumbleType.kBothRumble, 0.0);
+        kOperator.setRumble(RumbleType.kBothRumble, 0.0);
+
+        FollowPathCommand.warmupCommand().schedule();
     }
 
     /**
@@ -45,12 +106,68 @@ public class Robot extends TimedRobot
     @Override
     public void robotPeriodic()
     {
+        // Logger.recordOutput("RobotPose", new Pose2d());
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        
+        //display preferences periodicaly
         SKPreferences.refreshIfNeeded();
+
+        //display real time memory consumption
+        SmartDashboard.putNumber("Memory", Runtime.getRuntime().freeMemory() / 1000000); //bytes to mb
+
+        // display match time
+        SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+
+        SmartDashboard.putNumber("IntMatchTime", ((Double)DriverStation.getMatchTime()).intValue());
+    }
+
+    public void checkIfThirtySecondsLeft()
+    {
+        // DriverStation.reportError(String.valueOf(((Double)DriverStation.getMatchTime()).intValue()), false);
+
+        //time will be -1 if enabled in teleop directly. Works in practice mode on DS.
+        if (((Double)DriverStation.getMatchTime()).intValue() <= 30 && thirtySecondsReached == false)  //previously match time
+        {
+            
+            // DriverStation.reportError("CONDITION REACHED", false);
+
+            //dont let the notification send more than once
+            thirtySecondsReached = true;
+
+            //send elastic notification that thirty seconds are left
+            Elastic.Notification timeToClimbNotification = new Elastic.Notification(
+                NotificationLevel.WARNING, 
+                "Time to Climb!", 
+                "There are thirty seconds left in the match."
+            );
+            //make the notification take up more of the screen
+            Elastic.sendNotification(timeToClimbNotification
+                .withDisplaySeconds(5.0)
+                .withWidth(500.0)
+                .withHeight(200.0)
+            );
+
+            //controller rumble to alert driver and operator
+            kDriver.setRumble(RumbleType.kBothRumble, 0.5);
+            kOperator.setRumble(RumbleType.kBothRumble, 0.5);
+
+            rumbling = true;
+        }
+
+        if (DriverStation.getMatchTime() <= 29 && rumbling == true)
+            {
+                //stop rumble after 1 second
+                kDriver.setRumble(RumbleType.kBothRumble, 0.0);
+                kOperator.setRumble(RumbleType.kBothRumble, 0.0);
+
+                rumbling = false;
+
+                // DriverStation.reportError("RUMBLE STOPPED", false);
+            }
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
@@ -81,7 +198,7 @@ public class Robot extends TimedRobot
          * break; }
          */
 
-        // schedule the autonomous command (example)
+        //schedule the autonomous command (example)
         if (m_autonomousCommand != null)
         {
             m_autonomousCommand.schedule();
@@ -109,12 +226,16 @@ public class Robot extends TimedRobot
         }
 
         m_robotContainer.teleopInit();
+
+        //ensure this value is reset before thirty seconds can ever be reached
+        thirtySecondsReached = false;
     }
 
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic()
     {
+        checkIfThirtySecondsLeft();
     }
 
     @Override
@@ -130,5 +251,9 @@ public class Robot extends TimedRobot
     public void testPeriodic()
     {
         m_robotContainer.testPeriodic();
+
+        
     }
+
+
 }

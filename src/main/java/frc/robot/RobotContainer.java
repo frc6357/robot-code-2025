@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.bindings.CommandBinder;
 import frc.robot.utils.SK25AutoBuilder;
@@ -37,13 +38,18 @@ import frc.robot.utils.filters.FilteredJoystick;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  // private Optional<ExampleSubsystem> mySubsystem = Optional.empty();
+
+  // Make your list of subsystem containers here
+  // ex: public Optional<SKVision> m_visionContainer = Optional.empty();
+
+  // Then make static references to each subsystem you've added
+  // ex: public static SKVision m_vision;
+
+
 
   // The list containing all the command binding classes
   private List<CommandBinder> buttonBinders = new ArrayList<CommandBinder>();
 
-  // The class used to create all PathPlanner Autos
-  // private SK23AutoGenerator autoGenerator;
   // An option box on shuffleboard to choose the auto path
   SendableChooser<Command> autoCommandSelector = new SendableChooser<Command>();
 
@@ -54,7 +60,7 @@ public class RobotContainer {
     configureSubsystems();
 
     // sets up autos needed for pathplanner
-    configurePathPlanner();
+    configurePathPlannerCommands();
 
     // Configure the trigger bindings
     configureButtonBindings();
@@ -77,11 +83,11 @@ public class RobotContainer {
                     factory.createParser(new File(deployDirectory, Konstants.SUBSYSTEMFILE));
             SubsystemControls subsystems = mapper.readValue(parser, SubsystemControls.class);
 
-            // Instantiating subsystems if they are present
-            // This is decided by looking at Subsystems.json
-            // if(subsystems.isExamplePresent())
+            // ex:
+            // if(subsystems.isVisionPresent())
             // {
-            //     mySubsystem = Optional.of(new ExampleSubsystem());
+            //     m_visionContainer = Optional.of(new SKVision());
+            //     m_vision = m_visionContainer.get();
             // }
         }
         catch (IOException e)
@@ -99,8 +105,10 @@ public class RobotContainer {
     private void configureButtonBindings()
     {
 
-        // Adding all the binding classes to the list
-        // buttonBinders.add(new ExampleBinder(mySubsystem));
+        // ex: buttonBinders.add(new SKVisionBinder(m_visionContainer))
+        // Note: if your subsystem binder interacts/controls other subsystems, you can add its 
+        //       respective container reference into the binder constructor.
+        // ex: buttonBinders.add(new SKVisionBinder(m_visionContainer, m_driveContainer, m_launcherContainer))
 
 
         // Traversing through all the binding classes to actually bind the buttons
@@ -111,38 +119,37 @@ public class RobotContainer {
 
     }
 
-    private void configurePathPlanner()
+    private void configurePathPlannerCommands()
     {
-        // if(m_PracticeSwerve.isPresent())
-        // {
-        //         ExampleSubsystem subsystem = mySubsystem.get();
-                
-        //         NamedCommands.registerCommand("ExampleCommand", new ExampleCommand(subsystem));
+        // Always check to see if the drivetrain is present for auto
+        // It's kinda useless to create autonomous commands if there's no drivebase
+        // to move the robot around the field...
 
-
-        //     //Register commands for use in auto
-        //     //NamedCommands.registerCommand("StartLauncherCommand", new LaunchCommandAuto(kLauncherLeftSpeed, kLauncherRightSpeed, launcher));
-            
-        // }
-
-        // if(m_PracticeSwerve.isPresent()){
-            
-        //     // Configures the autonomous paths and smartdashboard chooser
-            
-        //     //SK25AutoBuilder.setAutoNames(autoList);
-        //     autoCommandSelector = SK25AutoBuilder.buildAutoChooser("P4_Taxi");
-        //     //SmartDashboard.putData("Auto Chooser", autoCommandSelector);
-        // }
+        /* ex:
+         * Nest the other subsystem checking if-statements inside the drivetrain if-statement
+         * 
+         * if(m_driveContainer.isPresent()) {
+         *      if(m_launcherContainer.isPresent()) {
+         *            // This line configures a launching command to be used in autonomous and feeds in
+         *            // a medium motor speed value
+         *            NamedCommands.registerCommand("RunLauncherMediumCommand", new RunLauncherCommand(kMediumSpeed));
+         *      }
+         * }
+         */
     }
 
   /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
+     * <p>
+     * This method loads the auto when it is called, however, it is recommended
+     * to first load your paths/autos when code starts, then return the
+     * pre-loaded auto/path.
      *
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand()
     {
-        return autoCommandSelector.getSelected();
+        return Commands.sequence(Commands.waitSeconds(0.01), autoCommandSelector.getSelected());
     }
 
     public void testPeriodic(){
