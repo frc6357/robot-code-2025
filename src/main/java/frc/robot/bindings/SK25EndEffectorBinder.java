@@ -68,7 +68,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
     Trigger IntakeButton;
     Trigger ResetEncoderButton;
     Trigger RollerIntake;
-    Trigger RollerOutPut;
+    Trigger RollerOutput;
     Trigger zeroPositionButton;
     Trigger zeroPositionButtonDriver;
     Trigger resetPos;
@@ -86,7 +86,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
         this.elevator = elevator;
         this.ResetEncoderButton     = resetencoder.button;
         this.RollerIntake           = kIntake.button;
-        this.RollerOutPut           = kShoot.button;
+        this.RollerOutput           = kShoot.button;
         this.zeroPositionButton = kZeroPositionOperator.button;
         this.LowButton = kLowBranchEffector.button.or(kMiddleBranchEffector.button);
         this.MiddleButton = kMiddleBranchEffector.button;
@@ -125,7 +125,7 @@ public class SK25EndEffectorBinder implements CommandBinder {
             
             
             // RollerIntake.onTrue(new EndEffectorRollerScoreCommand(endEffector, m_elevator));
-            RollerOutPut.onTrue(
+            RollerIntake.onTrue(
                 Commands.either(
                     Commands.parallel(
                         new EndEffectorRollerIntakeCommand(endEffector, m_elevator),
@@ -140,9 +140,9 @@ public class SK25EndEffectorBinder implements CommandBinder {
                     }
                 )
             );
-            RollerIntake.whileTrue(new EndEffectorRollerOutputCommand(endEffector, m_elevator));
+            RollerOutput.whileTrue(new EndEffectorRollerOutputCommand(endEffector, m_elevator));
+            RollerOutput.onFalse(new EndEffectorRollerStopCommand(endEffector));
             RollerIntake.onFalse(new EndEffectorRollerStopCommand(endEffector));
-            RollerOutPut.onFalse(new EndEffectorRollerStopCommand(endEffector));
 
             /*
             RollerIntake.whileTrue(new WaitUntilCommand(endEffector::haveCoral)
