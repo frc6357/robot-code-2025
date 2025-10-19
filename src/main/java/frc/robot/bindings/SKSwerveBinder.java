@@ -230,7 +230,7 @@ public class SKSwerveBinder implements CommandBinder{
             3.0, 3.0, 
             540, 720, 
             12, false);
-        pathfindToReef.whileTrue(AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("BargeSideSourceNWVision"), pathConstraints));
+        pathfindToReef.whileTrue(AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Seamless3GP"), pathConstraints));
         } catch (Exception e) {
             if(e instanceof IOException) {
                 System.out.println("Path not found");
