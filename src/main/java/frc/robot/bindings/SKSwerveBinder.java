@@ -3,6 +3,7 @@ package frc.robot.bindings;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
 import static frc.robot.Konstants.OIConstants.kSlowModePercent;
 import static frc.robot.Konstants.OIConstants.kSlowModeRotationPercent;
+import static frc.robot.Ports.DriverPorts.kAlignToReef;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
 import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
@@ -11,10 +12,17 @@ import static frc.robot.Ports.DriverPorts.kTranslationXPort;
 import static frc.robot.Ports.DriverPorts.kTranslationYPort;
 import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Optional;
 //import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -196,6 +204,10 @@ public class SKSwerveBinder implements CommandBinder{
             return axis;
     }
 
+    /**
+     * Experimental Pathfinding Code
+     */
+        private Trigger pathfindToReef = kAlignToReef.button;
 
     @Override
     public void bindButtons()
@@ -210,6 +222,33 @@ public class SKSwerveBinder implements CommandBinder{
 
         SKSwerve drivetrain = m_drive.get();
         
+        /**
+         * Experimental Pathfinding Code
+         */
+        try {
+        PathConstraints pathConstraints = new PathConstraints(
+            3.0, 3.0, 
+            540, 720, 
+            12, false);
+        pathfindToReef.whileTrue(AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("BargeSideSourceNWVision"), pathConstraints));
+        } catch (Exception e) {
+            if(e instanceof IOException) {
+                System.out.println("Path not found");
+            }
+            else if(e instanceof ParseException) {
+                System.out.println("JSON could not be parsed");
+            }
+            else if(e instanceof FileNotFoundException) {
+                System.out.println("Path file not found");
+            }
+            else if(e instanceof FileVersionException) {
+                System.out.println("Path file version is not compatible with this version of PathPlanner");
+            }
+            else {
+                System.out.println("Unknown error occurred while loading path");
+            }
+        }
+
         // Sets filters for driving axes
         kTranslationXPort.setFilter(translationXFilter);
         kTranslationYPort.setFilter(translationYFilter);
@@ -239,5 +278,7 @@ public class SKSwerveBinder implements CommandBinder{
                     .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModeRotationPercent)); // Drive counterclockwise with negative X (left)
             })
         );
+
+
     }
 }

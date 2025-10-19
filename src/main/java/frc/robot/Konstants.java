@@ -532,8 +532,8 @@ public final class Konstants
         public static final double kIntakeAutoDurationSeconds = 0.3;  //0.5
 
         // PID Constants
-        public static final PIDConstants kTranslationPIDConstants = new PIDConstants(6, 0, 0);
-        public static final PIDConstants kRotationPIDConstants    = new PIDConstants(6, 0.4, 0);
+        public static final PIDConstants kTranslationPIDConstants = new PIDConstants(6.4, 0.05, 0);
+        public static final PIDConstants kRotationPIDConstants    = new PIDConstants(6, 0.4, 0.0);
 
         public static final PPHolonomicDriveController pathConfig = new PPHolonomicDriveController(kTranslationPIDConstants, kRotationPIDConstants);
     }

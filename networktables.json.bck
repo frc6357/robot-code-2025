@@ -2,7 +2,7 @@
   {
     "name": "/Preferences/elevatorKp",
     "type": "double",
-    "value": 0.115,
+    "value": 0.12,
     "properties": {
       "persistent": true
     }
@@ -48,6 +48,22 @@
     }
   },
   {
+    "name": "/Preferences/lidarTargetDistMm",
+    "type": "double",
+    "value": 75.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/lidarThreshold",
+    "type": "double",
+    "value": 5.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
     "name": "/Preferences/armKg",
     "type": "double",
     "value": 0.05,
@@ -57,6 +73,22 @@
   },
   {
     "name": "/Preferences/armAngleDeg",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorKd",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorKpFF",
     "type": "double",
     "value": 0.0,
     "properties": {
@@ -88,22 +120,6 @@
     }
   },
   {
-    "name": "/Preferences/elevatorKd",
-    "type": "double",
-    "value": 0.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/elevatorTargetHeight",
-    "type": "double",
-    "value": 0.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
     "name": "/Preferences/elevatorVelocity",
     "type": "double",
     "value": 4500.0,
@@ -112,33 +128,9 @@
     }
   },
   {
-    "name": "/Preferences/lidarTargetDistMm",
-    "type": "double",
-    "value": 75.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/lidarThreshold",
-    "type": "double",
-    "value": 5.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/elevatorKpFF",
+    "name": "/Preferences/elevatorTargetHeight",
     "type": "double",
     "value": 0.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/SimulatedTagID",
-    "type": "double",
-    "value": 9.0,
     "properties": {
       "persistent": true
     }
@@ -179,14 +171,6 @@
     "name": "/Preferences/endEffectorVelocity",
     "type": "double",
     "value": 0.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/elevatorAcceleration",
-    "type": "double",
-    "value": 6000.0,
     "properties": {
       "persistent": true
     }

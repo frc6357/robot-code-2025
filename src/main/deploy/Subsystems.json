@@ -5,5 +5,5 @@
     "elevator": false,
     "climb": true,
     "coralSubsystem" : true,
-    "vision": true
+    "vision": false
 }
