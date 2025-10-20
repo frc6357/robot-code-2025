@@ -37,6 +37,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.controllers.PathFollowingController;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.numbers.N1;
@@ -536,6 +537,11 @@ public final class Konstants
         public static final PIDConstants kRotationPIDConstants    = new PIDConstants(6, 0.4, 0.0);
 
         public static final PPHolonomicDriveController pathConfig = new PPHolonomicDriveController(kTranslationPIDConstants, kRotationPIDConstants);
+
+        public static final PathConstraints kDefaultPathfindingConstraints = new PathConstraints(
+            3.5, 3.0, 
+            540, 720, 
+            12, false);
     }
 
     public static final class SimulationRobotConstants

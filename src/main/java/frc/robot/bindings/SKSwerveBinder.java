@@ -1,5 +1,6 @@
 package frc.robot.bindings;
 
+import static frc.robot.Konstants.AutoConstants.kDefaultPathfindingConstraints;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
 import static frc.robot.Konstants.OIConstants.kSlowModePercent;
 import static frc.robot.Konstants.OIConstants.kSlowModeRotationPercent;
@@ -17,27 +18,23 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Optional;
-//import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FileVersionException;
-import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//import edu.wpi.first.math.filter.SlewRateLimiter;
-// Used for binding buttons to drive actions
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Konstants.TunerConstants;
 import frc.robot.preferences.Pref;
 import frc.robot.preferences.SKPreferences;
 import frc.robot.subsystems.SK25Elevator;
-// Adds the Swerve subsystem for construction
 import frc.robot.subsystems.SKSwerve;
 import frc.robot.utils.filters.DriveStickFilter;
+import static frc.robot.commands.TeleAuto.ExecutePathSequenceFromAuto.NewPathSequenceCommand;
 
 public class SKSwerveBinder implements CommandBinder{
     Optional<SKSwerve>  m_drive;
@@ -75,7 +72,12 @@ public class SKSwerveBinder implements CommandBinder{
     private final Trigger slowmode = kSlowMode.button;
     private final Trigger resetButton = kResetGyroPos.button;
 
+    
+    /**
+     * Experimental Autonomous Triggers
+     */
     private final Trigger simulateCollision = kSimulateCollision.button;
+    private final Trigger runAuto = robotCentric;
 
     public double desiredRotSpeed = 0.0; // The double to update for the driver's desired rotation speed
 
@@ -228,13 +230,9 @@ public class SKSwerveBinder implements CommandBinder{
         /**
          * Experimental Pathfinding Code
          */
-        try {
-        PathConstraints pathConstraints = new PathConstraints(
-            3.0, 3.0, 
-            540, 720, 
-            12, false);
-        
-        pathfindToReef.whileTrue(AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Seamless3GP"), pathConstraints));
+        try {        
+        pathfindToReef.whileTrue(AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Seamless3GP"), kDefaultPathfindingConstraints));
+
         } catch (Exception e) {
             if(e instanceof IOException) {
                 System.out.println("Path not found");
@@ -252,6 +250,7 @@ public class SKSwerveBinder implements CommandBinder{
                 System.out.println("Unknown error occurred while loading path");
             }
         }
+        runAuto.whileTrue(NewPathSequenceCommand("DriftlessBargeL4(3GP)"));
 
         simulateCollision.onTrue(new InstantCommand(() -> {drivetrain.simulateCollision();} ));
         /**
@@ -263,17 +262,18 @@ public class SKSwerveBinder implements CommandBinder{
         kTranslationYPort.setFilter(translationYFilter);
         kVelocityOmegaPort.setFilter(rotationFilter);
 
-        robotCentric.whileTrue(
-            drivetrain.applyRequest(() -> {
-                return robotCentricDrive.withVelocityX(applyGains(-MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercent)) // Drive forward with negative Y (forward)
-                    .withVelocityY(applyGains(-MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercent)) // Drive left with negative X (left)
-                    .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercent)); // Drive counterclockwise with negative X (left)
-            })
-        );
+        // robotCentric.whileTrue(
+        //     drivetrain.applyRequest(() -> {
+        //         return robotCentricDrive.withVelocityX(applyGains(-MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercent)) // Drive forward with negative Y (forward)
+        //             .withVelocityY(applyGains(-MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercent)) // Drive left with negative X (left)
+        //             .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercent)); // Drive counterclockwise with negative X (left)
+        //     })
+        // );
+
 
         //Apply slow mode if activated
-        slowmode.onTrue(new InstantCommand(() -> setSlowMode(true)));
-        slowmode.onFalse(new InstantCommand(() -> setSlowMode(false)));
+        // slowmode.onTrue(new InstantCommand(() -> setSlowMode(true)));
+        // slowmode.onFalse(new InstantCommand(() -> setSlowMode(false)));
         
         // Resets gyro angles / robot oreintation
         resetButton.onTrue(new InstantCommand(() -> {drivetrain.resetOrientation();} ));

@@ -6,6 +6,8 @@ import static frc.robot.Konstants.AutoConstants.pathConfig;
 import static frc.robot.Konstants.SwerveConstants.kChassisLength;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.wpilog.WPILOGWriter.AdvantageScopeOpenBehavior;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
@@ -33,6 +35,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -59,6 +63,9 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
     private SwerveDrivePoseEstimator poseEstimator;
 
     private Field2d field = new Field2d();
+
+    private StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
+        .getStructTopic("RobotPose", Pose2d.struct).publish();
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.k180deg;
@@ -286,6 +293,8 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
 
         poseEstimator.update(getGyroRotation(), getState().ModulePositions);
         field.setRobotPose(getRobotPose());
+
+        posePublisher.set(getRobotPose());
         // Trajectory currentTrajectory = new Trajectory();
         // field.getRobotObject().setTrajectory();
         SmartDashboard.putNumber("SwerveRotRads", getGyroRotation().getRadians());
