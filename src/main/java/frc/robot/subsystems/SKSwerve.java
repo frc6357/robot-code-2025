@@ -13,7 +13,11 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
+import com.pathplanner.lib.trajectory.PathPlannerTrajectoryState;
 import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.PathPlannerLogging;
+
 //import choreo.Choreo.TrajectoryLogger;
 //import choreo.auto.AutoFactory;
 //import choreo.trajectory.SwerveSample;
@@ -22,11 +26,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -36,6 +42,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Robot;
 import frc.robot.Konstants.TunerConstants.TunerSwerveDrivetrain;
 import frc.robot.utils.Field;
 import frc.robot.utils.Util;
@@ -279,6 +286,8 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
 
         poseEstimator.update(getGyroRotation(), getState().ModulePositions);
         field.setRobotPose(getRobotPose());
+        // Trajectory currentTrajectory = new Trajectory();
+        // field.getRobotObject().setTrajectory();
         SmartDashboard.putNumber("SwerveRotRads", getGyroRotation().getRadians());
         SmartDashboard.putNumber("PoseX", getRobotPose().getX());
         SmartDashboard.putNumber("PoseY", getRobotPose().getY());
@@ -401,6 +410,12 @@ public class SKSwerve extends TunerSwerveDrivetrain implements Subsystem {
             );
         } catch (Exception ex) {
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
+        }
+    }
+
+    public void simulateCollision() {
+        if(!Robot.isReal()) {
+            resetPose(getRobotPose().plus(new Transform2d(-0.4, 0.5, getRobotRotation().plus(Rotation2d.fromDegrees(30)))));
         }
     }
 

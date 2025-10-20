@@ -7,6 +7,7 @@ import static frc.robot.Ports.DriverPorts.kAlignToReef;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
 import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
+import static frc.robot.Ports.DriverPorts.kSimulateCollision;
 import static frc.robot.Ports.DriverPorts.kSlowMode;
 import static frc.robot.Ports.DriverPorts.kTranslationXPort;
 import static frc.robot.Ports.DriverPorts.kTranslationYPort;
@@ -73,6 +74,8 @@ public class SKSwerveBinder implements CommandBinder{
     private final Trigger robotCentric = kRobotCentricMode.button;
     private final Trigger slowmode = kSlowMode.button;
     private final Trigger resetButton = kResetGyroPos.button;
+
+    private final Trigger simulateCollision = kSimulateCollision.button;
 
     public double desiredRotSpeed = 0.0; // The double to update for the driver's desired rotation speed
 
@@ -230,6 +233,7 @@ public class SKSwerveBinder implements CommandBinder{
             3.0, 3.0, 
             540, 720, 
             12, false);
+        
         pathfindToReef.whileTrue(AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Seamless3GP"), pathConstraints));
         } catch (Exception e) {
             if(e instanceof IOException) {
@@ -248,6 +252,11 @@ public class SKSwerveBinder implements CommandBinder{
                 System.out.println("Unknown error occurred while loading path");
             }
         }
+
+        simulateCollision.onTrue(new InstantCommand(() -> {drivetrain.simulateCollision();} ));
+        /**
+         * End Experimental Pathfinding Code
+         */
 
         // Sets filters for driving axes
         kTranslationXPort.setFilter(translationXFilter);
@@ -278,6 +287,7 @@ public class SKSwerveBinder implements CommandBinder{
                     .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModeRotationPercent)); // Drive counterclockwise with negative X (left)
             })
         );
+
 
 
     }

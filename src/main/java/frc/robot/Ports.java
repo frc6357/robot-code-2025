@@ -76,7 +76,11 @@ public class Ports
         public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kRightStick.value, BUTTON);
 
         // Party mode
-        
+
+        /**
+         * Experimental autonomous code
+         */
+        public static final SKTrigger kSimulateCollision = new SKTrigger(kDriver, kA.value, BUTTON);
 
     }
     /**
