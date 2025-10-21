@@ -18,13 +18,14 @@ public class SKController
     private FilteredXboxController xboxController;
     private GenericHID hIDController;
 
-    public enum ControllerType
+    public static enum ControllerType
     {
         XBOX,
         HID,
         GUITAR_HERO,
         KEYBOARD,
-        GCN;
+        GCN,
+        NINTENDOSWITCH;
     }
 
     public SKController(ControllerType type, int port)
@@ -98,6 +99,16 @@ public class SKController
                 //send and display the notification for 8.0 seconds
                 Elastic.sendNotification(gameCubeNotification.withDisplaySeconds(8.0));
 
+                break;
+            case NINTENDOSWITCH:
+                hIDController = new GenericHID(port);
+
+                Elastic.Notification switchNotification = new Elastic.Notification(NotificationLevel.INFO,
+                "Controller connected to port " + String.valueOf(port),
+                "A Controller of type GenericHID has been recognized and is active.");
+
+                Elastic.sendNotification(switchNotification.withDisplaySeconds(8.0));
+            default:
                 break;
         }
     }

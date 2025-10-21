@@ -20,6 +20,8 @@ import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
 import static frc.robot.Konstants.DriveConstants.kPigeonID;
+import frc.lib.utils.SKController;
+import static frc.lib.utils.SKController.ControllerType;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import frc.lib.utils.CANPort;
@@ -41,7 +43,7 @@ public class Ports
         //public static final CommandXboxController kDriver = new CommandXboxController(0);
         //static CommandXboxController importedKDriver = frc.robot.bindings.SK25SwerveBinder.kDriver;
         //static GenericHID kUnderlyingDriverController = importedKDriver.getHID();
-        public static final GenericHID kDriver = new FilteredXboxController(0).getHID();
+        public static final GenericHID kDriver = new SKController(ControllerType.NINTENDOSWITCH, 0).getUnderlyingHIDController();
         
         // Filtered axis (translation & rotation)
         public static final FilteredAxis kTranslationXPort = new FilteredAxis(() -> kDriver.getRawAxis(kLeftY.value));

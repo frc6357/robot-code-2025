@@ -3,6 +3,10 @@ package frc.robot.subsystems.drive;
 import static frc.robot.Konstants.AutoConstants.pathConfig;
 import static frc.robot.Konstants.SwerveConstants.kChassisLength;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -10,6 +14,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 //import choreo.Choreo.TrajectoryLogger;
 //import choreo.auto.AutoFactory;
@@ -25,6 +30,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -47,31 +53,40 @@ public class SKSwerve extends SubsystemBase {
     private final GeneratedDrivetrain drivetrain = GeneratedConstants.createDrivetrain();
     private SwerveDrivePoseEstimator poseEstimator;
     private final GeneratedTelemetry telemetry = new GeneratedTelemetry(DriveConstants.kMaxSpeed);
-
+    
     private Field2d elasticField = new Field2d();
-
+    
     private StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
-        .getStructTopic("RobotPose", Pose2d.struct).publish();
-
-
+    .getStructTopic("RobotPose", Pose2d.struct).publish();
+    
+    private StructArrayPublisher<Pose2d> pathPublisher = NetworkTableInstance.getDefault()
+    .getStructArrayTopic("ActivePath", Pose2d.struct).publish();
+    
+    
     /** Swerve request to apply during robot-centric path following */
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     private final SwerveRequest.FieldCentric teleopRequest = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
     
-
+    
     public SKSwerve() {
         lastReadState = drivetrain.getState();
         
         setupPoseEstimator();
         configureAutoBuilder();
-
+        
+        PathPlannerLogging.setLogActivePathCallback((activePath) -> telemeterizeActivePath(activePath));
     }
 
     @Override
     public void periodic() {
         poseEstimator.update(getGyroRotation(), drivetrain.getState().ModulePositions);
 
+
         outputTelemetry();
+    }
+
+    private void telemeterizeActivePath(List<Pose2d> path) {
+        pathPublisher.set(path.toArray(Pose2d[]::new));
     }
 
     public void outputTelemetry() {
