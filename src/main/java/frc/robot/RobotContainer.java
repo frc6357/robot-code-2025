@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import static frc.robot.Konstants.ClimbConstants.kKrakenSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSpeed;
 import static frc.robot.Konstants.EndEffectorConstants.kRollerSuperSpeed;
 
@@ -19,37 +18,28 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.PathPlannerPath;
-
-import static frc.robot.Ports.DriverPorts.kDriver;
-import static frc.robot.Ports.OperatorPorts.kOperator;
 
 //import choreo.auto.AutoChooser;
 //import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.utils.SubsystemControls;
-import frc.lib.utils.files.Elastic;
-import frc.lib.utils.files.Elastic.Notification.NotificationLevel;
 import frc.lib.utils.filters.FilteredJoystick;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 import frc.robot.bindings.ClimbBinder;
 import frc.robot.bindings.CommandBinder;
-import frc.robot.bindings.SK25VisionBinder;
-import frc.robot.bindings.RevBindings;
-// import frc.robot.bindings.SK25ElevatorBinder;
-//import frc.robot.utils.SK25AutoBuilder;
+import frc.robot.bindings.SK25ElevatorBinder;
 import frc.robot.bindings.SK25EndEffectorBinder;
 import frc.robot.bindings.SK25LightsBinder;
-// import frc.robot.bindings.SK25ScoringBinder;
+import frc.robot.bindings.SK25VisionBinder;
 import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.commands.AlignToReefTag.Target;
+import frc.robot.commands.EndEffectorButtonCommand;
 import frc.robot.commands.GoToSource.GoToBargeSourceFromN;
 import frc.robot.commands.GoToSource.GoToBargeSourceFromNW;
 import frc.robot.commands.GoToSource.GoToBargeSourceFromS;
@@ -57,7 +47,6 @@ import frc.robot.commands.GoToSource.GoToBargeSourceFromSW;
 import frc.robot.commands.GoToSource.GoToProcessorSourceFromNE;
 import frc.robot.commands.GoToSource.GoToProcessorSourceFromS;
 import frc.robot.commands.GoToSource.GoToProcessorSourceFromSE;
-import frc.robot.commands.EndEffectorButtonCommand;
 import frc.robot.commands.commandGroups.AlignToReefComboAuton;
 import frc.robot.commands.commandGroups.LineupCombo;
 import frc.robot.commands.commandGroups.StationCombo;
@@ -66,11 +55,10 @@ import frc.robot.subsystems.CoralSubsystem.Setpoint;
 //import frc.robot.subsystems.Configs.CoralSubsystem;
 import frc.robot.subsystems.SK25Climb;
 import frc.robot.subsystems.SK25Elevator;
-import frc.robot.subsystems.vision.SK25Vision;
-
 import frc.robot.subsystems.SK25EndEffector;
 import frc.robot.subsystems.SK25Lights;
-import frc.robot.subsystems.SKSwerve;
+import frc.robot.subsystems.drive.SKSwerve;
+import frc.robot.subsystems.vision.SK25Vision;
 
 
 /**
@@ -202,7 +190,7 @@ public class RobotContainer extends Robot{
         buttonBinders.add(new SKSwerveBinder(m_swerveContainer, m_elevatorContainer));
         // buttonBinders.add(new SK25ElevatorBinder(m_elevator));
         buttonBinders.add(new SK25LightsBinder(m_lightsContainer));
-        buttonBinders.add(new RevBindings(m_coralContainer));
+        buttonBinders.add(new SK25ElevatorBinder(m_coralContainer));
 
         // Adding all the binding classes to the list
         buttonBinders.add(new ClimbBinder(m_climbContainer));

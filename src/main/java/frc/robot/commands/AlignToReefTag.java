@@ -1,5 +1,17 @@
 package frc.robot.commands;
 
+import static frc.robot.Konstants.VisionConstants.AlignmentConstants.kAlgaeXSetpoint;
+import static frc.robot.Konstants.VisionConstants.AlignmentConstants.kCenterYSetpoint;
+import static frc.robot.Konstants.VisionConstants.AlignmentConstants.kCoralXSetpoint;
+import static frc.robot.Konstants.VisionConstants.AlignmentConstants.kFarXSetpoint;
+import static frc.robot.Konstants.VisionConstants.AlignmentConstants.kLeftYSetpoint;
+import static frc.robot.Konstants.VisionConstants.AlignmentConstants.kRejectDistance;
+import static frc.robot.Konstants.VisionConstants.AlignmentConstants.kRightYSetpoint;
+import static frc.robot.Konstants.VisionConstants.AlignmentConstants.kRotSetpoint;
+import static frc.robot.Ports.DriverPorts.kDriver;
+
+import java.util.Optional;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -9,19 +21,11 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.vision.Limelight;
-import frc.lib.vision.LimelightHelpers;
-import frc.lib.vision.LimelightHelpers.RawFiducial;
-import frc.robot.subsystems.SKSwerve;
+import frc.robot.Konstants.VisionConstants.limelightAlpha;
+import frc.robot.Konstants.VisionConstants.limelightBeta;
+import frc.robot.subsystems.drive.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
 import frc.robot.subsystems.vision.SK25Vision.MultiLimelightCommandConfig;
-
-import static frc.robot.Konstants.VisionConstants.AlignmentConstants.*;
-import static frc.robot.Ports.DriverPorts.kDriver;
-
-import java.util.Optional;
-
-import static frc.robot.Konstants.VisionConstants.limelightAlpha;
-import static frc.robot.Konstants.VisionConstants.limelightBeta;
 
 
 public class AlignToReefTag extends Command {

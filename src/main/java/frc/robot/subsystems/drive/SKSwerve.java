@@ -1,12 +1,12 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.drive;
 
 import static frc.robot.Konstants.AutoConstants.pathConfig;
 import static frc.robot.Konstants.SwerveConstants.kChassisLength;
 
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.util.DriveFeedforwards;
@@ -17,7 +17,6 @@ import com.pathplanner.lib.util.DriveFeedforwards;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -36,11 +35,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.utils.Field;
 import frc.lib.utils.Util;
-import frc.robot.Robot;
 import frc.robot.Konstants.DriveConstants;
-import frc.robot.subsystems.drive.GeneratedConstants;
-import frc.robot.subsystems.drive.GeneratedDrivetrain;
-import frc.robot.subsystems.drive.GeneratedTelemetry;
+import frc.robot.Robot;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.superclasses;
+package frc.lib.superclasses;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;

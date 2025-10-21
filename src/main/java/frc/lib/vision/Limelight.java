@@ -317,7 +317,6 @@ public class Limelight {
         if (!isAttached()) {
             return 0;
         }
-        // TODO: Is this synchronized with the RoboRio? If not, how/where to synchronize?
         return LimelightHelpers.getBotPoseEstimate_wpiBlue(config.getName()).timestampSeconds;
     }
 

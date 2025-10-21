@@ -3,7 +3,7 @@ package frc.robot.commands;
 import java.util.function.Supplier;
 
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.SKSwerve;
+import frc.robot.subsystems.drive.SKSwerve;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;

@@ -1,7 +1,6 @@
 package frc.robot.bindings;
 
 import static frc.lib.drive.FollowAutoPathSequence.NewPathSequenceCommand;
-import static frc.robot.Konstants.AutoConstants.kDefaultPathfindingConstraints;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
 import static frc.robot.Konstants.OIConstants.kSlowModePercent;
 import static frc.robot.Konstants.OIConstants.kSlowModeRotationPercent;
@@ -15,16 +14,10 @@ import static frc.robot.Ports.DriverPorts.kTranslationXPort;
 import static frc.robot.Ports.DriverPorts.kTranslationYPort;
 import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.util.FileVersionException;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -35,7 +28,7 @@ import frc.lib.preferences.SKPreferences;
 import frc.lib.utils.filters.DriveStickFilter;
 import frc.robot.Konstants.DriveConstants;
 import frc.robot.subsystems.SK25Elevator;
-import frc.robot.subsystems.SKSwerve;
+import frc.robot.subsystems.drive.SKSwerve;
 
 public class SKSwerveBinder implements CommandBinder{
     Optional<SKSwerve>  m_drive;

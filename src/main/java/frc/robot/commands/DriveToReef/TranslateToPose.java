@@ -8,7 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.subsystems.SKSwerve;
+import frc.robot.subsystems.drive.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision.CommandConfig;
 
 /**
