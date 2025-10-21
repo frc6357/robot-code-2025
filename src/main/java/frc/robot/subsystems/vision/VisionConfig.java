@@ -5,9 +5,9 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import frc.lib.vision.Limelight.LimelightConfig;
 
 import static frc.robot.Konstants.VisionConstants.*;
-import frc.robot.utils.vision.Limelight.LimelightConfig;
 
 public final class VisionConfig {
     public static final String RIGHT_LL = limelightAlpha.kName;

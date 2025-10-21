@@ -34,10 +34,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.preferences.SKPreferences;
+import frc.lib.preferences.SKPreferences;
+import frc.lib.utils.files.Elastic;
+import frc.lib.utils.files.Elastic.Notification.NotificationLevel;
 import frc.robot.subsystems.SK25Climb;
-import frc.robot.utils.files.Elastic;
-import frc.robot.utils.files.Elastic.Notification.NotificationLevel;
 
 // Unused Imports
 //import edu.wpi.first.wpilibj.TimedRobot;

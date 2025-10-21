@@ -1,5 +1,6 @@
 package frc.robot.bindings;
 
+import static frc.lib.drive.FollowAutoPathSequence.NewPathSequenceCommand;
 import static frc.robot.Konstants.AutoConstants.kDefaultPathfindingConstraints;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
 import static frc.robot.Konstants.OIConstants.kSlowModePercent;
@@ -28,13 +29,13 @@ import com.pathplanner.lib.util.FileVersionException;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.lib.drive.FollowPath;
+import frc.lib.preferences.Pref;
+import frc.lib.preferences.SKPreferences;
+import frc.lib.utils.filters.DriveStickFilter;
 import frc.robot.Konstants.TunerConstants;
-import frc.robot.preferences.Pref;
-import frc.robot.preferences.SKPreferences;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SKSwerve;
-import frc.robot.utils.filters.DriveStickFilter;
-import static frc.robot.commands.TeleAuto.ExecutePathSequenceFromAuto.NewPathSequenceCommand;
 
 public class SKSwerveBinder implements CommandBinder{
     Optional<SKSwerve>  m_drive;
@@ -230,26 +231,8 @@ public class SKSwerveBinder implements CommandBinder{
         /**
          * Experimental Pathfinding Code
          */
-        try {        
-        pathfindToReef.whileTrue(AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Seamless3GP"), kDefaultPathfindingConstraints));
-
-        } catch (Exception e) {
-            if(e instanceof IOException) {
-                System.out.println("Path not found");
-            }
-            else if(e instanceof ParseException) {
-                System.out.println("JSON could not be parsed");
-            }
-            else if(e instanceof FileNotFoundException) {
-                System.out.println("Path file not found");
-            }
-            else if(e instanceof FileVersionException) {
-                System.out.println("Path file version is not compatible with this version of PathPlanner");
-            }
-            else {
-                System.out.println("Unknown error occurred while loading path");
-            }
-        }
+        pathfindToReef.whileTrue(FollowPath.PathfindThenFollowPathCommand("Seamless3GP"));
+        
         runAuto.whileTrue(NewPathSequenceCommand("DriftlessBargeL4(3GP)"));
 
         simulateCollision.onTrue(new InstantCommand(() -> {drivetrain.simulateCollision();} ));

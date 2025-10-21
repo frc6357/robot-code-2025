@@ -28,13 +28,12 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 // SmartDashboard
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.lib.preferences.Pref;
+import frc.lib.preferences.SKPreferences;
+import frc.lib.utils.Util;
 // Constants (Muy Importante)
 import frc.robot.Konstants.ElevatorConstants.ElevatorPosition;
-// Preferences
-import frc.robot.preferences.Pref;
-import frc.robot.preferences.SKPreferences;
 import frc.robot.subsystems.superclasses.Elevator;
-import frc.robot.utils.Util;
 
 public class SK25Elevator extends Elevator
 {

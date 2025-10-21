@@ -28,9 +28,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants;
 import frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.ElevatorSetpoints;
+import frc.lib.preferences.Pref;
+import frc.lib.preferences.SKPreferences;
 import frc.robot.Konstants.SimulationRobotConstants;
-import frc.robot.preferences.Pref;
-import frc.robot.preferences.SKPreferences;
 
 public class CoralSubsystem extends SubsystemBase {
   /** Subsystem-wide setpoints */

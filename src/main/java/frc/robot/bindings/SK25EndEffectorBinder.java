@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.lib.utils.filters.DeadbandFilter;
 import frc.robot.Konstants.ElevatorConstants.CoralSubsystemConstants.ElevatorSetpoints;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
 
@@ -54,7 +55,6 @@ import frc.robot.commands.EndEffectorRollerOutputCommand;
 import frc.robot.commands.EndEffectorRollerStopCommand;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.SK25EndEffector;
-import frc.robot.utils.filters.DeadbandFilter;
 
 public class SK25EndEffectorBinder implements CommandBinder {
 

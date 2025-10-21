@@ -49,9 +49,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.preferences.Pref;
+import frc.lib.preferences.SKPreferences;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
-import frc.robot.preferences.Pref;
-import frc.robot.preferences.SKPreferences;
 
 public class SK25EndEffector extends SubsystemBase
 {

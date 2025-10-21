@@ -8,6 +8,9 @@ import static frc.robot.Konstants.SwerveConstants.kBackLeftTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kBackRightTurnMotorID;
+import static frc.lib.utils.SKTrigger.INPUT_TYPE.AXIS;
+import static frc.lib.utils.SKTrigger.INPUT_TYPE.BUTTON;
+import static frc.lib.utils.SKTrigger.INPUT_TYPE.POV;
 import static frc.robot.Konstants.kCANivoreName;
 import static frc.robot.Konstants.EndEffectorConstants.kJoystickDeadband;
 import static frc.robot.Konstants.SwerveConstants.kFrontLeftDriveMotorID;
@@ -17,17 +20,13 @@ import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kPigeonID;
-//import static frc.robot.utils.SKTrigger.INPUT_TYPE.*;
-import static frc.robot.utils.SKTrigger.INPUT_TYPE.AXIS;
-import static frc.robot.utils.SKTrigger.INPUT_TYPE.BUTTON;
-import static frc.robot.utils.SKTrigger.INPUT_TYPE.POV;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import frc.robot.utils.CANPort;
-import frc.robot.utils.SKTrigger;
-import frc.robot.utils.filters.DeadbandFilter;
-import frc.robot.utils.filters.FilteredAxis;
-import frc.robot.utils.filters.FilteredXboxController;
+import frc.lib.utils.CANPort;
+import frc.lib.utils.SKTrigger;
+import frc.lib.utils.filters.DeadbandFilter;
+import frc.lib.utils.filters.FilteredAxis;
+import frc.lib.utils.filters.FilteredXboxController;
 
 // Unused Imports
 
