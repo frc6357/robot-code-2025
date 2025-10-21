@@ -52,7 +52,7 @@ public class DriveCommand {
         
         public void run(){
             if(fieldOriented.get() == true) { // Field centric drive requested
-                m_swerve.setControl(
+                m_swerve.getDrivetrain().setControl(
                     fieldCentricDrive
                         .withVelocityX(velX.get())
                         .withVelocityY(velY.get())
@@ -60,7 +60,7 @@ public class DriveCommand {
                 );
             }
             else { // Robot centric drive
-                m_swerve.setControl(
+                m_swerve.getDrivetrain().setControl(
                     robotCentricDrive
                         .withVelocityX(velX.get())
                         .withVelocityY(velY.get())

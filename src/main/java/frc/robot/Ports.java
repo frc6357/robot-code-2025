@@ -19,7 +19,7 @@ import static frc.robot.Konstants.SwerveConstants.kFrontLeftTurnMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightDriveMotorID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightEncoderID;
 import static frc.robot.Konstants.SwerveConstants.kFrontRightTurnMotorID;
-import static frc.robot.Konstants.SwerveConstants.kPigeonID;
+import static frc.robot.Konstants.DriveConstants.kPigeonID;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import frc.lib.utils.CANPort;
@@ -151,29 +151,29 @@ public class Ports
      * Defines all the ports needed to create sensors and actuators for the drivetrain.
      */
 
-    public static class DrivePorts
-    {
-        // CAN IDs for the drive motors on the swerve module
-        public static final CANPort kFrontLeftDriveMotorPort  = new CANPort(kFrontLeftDriveMotorID, kCANivoreName);
-        public static final CANPort kFrontRightDriveMotorPort = new CANPort(kFrontRightDriveMotorID, kCANivoreName);
-        public static final CANPort kBackLeftDriveMotorPort   = new CANPort(kBackLeftDriveMotorID, kCANivoreName);
-        public static final CANPort kBackRightDriveMotorPort  = new CANPort(kBackRightDriveMotorID, kCANivoreName);
+    // public static class DrivePorts
+    // {
+    //     // CAN IDs for the drive motors on the swerve module
+    //     public static final CANPort kFrontLeftDriveMotorPort  = new CANPort(kFrontLeftDriveMotorID, kCANivoreName);
+    //     public static final CANPort kFrontRightDriveMotorPort = new CANPort(kFrontRightDriveMotorID, kCANivoreName);
+    //     public static final CANPort kBackLeftDriveMotorPort   = new CANPort(kBackLeftDriveMotorID, kCANivoreName);
+    //     public static final CANPort kBackRightDriveMotorPort  = new CANPort(kBackRightDriveMotorID, kCANivoreName);
 
-        // CAN IDs for the turning motors on the swerve module
-        public static final CANPort kFrontLeftTurnMotorPort  = new CANPort(kFrontLeftTurnMotorID, kCANivoreName);
-        public static final CANPort kFrontRightTurnMotorPort = new CANPort(kFrontRightTurnMotorID, kCANivoreName);
-        public static final CANPort kBackLeftTurnMotorPort   = new CANPort(kBackLeftTurnMotorID, kCANivoreName);
-        public static final CANPort kBackRightTurnMotorPort  = new CANPort(kBackRightTurnMotorID, kCANivoreName);
+    //     // CAN IDs for the turning motors on the swerve module
+    //     public static final CANPort kFrontLeftTurnMotorPort  = new CANPort(kFrontLeftTurnMotorID, kCANivoreName);
+    //     public static final CANPort kFrontRightTurnMotorPort = new CANPort(kFrontRightTurnMotorID, kCANivoreName);
+    //     public static final CANPort kBackLeftTurnMotorPort   = new CANPort(kBackLeftTurnMotorID, kCANivoreName);
+    //     public static final CANPort kBackRightTurnMotorPort  = new CANPort(kBackRightTurnMotorID, kCANivoreName);
 
-        // CAN IDs for the CANCoders
-        public static final CANPort kFrontLeftEncoderPort  = new CANPort(kFrontLeftEncoderID, kCANivoreName);
-        public static final CANPort kFrontRightEncoderPort = new CANPort(kFrontRightEncoderID, kCANivoreName);
-        public static final CANPort kBackLeftEncoderPort   = new CANPort(kBackLeftEncoderID, kCANivoreName);
-        public static final CANPort kBackRightEncoderPort  = new CANPort(kBackRightEncoderID, kCANivoreName);
+    //     // CAN IDs for the CANCoders
+    //     public static final CANPort kFrontLeftEncoderPort  = new CANPort(kFrontLeftEncoderID, kCANivoreName);
+    //     public static final CANPort kFrontRightEncoderPort = new CANPort(kFrontRightEncoderID, kCANivoreName);
+    //     public static final CANPort kBackLeftEncoderPort   = new CANPort(kBackLeftEncoderID, kCANivoreName);
+    //     public static final CANPort kBackRightEncoderPort  = new CANPort(kBackRightEncoderID, kCANivoreName);
         
-        // CAN ID for IMU
-        public static final CANPort kPigeonPort = new CANPort(kPigeonID, kCANivoreName);
-    }
+    //     // CAN ID for IMU
+    //     public static final CANPort kPigeonPort = new CANPort(kPigeonID, kCANivoreName);
+    // }
     
     public static class ClimbPorts
     {

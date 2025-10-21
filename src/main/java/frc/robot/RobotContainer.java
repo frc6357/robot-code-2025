@@ -164,7 +164,7 @@ public class RobotContainer extends Robot{
                 m_elevator = m_elevatorContainer.get();
             }
             if(subsystems.isSwervePresent()) {
-                m_swerveContainer = Optional.of(Konstants.TunerConstants.createDrivetrain());
+                m_swerveContainer = Optional.of(new SKSwerve());
                 m_swerve = m_swerveContainer.get(); // Returns new SKSwerve
             }
             if(subsystems.isVisionPresent() && subsystems.isSwervePresent()) {

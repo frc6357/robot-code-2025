@@ -33,7 +33,7 @@ import frc.lib.drive.FollowPath;
 import frc.lib.preferences.Pref;
 import frc.lib.preferences.SKPreferences;
 import frc.lib.utils.filters.DriveStickFilter;
-import frc.robot.Konstants.TunerConstants;
+import frc.robot.Konstants.DriveConstants;
 import frc.robot.subsystems.SK25Elevator;
 import frc.robot.subsystems.SKSwerve;
 
@@ -59,8 +59,8 @@ public class SKSwerveBinder implements CommandBinder{
                 });
 
     //Define the max speeds of the drivetrain
-    private double MaxSpeed = TunerConstants.MaxSpeed; // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = TunerConstants.MaxAngularRate; // 3/4 of a rotation per second max angular velocity
+    private double MaxSpeed = DriveConstants.kMaxSpeed; // kSpeedAt12Volts desired top speed
+    private double MaxAngularRate = DriveConstants.kMaxAngularRate; // 3/4 of a rotation per second max angular velocity
 
     // Driver Buttons
     //The function button enables button combinations which occur only when both the function and the other
@@ -226,16 +226,16 @@ public class SKSwerveBinder implements CommandBinder{
         //set to false by defualt
         setSlowMode(slowModeStatus);
 
-        SKSwerve drivetrain = m_drive.get();
+        SKSwerve drive = m_drive.get();
         
         /**
          * Experimental Pathfinding Code
          */
         pathfindToReef.whileTrue(FollowPath.PathfindThenFollowPathCommand("Seamless3GP"));
-        
+
         runAuto.whileTrue(NewPathSequenceCommand("DriftlessBargeL4(3GP)"));
 
-        simulateCollision.onTrue(new InstantCommand(() -> {drivetrain.simulateCollision();} ));
+        simulateCollision.onTrue(new InstantCommand(() -> {drive.simulateCollision();} ));
         /**
          * End Experimental Pathfinding Code
          */
@@ -259,12 +259,12 @@ public class SKSwerveBinder implements CommandBinder{
         // slowmode.onFalse(new InstantCommand(() -> setSlowMode(false)));
         
         // Resets gyro angles / robot oreintation
-        resetButton.onTrue(new InstantCommand(() -> {drivetrain.resetOrientation();} ));
+        resetButton.onTrue(new InstantCommand(() -> {drive.resetOrientation();} ));
 
 
-        drivetrain.setDefaultCommand(
+        drive.getDrivetrain().setDefaultCommand(
             // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() -> {
+            drive.getDrivetrain().applyRequest(() -> {
                 return feildCentricDrive.withVelocityX(applyGains(-MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercent)) // Drive forward with negative Y (forward)
                     .withVelocityY(applyGains(-MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercent)) // Drive left with negative X (left)
                     .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModeRotationPercent)); // Drive counterclockwise with negative X (left)

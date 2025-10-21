@@ -34,7 +34,7 @@ import frc.lib.vision.Limelight.IMUMode;
 import frc.lib.vision.LimelightHelpers.RawFiducial;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.Konstants.TunerConstants;
+import frc.robot.Konstants.DriveConstants;
 import frc.robot.subsystems.SKSwerve;
 
 public class SK25Vision extends SubsystemBase implements NTSendable {
@@ -107,10 +107,10 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             configKpid(1, 0, 0.001); //1, 0, .001
             configTolerance(0.02);
             configProfile(
-                TunerConstants.MaxSpeed * 0.55, 
-                (TunerConstants.MaxSpeed * 0.55) * 2
+                DriveConstants.kMaxSpeed * 0.55, 
+                (DriveConstants.kMaxSpeed * 0.55) * 2
             ); //55% Max Speed; 2x Acceleration
-            configMaxOutput(TunerConstants.MaxSpeed * 0.55);
+            configMaxOutput(DriveConstants.kMaxSpeed * 0.55);
             configError(0.01);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
@@ -126,9 +126,9 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             configKpid(0.006, 0, 0.00015);
             configTolerance(1.5);
             configProfile(
-                TunerConstants.MaxAngularRateDeg * 0.1, 
-                TunerConstants.MaxAngularRateDeg * 0.1 * 5); // 10% Angular speed; 5x acceleration
-            configMaxOutput(TunerConstants.MaxAngularRateDeg * 0.1);
+                DriveConstants.kMaxAngularRateDeg * 0.1, 
+                DriveConstants.kMaxAngularRateDeg * 0.1 * 5); // 10% Angular speed; 5x acceleration
+            configMaxOutput(DriveConstants.kMaxAngularRateDeg * 0.1);
             configError(1);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
@@ -489,14 +489,14 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             VisionConfig.VISION_STD_DEV_X = 0.001;
             VisionConfig.VISION_STD_DEV_Y = 0.001;
             VisionConfig.VISION_STD_DEV_THETA = 0.001;
-            m_swerve.setVisionMeasurementStdDevs(
+            m_swerve.getDrivetrain().setVisionMeasurementStdDevs(
                     VecBuilder.fill(
                             VisionConfig.VISION_STD_DEV_X,
                             VisionConfig.VISION_STD_DEV_Y,
                             VisionConfig.VISION_STD_DEV_THETA));
 
             Pose2d integratedPose = new Pose2d(megaPose.getTranslation(), megaPose.getRotation());
-            m_swerve.addVisionMeasurement(integratedPose, poseTimestamp);
+            m_swerve.getDrivetrain().addVisionMeasurement(integratedPose, poseTimestamp);
             // robotPose = m_swerve.getRobotPose(); // get updated pose
             resetPoseToVisionLog = ("ResetPoseToVision: SUCCESS");
             return true;
@@ -642,9 +642,9 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     }
 
     private void addVisionMeasurementWithStdDevs(Pose2d integratedPose, double timeStamp, Vector<N3>stdDevs) {
-        m_swerve.setVisionMeasurementStdDevs(stdDevs);
+        m_swerve.getDrivetrain().setVisionMeasurementStdDevs(stdDevs);
 
-        m_swerve.addVisionMeasurement(integratedPose, timeStamp);
+        m_swerve.getDrivetrain().addVisionMeasurement(integratedPose, timeStamp);
     }
     private void addVisionMeasurementWithStdDevs(Pose2d integratedPose, double timeStamp, double stdDevX, double stdDevY, double stdDevTheta) {
         Vector<N3> stdDevs = VecBuilder.fill(
