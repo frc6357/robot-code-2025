@@ -1,11 +1,16 @@
 package frc.robot.bindings;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static frc.lib.drive.FollowAutoPathSequence.NewPathSequenceCommand;
+import static frc.robot.Konstants.DriveConstants.kMaxAngularRate;
+import static frc.robot.Konstants.DriveConstants.kMaxSpeed;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
 import static frc.robot.Konstants.OIConstants.kSlowModePercent;
 import static frc.robot.Konstants.OIConstants.kSlowModeRotationPercent;
 import static frc.robot.Ports.DriverPorts.kAlignToReef;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
+import static frc.robot.Ports.DriverPorts.kFastMode;
 import static frc.robot.Ports.DriverPorts.kResetGyroPos;
 import static frc.robot.Ports.DriverPorts.kRobotCentricMode;
 import static frc.robot.Ports.DriverPorts.kSimulateCollision;
@@ -25,9 +30,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.drive.FollowPath;
 import frc.lib.preferences.Pref;
 import frc.lib.preferences.SKPreferences;
+import frc.lib.utils.DriveJoystickInput;
 import frc.lib.utils.filters.DriveStickFilter;
 import frc.robot.Konstants.DriveConstants;
 import frc.robot.subsystems.SK25Elevator;
+import frc.robot.subsystems.drive.DriveRequests;
 import frc.robot.subsystems.drive.SKSwerve;
 
 public class SKSwerveBinder implements CommandBinder{
@@ -51,10 +58,6 @@ public class SKSwerveBinder implements CommandBinder{
                     rotationFilter.setSlewRate(newValue);
                 });
 
-    //Define the max speeds of the drivetrain
-    private double MaxSpeed = DriveConstants.kMaxSpeed; // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = DriveConstants.kMaxAngularRate; // 3/4 of a rotation per second max angular velocity
-
     // Driver Buttons
     //The function button enables button combinations which occur only when both the function and the other
     //specified button are pressed.
@@ -65,6 +68,7 @@ public class SKSwerveBinder implements CommandBinder{
     private final Trigger robotCentric = kRobotCentricMode.button;
     private final Trigger slowmode = kSlowMode.button;
     private final Trigger resetButton = kResetGyroPos.button;
+    private final Trigger fastmode = kFastMode.button;
 
     
     /**
@@ -121,16 +125,13 @@ public class SKSwerveBinder implements CommandBinder{
         // else
         // {
             this.translationXFilter = new DriveStickFilter(
-                MaxSpeed, 
                 driverTranslationSlewPref.get(),
                 kJoystickDeadband);
             this.translationYFilter = new DriveStickFilter(
-                MaxSpeed, 
                 driverTranslationSlewPref.get(), 
                 kJoystickDeadband);
 
             this.rotationFilter = new DriveStickFilter(
-                MaxAngularRate, 
                 driverRotationSlewPref.get(), 
                 kJoystickDeadband);
         // }
@@ -254,15 +255,26 @@ public class SKSwerveBinder implements CommandBinder{
         // Resets gyro angles / robot oreintation
         resetButton.onTrue(new InstantCommand(() -> {drive.resetOrientation();} ));
 
-
-        drive.getDrivetrain().setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drive.getDrivetrain().applyRequest(() -> {
-                return feildCentricDrive.withVelocityX(applyGains(-MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercent)) // Drive forward with negative Y (forward)
-                    .withVelocityY(applyGains(-MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercent)) // Drive left with negative X (left)
-                    .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModeRotationPercent)); // Drive counterclockwise with negative X (left)
-            })
+        drive.setDefaultCommand(
+            drive.followSwerveRequestCommand(
+                DriveRequests.teleopRequest, 
+                DriveRequests.teleopRequestUpdater, 
+                DriveJoystickInput.processInput(
+                    -kTranslationYPort.getFilteredAxis(), 
+                    -kTranslationXPort.getFilteredAxis(), 
+                    -kVelocityOmegaPort.getFilteredAxis(), 
+                    slowmode.getAsBoolean(), 
+                    fastmode.getAsBoolean()))
         );
+
+        // drive.getDrivetrain().setDefaultCommand(
+        //     // Drivetrain will execute this command periodically
+        //     drive.getDrivetrain().applyRequest(() -> {
+        //         return feildCentricDrive.withVelocityX(applyGains(-kMaxSpeed.in(MetersPerSecond) * kTranslationXPort.getFilteredAxis(), kSlowModePercent)) // Drive forward with negative Y (forward)
+        //             .withVelocityY(applyGains(-kMaxSpeed.in(MetersPerSecond) * kTranslationYPort.getFilteredAxis(), kSlowModePercent)) // Drive left with negative X (left)
+        //             .withRotationalRate(applyGains(kMaxAngularRate.in(RadiansPerSecond) * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModeRotationPercent)); // Drive counterclockwise with negative X (left)
+        //     })
+        // );
 
 
 

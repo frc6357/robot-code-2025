@@ -1,5 +1,7 @@
 package frc.robot.subsystems.vision;
 
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static frc.robot.Konstants.VisionConstants.kAprilTagPipeline;
 
 import java.text.DecimalFormat;
@@ -101,10 +103,10 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             configKpid(1, 0, 0.001); //1, 0, .001
             configTolerance(0.02);
             configProfile(
-                DriveConstants.kMaxSpeed * 0.55, 
-                (DriveConstants.kMaxSpeed * 0.55) * 2
+                DriveConstants.kMaxSpeed.times(0.55).in(MetersPerSecond), 
+                DriveConstants.kMaxSpeed.times(0.55).in(MetersPerSecond) * 2
             ); //55% Max Speed; 2x Acceleration
-            configMaxOutput(DriveConstants.kMaxSpeed * 0.55);
+            configMaxOutput(DriveConstants.kMaxSpeed.times(0.55).in(MetersPerSecond));
             configError(0.01);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);
@@ -120,9 +122,9 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
             configKpid(0.006, 0, 0.00015);
             configTolerance(1.5);
             configProfile(
-                DriveConstants.kMaxAngularRateDeg * 0.1, 
-                DriveConstants.kMaxAngularRateDeg * 0.1 * 5); // 10% Angular speed; 5x acceleration
-            configMaxOutput(DriveConstants.kMaxAngularRateDeg * 0.1);
+                DriveConstants.kMaxAngularRate.in(DegreesPerSecond) * 0.1, 
+                DriveConstants.kMaxAngularRate.in(DegreesPerSecond) * 0.1 * 5); // 10% Angular speed; 5x acceleration
+            configMaxOutput(DriveConstants.kMaxAngularRate.in(DegreesPerSecond) * 0.1);
             configError(1);
             configPipelineIndex(kAprilTagPipeline);
             configLimelights(RobotContainer.m_vision.poseLimelights);

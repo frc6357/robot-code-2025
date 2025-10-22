@@ -1,16 +1,14 @@
 {
   "hubs": [
     {
-      "x": 260,
-      "y": 106,
-      "width": 1040,
-      "height": 678,
+      "x": 202,
+      "y": 69,
+      "width": 1041,
+      "height": 683,
       "state": {
         "sidebar": {
           "width": 300,
-          "expanded": [
-            "/SmartDashboard"
-          ]
+          "expanded": []
         },
         "tabs": {
           "selected": 2,
@@ -74,24 +72,9 @@
                 "bumpers": "auto",
                 "origin": "blue",
                 "orientation": 0,
-                "size": 30
+                "size": 27
               },
               "controllerUUID": "35q5yp4vu5fwmc0zft7nxvmhbsakcznu",
-              "renderer": null,
-              "controlsHeight": 200
-            },
-            {
-              "type": 2,
-              "title": "Odometry",
-              "controller": {
-                "sources": [],
-                "game": "2025 Field (Welded)",
-                "bumpers": "auto",
-                "origin": "blue",
-                "orientation": 0,
-                "size": 30
-              },
-              "controllerUUID": "0hpk4rjglt0d424swd1xtiidgto377mv",
               "renderer": null,
               "controlsHeight": 200
             },

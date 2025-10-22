@@ -6,6 +6,9 @@ import static frc.robot.Konstants.SwerveConstants.kChassisLength;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
@@ -38,8 +41,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.utils.DriveJoystickInput;
 import frc.lib.utils.Field;
+import frc.lib.utils.Trio;
 import frc.lib.utils.Util;
 import frc.robot.Konstants.DriveConstants;
 import frc.robot.Robot;
@@ -52,7 +58,8 @@ public class SKSwerve extends SubsystemBase {
     private SwerveDriveState lastReadState;
     private final GeneratedDrivetrain drivetrain = GeneratedConstants.createDrivetrain();
     private SwerveDrivePoseEstimator poseEstimator;
-    private final GeneratedTelemetry telemetry = new GeneratedTelemetry(DriveConstants.kMaxSpeed);
+    private final GeneratedTelemetry telemetry = new GeneratedTelemetry(DriveConstants.kMaxSpeed.baseUnitMagnitude());
+    private SwerveRequest currentRequest = DriveRequests.teleopRequest;
     
     private Field2d elasticField = new Field2d();
     
@@ -65,8 +72,26 @@ public class SKSwerve extends SubsystemBase {
     
     /** Swerve request to apply during robot-centric path following */
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
-    private final SwerveRequest.FieldCentric teleopRequest = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-    
+
+    public void setSwerveRequest(SwerveRequest request) {
+		currentRequest = request;
+	}
+
+    /**
+     * Creates a command that will continuously update the drivetrain's
+     * target swerve request based on the given request and updater function.
+     * @param request The specific request to follow.
+     * @param updater The corresponding request updater. Make sure you use the corrrect updater.
+     * @return The command.
+     */
+    public Command followSwerveRequestCommand(
+        SwerveRequest.FieldCentric request, 
+        BiFunction<SwerveRequest.FieldCentric, DriveJoystickInput, SwerveRequest.FieldCentric> updater,
+        DriveJoystickInput joystickInputs) {
+        return run(() -> setSwerveRequest(updater.apply(request, joystickInputs)))
+                .handleInterrupt(() -> setSwerveRequest(new SwerveRequest.FieldCentric()));
+    }
+
     
     public SKSwerve() {
         lastReadState = drivetrain.getState();
@@ -75,12 +100,15 @@ public class SKSwerve extends SubsystemBase {
         configureAutoBuilder();
         
         PathPlannerLogging.setLogActivePathCallback((activePath) -> telemeterizeActivePath(activePath));
+
+        drivetrain.setDefaultCommand(drivetrain.applyRequest(()-> {
+            return currentRequest;
+        }));
     }
 
     @Override
     public void periodic() {
         poseEstimator.update(getGyroRotation(), drivetrain.getState().ModulePositions);
-
 
         outputTelemetry();
     }

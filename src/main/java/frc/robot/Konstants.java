@@ -3,97 +3,49 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Volts;
-import static frc.robot.Konstants.DriveConstants.kPigeonID;
+import static frc.robot.Konstants.OIConstants.kSlowModePercent;
 
 import java.util.HashMap;
 import java.util.List;
 
-import com.ctre.phoenix6.CANBus;    
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.Pigeon2Configuration;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
-import com.ctre.phoenix6.swerve.SwerveDrivetrain;
-import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
-import com.ctre.phoenix6.swerve.SwerveModuleConstants;
-import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
-import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
-import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
-import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
-import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.controllers.PathFollowingController;
 import com.pathplanner.lib.path.PathConstraints;
-
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.LinearVelocity;
-
-
-//import static edu.wpi.first.units.Units.Rotations;
-//import static edu.wpi.first.units.Units.Radians;
-//import edu.wpi.first.units.measure.Distance;
-//import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
-//import edu.wpi.first.math.util.Units;
-// import com.pathplanner.lib.config.PIDConstants;
-// import com.revrobotics.spark.SparkClosedLoopController;
-// import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-// import com.revrobotics.spark.config.LimitSwitchConfig.Type;
-// import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-// import com.revrobotics.spark.config.SparkFlexConfig;
-import edu.wpi.first.units.measure.MomentOfInertia;
-import edu.wpi.first.units.measure.Voltage;
-import frc.lib.utils.Field;
-import frc.robot.subsystems.drive.GeneratedConstants;
-import frc.robot.subsystems.drive.SKSwerve;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Pose2d;
-// import edu.wpi.first.math.util.Units;
-// import edu.wpi.first.units.measure.Angle;
-
-//import edu.wpi.first.units.measure.Distance;
-//import frc.robot.subsystems.swerve.SwerveConstantsConfigurator;
-//import edu.wpi.first.math.util.Units;
-import com.pathplanner.lib.config.PIDConstants;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
+import edu.wpi.first.math.geometry.Pose2d;
+// import edu.wpi.first.math.util.Units;
+// import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Velocity;
+import frc.robot.subsystems.drive.GeneratedConstants;
 
 @SuppressWarnings("unused")
 public final class Konstants
 {
     public static final class DriveConstants {
-    public static double kMaxSpeed = GeneratedConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    public static double kMaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-    public static double kMaxAngularRateDeg = RadiansPerSecond.of(kMaxAngularRate).in(DegreesPerSecond);
+        public static final LinearVelocity kMaxSpeed = GeneratedConstants.kSpeedAt12Volts; // kSpeedAt12Volts desired top speed
+        public static final LinearVelocity kMaxSpeedFAST = kMaxSpeed.times(1.75);
+        public static final LinearVelocity kMaxSpeedSLOW = kMaxSpeed.times(0.3);
 
-    //pigeon ID
-    public static final int kPigeonID = 30; //30
+        public static final AngularVelocity kMaxAngularRate = RotationsPerSecond.of(2); // 3/4 of a rotation per second max angular velocity
+        public static final AngularVelocity kMaxAngularRateFAST = kMaxAngularRate.times(2); // 1.5 rotations per second max angular velocity
+        public static final AngularVelocity kMaxAngularRateSLOW = kMaxAngularRate.times(0.5); // 1/4 of a rotation per second max angular velocity
+
+        //pigeon ID
+        public static final int kPigeonID = 30; //30
     }
 
     /*
@@ -224,9 +176,9 @@ public final class Konstants
         /** The max rotation speed the turn wheels should be allowed to go */
         public static final double kMaxRotationDegreesPerSecond = 360.0;  // degrees/second
 
-        public static final double kMaxAngularRate = 1.5 * Math.PI;
-        public static final double kMaxAngularVelocity = 2 * Math.PI; // rad/s
-        public static final double kMaxAngularAcceleration = Math.pow(kMaxAngularVelocity, 2); // rad/s^2
+        // public static final double kMaxAngularRate = 1.5 * Math.PI;
+        // public static final double kMaxAngularVelocity = 2 * Math.PI; // rad/s
+        // public static final double kMaxAngularAcceleration = Math.pow(kMaxAngularVelocity, 2); // rad/s^2
 
         // The inertia expereinced by the robot when attempting to drive or turn.
         //These are only used for simulation
