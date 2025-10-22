@@ -2,7 +2,7 @@
   {
     "name": "/Preferences/elevatorKp",
     "type": "double",
-    "value": 0.12,
+    "value": 0.13,
     "properties": {
       "persistent": true
     }
@@ -34,7 +34,7 @@
   {
     "name": "/Preferences/driverTranslSlew",
     "type": "double",
-    "value": 4.0,
+    "value": 2.0,
     "properties": {
       "persistent": true
     }
@@ -122,7 +122,7 @@
   {
     "name": "/Preferences/elevatorVelocity",
     "type": "double",
-    "value": 4500.0,
+    "value": 5000.0,
     "properties": {
       "persistent": true
     }
@@ -171,6 +171,14 @@
     "name": "/Preferences/endEffectorVelocity",
     "type": "double",
     "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorAcceleration",
+    "type": "double",
+    "value": 6000.0,
     "properties": {
       "persistent": true
     }

@@ -6,9 +6,13 @@ public class DriveStickFilter implements Filter {
     private DeadbandFilter deadbandFilter;
     private SlewRateLimiter slewRateFilter;
         
-            public DriveStickFilter(double slewRate, double deadband) {                
-                setDeadband(deadband);
-                setSlewRate(slewRate);
+        public DriveStickFilter(double slewRate, double deadband) {                
+            setDeadband(deadband);
+            setSlewRate(slewRate);
+        }
+        public DriveStickFilter(double slewRate, DeadbandFilter deadbandFilter) {                
+            this.deadbandFilter = deadbandFilter;
+            setSlewRate(slewRate);
         }
     
         @Override

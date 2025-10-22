@@ -43,8 +43,7 @@ public class Ports
         //public static final CommandXboxController kDriver = new CommandXboxController(0);
         //static CommandXboxController importedKDriver = frc.robot.bindings.SK25SwerveBinder.kDriver;
         //static GenericHID kUnderlyingDriverController = importedKDriver.getHID();
-        public static final GenericHID kDriver = new SKController(ControllerType.NINTENDOSWITCH, 0).getUnderlyingHIDController();
-        
+        public static final GenericHID kDriver = new FilteredXboxController(0).getHID();        
         // Filtered axis (translation & rotation)
         public static final FilteredAxis kTranslationXPort = new FilteredAxis(() -> kDriver.getRawAxis(kLeftY.value));
         public static final FilteredAxis kTranslationYPort = new FilteredAxis(() -> kDriver.getRawAxis(kLeftX.value));
@@ -71,8 +70,8 @@ public class Ports
 
         // Switch modes
         public static final SKTrigger kRobotCentricMode = new SKTrigger(kDriver, kRightBumper.value, BUTTON);
-        public static final SKTrigger kFastMode = new SKTrigger(kDriver, kLeftBumper.value, BUTTON); 
-        public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kLeftStick.value, BUTTON); 
+        public static final SKTrigger kSlowMode = new SKTrigger(kDriver, kLeftBumper.value, BUTTON); 
+        public static final SKTrigger kFastMode = new SKTrigger(kDriver, kLeftStick.value, BUTTON); 
 
         // Reset gyro
         public static final SKTrigger kResetGyroPos = new SKTrigger(kDriver, kRightStick.value, BUTTON);

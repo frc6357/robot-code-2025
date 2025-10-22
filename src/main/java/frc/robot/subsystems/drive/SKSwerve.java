@@ -2,12 +2,16 @@ package frc.robot.subsystems.drive;
 
 import static frc.robot.Konstants.AutoConstants.pathConfig;
 import static frc.robot.Konstants.SwerveConstants.kChassisLength;
+import static frc.robot.Ports.DriverPorts.kTranslationXPort;
+import static frc.robot.Ports.DriverPorts.kTranslationYPort;
+import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import com.ctre.phoenix6.Utils;
@@ -43,7 +47,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.utils.DriveJoystickInput;
 import frc.lib.utils.Field;
 import frc.lib.utils.Trio;
 import frc.lib.utils.Util;
@@ -60,6 +63,10 @@ public class SKSwerve extends SubsystemBase {
     private SwerveDrivePoseEstimator poseEstimator;
     private final GeneratedTelemetry telemetry = new GeneratedTelemetry(DriveConstants.kMaxSpeed.baseUnitMagnitude());
     private SwerveRequest currentRequest = DriveRequests.teleopRequest;
+
+    private Supplier<Double> translationXSupplier = () -> -kTranslationXPort.getFilteredAxis();
+    private Supplier<Double> translationYSupplier = () -> -kTranslationYPort.getFilteredAxis();
+    private Supplier<Double> velocityOmegaSupplier = () -> -kVelocityOmegaPort.getFilteredAxis();
     
     private Field2d elasticField = new Field2d();
     
@@ -86,9 +93,8 @@ public class SKSwerve extends SubsystemBase {
      */
     public Command followSwerveRequestCommand(
         SwerveRequest.FieldCentric request, 
-        BiFunction<SwerveRequest.FieldCentric, DriveJoystickInput, SwerveRequest.FieldCentric> updater,
-        DriveJoystickInput joystickInputs) {
-        return run(() -> setSwerveRequest(updater.apply(request, joystickInputs)))
+        UnaryOperator<SwerveRequest.FieldCentric> updater) {
+        return run(() -> setSwerveRequest(updater.apply(request)))
                 .handleInterrupt(() -> setSwerveRequest(new SwerveRequest.FieldCentric()));
     }
 
@@ -109,6 +115,15 @@ public class SKSwerve extends SubsystemBase {
     @Override
     public void periodic() {
         poseEstimator.update(getGyroRotation(), drivetrain.getState().ModulePositions);
+        lastReadState = drivetrain.getState();
+
+        SmartDashboard.putNumberArray(
+            "Drive/RawJoysticks", 
+            new double[] {
+                 translationXSupplier.get(),
+                translationYSupplier.get(),
+                velocityOmegaSupplier.get()          
+                });
 
         outputTelemetry();
     }
@@ -328,9 +343,7 @@ public class SKSwerve extends SubsystemBase {
                 () -> drivetrain.getState().Speeds, // Supplier of current robot speeds
                 // Consumer of ChassisSpeeds and feedforwards to drive the robot
                 (speeds, feedforwards) -> drivetrain.setControl(
-                    m_pathApplyRobotSpeeds.withSpeeds(speeds)
-                        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
-                        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+                    DriveRequests.getPathPlannerRequestUpdater(() -> speeds, () -> feedforwards).apply(DriveRequests.pathPlannerRequest)
                 ),
                 pathConfig,
                 config,

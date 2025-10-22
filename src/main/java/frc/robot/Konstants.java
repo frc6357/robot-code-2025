@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
 import static frc.robot.Konstants.OIConstants.kSlowModePercent;
 
 import java.util.HashMap;
@@ -40,12 +41,22 @@ public final class Konstants
         public static final LinearVelocity kMaxSpeedFAST = kMaxSpeed.times(1.75);
         public static final LinearVelocity kMaxSpeedSLOW = kMaxSpeed.times(0.3);
 
-        public static final AngularVelocity kMaxAngularRate = RotationsPerSecond.of(2); // 3/4 of a rotation per second max angular velocity
+        public static final AngularVelocity kMaxAngularRate = RotationsPerSecond.of(1); // 3/4 of a rotation per second max angular velocity
         public static final AngularVelocity kMaxAngularRateFAST = kMaxAngularRate.times(2); // 1.5 rotations per second max angular velocity
         public static final AngularVelocity kMaxAngularRateSLOW = kMaxAngularRate.times(0.5); // 1/4 of a rotation per second max angular velocity
 
         //pigeon ID
         public static final int kPigeonID = 30; //30
+
+        public static double getDeadbandedStick(double rawValue) {
+            if (Math.abs(rawValue) < kJoystickDeadband) {
+                return 0.0;
+            } else {
+                double unsignedValue = (Math.abs(rawValue) - kJoystickDeadband)
+                        / (1.0 - kJoystickDeadband);
+                return (rawValue > 0 ? unsignedValue : -unsignedValue);
+            }
+        }
     }
 
     /*
@@ -53,155 +64,31 @@ public final class Konstants
      */
     public static final class SwerveConstants
     {
-        //Device Settings and Default States
-
+        // //Device Settings and Default States
+        
         //swerve motor IDs
         public static final int kFrontLeftDriveMotorID = 1; //1
         public static final int kFrontRightDriveMotorID = 2; //2
         public static final int kBackLeftDriveMotorID = 3; //3
         public static final int kBackRightDriveMotorID = 4; //4
-
+        
         public static final int kFrontLeftTurnMotorID = 11; //11
         public static final int kFrontRightTurnMotorID = 12; //12
         public static final int kBackLeftTurnMotorID = 13; //13
         public static final int kBackRightTurnMotorID = 14; //14
-
+        
         //encoder IDs
         public static final int kFrontLeftEncoderID = 21; //21
         public static final int kFrontRightEncoderID = 22; //22
         public static final int kBackLeftEncoderID = 23; //23
         public static final int kBackRightEncoderID = 24; //24
-
-        //The offset of the encoders in radians
-        //fl 0.35
-        //fr 2.225
-        //bl 1.35
-        //br 4.353
-
-        public static final Double kFrontLeftEncoderOffsetRadians = (0.35); //old offset, don't delete: -0.184326171875;
-        public static final Double kFrontRightEncoderOffsetRadians = (2.225); //old offset, don't delete: 0.113525390625;
-        public static final Double kBackLeftEncoderOffsetRadians = (1.35); //old offset, don't delete: -0.036865234375;
-        public static final Double kBackRightEncoderOffsetRadians = (4.353); //old offset, don't delete: 0.441162109375;
-
-        //determines if the encoders are inverted
-        public static final boolean kIsFrontLeftEncoderInverted = false;
-        public static final boolean kIsFrontRightEncoderInverted = false;
-        public static final boolean kIsBackLeftEncoderInverted = false;
-        public static final boolean kIsBackRightEncoderInverted = false;
-
-        //constants which determine if the drive motors are inverted, negative if they are inverted, positive if not.
-        public static final double kFrontLeftDriveInverted = -1.0;
-        public static final double kFrontRightDriveInverted = -1.0;
-        public static final double kBackLeftDriveInverted = -1.0;
-        public static final double kBackRightDriveInverted = -1.0;
-
-        //if the sides are inverted
-        public static final boolean kInvertLeftSide = false;
-        public static final boolean kInvertRightSide = true;
-
-        //if the turn motors are inverted
-        public static final boolean kTurnMotorsReversed = true;
-
+        
         //Robot Dimension values
-
+    
         //swerve chassis width and length in inches 
         public static final int kChassisLength = 27;
-        public static final int kChassisWidth = 27;
-
-        // "Front-to-back Encoder Distance in inches"
-        public static final double kFrontToBackEncoderDistInches = 21.625;
-        // "Left-to-right Encoder Distance in inches"
-        public static final double kLeftToRightEncoderDistInches = 21.625;
-
-        // Module positions for kinematics, distances between encoders divided by two
-        // Front left
-        public static final double kFrontLeftXPos = kLeftToRightEncoderDistInches / 2;
-        public static final double kFrontLeftYPos = kFrontToBackEncoderDistInches / 2;
-        // Front right
-        public static final double kFrontRightXPos = kLeftToRightEncoderDistInches / 2;
-        public static final double kFrontRightYPos = -kFrontToBackEncoderDistInches / 2;
-        // Back left
-        public static final double kBackLeftXPos = -kLeftToRightEncoderDistInches / 2;
-        public static final double kBackLeftYPos = kFrontToBackEncoderDistInches / 2;
-        // Back right
-        public static final double kBackRightXPos = -kLeftToRightEncoderDistInches / 2;
-        public static final double kBackRightYPos = -kFrontToBackEncoderDistInches / 2;
-
-        //radius of the wheels in inches
-        public static final Double kWheelRadiusInches = 2.0;   //inches
-        //radius of the wheels in meters. One meter is equal to 39.37 inches.
-        private static final Double kWheelRadiusMeters = kWheelRadiusInches  / 39.37;   //meters
-        /**Circumference of the swerve wheels for the drive conversion 
-         * (circumfrance of the wheel times rotations yeilds distance travelled) */
-        public static final Double kWheelCircumferenceMeters = 2 * Math.PI * kWheelRadiusMeters;   //meters
-
-        // Combines a margin of error with the known wheel radius 
-        // to determine an optimized value for odometry
-        public static final double kWheelErrorMargin = 0.0; //inches
-        public static final double kWheelRadius = ((kWheelRadiusInches + kWheelErrorMargin) / 2); //inches
-
-        //The gear ratios of the drive and turn motors
-        public static final double kDriveGearRatio = 6.746031746031747;
-        public static final double kTurnGearRatio = 21.428571428571427;
-
-
-        //PID Constants for wheels from manual tunning
-        public static final double kDriveP = 0.5;
-        public static final double kDriveI = 0.0;
-        public static final double kDriveD = 0.0;
-        public static final double kDriveS = 0.25;
-        public static final double kDriveV = 0.12;
-        public static final double kDriveA = 0.01;
-
-        /**
-         * The error tolerance for the PID controllers of the wheels in radians
-         */
-        public static final double kPIDControllerToleranceDegrees = 6.0;   //TODO: change this to radians?
-
-        public static final double kRotationToleranceRadians = (Math.PI / 360); // rads
-
-        /**The velocity limit for the swerve drive modules.*/
-        public static final double kMaxVelocityMetersPerSecond = 1.0;  // m/s
-
-        // Theoretical free speed (m/s) at 12v applied output;
-        // This needs to be tuned to your individual robot
-        //TODO: Tune free speed
-        public static final LinearVelocity kSpeedAt12VoltsMeterPerSecond = MetersPerSecond.of(4.73);  // m/s     //TODO: find max speed in phoenix tuner x
-
-        /**The maximum alowed angular speed of the swerve module's motors in degrees per second.*/
-        public static final double kMaxModuleAngularSpeedDegreesPerSecond = 360;
-
-        /** The max speed (m/s) the drive wheels should be allowed to go */
-        public static final double kMaxDriveSpeedMetersPerSecond = 3.0;  // m/s         //TODO: Update max speed depending on robot performance
-        /** The max rotation speed the turn wheels should be allowed to go */
-        public static final double kMaxRotationDegreesPerSecond = 360.0;  // degrees/second
-
-        // public static final double kMaxAngularRate = 1.5 * Math.PI;
-        // public static final double kMaxAngularVelocity = 2 * Math.PI; // rad/s
-        // public static final double kMaxAngularAcceleration = Math.pow(kMaxAngularVelocity, 2); // rad/s^2
-
-        // The inertia expereinced by the robot when attempting to drive or turn.
-        //These are only used for simulation
-        public static final double kSteerInertia = 0.00001;
-        public static final double kDriveInertia = 0.001;
-
-        /**The current limit of the turning motors. This number should be relativley low in comparison 
-        to the drive motor amperage since rotaing dosn't require nearly as much voltage as driving.*/
-        public static final Current kTurningCurrentLimitAmps = Amps.of(60);
-
-        /** Weather the current limits on the turn motors of the swerve drive are enabled. */
-        public static final boolean kTurningCurrentLimitsEnabled = true;
-
-        /**The stator current at which the wheels start to slip.
-        *This needs to be tuned to your individual robot*/
-        public static final double kSlipCurrentAmps = 120;            //TODO: Tune SlipCurrent
-
-        // Simulated voltage necessary to overcome friction
-        public static final double kTurnFrictionVoltage = 0.25;
-        public static final double kDriveFrictionVoltage = 0.25;
+        public static final int kChassisWidth = 27;    
     }
-
-
 
     public static final class AutoConstants
     {
