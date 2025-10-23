@@ -409,6 +409,13 @@ public class Limelight {
         LimelightHelpers.setPipelineIndex(config.name, pipelineIndex);
     }
 
+    public int getLimelightPipeline() {
+        if (!isAttached()) {
+            return -1;
+        }
+        return (int) LimelightHelpers.getCurrentPipelineIndex(config.name);
+    }
+
 
     public void setRobotOrientation(double degrees) {
         if (!isAttached()) {

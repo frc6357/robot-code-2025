@@ -11,8 +11,8 @@ import static frc.robot.commands.AlignToReefTag.Target;
 
 import frc.robot.subsystems.drive.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
-import static frc.robot.subsystems.vision.SK25Vision.DriveToPose;
-import static frc.robot.subsystems.vision.SK25Vision.RotateToPose;
+import static frc.robot.subsystems.vision.VisionConfig.DriveToPose;
+import static frc.robot.subsystems.vision.VisionConfig.RotateToPose;
 
 
 import static frc.robot.Ports.DriverPorts.kAlignToReef;

@@ -18,7 +18,7 @@ import frc.robot.Konstants.DriveConstants;
  */
 public class DriveRequests {
     public static final SwerveRequest.FieldCentric teleopRequest = new SwerveRequest.FieldCentric()
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withDeadband(DriveConstants.kMaxSpeed.times(0.1));
 
     public static final UnaryOperator<SwerveRequest.FieldCentric> getTeleopRequestUpdater(
         Supplier<Double> xJoystick, Supplier<Double> yJoystick, Supplier<Double> rotJoystick, Supplier<Boolean> slow, Supplier<Boolean> fast
@@ -45,12 +45,12 @@ public class DriveRequests {
     }
 
     public static final SwerveRequest.RobotCentric robotCentricTeleopRequest = new SwerveRequest.RobotCentric()
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withDeadband(DriveConstants.kMaxSpeedSLOW.times(0.1));
     
-    public static final UnaryOperator<SwerveRequest.FieldCentric> getRobotCentricTeleopRequestUpdater(
+    public static final UnaryOperator<SwerveRequest.RobotCentric> getRobotCentricTeleopRequestUpdater(
         Supplier<Double> xJoystick, Supplier<Double> yJoystick, Supplier<Double> rotJoystick, Supplier<Boolean> slow, Supplier<Boolean> fast
     ) {
-        return (SwerveRequest.FieldCentric request) -> {
+        return (SwerveRequest.RobotCentric request) -> {
             SmartDashboard.putNumberArray("Drive/Joystick Inputs", new double[] {xJoystick.get(), yJoystick.get(), rotJoystick.get()});
             if(slow.get()) {
                 return request

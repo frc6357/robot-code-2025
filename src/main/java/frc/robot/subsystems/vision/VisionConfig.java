@@ -6,7 +6,14 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.lib.vision.Limelight.LimelightConfig;
+import frc.robot.Konstants.DriveConstants;
+import frc.robot.Konstants.VisionConstants.limelightAlpha;
+import frc.robot.Konstants.VisionConstants.limelightBeta;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.vision.SK25Vision.MultiLimelightCommandConfig;
 
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static frc.robot.Konstants.VisionConstants.*;
 
 public final class VisionConfig {
@@ -35,4 +42,41 @@ public final class VisionConfig {
 
     public static final Matrix<N3, N1> visionStdMatrix = // This however, creates a matrix using these standard values to reference for that other 90% of the time
             VecBuilder.fill(VISION_STD_DEV_X, VISION_STD_DEV_Y, VISION_STD_DEV_THETA);
+    
+    public static final class DriveToPose extends MultiLimelightCommandConfig {
+        private DriveToPose() {
+            configKpid(1, 0, 0.001); //1, 0, .001
+            configTolerance(0.02);
+            configProfile(
+                DriveConstants.kMaxSpeed.times(0.55).in(MetersPerSecond), 
+                DriveConstants.kMaxSpeed.times(0.55).in(MetersPerSecond) * 2
+            ); //55% Max Speed; 2x Acceleration
+            configMaxOutput(DriveConstants.kMaxSpeed.times(0.55).in(MetersPerSecond));
+            configError(0.01);
+            configPipelineIndex(kAprilTagPipeline);
+            configLimelights(RobotContainer.m_visionInstance.poseLimelights);
+        }
+
+        public static DriveToPose getConfig() {
+            return new DriveToPose();
+        }
+    }
+
+    public static final class RotateToPose extends MultiLimelightCommandConfig {
+        private RotateToPose() {
+            configKpid(0.006, 0, 0.00015);
+            configTolerance(1.5);
+            configProfile(
+                DriveConstants.kMaxAngularRate.in(DegreesPerSecond) * 0.1, 
+                DriveConstants.kMaxAngularRate.in(DegreesPerSecond) * 0.1 * 5); // 10% Angular speed; 5x acceleration
+            configMaxOutput(DriveConstants.kMaxAngularRate.in(DegreesPerSecond) * 0.1);
+            configError(1);
+            configPipelineIndex(kAprilTagPipeline);
+            configLimelights(RobotContainer.m_visionInstance.poseLimelights);
+        }
+
+        public static RotateToPose getConfig() {
+            return new RotateToPose();
+        }
+    }
 }

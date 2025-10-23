@@ -16,7 +16,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
  * this DriveCommand in order to limit their maximum rate of change. (Limiting acceleration)
  */
 public class DriveCommand {
-    private SKSwerve m_swerve = RobotContainer.m_swerve;
+    private SKSwerve m_swerve = RobotContainer.m_swerveInstance;
 
     Supplier<Double> velX;
     Supplier<Double> velY;

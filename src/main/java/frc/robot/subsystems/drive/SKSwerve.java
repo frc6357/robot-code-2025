@@ -36,6 +36,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
@@ -75,6 +77,7 @@ public class SKSwerve extends SubsystemBase {
     
     private StructArrayPublisher<Pose2d> pathPublisher = NetworkTableInstance.getDefault()
     .getStructArrayTopic("ActivePath", Pose2d.struct).publish();
+    private Pose2d[] activePath;
     
     
     /** Swerve request to apply during robot-centric path following */
@@ -96,6 +99,21 @@ public class SKSwerve extends SubsystemBase {
         UnaryOperator<SwerveRequest.FieldCentric> updater) {
         return run(() -> setSwerveRequest(updater.apply(request)))
                 .handleInterrupt(() -> setSwerveRequest(new SwerveRequest.FieldCentric()));
+    }
+
+    /**
+     * Creates a command that will continuously update the drivetrain's
+     * target swerve request based on the given request and updater function.
+     * The same as the FieldCentric version, but for RobotCentric requests.
+     * @param request The specific request to follow.
+     * @param updater The corresponding request updater. Make sure you use the corrrect updater.
+     * @return The command.
+     */
+    public Command followSwerveRequestCommand(
+        SwerveRequest.RobotCentric request, 
+        UnaryOperator<SwerveRequest.RobotCentric> updater) {
+        return run(() -> setSwerveRequest(updater.apply(request)))
+                .handleInterrupt(() -> setSwerveRequest(new SwerveRequest.RobotCentric()));
     }
 
     

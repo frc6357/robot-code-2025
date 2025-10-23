@@ -1,53 +1,5 @@
 [
   {
-    "name": "/Preferences/elevatorKp",
-    "type": "double",
-    "value": 0.13,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/elevatorKi",
-    "type": "double",
-    "value": 0.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/elevatorkD",
-    "type": "double",
-    "value": 0.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/elevatorkFF",
-    "type": "double",
-    "value": 0.00196078431,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/driverTranslSlew",
-    "type": "double",
-    "value": 2.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
-    "name": "/Preferences/driverRotSlew",
-    "type": "double",
-    "value": 4.0,
-    "properties": {
-      "persistent": true
-    }
-  },
-  {
     "name": "/Preferences/lidarTargetDistMm",
     "type": "double",
     "value": 75.0,
@@ -73,6 +25,14 @@
   },
   {
     "name": "/Preferences/armAngleDeg",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elevatorKi",
     "type": "double",
     "value": 0.0,
     "properties": {
@@ -120,9 +80,17 @@
     }
   },
   {
+    "name": "/Preferences/elevatorKp",
+    "type": "double",
+    "value": 0.115,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
     "name": "/Preferences/elevatorVelocity",
     "type": "double",
-    "value": 5000.0,
+    "value": 4500.0,
     "properties": {
       "persistent": true
     }
@@ -131,6 +99,22 @@
     "name": "/Preferences/elevatorTargetHeight",
     "type": "double",
     "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/driverTranslSlew",
+    "type": "double",
+    "value": 4.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/driverRotSlew",
+    "type": "double",
+    "value": 4.0,
     "properties": {
       "persistent": true
     }

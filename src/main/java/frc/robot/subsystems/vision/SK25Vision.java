@@ -1,39 +1,40 @@
 package frc.robot.subsystems.vision;
 
-import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.MetersPerSecond;
+import static frc.robot.Konstants.VisionConstants.kAprilTagFieldLayout;
 import static frc.robot.Konstants.VisionConstants.kAprilTagPipeline;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.pathplanner.lib.config.PIDConstants;
 
+import choreo.util.TrajSchemaVersion;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.networktables.NTSendable;
-import edu.wpi.first.networktables.NTSendableBuilder;
-import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.utils.Field;
 import frc.lib.utils.Trio;
+import frc.lib.utils.Util;
 import frc.lib.vision.Limelight;
 import frc.lib.vision.Limelight.IMUMode;
 import frc.lib.vision.LimelightHelpers.RawFiducial;
-import frc.robot.Konstants.DriveConstants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.drive.SKSwerve;
 
-public class SK25Vision extends SubsystemBase implements NTSendable {
+public class SK25Vision extends SubsystemBase {
     public final Limelight rightLL = new Limelight(VisionConfig.RIGHT_CONFIG); // limelight-alpha
     public final Limelight leftLL = new Limelight(VisionConfig.LEFT_CONFIG); // limelight-beta
     private SKSwerve m_swerve;
@@ -45,10 +46,13 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
     public final Limelight[] poseLimelights = {leftLL, rightLL}; // Limelights specifically used for estimating pose
     public final Limelight[] reefLimelights = {leftLL, rightLL}; // Effectively used for pose estimating, 
                                                         // but are specifically for use with the reef
-
     public boolean leftLLEnabled = leftLL.isAttached();
     public boolean rightLLEnabled = rightLL.isAttached();
 
+    public List<Integer> targetIDsInView = new ArrayList<Integer>();
+    public List<Pose3d> targetLOSTransforms = new ArrayList<Pose3d>();
+    private StructArrayPublisher<Pose3d> targetLOSPublisher = NetworkTableInstance.getDefault()
+            .getStructArrayTopic("VisibleTargetPoses", Pose3d.struct).publish();
 
     private final DecimalFormat df = new DecimalFormat();
 
@@ -62,10 +66,10 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     public boolean enabled;
 
-    public SK25Vision(Optional<SKSwerve> m_swerveContainer) {
+    public SK25Vision(Optional<SKSwerve> m_swerve) {
         enabled = true;
 
-        this.m_swerve = m_swerveContainer.get();
+        this.m_swerve = m_swerve.get();
         df.setMaximumFractionDigits(2);
 
         /* Limelight startup configurator*/
@@ -83,58 +87,6 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         reefDriveTarget = "OFF";
     }
 
-    @Override
-    public void initSendable(NTSendableBuilder builder) {
-        SmartDashboard.putData("Vision",
-        new Sendable() {
-            @Override
-            public void initSendable(SendableBuilder builder) {
-                builder.setSmartDashboardType("Limelights");
-
-                builder.addStringProperty("RightLLStatus", () -> rightLL.getLogStatus(), null);
-                builder.addStringProperty("LeftLLStatus", () -> leftLL.getLogStatus(), null);
-                builder.addStringProperty("ResetPoseToVisionStatus", () -> resetPoseToVisionLog, null);
-            }
-        });
-    }
-
-    public static final class DriveToPose extends MultiLimelightCommandConfig {
-        private DriveToPose() {
-            configKpid(1, 0, 0.001); //1, 0, .001
-            configTolerance(0.02);
-            configProfile(
-                DriveConstants.kMaxSpeed.times(0.55).in(MetersPerSecond), 
-                DriveConstants.kMaxSpeed.times(0.55).in(MetersPerSecond) * 2
-            ); //55% Max Speed; 2x Acceleration
-            configMaxOutput(DriveConstants.kMaxSpeed.times(0.55).in(MetersPerSecond));
-            configError(0.01);
-            configPipelineIndex(kAprilTagPipeline);
-            configLimelights(RobotContainer.m_vision.poseLimelights);
-        }
-
-        public static DriveToPose getConfig() {
-            return new DriveToPose();
-        }
-    }
-
-    public static final class RotateToPose extends MultiLimelightCommandConfig {
-        private RotateToPose() {
-            configKpid(0.006, 0, 0.00015);
-            configTolerance(1.5);
-            configProfile(
-                DriveConstants.kMaxAngularRate.in(DegreesPerSecond) * 0.1, 
-                DriveConstants.kMaxAngularRate.in(DegreesPerSecond) * 0.1 * 5); // 10% Angular speed; 5x acceleration
-            configMaxOutput(DriveConstants.kMaxAngularRate.in(DegreesPerSecond) * 0.1);
-            configError(1);
-            configPipelineIndex(kAprilTagPipeline);
-            configLimelights(RobotContainer.m_vision.poseLimelights);
-        }
-
-        public static RotateToPose getConfig() {
-            return new RotateToPose();
-        }
-    }
-
     public void killVision() {
         enabled = false;
     }
@@ -144,22 +96,55 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     @Override
     public void periodic() {
-        
-
-        SmartDashboard.putBoolean("VisionDriving", isDriving);
-        SmartDashboard.putString("ReefDriveTarget", reefDriveTarget);
-        SmartDashboard.putString("RightLLStatus", rightLL.getLogStatus());
-        SmartDashboard.putString("LeftLLStatus", leftLL.getLogStatus());
-        SmartDashboard.putString("ResetPoseToVisionStatus", resetPoseToVisionLog);
-
+        targetIDsInView.clear();
+        targetLOSTransforms.clear();
         if(enabled) {
-        for(Limelight ll : poseLimelights) {
-            ll.setRobotOrientation(m_swerve.getRobotRotation().getDegrees());
-        }
-
+            for(Limelight ll : poseLimelights) {
+                ll.setRobotOrientation(m_swerve.getRobotRotation().getDegrees());
+                if(ll.getLimelightPipeline() == kAprilTagPipeline) {
+                    if(ll.targetInView()) {
+                        for(RawFiducial tag : ll.getRawFiducial()) {
+                            targetIDsInView.add(tag.id);
+                        }
+                    }
+                }
+            }
+            for(int id : targetIDsInView) {
+                kAprilTagFieldLayout.getTagPose(id).ifPresent(targetPose -> {
+                    targetLOSTransforms.add(
+                        targetPose
+                    );
+                });
+            }
+            SmartDashboard.putData("Vision", this);
+            targetLOSPublisher.set(targetLOSTransforms.toArray(Pose3d[]::new));
             /* The secret sauce: */
             estimatePose();
         }
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addBooleanProperty(
+            "Vision Driving", 
+            () -> isDriving, 
+            null);
+        builder.addStringProperty(
+            "Reef Drive Target", 
+            () -> reefDriveTarget, 
+            null);
+        builder.addStringProperty(
+            "Right Limelight Status", 
+            () -> rightLL.getLogStatus(), 
+            null);
+        builder.addStringProperty(
+            "Left Limelight Status", 
+            () -> leftLL.getLogStatus(), 
+            null);
+        builder.addStringProperty(
+            "ResetPoseToVision Status", 
+            () -> resetPoseToVisionLog, 
+            null);
     }
 
     /**

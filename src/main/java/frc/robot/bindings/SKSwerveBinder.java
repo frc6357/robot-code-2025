@@ -114,13 +114,16 @@ public class SKSwerveBinder implements CommandBinder{
         // kTranslationYPort.setFilter(translationYFilter);
         // kVelocityOmegaPort.setFilter(rotationFilter);
 
-        // robotCentric.whileTrue(
-        //     drivetrain.applyRequest(() -> {
-        //         return robotCentricDrive.withVelocityX(applyGains(-MaxSpeed * kTranslationXPort.getFilteredAxis(), kSlowModePercent)) // Drive forward with negative Y (forward)
-        //             .withVelocityY(applyGains(-MaxSpeed * kTranslationYPort.getFilteredAxis(), kSlowModePercent)) // Drive left with negative X (left)
-        //             .withRotationalRate(applyGains(MaxSpeed * -1.0 * kVelocityOmegaPort.getFilteredAxis(), kSlowModePercent)); // Drive counterclockwise with negative X (left)
-        //     })
-        // );
+        robotCentric.whileTrue(
+            drive.followSwerveRequestCommand(
+                DriveRequests.robotCentricTeleopRequest, 
+                DriveRequests.getRobotCentricTeleopRequestUpdater(
+                        () -> -kTranslationXPort.getFilteredAxis(), 
+                        () -> -kTranslationYPort.getFilteredAxis(), 
+                        () -> -kVelocityOmegaPort.getFilteredAxis(), 
+                        () -> slowmode.getAsBoolean(), 
+                        () -> fastmode.getAsBoolean())
+        ));
 
 
         //Apply slow mode if activated

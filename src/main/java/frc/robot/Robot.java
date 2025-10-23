@@ -96,7 +96,7 @@ public class Robot extends LoggedRobot
         m_robotContainer = new RobotContainer();
 
         if (m_robotContainer.m_climbContainer.isPresent())
-            climb = RobotContainer.m_climb;
+            climb = RobotContainer.m_climbInstance;
 
 
         //get the saved elastic dashboard layout

@@ -20,6 +20,8 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 // import edu.wpi.first.math.util.Units;
 // import edu.wpi.first.units.measure.Angle;
@@ -41,7 +43,7 @@ public final class Konstants
         public static final LinearVelocity kMaxSpeedFAST = kMaxSpeed.times(1.75);
         public static final LinearVelocity kMaxSpeedSLOW = kMaxSpeed.times(0.3);
 
-        public static final AngularVelocity kMaxAngularRate = RotationsPerSecond.of(1); // 3/4 of a rotation per second max angular velocity
+        public static final AngularVelocity kMaxAngularRate = RotationsPerSecond.of(1.25); // 3/4 of a rotation per second max angular velocity
         public static final AngularVelocity kMaxAngularRateFAST = kMaxAngularRate.times(2); // 1.5 rotations per second max angular velocity
         public static final AngularVelocity kMaxAngularRateSLOW = kMaxAngularRate.times(0.5); // 1/4 of a rotation per second max angular velocity
 
@@ -257,6 +259,8 @@ public final class Konstants
     }
 
     public static final class VisionConstants { // Each limelight has a greek letter name and an individual class for their own set of constants
+        public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+
         public static final int kAprilTagPipeline = 0; // Default Apriltag pipeline value for all Limelights
 
         public static final double kLeftSideReefAlignOffset = 0.0; // Degrees of tx to align to a reef apriltag to score on its left side

@@ -59,6 +59,7 @@ import frc.robot.subsystems.SK25EndEffector;
 import frc.robot.subsystems.SK25Lights;
 import frc.robot.subsystems.drive.SKSwerve;
 import frc.robot.subsystems.vision.SK25Vision;
+import frc.robot.subsystems.vision.VisionConfig;
 
 
 /**
@@ -87,12 +88,12 @@ public class RobotContainer extends Robot{
   public Optional<SK25Climb> m_climbContainer = Optional.empty();
   public Optional<SK25EndEffector> m_endEffectorContainer = Optional.empty();
 
-  public static SK25Vision m_vision;
-  public static SKSwerve m_swerve;
-  public static SK25Elevator m_elevator;
-  public static CoralSubsystem m_coral;
-  public static SK25Lights m_lights;
-  public static SK25Climb m_climb;
+  public static SK25Vision m_visionInstance;
+  public static SKSwerve m_swerveInstance;
+  public static SK25Elevator m_elevatorInstance;
+  public static CoralSubsystem m_coralInstance;
+  public static SK25Lights m_lightsInstance;
+  public static SK25Climb m_climbInstance;
   public static SK25EndEffector m_endEffector;
 
   // The list containing all the command binding classes
@@ -144,20 +145,20 @@ public class RobotContainer extends Robot{
             if(subsystems.isLightsPresent())
             {
                 m_lightsContainer = Optional.of(new SK25Lights());
-                m_lights = m_lightsContainer.get();
+                m_lightsInstance = m_lightsContainer.get();
             }
             if(subsystems.isElevatorPresent())
             {
                 m_elevatorContainer = Optional.of(new SK25Elevator());
-                m_elevator = m_elevatorContainer.get();
+                m_elevatorInstance = m_elevatorContainer.get();
             }
             if(subsystems.isSwervePresent()) {
                 m_swerveContainer = Optional.of(new SKSwerve());
-                m_swerve = m_swerveContainer.get(); // Returns new SKSwerve
+                m_swerveInstance = m_swerveContainer.get(); // Returns new SKSwerve
             }
             if(subsystems.isVisionPresent() && subsystems.isSwervePresent()) {
                 m_visionContainer = Optional.of(new SK25Vision(m_swerveContainer));
-                m_vision = m_visionContainer.get();
+                m_visionInstance = m_visionContainer.get();
             }
             if(subsystems.isEndEffectorPresent())
             {
@@ -166,11 +167,11 @@ public class RobotContainer extends Robot{
             }
             if(subsystems.isClimbPresent()) {
                 m_climbContainer = Optional.of(new SK25Climb());
-                m_climb = m_climbContainer.get();
+                m_climbInstance = m_climbContainer.get();
             }
             if(subsystems.isCoralSubsystemPresent()) {
                 m_coralContainer = Optional.of(new CoralSubsystem());
-                m_coral = m_coralContainer.get();
+                m_coralInstance = m_coralContainer.get();
             }
         }
         catch (IOException e)
@@ -214,40 +215,40 @@ public class RobotContainer extends Robot{
             if(m_visionContainer.isPresent()) {
                 NamedCommands.registerCommand("AlignToLeftReefCommandAuto", new AlignToReefComboAuton(
                                 Target.LEFT, 
-                                SK25Vision.DriveToPose.getConfig(), 
-                                SK25Vision.RotateToPose.getConfig(), 
-                                m_vision, 
-                                m_swerve));
+                                VisionConfig.DriveToPose.getConfig(), 
+                                VisionConfig.RotateToPose.getConfig(), 
+                                m_visionInstance, 
+                                m_swerveInstance));
                 NamedCommands.registerCommand("AlignToRightReefCommandAuto", new AlignToReefComboAuton(
                                 Target.RIGHT, 
-                                SK25Vision.DriveToPose.getConfig(), 
-                                SK25Vision.RotateToPose.getConfig(), 
-                                m_vision, 
-                                m_swerve));
+                                VisionConfig.DriveToPose.getConfig(), 
+                                VisionConfig.RotateToPose.getConfig(), 
+                                m_visionInstance, 
+                                m_swerveInstance));
                 NamedCommands.registerCommand("AlignToCenterReefCommandAuto", new AlignToReefComboAuton(
                                 Target.CENTER, 
-                                SK25Vision.DriveToPose.getConfig(), 
-                                SK25Vision.RotateToPose.getConfig(), 
-                                m_vision, 
-                                m_swerve));
+                                VisionConfig.DriveToPose.getConfig(), 
+                                VisionConfig.RotateToPose.getConfig(), 
+                                m_visionInstance, 
+                                m_swerveInstance));
                 NamedCommands.registerCommand("AlignToLeftReefCommandAuton", new AlignToReefComboAuton(
                                 Target.LEFT, 
-                                SK25Vision.DriveToPose.getConfig(), 
-                                SK25Vision.RotateToPose.getConfig(), 
-                                m_vision, 
-                                m_swerve));
+                                VisionConfig.DriveToPose.getConfig(), 
+                                VisionConfig.RotateToPose.getConfig(), 
+                                m_visionInstance, 
+                                m_swerveInstance));
                 NamedCommands.registerCommand("AlignToRightReefCommandAuton", new AlignToReefComboAuton(
                                 Target.RIGHT, 
-                                SK25Vision.DriveToPose.getConfig(), 
-                                SK25Vision.RotateToPose.getConfig(), 
-                                m_vision, 
-                                m_swerve));
+                                VisionConfig.DriveToPose.getConfig(), 
+                                VisionConfig.RotateToPose.getConfig(), 
+                                m_visionInstance, 
+                                m_swerveInstance));
                 NamedCommands.registerCommand("AlignToCenterReefCommandAuton", new AlignToReefComboAuton(
                                 Target.CENTER, 
-                                SK25Vision.DriveToPose.getConfig(), 
-                                SK25Vision.RotateToPose.getConfig(), 
-                                m_vision, 
-                                m_swerve));
+                                VisionConfig.DriveToPose.getConfig(), 
+                                VisionConfig.RotateToPose.getConfig(), 
+                                m_visionInstance, 
+                                m_swerveInstance));
                 NamedCommands.registerCommand("GoToBargeSourceFromSW", new GoToBargeSourceFromSW());
                 NamedCommands.registerCommand("GoToBargeSourceFromN", new GoToBargeSourceFromN());
                 NamedCommands.registerCommand("GoToBargeSourceFromNW", new GoToBargeSourceFromNW());
