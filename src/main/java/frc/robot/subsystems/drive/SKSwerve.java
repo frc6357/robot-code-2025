@@ -19,7 +19,9 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
@@ -77,7 +79,7 @@ public class SKSwerve extends SubsystemBase {
     
     private StructArrayPublisher<Pose2d> pathPublisher = NetworkTableInstance.getDefault()
     .getStructArrayTopic("ActivePath", Pose2d.struct).publish();
-    private Pose2d[] activePath;
+    private PathPlannerPath activePath;
     
     
     /** Swerve request to apply during robot-centric path following */
@@ -144,9 +146,12 @@ public class SKSwerve extends SubsystemBase {
                 });
 
         outputTelemetry();
+
+        SmartDashboard.putString("Active Path Name", PathPlannerAuto.currentPathName);
     }
 
     private void telemeterizeActivePath(List<Pose2d> path) {
+
         pathPublisher.set(path.toArray(Pose2d[]::new));
     }
 

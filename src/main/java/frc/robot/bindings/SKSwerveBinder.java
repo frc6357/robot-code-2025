@@ -1,6 +1,6 @@
 package frc.robot.bindings;
 
-import static frc.lib.drive.FollowAutoPathSequence.NewPathSequenceCommand;
+import static frc.robot.Konstants.AutoConstants.kDefaultPathfindingConstraints;
 import static frc.robot.Konstants.OIConstants.kJoystickDeadband;
 import static frc.robot.Ports.DriverPorts.kAlignToReef;
 import static frc.robot.Ports.DriverPorts.kDriveFn;
@@ -13,13 +13,21 @@ import static frc.robot.Ports.DriverPorts.kTranslationXPort;
 import static frc.robot.Ports.DriverPorts.kTranslationYPort;
 import static frc.robot.Ports.DriverPorts.kVelocityOmegaPort;
 
+import java.io.IOException;
 import java.util.Optional;
 
-import com.ctre.phoenix6.swerve.SwerveRequest;
+import org.json.simple.parser.ParseException;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
+
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.lib.drive.FollowPath;
+import frc.lib.auto.Pathfollower;
+import frc.lib.auto.Pathfinder;
 import frc.lib.preferences.Pref;
 import frc.lib.preferences.SKPreferences;
 import frc.lib.utils.filters.DriveStickFilter;
@@ -100,11 +108,25 @@ public class SKSwerveBinder implements CommandBinder{
         /**
          * Experimental Pathfinding Code
          */
-        pathfindToReef.whileTrue(FollowPath.PathfindThenFollowPathCommand("Seamless3GP"));
+        // pathfindToReef.whileTrue(Pathfinder.PathfindThenFollowPathCommand("Seamless3GP", kDefaultPathfindingConstraints));
 
-        runAuto.whileTrue(NewPathSequenceCommand("DriftlessBargeL4(3GP)"));
+        // runAuto.onTrue(
+        //     Commands.sequence(
+        //         Pathfinder.PathfindToStartOfAutoCommand("DriftlessBargeL4(3GP)", kDefaultPathfindingConstraints),
+        //         Pathfollower.FollowAutoSequenceCommand("DriftlessBargeL4(3GP)"))
+        //     );
 
-        simulateCollision.onTrue(new InstantCommand(() -> {drive.simulateCollision();} ));
+        // // simulateCollision.onTrue(new InstantCommand(() -> {drive.simulateCollision();} ));
+        // try {
+        //     simulateCollision.onTrue(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Seamless3GP")));
+        // } catch (FileVersionException e) {
+        //     e.printStackTrace();
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // } catch (ParseException e) {
+        //     e.printStackTrace();
+        // }
+        
         /**
          * End Experimental Pathfinding Code
          */
@@ -114,16 +136,16 @@ public class SKSwerveBinder implements CommandBinder{
         // kTranslationYPort.setFilter(translationYFilter);
         // kVelocityOmegaPort.setFilter(rotationFilter);
 
-        robotCentric.whileTrue(
-            drive.followSwerveRequestCommand(
-                DriveRequests.robotCentricTeleopRequest, 
-                DriveRequests.getRobotCentricTeleopRequestUpdater(
-                        () -> -kTranslationXPort.getFilteredAxis(), 
-                        () -> -kTranslationYPort.getFilteredAxis(), 
-                        () -> -kVelocityOmegaPort.getFilteredAxis(), 
-                        () -> slowmode.getAsBoolean(), 
-                        () -> fastmode.getAsBoolean())
-        ));
+        // robotCentric.whileTrue(
+        //     drive.followSwerveRequestCommand(
+        //         DriveRequests.robotCentricTeleopRequest, 
+        //         DriveRequests.getRobotCentricTeleopRequestUpdater(
+        //                 () -> -kTranslationXPort.getFilteredAxis(), 
+        //                 () -> -kTranslationYPort.getFilteredAxis(), 
+        //                 () -> -kVelocityOmegaPort.getFilteredAxis(), 
+        //                 () -> slowmode.getAsBoolean(), 
+        //                 () -> fastmode.getAsBoolean())
+        // ));
 
 
         //Apply slow mode if activated

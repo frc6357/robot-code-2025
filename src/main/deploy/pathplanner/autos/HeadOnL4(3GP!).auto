@@ -55,6 +55,18 @@
         {
           "type": "named",
           "data": {
+            "name": "StopAndFindGamePiece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToHeadOnPoint4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "ExtakeAutoCommand"
           }
         },
@@ -62,12 +74,6 @@
           "type": "named",
           "data": {
             "name": "StationPickupCombo"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ToHeadOnPoint4"
           }
         },
         {

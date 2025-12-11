@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P1_ToBargePoint1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToBargePoint2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToBargePoint3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToBargePoint4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ToBargePoint5"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "BargeSide(P1)",
+  "choreoAuto": false
+}

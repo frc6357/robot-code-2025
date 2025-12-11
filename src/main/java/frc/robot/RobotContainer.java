@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.lib.auto.OverrideAuto;
 import frc.lib.utils.SubsystemControls;
 import frc.lib.utils.filters.FilteredJoystick;
 import frc.robot.Konstants.EndEffectorConstants.EndEffectorPosition;
@@ -40,6 +41,7 @@ import frc.robot.bindings.SK25VisionBinder;
 import frc.robot.bindings.SKSwerveBinder;
 import frc.robot.commands.AlignToReefTag.Target;
 import frc.robot.commands.EndEffectorButtonCommand;
+import frc.robot.commands.FindGamePiece;
 import frc.robot.commands.GoToSource.GoToBargeSourceFromN;
 import frc.robot.commands.GoToSource.GoToBargeSourceFromNW;
 import frc.robot.commands.GoToSource.GoToBargeSourceFromS;
@@ -258,6 +260,16 @@ public class RobotContainer extends Robot{
                 NamedCommands.registerCommand("GoToProcessorSourceFromSE", new GoToProcessorSourceFromSE());
                 NamedCommands.registerCommand("GoToProcessorSourceFromS", new GoToProcessorSourceFromS());
 
+                // NamedCommands.registerCommand("StopAndFindGamePiece",
+                //     OverrideAuto.InterjectAutoAndRecover(
+                //         () -> autoCommandSelector.getSelected(),
+                //         new FindGamePiece(
+                //             2, 
+                //             m_swerveInstance, 
+                //             m_visionInstance) 
+                //     )
+                // );
+                // NamedCommands.registerCommand("FindGamePiece", new FindGamePiece(3, m_swerveInstance, m_visionInstance));
             }
             if (m_endEffectorContainer.isPresent())
             {
