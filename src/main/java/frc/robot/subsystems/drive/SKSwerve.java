@@ -86,6 +86,10 @@ public class SKSwerve extends SubsystemBase {
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
     public void setSwerveRequest(SwerveRequest request) {
+        // Only allows PathPlanner to control the drivetrain during auto period through its own request
+        if(DriverStation.isAutonomousEnabled() && !request.equals(DriveRequests.pathPlannerRequest)) {
+            return;
+        }
 		currentRequest = request;
 	}
 
@@ -365,7 +369,7 @@ public class SKSwerve extends SubsystemBase {
                 this::resetPose,         // Consumer for seeding pose against auto
                 () -> drivetrain.getState().Speeds, // Supplier of current robot speeds
                 // Consumer of ChassisSpeeds and feedforwards to drive the robot
-                (speeds, feedforwards) -> drivetrain.setControl(
+                (speeds, feedforwards) -> setSwerveRequest(
                     DriveRequests.getPathPlannerRequestUpdater(() -> speeds, () -> feedforwards).apply(DriveRequests.pathPlannerRequest)
                 ),
                 pathConfig,

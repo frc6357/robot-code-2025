@@ -45,7 +45,7 @@ public class DriveRequests {
     }
 
     public static final SwerveRequest.RobotCentric robotCentricTeleopRequest = new SwerveRequest.RobotCentric()
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withDeadband(DriveConstants.kMaxSpeedSLOW.times(0.1));
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withDeadband(DriveConstants.kMaxSpeed.times(0.1));
     
     public static final UnaryOperator<SwerveRequest.RobotCentric> getRobotCentricTeleopRequestUpdater(
         Supplier<Double> xJoystick, Supplier<Double> yJoystick, Supplier<Double> rotJoystick, Supplier<Boolean> slow, Supplier<Boolean> fast
@@ -82,4 +82,14 @@ public class DriveRequests {
                 .withWheelForceFeedforwardsY(feedforwards.get().robotRelativeForcesYNewtons());
         };
     }
+
+    // public static final UnaryOperator<SwerveRequest.RobotCentric> getPathPlannerRequestUpdater(
+    //     Supplier<ChassisSpeeds> speeds, Supplier<DriveFeedforwards> feedforwards) { 
+    //     return (SwerveRequest.RobotCentric request) -> {
+    //         return request
+    //             .withVelocityX(speeds.get().vxMetersPerSecond)
+    //             .withVelocityY(speeds.get().vyMetersPerSecond)
+    //             .withRotationalRate(speeds.get().omegaRadiansPerSecond);
+    //     };
+    // }
 }

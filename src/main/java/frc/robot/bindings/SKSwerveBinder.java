@@ -108,13 +108,13 @@ public class SKSwerveBinder implements CommandBinder{
         /**
          * Experimental Pathfinding Code
          */
-        // pathfindToReef.whileTrue(Pathfinder.PathfindThenFollowPathCommand("Seamless3GP", kDefaultPathfindingConstraints));
+        pathfindToReef.whileTrue(Pathfinder.PathfindThenFollowPathCommand("Seamless3GP", kDefaultPathfindingConstraints));
 
-        // runAuto.onTrue(
-        //     Commands.sequence(
-        //         Pathfinder.PathfindToStartOfAutoCommand("DriftlessBargeL4(3GP)", kDefaultPathfindingConstraints),
-        //         Pathfollower.FollowAutoSequenceCommand("DriftlessBargeL4(3GP)"))
-        //     );
+        runAuto.toggleOnTrue(
+            Commands.sequence(
+                Pathfinder.PathfindToStartOfAutoCommand("DriftlessBargeL4(3GP)", kDefaultPathfindingConstraints),
+                Pathfollower.FollowAutoSequenceCommand("DriftlessBargeL4(3GP)"))
+            );
 
         // // simulateCollision.onTrue(new InstantCommand(() -> {drive.simulateCollision();} ));
         // try {
