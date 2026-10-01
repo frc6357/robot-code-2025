@@ -102,72 +102,6 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
         });
     }
 
-    // Unused
-    public static final class AlignTranslationWithPose extends MultiLimelightCommandConfig {
-        private AlignTranslationWithPose() {
-            configKp(0.2);
-            configKi(0.0);
-            configKd(0.0);
-            configTolerance(0.01);
-            configMaxOutput(TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() * 0.6);
-            configError(0.3);
-            configPipelineIndex(kAprilTagPipeline);
-            configLimelights(RobotContainer.m_vision.poseLimelights);
-        }
-
-        public static AlignTranslationWithPose getConfig() {
-            return new AlignTranslationWithPose();
-        }
-    }
-
-    // Unused
-    public static final class AlignToReefTag extends CommandConfig {
-        private AlignToReefTag() {
-            configKp(0.02);
-            configKi(0.0);
-            configKd(0.0);
-            configTolerance(0.01);
-            configMaxOutput(TunerConstants.MaxSpeed * 0.6);
-            configError(0.3);
-            configPipelineIndex(kAprilTagPipeline);
-            configLimelight(RobotContainer.m_vision.leftLL);
-        }
-
-        public static AlignToReefTag getConfig() {
-            return new AlignToReefTag();
-        }
-    }
-
-    // public static final class DriveToReef extends MultiLimelightCommandConfig {
-    //     private DriveToReef() {
-    //         configKpid(0.2, 0, 0);
-    //         configTolerance(0.01);
-    //         configMaxOutput(TunerConstants.MaxSpeed * 0.75);
-    //         configError(0.3);
-    //         configPipelineIndex(kAprilTagPipeline);
-    //         configLimelights(RobotContainer.m_vision.poseLimelights);
-    //     }
-
-    //     public static DriveToReef getConfig() {
-    //         return new DriveToReef();
-    //     }
-    // }
-
-    // public static final class RotateToReef extends MultiLimelightCommandConfig {
-    //     private RotateToReef() {
-    //         configKpid(0.02, 0, 0);
-    //         configTolerance(0.01);
-    //         configMaxOutput(TunerConstants.MaxAngularRate * 0.85);
-    //         configError(0.3);
-    //         configPipelineIndex(kAprilTagPipeline);
-    //         configLimelights(RobotContainer.m_vision.poseLimelights);
-    //     }
-
-    //     public static RotateToReef getConfig() {
-    //         return new RotateToReef();
-    //     }
-    // }
-
     public static final class DriveToPose extends MultiLimelightCommandConfig {
         private DriveToPose() {
             configKpid(1, 0, 0.001); //1, 0, .001
@@ -268,10 +202,15 @@ public class SK25Vision extends SubsystemBase implements NTSendable {
 
     private void updatePoseSingleCam(Limelight ll) {
         try {
+            // Set the integrating status to false before checking if any limelight is integrating
             isIntegrating = false;
-            // Sets the robot's yaw for use with MEGATAG2 right before integrating with estimator
+
+            // Feeds the limelight's robot orientation for use with the MEGATAG2 algorithm
             ll.setRobotOrientation(m_swerve.getRobotRotation().getDegrees());
+
+            // Add the input into the pose estimator
             addFilteredLimelightInput(ll);
+            
             // A limelight's integrating status is determined by if it's received a valid status to integrate its pose
             isIntegrating |= ll.getConfig().isIntegrating();
         }
